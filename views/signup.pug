@@ -1,0 +1,85 @@
+extends base_auth 
+
+block content
+    main
+        .signup__form
+            span.spinner
+            .signup__container.grid
+                .login__form--image
+                    img.form__image(src='../../asset/img/signup_new.jpg')
+                form#signup(action='/signup' method='post')
+                    h3.form__heading
+                        | Create an account with 
+                        span.form__extra Clubmerce
+                    .signup__grid.signup__name
+                        .form__item
+                            label.form__item--label(for='fullname') Fullname
+                            input.form__item--input(name='fullname' type='text' placeholder='Enter your Full Name' required='')
+                        .form__item
+                            label.form__item--label(for='username') Username
+                            input.form__item--input(name='username' type='text' placeholder='Choose a Username' required='')
+                    .form__item
+                        label.form__item--label(for='email') Email Address
+                        input.form__item--input(name='email' type='email' placeholder='max123@example.com' required='')
+                    .signup__grid.signup__password
+                        .form__item
+                            label.form__item--label(for='password') Password
+                            input.form__item--input(name='password' type='password' placeholder='Enter a password' required='')
+                        .form__item
+                            label.form__item--label(for='passwordconfirm') Confirm Password
+                            input.form__item--input(name='passwordconfirm' type='password' placeholder='Confirm your password' required='')
+                    .signup__grid
+                        .form__item.select
+                            label.form__item--label(for='country') Country
+                            select.form__item--input.select--input(name='country' required='')
+                                option Select a country
+                                option Nigeria
+                        .form__item.select
+                            label.form__item--label(for='gender') Gender
+                            select.form__item--input.select--input(name='gender' required='')
+                                option Male
+                                option Female
+                    .signup__grid
+                        .form__item.select
+                            label.form__item--label(for='role') Role
+                            select.form__item--input.select--input(name='role' required='')
+                                option Affiliate
+                                option Vendor
+                        .form__item
+                            label.form__item--label(for='number') Phone Number
+                            input.form__item--input(name='number' type='number' placeholder='+1 039 456 827' required='')
+                    .form__check
+                        input.agree(type='checkbox' required='')
+                        p.form__help
+                            | I Agree to the 
+                            a.form__extra(href='terms.html') terms and conditions
+                            |  for membership.
+                    .form__submit
+                        button.form__button(type='submit') Submit and Signup
+                        p.form__text
+                            span &VerticalLine;
+                            | &nbsp; Already have an account? 
+                            a.form__extra(href='login.html') Login here.
+        .email__drop-down.drop-down__shadow.hidden
+            // email verification modal
+            .email-verify__modal.modal
+                // close icon
+                span.close__icon.verify__close--icon X
+                .modal__container
+                    h3.modal__heading
+                        | Successful signup!
+                    // icon
+                    p.modal__content
+                        | A link has been sent to&nbsp;
+                        span.user__email emailaddress@example.com
+                        br
+                        | Please click the link in your email and verify your email...
+            // email verification confirmed modal
+            .email-confirmed__modal.modal.hidden
+                // close icon
+                span.close__icon.email-confirm__close--icon X
+                .modal__container
+                    h3.modal__heading Success!
+                    // icon goes here
+                    p.modal__text Your email address has been verified successfully!
+                    a.form__button.proceed__button(href='#') Proceed to login

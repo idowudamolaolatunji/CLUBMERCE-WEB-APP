@@ -1,0 +1,36 @@
+extends base_account 
+
+block content 
+    .products__container
+        .products__cards--box
+            each product in products
+                .product__card
+                    .product__side--left    
+                        .side--top
+                            .product__image--container
+                                img.product__image(src='../../asset/img/affiliate.png' alt=product.name)
+                            .product__heading 
+                                h2.product__title= product.name
+                                p.product__niche health and fitness
+                                //- =product.niche
+                        .side--bottom
+                            .product__content
+                                h4.product__description= product.summary
+                            ul.product__info
+                                //- each icon in product.others
+                                li.product__info--item 1
+                                li.product__info--item 2
+                                li.product__info--item 3
+                                li.product__info--item 4
+
+                    .product__side--right
+                        span.product__commission
+                            p.commision avg commission 
+                            span.commission__amount NGN 7500
+                        a.product__button.promote(href="#") Promote
+                        a.product__button.page(href="/product") page
+
+                    
+
+        aside.product__filtering for filterings
+                    

@@ -1,0 +1,84 @@
+DOCTYPE
+html(lang="en")
+
+head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer")
+    script(src="https://kit.fontawesome.com/7f9b82a2e6.js" crossorigin="anonymous")
+    link(href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet")
+
+    //- STYLES 
+    link(rel="stylesheet" href="src/css/general.css")
+    link(rel="stylesheet" href="src/css/main.css")
+    link(rel="stylesheet" href="src/css/query.css")
+    link(rel="stylesheet" href="src/css/dashboard.css")
+
+    //- SCRIPTS
+    script(defer src="src/js/index.js")
+
+    title=title
+body
+
+    section.section__dashboard
+        .section__top
+            .nav__logo
+                i.fa-solid.fa-bars.icon.nav__icon
+                img.logo(src='../../asset/img/logo-removebg.png' alt='')
+            nav.navbar
+                if section === 'marketplace'
+                    form.nav__search(method="post" action="/")
+                        input.nav__input(type='search' placeholder='search...')
+                        button.search__button(type='submit')
+                            i.fa-solid.fa-magnifying-glass.icon.nav__icon
+
+                span.nav__icons
+                    a(href="#")
+                        i.fa-regular.fa-bell.icon.nav__icon
+                    a(href="#")
+                        i.fa-regular.fa-comment.icon.nav__icon
+                    a(href="#")
+                        img.nav__image(src='../../asset/img/face.png' alt="customer's dashboard photo")
+
+        .section__bottom
+            menu.menubar
+                .menu__body
+                    ul.menu__list
+                        li.menu__item
+                            a.menu__link(href="/dashboard")
+                                i.fa-solid.fa-gauge.icon.menu__icon
+                                | Dashboard
+                        li.menu__item
+                            a.menu__link(href="/marketplace")
+                                i.fa-solid.fa-shop.icon.menu__icon
+                                | Affiliate marketplace
+                        li.menu__item
+                            a.menu__link(href="/performance")
+                                i.fa-solid.fa-chart-simple.icon.menu__icon
+                                | Report and Performance
+                        li.menu__item
+                            a.menu__link(href="/transaction")
+                                i.fa-solid.fa-chart-line.icon.menu__icon
+                                | Transactions
+                        li.menu__item
+                            a.menu__link(href="/settings")
+                                i.fa-solid.fa-gear.icon.menu__icon
+                                | settings
+                .menu__bottom
+                    ul.menu__list
+                        li.menu__item
+                            a.menu__link(href="/profile")
+                                img.menu__profile-image(src='../../asset/img/face.png')
+                                | profile
+                        li.menu__item
+                            a.menu__button(href='/login')
+                                | signout&nbsp;
+                                i.fa-solid.fa-arrow-right-to-bracket
+            main.main__dashboard
+                .dashboard__content
+                    block content
+
+
+

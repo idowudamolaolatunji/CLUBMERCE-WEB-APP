@@ -1,0 +1,51 @@
+extends base_auth
+
+block content
+    main
+        div.login__form
+            span.spinner
+            .login__container.grid.grid__two
+
+                form#login(action="/login" method="post")
+                    h3.form__heading Login into your 
+                        span.form__extra Clubmerce 
+                        | account
+                    div.form__item
+                        label.form__item--label(for="email") Email Address
+                        input.form__item--input(name="email" type="email" placeholder="max123@example.com" required)
+
+                    div.form__item
+                        label.form__item--label(for="password") Password
+                        input.form__item--input(name="password" type="password" placeholder="Enter a password" required)
+
+                    div.form__item.select
+                        label.form__item--label(for="role") Role
+                        select.form__item--input.select--input(name="role" required)
+                            option Affiliate
+                            option Vendor
+
+                    button.form__button(type="submit") Login
+
+                    div.form__end
+                        p.form__help Need Help?
+                        span.form__text
+                            a.form__text(href="/signup") SignUp &nbsp; &VerticalBar; &nbsp; 
+                            span.form__extra.forgot.open__modal Forgot Password
+
+                div.login__form--image
+                    img.form__image(src="../../asset/img/login_new.jpg" alt="")
+
+
+        //- forgot password modal
+        div.forgot-password__drop-down.drop-down__shadow.hidden
+            div.forgot-password__modal.modal.hidden
+            //- <!-- close icon -->
+            span.close__icon.forgot__closse--icon
+                i.fa-solid.fa-close.icon
+
+            div.modal__container
+                form#forgot-password(action="/forgot-password" method="post")
+                    h3.modal__heading Forgotten Password??
+                    div.form__item
+                        input.form__item--input(name="forgot-password" type="email" placeholder="Enter account email address" required)
+                    button.form__button.submit__button(type="submit") Submit

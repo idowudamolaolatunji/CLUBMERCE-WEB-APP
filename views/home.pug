@@ -1,0 +1,241 @@
+extends base
+
+block content 
+    main
+        section.hero__section
+            span.spinner
+            img.hero__svg.svg1(src='asset/svg/svg1.svg')
+            img.hero__svg.svg2(src='asset/svg/svg2.svg')
+            .section__container.hero.grid
+                .section__heading.hero__heading
+                    h1.section__heading--primary
+                        | Unleash Your Earning Potentials.
+                    h3.section__heading--tetrary.lsp
+                        | With our innovative platform, you can supercharge your sales strategy and watch your revenue soar!
+                    .hero__button--container
+                        a.section__button.btn.hero__button.main__button(href='#') Get started
+                        a.section__button.hero__button.outline__button(href='#') Learn more
+        section.stats__section
+            .section__container.stats.grid.grid__three
+                .stats__data--one.stats__data
+                    span.stats1 90K
+                    p.stats__data--text Lorem ipsum dolor sit.
+                .stats__data--two.stats__data
+                    span 80%
+                    p.stats__data--text Lorem ipsum dolor sit.
+                .stats__data--three.stats__data
+                    span N1M
+                    p.stats__data--text Lorem ipsum dolor sit.
+        section.section.how__section
+            .section__container.relative
+                img.how__steps--line(src='asset/svg/line.svg' alt='')
+                .grid.how.grid__two.grid__align--center
+                    .section__image.how__section--image.how__one
+                        img.how__image(src='asset/svg/Work in progress-cuate.svg' alt='')
+                    .section__content
+                        h2.section__heading--secondary.how__heading.margin__bottom--md
+                            | how it works
+                        // <h3 class="section__content--title"><span class="number">01</span>Signup As An Affiliate</h3>
+                        h3.section__content--title Signup As An Affiliate
+                        p.section__content--text
+                            | Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                            | Inventore iste ipsam quos id, excepturi laborum libero
+                            | praesentium dolorenesciunt.
+                .grid.how.grid__two.grid__align--center
+                    .section__content
+                        h3.section__content--title
+                            // <span class="number">02</span>Visit The Affiliate MarketPlace
+                            | Visit The Affiliate MarketPlace
+                        p.section__content--text
+                            | Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                            | Inventore iste ipsam quos id, excepturi laborum libero
+                            | praesentium dolorenesciunt.
+                    .section__image.how__section--image.how__two
+                        img.how__image(src='asset/svg/People sightseeing outdoors-cuate.svg' alt='')
+                .grid.how.grid__two.grid__align--center
+                    .section__image.how__section--image.how__three
+                        img.how__image(src='asset/svg/Marketing-cuate.svg' alt='')
+                    .section__content
+                        // <h3 class="section__content--title"><span class="number">03</span>Promote and earn</h3>
+                        h3.section__content--title Promote and earn
+                        p.section__content--text
+                            | Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                            | Inventore iste ipsam quos id, excepturi laborum libero
+                            | praesentium dolorenesciunt.
+        //
+            <section class="section brands__section">
+            <div class="section__container brands">
+            brands
+            </div>
+            </section>
+        section.section.testimonial__section.center
+            h2.section__heading--secondary Testimonials
+            .container__skew
+                .testimonial__slide.un-skew
+                    .testimonial__slide--item
+                        .testimonial__slide--item-text
+                            p.testimonial__content
+                                | Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                                | Quibusdam eius ducimus dolore at illo nobis distinctio
+                                | nostrum, id alias eaque!
+                            p.testimonial__author Lorem.
+                        .testimonial__slide--item-img
+                            img.testimonial__image(src='asset/img/face.png' alt='')
+                    .testimonial__slide--item
+                        .testimonial__slide--item-text
+                            p.testimonial__content
+                                | Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                                | Quibusdam eius ducimus dolore at illo nobis distinctio
+                                | nostrum, id alias eaque!
+                            p.testimonial__author Lorem.
+                        .testimonial__slide--item-img
+                            img.testimonial__image(src='asset/img/face.png' alt='')
+                    .testimonial__slide--item.testimonial__active
+                        .testimonial__slide--item-text
+                            p.testimonial__content
+                                | Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                                | Quibusdam eius ducimus dolore at illo nobis distinctio
+                                | nostrum, id alias eaque!
+                            p.testimonial__author Lorem.
+                        .testimonial__slide--item-img
+                            img.testimonial__image(src='asset/img/face.png' alt='')
+                    .testimonial__slide--item
+                        .testimonial__slide--item-text
+                            p.testimonial__content
+                                | Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                                | Quibusdam eius ducimus dolore at illo nobis distinctio
+                                | nostrum, id alias eaque!
+                            p.testimonial__author Lorem.
+                        .testimonial__slide--item-img
+                            img.testimonial__image(src='asset/img/face.png' alt='')
+                    .testimonial__slide--item
+                        .testimonial__slide--item-text
+                            p.testimonial__content
+                                | Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                                | Quibusdam eius ducimus dolore at illo nobis distinctio
+                                | nostrum, id alias eaque!
+                            p.testimonial__author Lorem.
+                        .testimonial__slide--item-img
+                            img.testimonial__image(src='asset/img/face.png' alt='')
+                .dots.un-skew
+                    span.dot.dot1 &nbsp;
+                    span.dot.dot1 &nbsp;
+                    span.dot.dot2.dot__active &nbsp;
+                    span.dot.dot3 &nbsp;
+                    span.dot.dot3 &nbsp;
+        section.section.get-started__section
+            // <img class="get-started__svg" src="asset/img/" />
+            .section__container
+                .section__heading
+                    h2.section__heading--secondary.center get started
+                    p.get-started__heading--text
+                        | Whether you&rsquo;re looking to start, scale, or expand your business reach, Clubmerce can help. Join thousands of sellers and more than 1,000 affiliates who are finding success on the Clubmerce platform.
+                .cards
+                    .get-started__card.get-started__affiliate
+                        img.get-started__image(src='asset/img/affiliate2_reduced.jpg' alt='')
+                        .get-started__content
+                            p.get-started__content--title Become an affiliate
+                            p.get-started__content--text
+                                | Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                | Architecto dicta quasi id repudiandae vel provident eum voluptas
+                                | iusto harum molestias.
+                            a.get-started__button.btn(href='#') Get Started
+                    .get-started__card.get-started__vendor
+                        img.get-started__image(src='asset/img/vendor2_reduced.jpg' alt='')
+                        .get-started__content
+                            p.get-started__content--title Become an vendor
+                            p.get-started__content--text
+                                | Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                | Architecto dicta quasi id repudiandae vel provident eum voluptas
+                                | iusto harum molestias.
+                            a.get-started__button.btn(href='#') Get Started
+        section.section.faq__section
+            .section__container
+                h3.section__heading--secondary.center.capitalize frequenty asked questions
+                .faq__accordion
+                    .faq__accordion--item
+                        .accordion__content--title
+                            h3.accordion__heading
+                                | Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            span &minus;
+                        .faq__accordion--content.faq__open
+                            p.accordion__content--text
+                                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure velit magni libero, aut
+                                | esse commodi voluptatibus. Nobis qui nulla hic velit. Impedit laboriosam natus ipsa ad
+                                | voluptas rerum corporis cumque at minima a architecto, nulla excepturi consequatur unde
+                                | ipsam laudantium rem quo obcaecati ex possimus in est! Harum, odio quis?
+                    .faq__accordion--item
+                        .accordion__content--title
+                            h3.accordion__heading
+                                | Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            span &minus;
+                        .faq__accordion--content.faq__close
+                            p.accordion__content--text
+                                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure velit magni libero, aut
+                                | esse commodi voluptatibus. Nobis qui nulla hic velit. Impedit laboriosam natus ipsa ad
+                                | voluptas rerum corporis cumque at minima a architecto, nulla excepturi consequatur unde
+                                | ipsam laudantium rem quo obcaecati ex possimus in est! Harum, odio quis?
+                    .faq__accordion--item
+                        .accordion__content--title
+                            h3.accordion__heading
+                                | Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            span &minus;
+                        .faq__accordion--content.faq__close
+                            p.accordion__content--text
+                                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure velit magni libero, aut
+                                | esse commodi voluptatibus. Nobis qui nulla hic velit. Impedit laboriosam natus ipsa ad
+                                | voluptas rerum corporis cumque at minima a architecto, nulla excepturi consequatur unde
+                                | ipsam laudantium rem quo obcaecati ex possimus in est! Harum, odio quis?
+                    .faq__accordion--item
+                        .accordion__content--title
+                            h3.accordion__heading
+                                | Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            span &minus;
+                        .faq__accordion--content.faq__close
+                            p.accordion__content--text
+                                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure velit magni libero, aut
+                                | esse commodi voluptatibus. Nobis qui nulla hic velit. Impedit laboriosam natus ipsa ad
+                                | voluptas rerum corporis cumque at minima a architecto, nulla excepturi consequatur unde
+                                | ipsam laudantium rem quo obcaecati ex possimus in est! Harum, odio quis?
+        section.section.cta1__section
+            .section__container
+                .section__heading
+                    h2.section__heading--secondary.capitalize
+                        | Need affiliate to promote your products?
+                    h3.cta__content--text Get Started As A Vendor
+                    a.section__button.btn.cta__button(href='#') Get started
+        //
+            <section class="p-product__section">
+            <div class="section__container">
+            <h2 class="section__heading--secondary">popular product</h2>
+            <p class="section__content--text">Lorem ipsum, dolor sit amet consectetur adipisicing emodi maxime alias et beatae!</p>
+            <div class="grid__two">
+            <div class="p-product__card card">
+            <div class="p-product__card--top">
+            <img class="p-product__image" src="" alt="" />
+            </div>
+            <div class="p-product__card--buttom">
+            <div class="p-product__content">
+            <p class="p-product__content--text">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis modi ipsam assumenda voluptates, quae id. Quasi officia quos aspernatur tempore?
+            </p>
+            <button class="btn btn__p-product">Lorem.</button>
+            </div>
+            </div>
+            </div>
+            <div class="p-product__card card">
+            <div class="p-product__card--top">
+            <img class="p-product__image" src="" alt="" />
+            </div>
+            <div class="p-product__card--buttom">
+            <div class="p-product__content">
+            <p class="p-product__content--text">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis modi ipsam assumenda voluptates, quae id. Quasi officia quos aspernatur tempore?
+            </p>
+            <button class="btn btn__p-product">Lorem.</button>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            </section>
