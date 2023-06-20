@@ -1,6 +1,7 @@
 const { promisify } = require('util');
 const crypto = require('crypto')
 
+const express = require('express')
 const jwt = require('jsonwebtoken');
 
 const app = require("./../app");
@@ -10,13 +11,6 @@ const sendEmail = require('../utils/Email')
 
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
-const NewObj = {}
-const filterObj = function(obj, ...allowedFileds) {
-	Object.keys(obj).forEach(el => {
-		if(allowedFileds.includes(el)) NewObj[el] = obj[el]
-	});
-}
-
 const signToken = (id) => {
     // takes the user id(payload), secretkey, and an option(expiredin)
   return jwt.sign({ id: id }, process.env.CLUBMERCE_JWT_SECRET_TOKEN, {
@@ -24,6 +18,33 @@ const signToken = (id) => {
   });
 }
 
+
+const createCookie = function(statusCode, user, res, message) {
+  // takes the user id(payload), secretkey, and an option(expiredin)
+  const token = signToken(user._id);
+
+  // const cookieOptions = {
+  //     expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
+  //     httpOnly: true
+  // }
+  // if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  // res.cookies('JWT', token, cookieOptions);
+
+  res.status(200).json({
+    status: "success",
+    message: "Successfully logged in",
+    token,
+    data: {
+      user
+    }
+  });
+}
+
+
+//////////////////////////////////////////////
+//////////////////////////////////////////////
+//////////////////////////////////////////////
+// signup
 exports.signup = async (req, res) => {
   try {
     const newUser = await User.create({
@@ -44,7 +65,7 @@ exports.signup = async (req, res) => {
       data: {
         user: newUser
       }
-    })
+    });
 
   } catch(err) {
     res.status(400).json({
@@ -59,25 +80,27 @@ exports.login = async (req, res) => {
     const { email, password, role } = req.body;
     const user = await User.findOne({ email }).select('+password');
     // if (!email || !(await bcrypt.compare(password, user.password))) {
+      console.log(user)
       
-    if (!email || !( await user.comparePassword(password, user.password)) || (role != user.role)) {
-       return res.status(401).json({
-        status: "fail",
-        message: "incorrect email or password or role",
+    if (!email || !( await user.comparePassword(password, user.password))) {
+        return res.status(401).json({
+          status: "fail",
+          message: "incorrect email or password",
       });
     }
 
     // takes the user id(payload), secretkey, and an option(expiredin)
+    // const token = signToken(user._id);
     const token = jwt.sign({id: user._id}, process.env.CLUBMERCE_JWT_SECRET_TOKEN, {
-      expiresIn: process.env.JWT_EXPIRES_IN,
-    });
+      expiresIn: process.env.JWT_EXPIRES_IN
+    })
 
     const cookieOptions = {
         expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
-        httpOnly: true
+        httpOnly: true,
     }
     if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-    res.cookies('JWT', token, cookieOptions);
+    res.cookie('JWT', token, cookieOptions);
 
     res.status(200).json({
       status: "success",
@@ -87,11 +110,13 @@ exports.login = async (req, res) => {
         user
       }
     });
+    console.log(user)
 
   } catch (err) {
+    console.log(user, err)
     res.status(400).json({
       status: "fail",
-      message: err,
+      message: err.message,
     });
   }
 };
@@ -105,9 +130,9 @@ exports.protect = async (req, res, next) => {
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
       token = req.headers.authorization.split(' ')[1];
     }
-    console.log(token);
     if(!token)
       return next('You are not authorised')
+
     // verify token, by decoding jwt
     const decoded = await promisify(jwt.verify)(token, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
 
@@ -126,7 +151,7 @@ exports.protect = async (req, res, next) => {
   } catch(err) {
     res.status(400).json({
       status: "fail",
-      message: err,
+      message: err.message,
     })
   }
   next();
@@ -137,7 +162,6 @@ exports.protect = async (req, res, next) => {
 // (i.e an enum is like an array)
 // remember a middleware function like this one, we usually cannot give an argument of our own
 // but there is a way around it, by allowing the function act like a normal function and reurning a middleware function insde of it (i.e like a wrapper function).
-
 exports.restrictedTo = function(...role) {
   return function(req, res, next) {
     // now pass in an abitrary amount of argument into the function
@@ -149,6 +173,7 @@ exports.restrictedTo = function(...role) {
   }
 }
 
+/*
 // forgot password
 exports.forgotPassword = async (req, res, next) => {
 	try {
@@ -174,6 +199,7 @@ exports.forgotPassword = async (req, res, next) => {
 			status: "success",
 			message: "Token sent to email address"
 		});
+    console.log(user, user.passwordResetToken, user.passwordResetEpires)
 
 
 	} catch(err) {
@@ -182,6 +208,7 @@ exports.forgotPassword = async (req, res, next) => {
 		await user.save({ validateBeforeSave: false });
 		return next(err);
 	}
+  next()
 }
 
 // reset password
@@ -225,19 +252,8 @@ exports.resetPassword = async (req, res, next) => {
 			message: err.message
 		})
 	}
+  next()
 }
-
-// // Email verification
-// exports.emailVerification = async (req, res, next) => {
-// 	try {
-//     // const 
-//     // 
-//     const verificationCode = crypto.randomInt(100000, 999999).toString();
-//   } catch(err) {
-
-//   }
-// }
-
 
 // Updating current logged in user password
 exports.updatePassword = async (req, res, next) => {
@@ -272,7 +288,8 @@ exports.updatePassword = async (req, res, next) => {
 			data: {
 				user,
 			}
-		})
+		});
+    next()
 
 	} catch(err) {
 		res.status(400).json({
@@ -280,7 +297,10 @@ exports.updatePassword = async (req, res, next) => {
 			message: err.message
 		})
 	}
+  next();
 }
+
+*/
 
 
 

@@ -107,6 +107,7 @@ userSchema.pre('save', function(next) {
     next();
 })
 
+// hide all inactive user
 userSchema.pre(/^find/, function(next) {
     // this.find( { active: true } );
     this.find({ active: { $ne: false }});
@@ -116,6 +117,7 @@ userSchema.pre(/^find/, function(next) {
 userSchema.methods.comparePassword = async function(cnadidatePassword, hashedPassword) {
     return await bcrypt.compare(cnadidatePassword, hashedPassword);
 }
+
 
 userSchema.methods.changedPasswordAfter = function (jwtTimeStamp) {
     if(this.passwordChangedAt) {
@@ -140,9 +142,6 @@ userSchema.methods.createPasswordResetToken = function() {
     // send the unencrypted version
 }
 
-// userSchema.methods.createEmailVerificationToken = function() {
-//     const 
-// }
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;

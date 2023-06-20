@@ -77,6 +77,13 @@ exports.deleteUser = async(req, res) => {
 ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////
 // update current user data
+const NewObj = {}
+const filterObj = function(obj, ...allowedFileds) {
+	Object.keys(obj).forEach(el => {
+		if(allowedFileds.includes(el)) NewObj[el] = obj[el]
+	});
+}
+
 exports.updateMe = async (req, res, next) => {
 	try {
 		// create an error if user POST's password data.
@@ -106,6 +113,7 @@ exports.updateMe = async (req, res, next) => {
 			message: err.message
 		})
 	}
+    next()
 }
 
 // delete current user

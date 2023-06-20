@@ -1,18 +1,200 @@
 
+@media screen and (max-width: 75em) {
+    .hero__heading {
+        padding: 2.4rem;
+    }
+
+    .nav__list {
+        gap: 2.4rem;
+    }
+
+    .footer__grid {
+        grid-template-columns: 2fr 2fr 1.5fr 3fr;
+        gap: 2.4rem;
+    }
+
+}
+
+/* 1050px === 105rem === 65em */
+@media screen and (max-width: 65.63em) {
+
+    html {
+        font-size: 59.37%;
+    }
+
+    .header {
+        padding: 2rem;
+    }
+    
+    .how__image {
+        height: 25rem;
+    }
+
+    .heer__heading {
+        width: 130%;
+    }
+
+    .hero__section {
+        height: 90vh;
+    }
+
+    .footer__grid {
+        grid-template-columns: 2fr 1fr .6fr;
+        gap: 6.2rem;
+    }
+}
+
+/* 950px === 95rem === 59em */
+@media screen and (max-width: 59.37em) {
+    .logo {
+        height: 6rem;
+    }
+
+    .navbar, .nav__list { 
+        display: none;
+        opacity: 0;
+    }
+
+    .hero {
+        display: inline-block;
+    }
+    .hero__heading {
+        max-width: 80%;
+        display: flex;
+        justify-content: center;
+        background-color: rgba(237, 237, 237, 0.5);
+    }
+
+    .stats {
+        gap: 3.2rem;
+    }
+    .stats__data span {
+        font-size: 7rem;
+    }
+    .how {
+        gap: 4.8rem;
+    }
+
+    .dots {
+        display: none;
+    }
+
+    .cards {
+        gap: 8rem;
+    }
+    
+    .footer__grid {
+        gap: 2.4rem;
+    }
+
+}
 
 
+/* 80px === 80rem === 50em */
+@media screen and (max-width: 50em) {
+    .section__container {
+        padding: 0 4.8rem;
+    }
+
+    .hero__section {
+        background-size: 100%;
+        height: auto;
+    }
+
+    .section__heading--primary {
+        font-size: 3.6rem;
+        margin-bottom: 1.6rem;
+        letter-spacing: 0;
+    }
+    .section__heading--secondary {
+        font-size: 2.8rem;
+        margin-bottom: 1.8rem;
+    }
+    
+    .section__heading--tetrary {
+        font-size: 1.8rem;
+        margin-bottom: 3.2rem;
+    }
+
+    .hero__heading {
+        padding: 2rem;
+        max-width: 80%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin: 0 auto;
+        height: auto;
+        z-index: 100;
+    }
+
+    .hero__svg {
+        display: none;
+    }
+
+    .section__how--flex {
+        display: flex;
+        flex-direction: column;
+        gap: 9rem;
+    }
+
+    .how {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 3.6rem;
+    }
+
+    .how__one, .how__three {
+        order: 2;
+    }
+
+    .how__image {
+        height: 30rem;
+    }
+
+    .how__steps--line, .how__section--image::after {
+        display: none;
+    }
+
+    /* section skew */
 
 
+    
+    .footer__grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6.3rem;
+    }
+}
 
+/* 70px === 70rem === 43.75em */
+@media screen and (max-width: 43.75em) {
+    .accordion__heading {
+        font-size: 1.8rem;
+    }
 
+    .cards {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        align-items: center;
+    }
 
+    .get-started__vendor {
+        transform: translateY(0);
+    }
 
+    .footer__grid {
+       display: flex;
+       flex-direction: column;
+        gap: 6.3rem;
+    }
 
-
-
-
-
-
+    .footer__subscribe {
+        order: 10;
+    }
+}
 
 
 
@@ -27,3 +209,70 @@
 /* ================================= */
 /* FORM, LOGIN AND SIGNUP QUERY */
 /* ================================= */
+
+/* 950px === 95rem === 59em */
+@media screen and (max-width: 59.37em) {
+    .login__container, .signup__container {
+        display: flex;
+        justify-content: stretch;
+        align-items: center;
+        max-width: 60rem;
+        margin: 0 auto;
+        height: auto;
+    }
+
+    .login__form--image, .form__image, .signup__form--image{
+        display: none;
+    }
+
+    .signup, .login {
+        padding: 0 2.6rem;
+    }
+}
+
+
+/* 600px === 60rem === 37.5em */
+@media screen and (max-width: 37.5em) {
+    .footer__auth {
+        padding: 4.8rem 0;
+        text-align: left;
+    }
+
+    .signup__form .signup__grid {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+    }
+
+    .form__help, .form__text {
+        line-height: 1.5;
+    }
+
+    .form__submit {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .auth__lists {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        gap: .8rem;
+    }
+
+    .auth__item .cp {
+        font-size: 1.4rem;
+    }
+
+    .auth__item .auth__link {
+        font-size: 1.2rem;
+        color: #333;
+    }
+
+    .auth__text {
+        font-size: 1rem;
+    }
+
+}

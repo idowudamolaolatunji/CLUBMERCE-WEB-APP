@@ -1,8 +1,6 @@
 const app = require('../app');
 const Product = require('./../model/productsModel');
 
-const App = require('express')().use(require('express').json())
-
 
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
@@ -60,6 +58,7 @@ exports.getProduct = async(req, res) => {
         })
     }
 };
+
 
 exports.updateProduct = async(req, res) => {
     try {

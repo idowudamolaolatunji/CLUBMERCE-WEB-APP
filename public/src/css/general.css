@@ -136,6 +136,8 @@ a:link, a:visited {
 .uppercase { text-transform: uppercase !important; }
 .capitalize { text-transform: capitalize !important; }
 .lowercase { text-transform: lowercase !important;}
+.hidden { display: none; }
+
 
 .section__content--title {
     /* color: #AC3931; */

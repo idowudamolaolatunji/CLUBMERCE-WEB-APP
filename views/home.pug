@@ -28,40 +28,41 @@ block content
                     p.stats__data--text Lorem ipsum dolor sit.
         section.section.how__section
             .section__container.relative
-                img.how__steps--line(src='asset/svg/line.svg' alt='')
-                .grid.how.grid__two.grid__align--center
-                    .section__image.how__section--image.how__one
-                        img.how__image(src='asset/svg/Work in progress-cuate.svg' alt='')
-                    .section__content
-                        h2.section__heading--secondary.how__heading.margin__bottom--md
-                            | how it works
-                        // <h3 class="section__content--title"><span class="number">01</span>Signup As An Affiliate</h3>
-                        h3.section__content--title Signup As An Affiliate
-                        p.section__content--text
-                            | Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                            | Inventore iste ipsam quos id, excepturi laborum libero
-                            | praesentium dolorenesciunt.
-                .grid.how.grid__two.grid__align--center
-                    .section__content
-                        h3.section__content--title
-                            // <span class="number">02</span>Visit The Affiliate MarketPlace
-                            | Visit The Affiliate MarketPlace
-                        p.section__content--text
-                            | Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                            | Inventore iste ipsam quos id, excepturi laborum libero
-                            | praesentium dolorenesciunt.
-                    .section__image.how__section--image.how__two
-                        img.how__image(src='asset/svg/People sightseeing outdoors-cuate.svg' alt='')
-                .grid.how.grid__two.grid__align--center
-                    .section__image.how__section--image.how__three
-                        img.how__image(src='asset/svg/Marketing-cuate.svg' alt='')
-                    .section__content
-                        // <h3 class="section__content--title"><span class="number">03</span>Promote and earn</h3>
-                        h3.section__content--title Promote and earn
-                        p.section__content--text
-                            | Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                            | Inventore iste ipsam quos id, excepturi laborum libero
-                            | praesentium dolorenesciunt.
+                .section__how--flex
+                    img.how__steps--line(src='asset/svg/line.svg' alt='')
+                    .grid.how.grid__two.grid__align--center
+                        .section__image.how__section--image.how__one
+                            img.how__image(src='asset/svg/Work in progress-cuate.svg' alt='')
+                        .section__content
+                            h2.section__heading--secondary.how__heading.margin__bottom--md
+                                | how it works
+                            // <h3 class="section__content--title"><span class="number">01</span>Signup As An Affiliate</h3>
+                            h3.section__content--title Signup As An Affiliate
+                            p.section__content--text
+                                | Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                                | Inventore iste ipsam quos id, excepturi laborum libero
+                                | praesentium dolorenesciunt.
+                    .grid.how.grid__two.grid__align--center
+                        .section__content
+                            h3.section__content--title
+                                // <span class="number">02</span>Visit The Affiliate MarketPlace
+                                | Visit The Affiliate MarketPlace
+                            p.section__content--text
+                                | Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                                | Inventore iste ipsam quos id, excepturi laborum libero
+                                | praesentium dolorenesciunt.
+                        .section__image.how__section--image.how__two
+                            img.how__image(src='asset/svg/People sightseeing outdoors-cuate.svg' alt='')
+                    .grid.how.grid__two.grid__align--center
+                        .section__image.how__section--image.how__three
+                            img.how__image(src='asset/svg/Marketing-cuate.svg' alt='')
+                        .section__content
+                            // <h3 class="section__content--title"><span class="number">03</span>Promote and earn</h3>
+                            h3.section__content--title Promote and earn
+                            p.section__content--text
+                                | Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                                | Inventore iste ipsam quos id, excepturi laborum libero
+                                | praesentium dolorenesciunt.
         //
             <section class="section brands__section">
             <div class="section__container brands">
@@ -123,8 +124,9 @@ block content
                     span.dot.dot2.dot__active &nbsp;
                     span.dot.dot3 &nbsp;
                     span.dot.dot3 &nbsp;
+
         section.section.get-started__section
-            // <img class="get-started__svg" src="asset/img/" />
+            //- img.get-started__svg(src="asset/")
             .section__container
                 .section__heading
                     h2.section__heading--secondary.center get started
@@ -139,7 +141,7 @@ block content
                                 | Lorem ipsum dolor sit amet consectetur adipisicing elit.
                                 | Architecto dicta quasi id repudiandae vel provident eum voluptas
                                 | iusto harum molestias.
-                            a.get-started__button.btn(href='#') Get Started
+                            a.get-started__button.btn(href='/affiliate') Get Started
                     .get-started__card.get-started__vendor
                         img.get-started__image(src='asset/img/vendor2_reduced.jpg' alt='')
                         .get-started__content
@@ -148,7 +150,7 @@ block content
                                 | Lorem ipsum dolor sit amet consectetur adipisicing elit.
                                 | Architecto dicta quasi id repudiandae vel provident eum voluptas
                                 | iusto harum molestias.
-                            a.get-started__button.btn(href='#') Get Started
+                            a.get-started__button.btn(href='/vendor') Get Started
         section.section.faq__section
             .section__container
                 h3.section__heading--secondary.center.capitalize frequenty asked questions
@@ -203,7 +205,7 @@ block content
                     h2.section__heading--secondary.capitalize
                         | Need affiliate to promote your products?
                     h3.cta__content--text Get Started As A Vendor
-                    a.section__button.btn.cta__button(href='#') Get started
+                    a.section__button.btn.cta__button(href='/vendor') Get started
         //
             <section class="p-product__section">
             <div class="section__container">

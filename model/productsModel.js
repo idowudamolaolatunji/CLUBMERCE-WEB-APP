@@ -1,5 +1,8 @@
+const crypto = require('crypto');
+
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+
 
 const productSchema = new mongoose.Schema({
     name: {
@@ -30,9 +33,9 @@ const productSchema = new mongoose.Schema({
         maxLength: [120, "Summary must not be more than 200 characters"],
         minLength: [60, "Summary must not be more than 60 characters"],
     },
-    productPercentage: {
+    productCommission: {
         type: Number,
-        required: [true, 'A product must have a price'],
+        // required: [true, 'A product must have a price'],
     },
     productType: [String],
     productNiche: [String],
@@ -51,7 +54,9 @@ const productSchema = new mongoose.Schema({
 
 // DOCUMENT MIDDLEWARE: runs before .save() and .create()
 productSchema.pre('save', function(next) {
-    this.slug = slugify(this.name, { lower: true });
+    const slug = slugify(this.name, { lower: true });
+    // const randomId = crypto.randomInt(100000, 999999).toString();
+    // console.log(slug, randomId)
     next();
 });
 

@@ -17,5 +17,6 @@ router.get('/marketplace/product', viewController.product);
 router.get('/profile', viewController.profile);
 router.get('/transaction', viewController.transaction);
 router.get('/settings', viewController.settings);
+router.get('/notification', viewController.notification);
 
 module.exports = router;

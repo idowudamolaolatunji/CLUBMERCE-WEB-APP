@@ -1,4 +1,6 @@
 const path = require('path');
+////////////////////////////////////////////////////
+
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
@@ -6,7 +8,9 @@ const pug = require('pug');
 const helmet = require('helmet')
 const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean')
+const xss = require('xss-clean');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser')
 /////////////////////////////////////////////////////
 
 const productsRouter = require('./routes/productsRoutes');
@@ -15,9 +19,10 @@ const viewsRouter = require('./routes/viewsRoutes');
 
 dotenv.config({path: './config.env'});
 const app = express();
+// body parser
+app.use(express.json());
 
-// Set security http headers
-app.use(helmet())
+app.use(cookieParser())
 
 // pug
 app.set('view engine', 'pug');
@@ -28,16 +33,16 @@ if(process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
-// Rate limiting
-const limiter = rateLimit({
-    max: 100,
-    windowMs: 60 * 60 * 1000,
-    message: 'Too many request from this IP, please try again in an hour!'
-})
-app.use('/', limiter)
+// Set security http headers
+app.use(helmet())
 
-// body parser
-app.use(express.json());
+// Rate limiting
+// const limiter = rateLimit({
+//     max: 500,
+//     windowMs: 60 * 60 * 1000,
+//     message: 'Too many request from this IP, please try again in an hour!'
+// })
+// app.use('/', limiter)
 
 // Data sanitization agains NoSql query injestion
 app.use(mongoSanitize());
@@ -47,7 +52,6 @@ app.use(xss())
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-/////////////////////////
 app.use((req, res, next) => {
     // console.log(req.headers);
     console.log('Hello from the Middleware...');

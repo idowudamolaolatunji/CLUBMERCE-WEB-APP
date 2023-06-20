@@ -1,6 +1,10 @@
 extends base_account 
 
 block content 
+    h3.dashboard__heading Clubmerce marketplace
+    
+    h6 Top offers
+    p Total #{products.length}
     .products__container
         .products__cards--box
             each product in products
@@ -18,19 +22,55 @@ block content
                                 h4.product__description= product.summary
                             ul.product__info
                                 //- each icon in product.others
-                                li.product__info--item 1
-                                li.product__info--item 2
-                                li.product__info--item 3
-                                li.product__info--item 4
+                                li.product__info--item 
+                                    i.fa-solid.fa-truck-fast.product__icon.icon
+                                    | Digital Products
+                                li.product__info--item 
+                                    i.fa-solid.fa-tools.product__icon.icon
+                                    | Affiliate tools
+                                li.product__info--item 
+                                    i.fa-solid.fa-link.product__icon.icon
+                                    | Unique Link
+                                li.product__info--item 
+                                    i.fa-regular.fa-square-check.product__icon.icon
+                                    | Approved
+                                
 
                     .product__side--right
                         span.product__commission
                             p.commision avg commission 
                             span.commission__amount NGN 7500
-                        a.product__button.promote(href="#") Promote
+                        button.btn.product__button.promote Promote
                         a.product__button.page(href="/product") page
 
                     
 
-        aside.product__filtering for filterings
+        aside.product__filtering
+            form.product__filter 
+                select
+                    option(value="Average") 
+                    option(value="Average") 
+                    option(value="Average") 
+                    option(value="Average") 
+                    option(value="Average") 
+                    option(value="Average") 
+            
+            .product__category
+                p catergories
+        
                     
+
+    .hoplink__overlay.hidden
+        .hoplink__modal.hidden
+            i.fa-solid.fa-close.icon.hoplink__icon
+            h2.hoplink__heading Creating a HopLink
+            p.hoplink__text
+            | Earn commission for every customer you refer to this product using your personalized affiliate hoplink.
+            form.hoplink
+            .hoplink__body
+                input.hoplink__input(type='text' required='' placeholder='Username')
+                p.hoplink__body--text Required
+            .hoplink__body
+                input.hoplink__input(type='text' placeholder='Tracing Id')
+                p.hoplink__body--text Optional
+            button.btn.hoplink__submit(type='submit') Generate Hoplink

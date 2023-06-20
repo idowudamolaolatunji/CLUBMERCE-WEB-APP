@@ -11,15 +11,14 @@
     background-image: linear-gradient(to right bottom, rgba(255, 255, 255, .5), rgba(255, 255, 255, .5));
     overflow: hidden;
     height: 55rem;
+    align-items: start;
 }
 
 .signup__container {
     grid-template-columns: 1fr 1.5fr;
-    align-items: start;
 }
 .login__container {
     grid-template-columns: 1fr 1fr;
-    align-items: start;
 }
 
 .form__heading {
@@ -48,7 +47,7 @@
 }
 
 .login__form .form__item.select .form__item--input {
-    width: 50%;
+    width: 60%;
 }
 
 .form__item.select .form__item--input {
@@ -257,10 +256,71 @@ button {
 }
 
 .auth__link:hover {
-    color: rgba(46, 49, 146, 0.45);
+    background-image: linear-gradient(to left, #2e3192, #f15a29);
+    display: inline-block;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .auth__text {
     font-size: 1.2rem;
     line-height: 1.5;
 }
+
+
+
+.hoplink__overlay {
+            background-color: rgba(0, 0, 0, .25);
+            width: 100%;
+            height: 100vh;
+        }
+
+        .hoplink__modal {
+            max-width: 70rem;
+            padding:2.8rem;
+            border-radius: 1rem;
+            background-color: #fff;
+            color: inherit;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+       
+        .hoplink__heading {
+            font-size: 2rem;
+            margin-bottom: 2.4rem;
+        }
+
+        .hoplink__modal p {
+            font-size: 1.4rem;
+            line-height: 1.4;
+        }
+       
+        .hoplink__body {
+            display: flex;
+            flex-direction: column;
+            gap: .6rem;
+            margin-top: 3.2rem;
+        }
+        
+        .hoplink__input {
+            border: 1px solid #eee;
+            padding: 1.2rem;
+            border-radius: .4rem;
+            transition: all .35s;
+        }
+
+        .hoplink__body--text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-transform: capitalize;
+            margin-left: 1.2rem;
+        }
+        .hoplink__icon {
+            position: absolute;
+            top: 3rem;
+            left: 3rem;
+        }

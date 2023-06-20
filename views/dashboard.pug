@@ -2,10 +2,33 @@ extends base_account
 
 block content 
     .main__dashboard--container
-        .dashboard__heading
-            h3.heading__title=`Welcome back, ${user.fullname}`
+        h3.dashboard__heading=`Welcome back, ${user.fullname}`
+        .dashboard__insights 
+            .insight.insight__one
+                i.fa-solid.fa-coins.insight__icon
+                p.insignt__text NGN 25K
+                p.insignt__title Total enarned
+
+            .insight.insight__two
+                i.fa-solid.fa-comments-dollar.insight__icon
+                //- i.fa-solid.fa-shoping-bag.insight__icon
+                p.insignt__text 15
+                p.insignt__title Product Sold
+
+            .insight.insight__three
+                i.fa-solid.fa-up-right-from-square.insight__icon
+                p.insignt__text 100
+                p.insignt__title Links clicks
+
+            .insight.insight__four
+                i.fa-solid.fa-bullhorn.insight__icon
+                p.insignt__text 20
+                p.insignt__title promotions
+
         .dashboard__cards
-            .box1.box
-            .box2.box
-            .box3.box
-            .box4.box
+            //- .box1.box
+            //- .box2.box
+            //- .box3.box
+            //- .box4.box
+            .dashboard__card.card1
+            .dashboard__card.card2

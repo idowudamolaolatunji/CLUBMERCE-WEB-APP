@@ -6,21 +6,21 @@ block content
             span.spinner
             .login__container.grid.grid__two
 
-                form#login(action="/login" method="post")
+                form.login(method="POST" action="/api/users/login")
                     h3.form__heading Login into your 
                         span.form__extra Clubmerce 
                         | account
                     div.form__item
                         label.form__item--label(for="email") Email Address
-                        input.form__item--input(name="email" type="email" placeholder="max123@example.com" required)
+                        input.form__item--input.login__email(name="email" type="email" placeholder="max123@example.com" required)
 
                     div.form__item
                         label.form__item--label(for="password") Password
-                        input.form__item--input(name="password" type="password" placeholder="Enter a password" required)
+                        input.form__item--input.login__password(name="password" type="password" placeholder="Enter a password" required)
 
                     div.form__item.select
                         label.form__item--label(for="role") Role
-                        select.form__item--input.select--input(name="role" required)
+                        select.form__item--input.select--input.login__role(name="role" required)
                             option Affiliate
                             option Vendor
 

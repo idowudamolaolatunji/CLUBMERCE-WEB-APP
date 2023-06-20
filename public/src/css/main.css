@@ -7,6 +7,9 @@
     left: 0;
     right: 0;
     color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     
     z-index: 300;
 }
@@ -31,22 +34,27 @@
     color: inherit;
     color: #333;
 }
+.nav__link:hover, .nav__link:active, .nav__active {
+    background-image: linear-gradient(to left, #2e3192, #f15a29);
+    display: inline-block;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
 .nav__link:hover, .nav__link:active {
-    color: #2e3192;
-    text-shadow: 1rem 1rem 4rem rgba(255, 255, 255, .88);
+    text-shadow: 1rem 1rem 4rem rgba(46, 49, 146, 0.45);
 }
 
 .nav__button {
     padding: 1.2rem 1.8rem;
     border-radius: 1rem;
-    background-color: #2e3192;
+    background-color: #2e3192d5;
     font-weight: 700;
     color: #fff !important;
 }
 
 .nav__active {
-    transform: scale(1.02);
     text-shadow: 1.2rem 1.2rem 4rem rgba(46, 49, 146, 0.88);
     color: #2e3192;    
     position: relative;
@@ -71,12 +79,12 @@
 }
 
 .nav__button:hover, .nav__button:active {
-    background-color: rgba(46, 49, 146, 0.8);
-    color: #fff;
+    box-shadow: inset 0 0 0 .2rem rgba(46, 49, 146, 0.8) !important;
+    /* color: #fff; */
 }
 
 .hero__section {
-    background-image: linear-gradient(rgba(0, 0, 0, .35), rgba(0, 0, 0, .25)), url('./../../asset/img/hero2_reduced.jpg');
+    background-image: linear-gradient(to right bottom,  rgba(0, 0, 0, .35), rgba(0, 0, 0, .35), rgba(241, 91, 41, 0.35)), url('./../../asset/img/hero2_reduced.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -106,7 +114,7 @@
 }
 
 .hero__button {
-    padding: 1.4rem 3.6rem;
+    padding: 1.4rem 3rem;
     display: inline-block;
     
     border-radius: 1rem;
@@ -130,14 +138,8 @@
     box-shadow:inset 0 0 0 .22rem #f15a29;
 }
 
-.hero__image {
-    position: absolute;
-    width: 135%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-60%, -55%);
-    z-index: -1;
-    filter: grayscale(50);
+.hero__image--container, .hero__image {
+    display: none;
 }
 
 .stats__section {
@@ -506,9 +508,8 @@
 /* ====== footer ====== */
 .footer {
     padding: 6.2rem 4.8rem;
-    background-color: #2e3192;
+    background-image: linear-gradient(to right bottom, #2e3192 60%, #f15a29);
     color: #eeee;
-    /* clip-path: polygon(0 36%, 100% 0, 100% 62%, 0% 100%); */
 }
 
 .footer__grid {
