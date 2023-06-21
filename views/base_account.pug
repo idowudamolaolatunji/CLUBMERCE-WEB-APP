@@ -31,10 +31,25 @@ body
                             i.fa-solid.fa-magnifying-glass.icon.nav__icon
 
                 span.nav__icons
-                    a(href="/notification")
+                    span.notification__icon
                         i.fa-regular.fa-bell.icon.nav__icon
-                    a(href="/profile")
+                        div.notification__hovered.hidden 
+                            h3.dashboard__heading Notification
+                            p.notification__amount New (0)
+                                div.notification__content 
+                                    span.notice 
+                                | you have no notification
+
+                    span
                         img.nav__image(src='../../asset/img/face.png' alt="customer's dashboard photo")
+                        div.Profile__hovered.hidden
+                            div.profile__content
+                                a.profile__link.nav__link(href="/profile") Go to profile
+
+                                a.profile__button(href="") signout 
+                                    i.fa-solid.fa-arrow-right-to-bracket.profile__icon
+                        
+
 
         .section__bottom
             menu.menubar
@@ -73,6 +88,9 @@ body
             main.main__dashboard
                 .dashboard__content
                     block content
+
+
+            
 
 
 

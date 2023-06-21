@@ -268,3 +268,13 @@ a:link, a:visited {
     color: #fff;
     margin-right: 1.2rem
 }
+
+select:required:invalid {
+color: #666;
+}
+option[value=""][disabled] {
+display: none;
+}
+option {
+color: #080707;
+}

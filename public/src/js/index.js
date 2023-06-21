@@ -85,10 +85,21 @@ if (menuOpen)
 
 console.log('connected')
 
+const notifyIcon = document.querySelector('.notification__icon');
+const notifyBox = document.querySelector('.notification__hovered')
+
+notifyIcon.addEventListener('click', () => notifyBox.classList.toggle('hidden'));
+
+
+const profileImg = document.querySelector('.nav__image')
+const profileBox = document.querySelector('.Profile__hovered')
+
+profileImg.addEventListener('click', () => profileBox.classList.toggle('hidden'))
+
+
 const accordionContainer = document.querySelector('.faq__accordion');
 const accordionItem = document.querySelectorAll('.faq__accordion--item');
 const accordionContent = document.querySelector('.faq__accordion--content');
-
 
 accordionContainer.addEventListener('click', function(e) {
     // console.log(e.target, e.currentTarget)
@@ -98,8 +109,5 @@ accordionContainer.addEventListener('click', function(e) {
 
     accordionItem.forEach(accordion => accordion.classList.remove('faq__open'));
     clicked.classList.add('faq__open')
-
-
-
 
 })

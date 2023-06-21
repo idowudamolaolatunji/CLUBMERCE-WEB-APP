@@ -5,16 +5,16 @@ block content
         .signup__form
             span.spinner
             .signup__container.grid
-                .login__form--image
+                .signup__form--image
                     img.form__image(src='../../asset/img/signup_new.jpg')
-                form.signup
+                form.signup(method="POST" action="/api/users/signup")
                     h3.form__heading
                         | Create an account with 
                         span.form__extra Clubmerce
                     .signup__grid.signup__name
                         .form__item
-                            label.form__item--label(for='fullname') Fullname
-                            input.form__item--input.signup__fullname(name='fullname' type='text' placeholder='Enter your Full Name' required='')
+                            label.form__item--label(for='fullName') Fullname
+                            input.form__item--input.signup__fullname(name='fullName' type='text' placeholder='Enter your Full Name' required='')
                         .form__item
                             label.form__item--label(for='username') Username
                             input.form__item--input.signup__username(name='username' type='text' placeholder='Choose a Username' required='')
@@ -26,28 +26,29 @@ block content
                             label.form__item--label(for='password') Password
                             input.form__item--input.signup__password(name='password' type='password' placeholder='Enter a password' required='')
                         .form__item
-                            label.form__item--label(for='passwordconfirm') Confirm Password
-                            input.form__item--input.signup__passwordconfirm(name='passwordconfirm' type='password' placeholder='Confirm your password' required='')
+                            label.form__item--label(for='passwordConfirm') Confirm Password
+                            input.form__item--input.signup__passwordconfirm(name='passwordConfirm' type='password' placeholder='Confirm your password' required='')
                     .signup__grid
                         .form__item.select
                             label.form__item--label(for='country') Country
                             select.form__item--input.select--input.signup__country(name='country' required='')
-                                option Select a country
+                                option(disable selected value="") Select your country
                                 option Nigeria
                         .form__item.select
                             label.form__item--label(for='gender') Gender
                             select.form__item--input.select--input.signup__gender(name='gender' required='')
-                                option Male
-                                option Female
-                    .signup__grid
+                                option(disable selected value="") Your gender
+                                option(value="male") male
+                                option(value="female") female
                         .form__item.select
                             label.form__item--label(for='role') Role
                             select.form__item--input.select--input.signup__role(name='role' required='')
-                                option Affiliate
-                                option Vendor
+                                option(disable selected value="") Choose a role 
+                                option(value="affliate") Affiliate
+                                option(value="vendor") Vendor
                         .form__item
                             label.form__item--label(for='number') Phone Number
-                            input.form__item--input.signup__phone(name='number' type='number' placeholder='+1 039 456 827' required='')
+                            input.form__item--input.signup__phone(name='number' type='text' placeholder='+1 039 456 827' required='')
                     .form__check
                         input.agree(type='checkbox' required='')
                         p.form__help

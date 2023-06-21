@@ -77,46 +77,27 @@ exports.signup = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const { email, password, role } = req.body;
-    const user = await User.findOne({ email }).select('+password');
-    // if (!email || !(await bcrypt.compare(password, user.password))) {
-      console.log(user)
-      
-    if (!email || !( await user.comparePassword(password, user.password))) {
-        return res.status(401).json({
-          status: "fail",
-          message: "incorrect email or password",
+    const user = await User.findOne({email: req.body.email}).select('+password');
+
+    if(!user || !await user.comparePassword(req.body.password, user.password) || role !== req.body.role) {
+      return res.status(401).json({
+        status: "fail",
+        message: "user email or password or role incorrect"
       });
     }
 
-    // takes the user id(payload), secretkey, and an option(expiredin)
-    // const token = signToken(user._id);
-    const token = jwt.sign({id: user._id}, process.env.CLUBMERCE_JWT_SECRET_TOKEN, {
-      expiresIn: process.env.JWT_EXPIRES_IN
-    })
-
-    const cookieOptions = {
-        expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
-        httpOnly: true,
-    }
-    if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-    res.cookie('JWT', token, cookieOptions);
+    const token = signToken(user._id);
 
     res.status(200).json({
-      status: "success",
-      message: "Successfully logged in",
-      token,
+      satus: "success",
       data: {
         user
       }
-    });
-    console.log(user)
-
-  } catch (err) {
-    console.log(user, err)
+    })
+  } catch(err) {
     res.status(400).json({
       status: "fail",
-      message: err.message,
+      message: err,
     });
   }
 };

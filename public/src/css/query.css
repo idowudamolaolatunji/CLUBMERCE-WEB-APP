@@ -214,6 +214,8 @@
 @media screen and (max-width: 59.37em) {
     .login__container, .signup__container {
         display: flex;
+        flex-direction: column;
+        gap: 6.2rem;
         justify-content: stretch;
         align-items: center;
         max-width: 60rem;
@@ -221,8 +223,13 @@
         height: auto;
     }
 
-    .login__form--image, .form__image, .signup__form--image{
-        display: none;
+    .signup__form--image{
+        order: 1;
+    }
+
+    .form__image {
+        height: 60rem;
+        border-radius: .8rem;
     }
 
     .signup, .login {
@@ -235,7 +242,6 @@
 @media screen and (max-width: 37.5em) {
     .footer__auth {
         padding: 4.8rem 0;
-        text-align: left;
     }
 
     .signup__form .signup__grid {
@@ -243,6 +249,10 @@
         flex-direction: column;
         align-items: stretch;
         gap: 0;
+    }
+
+    .login__form--image, .form__image, .signup__form--image{
+        display: none;
     }
 
     .form__help, .form__text {
@@ -257,7 +267,7 @@
 
     .auth__lists {
         display: flex;
-        justify-content: start;
+        flex-direction: column;
         align-items: center;
         gap: .8rem;
     }

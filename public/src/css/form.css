@@ -88,6 +88,7 @@
     font-size: 1.4rem;
     background-color: #eee;
     color: #333;
+    text-transform: capitalize;
 }
 
 .form__check, .form__submit {
@@ -146,7 +147,7 @@ button {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     align-items: center;
-    gap: 2.4rem;
+    column-gap: 2.4rem;
     justify-items: space-between;
 }
 
