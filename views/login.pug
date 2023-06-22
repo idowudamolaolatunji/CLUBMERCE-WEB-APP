@@ -12,15 +12,15 @@ block content
                         | account
                     div.form__item
                         label.form__item--label(for="email") Email Address
-                        input.form__item--input.login__email(name="email" type="email" placeholder="max123@example.com" required)
+                        input.form__item--input.login__email(id="email" name="email" type="email" placeholder="max123@example.com" required)
 
                     div.form__item
                         label.form__item--label(for="password") Password
-                        input.form__item--input.login__password(name="password" type="password" placeholder='••••••••••••', required, minlength='8')
+                        input.form__item--input.login__password(id="password" name="password" type="password" placeholder='••••••••••••', required, minlength='8')
 
                     div.form__item.select
                         label.form__item--label(for="role") Role
-                        select.form__item--input.select--input.login__role(name="role" required)
+                        select.form__item--input.select--input.login__role(id="role" name="role" required)
                             option Affiliate
                             option Vendor
 

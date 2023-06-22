@@ -3,29 +3,34 @@ const Product = require('../model/productsModel')
 
 exports.home = (req, res) => {
     res.status(200).render('home', {
-        title: 'Official Website'
+        title: 'Official Website',
+        active: true
     });
 }
 exports.getStarted = (req, res) => {
     res.status(200).render('get-started', {
-        title: 'Get Started'
+        title: 'Get Started',
+        active: true
     });
 }
 exports.vendor = (req, res) => {
     res.status(200).render('vendor', {
-        title: 'Become a vendor'
+        title: 'Become a vendor',
+        active: true
     });
 }
 exports.affiliate = (req, res) => {
     res.status(200).render('affiliate', {
-        title: 'Become an affiliate'
+        title: 'Become an affiliate',
+        active: true
     });
 }
-// exports.login = (req, res) => {
-//     res.status(200).render('login', {
-//         title: 'Sign into your account'
-//     });
-// }
+exports.login = async (req, res) => {
+    res.status(200).render('login', {
+        title: 'Login your account',
+        active: true
+    })
+}
 exports.signUp = (req, res) => {
     res.status(200).render('signup', {
         title: 'Create an account'
@@ -66,12 +71,6 @@ exports.transaction = (req, res) => {
 }
 exports.settings = (req, res) => {
     res.status(200).render('setting');
-}
-
-exports.login = async (req, res) => {
-    res.status(200).render('login', {
-        title: 'Login your account'
-    })
 }
 exports.notification = async (req, res) => {
     res.status(200).render('notification', {

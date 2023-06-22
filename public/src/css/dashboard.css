@@ -901,7 +901,7 @@ input:focus, input:hover, select:focus,
 .bottom__card {
     width: 24rem;
     border: 1px solid #eee;
-    border-radius: 1rem;
+    border-radius: 1rem; 
     overflow: hidden;
 }
 
