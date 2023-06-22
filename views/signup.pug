@@ -24,31 +24,25 @@ block content
                     .signup__grid.signup__password
                         .form__item
                             label.form__item--label(for='password') Password
-                            input.form__item--input.signup__password(name='password' type='password' placeholder='Enter a password' required='')
+                            input.form__item--input.signup__password(name='password' type='password' placeholder='••••••••••••', required, minlength='8')
                         .form__item
                             label.form__item--label(for='passwordConfirm') Confirm Password
-                            input.form__item--input.signup__passwordconfirm(name='passwordConfirm' type='password' placeholder='Confirm your password' required='')
+                            input.form__item--input.signup__passwordconfirm(name='passwordConfirm' type='password' placeholder='••••••••••••', required, minlength='8')
                     .signup__grid
                         .form__item.select
                             label.form__item--label(for='country') Country
                             select.form__item--input.select--input.signup__country(name='country' required='')
                                 option(disable selected value="") Select your country
                                 option Nigeria
-                        .form__item.select
-                            label.form__item--label(for='gender') Gender
-                            select.form__item--input.select--input.signup__gender(name='gender' required='')
-                                option(disable selected value="") Your gender
-                                option(value="male") male
-                                option(value="female") female
+                        .form__item
+                            label.form__item--label(for='number') Phone Number
+                            input.form__item--input.signup__phone(id="phone" name='number' type='tel' placeholder='+1 039 456 827' required='')
                         .form__item.select
                             label.form__item--label(for='role') Role
                             select.form__item--input.select--input.signup__role(name='role' required='')
                                 option(disable selected value="") Choose a role 
                                 option(value="affliate") Affiliate
                                 option(value="vendor") Vendor
-                        .form__item
-                            label.form__item--label(for='number') Phone Number
-                            input.form__item--input.signup__phone(name='number' type='text' placeholder='+1 039 456 827' required='')
                     .form__check
                         input.agree(type='checkbox' required='')
                         p.form__help

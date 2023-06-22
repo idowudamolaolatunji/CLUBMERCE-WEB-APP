@@ -82,6 +82,10 @@ a:link, a:visited {
     transition: all .35s ease-in-out;
     display: inline-block;
 }
+button {
+    border: none;
+    cursor: pointer;
+}
 
 .hidden {
     display: none;
@@ -268,6 +272,48 @@ a:link, a:visited {
     color: #fff;
     margin-right: 1.2rem
 }
+
+/* auth */
+
+.footer__auth {
+    padding: 8rem 0;
+    text-align: center;
+}
+
+.auth__container {
+    max-width: 90rem;
+    margin: 0 auto;
+    padding: 0 2.4rem;
+}
+
+.auth__lists {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.8rem;
+    margin-bottom: 2.4rem;
+    list-style: none;
+}
+
+.auth__link:link, .auth__link:visited {
+    font-size: 1.6rem;
+    color: #333;
+}
+
+.auth__link:hover {
+    background-image: linear-gradient(to left, #2e3192, #f15a29);
+    display: inline-block;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.auth__text {
+    font-size: 1.2rem;
+    line-height: 1.5;
+}
+
+
 
 select:required:invalid {
 color: #666;

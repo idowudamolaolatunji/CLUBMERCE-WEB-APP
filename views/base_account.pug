@@ -24,6 +24,7 @@ body
                 i.fa-solid.fa-bars.icon.nav__icon.menu__open
                 img.logo(src='../../asset/img/logo-removebg.png' alt='clubmerce logo')
             nav.navbar
+            
                 if section === 'marketplace'
                     form.nav__search
                         input.nav__input(type='search' placeholder='search...')
@@ -33,48 +34,81 @@ body
                 span.nav__icons
                     span.notification__icon
                         i.fa-regular.fa-bell.icon.nav__icon
-                        div.notification__hovered.hidden 
+                        .notification__hovered.hidden 
                             h3.dashboard__heading Notification
                             p.notification__amount New (0)
-                                div.notification__content 
+                                .notification__content 
                                     span.notice 
                                 | you have no notification
 
                     span
                         img.nav__image(src='../../asset/img/face.png' alt="customer's dashboard photo")
-                        div.Profile__hovered.hidden
-                            div.profile__content
-                                a.profile__link.nav__link(href="/profile") Go to profile
+                        .Profile__hovered.hidden
+                            .profile__content
+                                .profile__owner
+                                    img.profile__image(src="../../asset/img/face.png", alt="customer's dashboard photo")
+                                    p.profile__name idowu olatunji
+                                a.profile__link.nav__link(href="/profile") My profile
 
-                                a.profile__button(href="") signout 
+                                a.profile__button.nav__link(href="") signout 
                                     i.fa-solid.fa-arrow-right-to-bracket.profile__icon
-                        
 
+
+        mixin menuItem(link, text, icon, active)                    
+            li(class=`${active ? 'menu__active' : ''}`).menu__item
+                a.menu__link(href=`/${link}`)
+                    i.icon.menu__icon(class=`${icon}`)
+                    | #{text}
 
         .section__bottom
             menu.menubar
                 .menu__body
                     ul.menu__list
-                        li.menu__item
-                            a.menu__link(href="/dashboard")
-                                i.fa-solid.fa-gauge.icon.menu__icon
-                                | Dashboard
-                        li.menu__item
-                            a.menu__link(href="/marketplace")
-                                i.fa-solid.fa-shop.icon.menu__icon
-                                | Affiliate marketplace
-                        li.menu__item
-                            a.menu__link(href="/performance")
-                                i.fa-solid.fa-chart-simple.icon.menu__icon
-                                | Report and Performance
-                        li.menu__item
-                            a.menu__link(href="/transaction")
-                                i.fa-solid.fa-chart-line.icon.menu__icon
-                                | Transactions
-                        li.menu__item
-                            a.menu__link(href="/settings")
-                                i.fa-solid.fa-gear.icon.menu__icon
-                                | settings
+                        //- -if(user.role === 'affiliate')
+                        +menuItem('dashboard', 'Dashboard', 'fa-solid fa-gauge', true)
+                        +menuItem('marketplace', 'Affiliate marketplace', 'fa-solid fa-shop', false)
+                        +menuItem('performance', 'Report and Performance', 'fa-solid fa-chart-simple', false)
+                        +menuItem('transaction', 'Transactions', 'fa-solid fa-chart-line', false)
+                        +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
+
+                        //- -if(user.role === 'vendor')
+                            //- +menuItem('dashboard-v1', 'Dashboard', 'fa-solid fa-gauge', true)
+                            //- +menuItem('catalog', 'Product Catalog', 'fa-regular fa-clipboard-list-check', false)
+                            //- +menuItem('performance-v1', 'Report and Performance', 'fa-solid fa-chart-simple', false)
+                            //- +menuItem('transaction', 'Transactions', 'fa-solid fa-chart-line', false)
+                            //- +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
+
+                    //- -if(user.role !== 'admin')
+                    //-     .menu__bottom
+                    //-         ul.menu__list
+                    //-             li.menu__item
+                    //-                 a.menu__link(href="/profile")
+                    //-                     img.menu__profile-image(src='../../asset/img/face.png')
+                    //-                     | profile
+                    //-             li.menu__item
+                    //-                 a.menu__button(href='/login')
+                    //-                     | signout&nbsp;
+                    //-                     i.fa-solid.fa-arrow-right-to-bracket
+
+                        //- -if(user.role === 'admin')
+                            //- +menuItem('dashboard-v1', 'Dashboard', 'fa-solid fa-gauge', true)
+                            //- +menuItem('catalog', 'Product Marketplace', 'fa-solid fa-clipboard-list', false)
+                            //- +menuItem('performance', 'Vendors Performance', 'fa-solid fa-chart-simple', false)
+                            //- +menuItem('performance', 'Affiliates Performance', 'fa-solid fa-chart-simple', false)
+                            //- +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
+
+
+                //- .menu__bottom
+                //-     ul.menu__list
+                //-         li.menu__item
+                //-             a.menu__link(href="/manage-users") Manage Users
+                //-         li.menu__item
+                //-             a.menu__link(href="/manage-product") Manage Products
+                //-         li.menu__item
+                //-             a.menu__button(href='/login')
+                //-                 | signout&nbsp;
+                //-                 i.fa-solid.fa-arrow
+               
                 .menu__bottom
                     ul.menu__list
                         li.menu__item
@@ -89,11 +123,6 @@ body
                 .dashboard__content
                     block content
 
+                include _auth_footer
 
-            
-
-
-
-
-    //- SCRIPTS
     script( src="src/js/index.js")

@@ -23,14 +23,14 @@ const productSchema = new mongoose.Schema({
         type: String,
         trim: true,
         required: [true, 'A product must have a description'],
-        // maxLength: [4000, "Description must not be more than 4000 characters"],
-        // minLength: [500, "Description must not be more than 800 characters"],
+        maxLength: [4000, "Description must not be more than 4000 characters"],
+        minLength: [500, "Description must not be more than 800 characters"],
     },
     summary: {
         type: String,
         required: [true, 'A product must have a summary'],
         trim: true,
-        maxLength: [120, "Summary must not be more than 200 characters"],
+        maxLength: [200, "Summary must not be more than 200 characters"],
         minLength: [60, "Summary must not be more than 60 characters"],
     },
     productCommission: {
@@ -55,8 +55,8 @@ const productSchema = new mongoose.Schema({
 // DOCUMENT MIDDLEWARE: runs before .save() and .create()
 productSchema.pre('save', function(next) {
     const slug = slugify(this.name, { lower: true });
-    // const randomId = crypto.randomInt(100000, 999999).toString();
-    // console.log(slug, randomId)
+    const randomId = crypto.randomInt(100000, 999999).toString();
+    console.log(slug, randomId);
     next();
 });
 

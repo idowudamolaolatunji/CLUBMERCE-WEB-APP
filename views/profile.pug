@@ -1,4 +1,34 @@
 extends base_account 
 
 block content 
-    h3.dashboard__heading Profile
+    h3.dashboard__heading Your Profile
+
+    form.form__data.form-profile-data
+        p.profile__details Update profile info
+        .form__item
+            label.form__label(for='fullName') Full name
+            input#fullName.form__input(type='text', value='Jonas Schmedtmann', required)
+        .form__item
+            label.form__label(for='email') Email address
+            input#email.form__input(type='email' value='max@example.com' required)
+        .form__item
+            label.form__label(for='phone') Phone number
+            input#phone.form__input(type='tel' value='+1234567890' required)
+        .form__item
+            label.form__label(for='country') Country
+            input#country.form__input(type='country' placeholder="Select a country" required)
+        .form__item
+            label.form__label(for='state') State
+            input#state.form__input(type='state' placeholder="Select a country" required)
+        .form__item
+            label.form__label(for='streetAddress') City / Province / Region
+            input#streetAddress.form__input(type='streetAddress' placeholder="Select a country" required)
+        .form__item
+            label.form__label(for='streetAddress') Zip code / Postal code
+            input#streetAddress.form__input(type='streetAddress' placeholder="Select a country" required)
+        .form__item.form__photo-upload
+            //- img.form__user-photo(src='img/user.jpg' alt='User photo')
+            img.form__user-photo(src='asset/img/face.png' alt='User photo')
+            a.btn-text(href='') Choose new photo
+        .form__item
+            button.btn.form-btn Save settings

@@ -50,7 +50,6 @@ const userSchema = new mongoose.Schema({
     passwordResetToken: String,
     passwordResetExpires: Date,
     country: String,
-    gender: String,
     phone: {
         type: String,
         trim: true,
@@ -73,7 +72,6 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now(),
     },
-    state: String,
     bankAccount: String,
     bankAccountNumber: Number,
     active: {

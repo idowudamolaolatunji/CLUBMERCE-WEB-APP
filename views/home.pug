@@ -15,17 +15,23 @@ block content
                     .hero__button--container
                         a.section__button.btn.hero__button.main__button(href='#') Get started
                         a.section__button.hero__button.outline__button(href='#') Learn more
-        section.stats__section
-            .section__container.stats.grid.grid__three
-                .stats__data--one.stats__data
-                    span.stats1 90K
-                    p.stats__data--text Lorem ipsum dolor sit.
-                .stats__data--two.stats__data
-                    span 80%
-                    p.stats__data--text Lorem ipsum dolor sit.
-                .stats__data--three.stats__data
-                    span N1M
-                    p.stats__data--text Lorem ipsum dolor sit.
+        section.section.section__features 
+            .section__container.features 
+                .features__card
+                    i.fa-solid.fa-magnifying-glass-chart.features__icon 
+                    p.features__text Transparent Product Marketplace
+
+                .features__card
+                    i.fa-solid.fa-credit-card.features__icon
+                    p.features__text Reliable and Integrated Payments
+
+                .features__card
+                    i.fa-solid.fa-pie-chart.features__icon
+                    p.features__text Top Performing Offers
+                .features__card
+                    i.fa-solid.fa-list-check.features__icon
+                    p.features__text Personalized Account Management
+
         section.section.how__section
             .section__container.relative
                 .section__how--flex
@@ -63,12 +69,94 @@ block content
                                 | Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                                 | Inventore iste ipsam quos id, excepturi laborum libero
                                 | praesentium dolorenesciunt.
-        //
-            <section class="section brands__section">
-            <div class="section__container brands">
-            brands
-            </div>
-            </section>
+        section.section.get-started__section
+            //- img.get-started__svg(src="asset/")
+            .section__container
+                .section__heading
+                    h2.section__heading--secondary.center get started
+                    p.get-started__heading--text
+                        | Whether you&rsquo;re looking to start, scale, or expand your business reach, Clubmerce can help. Join thousands of sellers and more than 1,000 affiliates who are finding success on the Clubmerce platform.
+                .cards
+                    .get-started__card.get-started__affiliate
+                        img.get-started__image(src='asset/img/affiliate2_reduced.jpg' alt='')
+                        .get-started__content
+                            p.get-started__content--title Become an affiliate
+                            p.get-started__content--text
+                                | Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                | Architecto dicta quasi id repudiandae vel provident eum voluptas
+                                | iusto harum molestias.
+                            a.get-started__button.btn(href='/affiliate') Get Started
+                    .get-started__card.get-started__vendor
+                        img.get-started__image(src='asset/img/vendor2_reduced.jpg' alt='')
+                        .get-started__content
+                            p.get-started__content--title Become an vendor
+                            p.get-started__content--text
+                                | Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                | Architecto dicta quasi id repudiandae vel provident eum voluptas
+                                | iusto harum molestias.
+                            a.get-started__button.btn(href='/vendor') Get Started
+
+        section.stats__section
+            .section__container.stats.grid.grid__three
+                .stats__data--one.stats__data
+                    span.stats1 90K
+                    p.stats__data--text Lorem ipsum dolor sit.
+                .stats__data--two.stats__data
+                    span 80%
+                    p.stats__data--text Lorem ipsum dolor sit.
+                .stats__data--three.stats__data
+                    span N1M
+                    p.stats__data--text Lorem ipsum dolor sit.
+
+        section.section.faq__section
+            .section__container
+                h3.section__heading--secondary.center.capitalize frequenty asked questions
+                .faq__accordion
+                    .faq__accordion--item
+                        .accordion__content--title
+                            h3.accordion__heading
+                                | Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            span &minus;
+                        .faq__accordion--content.faq__open
+                            p.accordion__content--text
+                                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure velit magni libero, aut
+                                | esse commodi voluptatibus. Nobis qui nulla hic velit. Impedit laboriosam natus ipsa ad
+                                | voluptas rerum corporis cumque at minima a architecto, nulla excepturi consequatur unde
+                                | ipsam laudantium rem quo obcaecati ex possimus in est! Harum, odio quis?
+                    .faq__accordion--item
+                        .accordion__content--title
+                            h3.accordion__heading
+                                | Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            span &minus;
+                        .faq__accordion--content.faq__close
+                            p.accordion__content--text
+                                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure velit magni libero, aut
+                                | esse commodi voluptatibus. Nobis qui nulla hic velit. Impedit laboriosam natus ipsa ad
+                                | voluptas rerum corporis cumque at minima a architecto, nulla excepturi consequatur unde
+                                | ipsam laudantium rem quo obcaecati ex possimus in est! Harum, odio quis?
+                    .faq__accordion--item
+                        .accordion__content--title
+                            h3.accordion__heading
+                                | Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            span &minus;
+                        .faq__accordion--content.faq__close
+                            p.accordion__content--text
+                                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure velit magni libero, aut
+                                | esse commodi voluptatibus. Nobis qui nulla hic velit. Impedit laboriosam natus ipsa ad
+                                | voluptas rerum corporis cumque at minima a architecto, nulla excepturi consequatur unde
+                                | ipsam laudantium rem quo obcaecati ex possimus in est! Harum, odio quis?
+                    .faq__accordion--item
+                        .accordion__content--title
+                            h3.accordion__heading
+                                | Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            span &minus;
+                        .faq__accordion--content.faq__close
+                            p.accordion__content--text
+                                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure velit magni libero, aut
+                                | esse commodi voluptatibus. Nobis qui nulla hic velit. Impedit laboriosam natus ipsa ad
+                                | voluptas rerum corporis cumque at minima a architecto, nulla excepturi consequatur unde
+                                | ipsam laudantium rem quo obcaecati ex possimus in est! Harum, odio quis?
+
         section.section.testimonial__section.center
             h2.section__heading--secondary Testimonials
             .container__skew
@@ -124,81 +212,7 @@ block content
                     span.dot.dot2.dot__active &nbsp;
                     span.dot.dot3 &nbsp;
                     span.dot.dot3 &nbsp;
-
-        section.section.get-started__section
-            //- img.get-started__svg(src="asset/")
-            .section__container
-                .section__heading
-                    h2.section__heading--secondary.center get started
-                    p.get-started__heading--text
-                        | Whether you&rsquo;re looking to start, scale, or expand your business reach, Clubmerce can help. Join thousands of sellers and more than 1,000 affiliates who are finding success on the Clubmerce platform.
-                .cards
-                    .get-started__card.get-started__affiliate
-                        img.get-started__image(src='asset/img/affiliate2_reduced.jpg' alt='')
-                        .get-started__content
-                            p.get-started__content--title Become an affiliate
-                            p.get-started__content--text
-                                | Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                | Architecto dicta quasi id repudiandae vel provident eum voluptas
-                                | iusto harum molestias.
-                            a.get-started__button.btn(href='/affiliate') Get Started
-                    .get-started__card.get-started__vendor
-                        img.get-started__image(src='asset/img/vendor2_reduced.jpg' alt='')
-                        .get-started__content
-                            p.get-started__content--title Become an vendor
-                            p.get-started__content--text
-                                | Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                | Architecto dicta quasi id repudiandae vel provident eum voluptas
-                                | iusto harum molestias.
-                            a.get-started__button.btn(href='/vendor') Get Started
-        section.section.faq__section
-            .section__container
-                h3.section__heading--secondary.center.capitalize frequenty asked questions
-                .faq__accordion
-                    .faq__accordion--item
-                        .accordion__content--title
-                            h3.accordion__heading
-                                | Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                            span &minus;
-                        .faq__accordion--content.faq__open
-                            p.accordion__content--text
-                                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure velit magni libero, aut
-                                | esse commodi voluptatibus. Nobis qui nulla hic velit. Impedit laboriosam natus ipsa ad
-                                | voluptas rerum corporis cumque at minima a architecto, nulla excepturi consequatur unde
-                                | ipsam laudantium rem quo obcaecati ex possimus in est! Harum, odio quis?
-                    .faq__accordion--item
-                        .accordion__content--title
-                            h3.accordion__heading
-                                | Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                            span &minus;
-                        .faq__accordion--content.faq__close
-                            p.accordion__content--text
-                                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure velit magni libero, aut
-                                | esse commodi voluptatibus. Nobis qui nulla hic velit. Impedit laboriosam natus ipsa ad
-                                | voluptas rerum corporis cumque at minima a architecto, nulla excepturi consequatur unde
-                                | ipsam laudantium rem quo obcaecati ex possimus in est! Harum, odio quis?
-                    .faq__accordion--item
-                        .accordion__content--title
-                            h3.accordion__heading
-                                | Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                            span &minus;
-                        .faq__accordion--content.faq__close
-                            p.accordion__content--text
-                                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure velit magni libero, aut
-                                | esse commodi voluptatibus. Nobis qui nulla hic velit. Impedit laboriosam natus ipsa ad
-                                | voluptas rerum corporis cumque at minima a architecto, nulla excepturi consequatur unde
-                                | ipsam laudantium rem quo obcaecati ex possimus in est! Harum, odio quis?
-                    .faq__accordion--item
-                        .accordion__content--title
-                            h3.accordion__heading
-                                | Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                            span &minus;
-                        .faq__accordion--content.faq__close
-                            p.accordion__content--text
-                                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure velit magni libero, aut
-                                | esse commodi voluptatibus. Nobis qui nulla hic velit. Impedit laboriosam natus ipsa ad
-                                | voluptas rerum corporis cumque at minima a architecto, nulla excepturi consequatur unde
-                                | ipsam laudantium rem quo obcaecati ex possimus in est! Harum, odio quis?
+        
         section.section.cta1__section
             .section__container
                 .section__heading

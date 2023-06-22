@@ -54,7 +54,6 @@ exports.signup = async (req, res) => {
       password: req.body.password,
       passwordConfirm: req.body.passwordConfirm,
       country: req.body.country,
-      gender: req.body.gender,
       phone: req.body.phone,
       role: req.body.role,
     });
