@@ -56,7 +56,6 @@
 
 .nav__active {
     text-shadow: 1.2rem 1.2rem 4rem rgba(46, 49, 146, 0.88);
-    color: #2e3192;    
     position: relative;
 }
 
@@ -66,6 +65,7 @@
     width: 10rem;
     height: .4rem;
     background-color: #2e3192;
+    /* background-image: linear-gradient(to left, #2e3192, #f15a29); */
     position: absolute;
     bottom: -2.8rem;
     left: 50%;
@@ -144,7 +144,6 @@
 
 .section__features {
     background-color: f8f8f8;
-    padding: 6rem 0;
 }
 
 .features {
@@ -153,14 +152,14 @@
     gap: 2.6rem;
 }
 .features__card {
-    padding: 1.8rem;
+    padding: 2rem;
     border-radius: .8rem;
     border: 1px solid #eee;
 
     display: flex;
     flex-direction: column;
-    box-shadow: 0 0 .4rem rgba(0, 0, 0, .15);
-    transition: all .35s ease-in;
+    box-shadow: 0 0 .2rem rgba(0, 0, 0, .15);
+    transition: all .35s;
 }
 
 .features__card:hover {

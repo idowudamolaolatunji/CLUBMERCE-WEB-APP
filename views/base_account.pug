@@ -58,6 +58,8 @@ body
             li(class=`${active ? 'menu__active' : ''}`).menu__item
                 a.menu__link(href=`/${link}`)
                     i.icon.menu__icon(class=`${icon}`)
+                    //- svg.icon.menu__icon
+                    //-     use(xlink:href=`/asset/icons/${icon}.svg`)
                     | #{text}
 
         .section__bottom

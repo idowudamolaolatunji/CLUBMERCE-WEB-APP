@@ -1,4 +1,4 @@
-.page__head {
+.page__hero {
     height: 70vh;
     padding: 8rem 0;
 
@@ -7,19 +7,22 @@
     background-repeat: no-repeat;
 }
 .get__started {
-    background-image: linear-gradient(rgba(0, 0, 0, .25) , rgba(0, 0, 0, .25)), url('../../asset/img/get-started.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, .25) , rgba(0, 0, 0, .25)), url('../../asset/img/get_started.jpg');
 }
 .affiliate {
     background-image: linear-gradient(rgba(0, 0, 0, .35) , rgba(0, 0, 0, .35)), url('../../asset/img/affliate_hero.jpg');
+}
+.vendor {
+    background-image: linear-gradient(rgba(0, 0, 0, .35) , rgba(0, 0, 0, .35)), url('../../asset/img/vendor_hero.jpg');
 }
 
 .page__section {
     padding: 8rem 0;
 }
 
-.affiliate  .page__head--text  {
+/* .affiliate  .page__head--text  {
     margin-left: auto;
-}
+} */
 
 .page__head--text  {
     color: #fff;
@@ -83,6 +86,11 @@
     font-size: 1.8rem;
     font-weight: 500;
     line-height: 1.4;
+}
+
+.card__description {
+    font-size: 1.2rem;
+    line-height: 1.5;
 }
 
 .content__button {

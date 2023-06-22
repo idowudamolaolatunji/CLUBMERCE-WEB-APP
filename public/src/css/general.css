@@ -97,12 +97,15 @@ button {
 }
 
 .section {
-    padding: 5.2rem 0;
+    padding: 10rem 0;
+}
+
+.stats__section {
+    padding: 7rem;
 }
 
 .stats__section,
 .cta1__section {
-    padding: 6.8rem 0;
     text-align: center;
 }
 
@@ -264,8 +267,11 @@ button {
 }
 
 .icon {
-    font-size: 1.8rem;
-    display: inline-block;
+    /* font-size: 1.8rem;
+    display: inline-block; */
+    width: 2.4rem;
+    height: 2.4rem;
+    color: #080707;
 }
 
 .footer__icon {

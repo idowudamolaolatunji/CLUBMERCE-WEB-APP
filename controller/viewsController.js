@@ -78,8 +78,8 @@ exports.notification = async (req, res) => {
         title: 'Your Notification'
     })
 }
-exports.directMessage = async (req, res) => {
-    res.status(200).render('direct_message', {
-        title: 'Your Direct Message'
+exports.dashboardV = async (req, res) => {
+    res.status(200).render('dashboardV', {
+        title: 'Vendor Dashboard'
     })
 }
