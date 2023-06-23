@@ -21,7 +21,7 @@ body
     section.section__dashboard
         .section__top
             .nav__logo
-                i.fa-solid.fa-bars.icon.nav__icon.menu__open
+                i.fa-solid.fa-close.icon.nav__icon.menubar-control
                 img.logo(src='../../asset/img/logo-removebg.png' alt='clubmerce logo')
             nav.navbar
             
@@ -50,7 +50,7 @@ body
                                     p.profile__name idowu olatunji
                                 a.profile__link.nav__link(href="/profile") My profile
 
-                                a.profile__button.nav__link(href="") signout 
+                                a.profile__button.nav__link(href="/login") signout 
                                     i.fa-solid.fa-arrow-right-to-bracket.profile__icon
 
 
@@ -67,7 +67,7 @@ body
                 .menu__body
                     ul.menu__list
                         //- -if(user.role === 'affiliate')
-                        +menuItem('dashboard', 'Dashboard', 'fa-solid fa-gauge', true)
+                        +menuItem('affiliate_dashboard', 'Dashboard', 'fa-solid fa-gauge', false)
                         +menuItem('marketplace', 'Affiliate marketplace', 'fa-solid fa-shop', false)
                         +menuItem('performance', 'Report and Performance', 'fa-solid fa-chart-simple', false)
                         +menuItem('transaction', 'Transactions', 'fa-solid fa-chart-line', false)

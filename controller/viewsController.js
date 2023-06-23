@@ -36,10 +36,10 @@ exports.signUp = (req, res) => {
         title: 'Create an account'
     });
 }
-exports.dashboard =  (req, res, next) => {
+exports.affiliateDashboard =  (req, res, next) => {
     const user =  User.findOne();
 
-    res.status(200).render('dashboard', {
+    res.status(200).render('affiliate_dashboard', {
         user: user,
         title: `${user.name}'s dashboard`
     });
@@ -77,8 +77,8 @@ exports.notification = async (req, res) => {
         title: 'Your Notification'
     })
 }
-exports.dashboardV = async (req, res) => {
-    res.status(200).render('dashboardV', {
+exports.vendorDashboard = async (req, res) => {
+    res.status(200).render('vendor_dashboard', {
         title: 'Vendor Dashboard'
     })
 }

@@ -30,8 +30,8 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: [true, 'A product must have a summary'],
         trim: true,
-        maxLength: [120, "Summary must not be more than 200 characters"],
-        minLength: [60, "Summary must not be more than 60 characters"],
+        maxLength: [130, "Summary must not be more than 200 characters"],
+        minLength: [80, "Summary must not be more than 60 characters"],
     },
     productCommission: {
         type: Number,

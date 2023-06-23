@@ -49,14 +49,20 @@
 //     })
     
 
-const menuButton = document.querySelector('menu__button')
-const menuOpen = document.querySelector('.menu__open')
-if (menuOpen) 
-    menuOpen.addEventListener('click', function(e) {
-        document.querySelector('.section__bottom').classList.toggle('open');
-        menuButton.classList.toggle('hidden')
-        e.target.classList.toggle('fa-open')
-        e.target.classList.toggle('fa-close')
+const menu = document.querySelector('.menubar-control')
+const menuButton = document.querySelector('menu__button');
+if (menu) 
+    menu.addEventListener('click', function(e) {
+        document.querySelector('.section__bottom').classList.toggle('close');
+        if(e.target.classList.contains('fa-close')) {
+            e.target.classList.remove('fa-close')
+            e.target.classList.add('fa-bars')
+        } else {
+            e.target.classList.add('fa-close')
+            e.target.classList.remove('fa-bars')
+        }
+        console.log(e.target.classList)
+        menuButton.classList.toggle('hidden');
     });
 
 
