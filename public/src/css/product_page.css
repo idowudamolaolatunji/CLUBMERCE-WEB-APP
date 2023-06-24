@@ -60,7 +60,8 @@
     height: auto;
 }
 .product__img {
-    height: 45rem;
+    height: 40rem;
+    width: 70rem;
 }
 .description__text {
     line-height: 1.4;
