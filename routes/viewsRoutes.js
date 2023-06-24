@@ -13,7 +13,7 @@ router.get('/signup', viewController.signUp);
 router.get('/affiliate_dashboard', viewController.affiliateDashboard);
 router.get('/marketplace', viewController.marketPlace);
 router.get('/performance', viewController.reportPerformance);
-router.get('/marketplace/product', viewController.product);
+router.get('/product', viewController.product);
 router.get('/profile', viewController.profile);
 router.get('/transaction', viewController.transaction);
 router.get('/settings', viewController.settings);
