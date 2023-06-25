@@ -304,6 +304,7 @@ button {
 .auth__link:link, .auth__link:visited {
     font-size: 1.6rem;
     color: #333;
+    transition: all .35s !important;
 }
 
 .auth__link:hover {
@@ -318,7 +319,7 @@ button {
     font-size: 1.2rem;
     line-height: 1.5;
 }
-
+/* ===================== */
 
 
 select:required:invalid {

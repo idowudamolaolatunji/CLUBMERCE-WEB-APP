@@ -1,0 +1,160 @@
+/* ===========================================
+    MEDIA QUERIES FOR DASHBOARD
+   =========================================== */
+/* 1135px === 113.5rem === 70.94em */
+@media screen and (max-width: 70.94em) {
+    /* VENDOR */
+    .close .top__details {
+        gap: 10rem;
+    }
+    .top__details {
+        gap: 6.4rem;
+        transition: all .35s;
+    }
+    .close .top__insights {
+        gap: 2rem;
+    }
+    .top__insights {
+        gap: 1.6rem;
+    }
+    .close .top__card {
+        width: 18rem;
+        height: 14rem;
+    }
+    .top__card {
+        width: 16rem;
+        height: auto;
+        transition: all .35s;
+    }
+    .close .bottom__products {
+        gap: 4rem;
+    }
+    .bottom__products {
+        gap: 3rem;
+        transition: all .35s;
+    }
+    .close .bottom__card {
+        width: 24rem;
+        overflow: hidden;
+    }
+    .bottom__card {
+        width: 22rem;
+        overflow: hidden;
+        transition: all .35s;
+    }
+}
+
+
+/* 1100px === 110rem === 68.75em */
+@media screen and (max-width: 68.75em) {
+    .main__dashboard {
+        padding: 2.4rem;
+    }
+    /* AFFILIATE */
+    .dashboard__insights {
+        gap: 1.8rem;
+        transition: all .35s;
+    }
+    .insight {
+        padding: 2rem;
+        transition: all .35s;
+    }
+    .insight__icon {
+        font-size: 3rem;
+    }
+    .insignt__text {
+        font-size: 2rem;
+    }
+    .form__data, .delete-data {
+        max-width: 55rem;
+        padding: 2.4rem;
+    }
+}
+
+/* 1030px === 103rem === 64.19em */
+@media screen and (max-width: 64.19em) {
+    .close .bottom__products {
+        gap: 4rem;
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .bottom__products {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 5rem;
+    }
+    .close .bottom__card {
+        width: 24rem;
+    }
+    .bottom__card {
+        width: 25rem;
+    }
+    .close .card__image {
+        width: 24rem;
+    }
+    .card__image {
+        width: 100%;
+    }
+    
+    .top__insights {
+        gap: 2rem;
+    }
+    /* *** */
+    .close .top__details { margin-top: 0; }
+    .top__details { margin-top: 2.8rem; }
+    .close .top__img-box { margin-top: 0; }
+    .top__img-box { margin-top: -4rem; }
+    .top__cred {gap: 2.4rem;}
+    .close .top__insights { margin-top: 0; margin-left: 0;}
+    .top__insights { margin-top: 2.6rem; margin-left: -18rem; }
+    /* *** */
+}
+
+/* 950px === 95rem === 59.68em */
+@media screen and (max-width: 59.68em) {
+    .top__details { margin-top: 0; }
+    .top__img-box { margin-top: 0; }
+    .top__insights { margin-top: 0; margin-left: 0;}
+
+    /* something magical will happen... */
+    /* and this is global */
+
+    .section__bottom {
+        grid-template-columns: 7rem 1fr;
+        transition: 0ms;
+    }
+    .menu__link:link, .menu__link:visited {
+        gap: 2.8rem;
+    }
+    .menu__button:link, .menu__button:visited {
+        display: none;
+        opacity: 0;
+    }
+    .open .menubar, .open .main__dashboard {
+        position: absolute;
+        top: 7rem;
+    }
+    .open .menubar {
+        left: 0;
+        width: 26rem;
+        height: 100%;
+        z-index: 100;
+        backface-visibility: hidden;
+    }
+    .open .main__dashboard {
+        right: 0;
+        width: 1fr;
+    }
+    /* temp */
+    .open .main__dashboard::after {
+        content: "";
+        display: inline-block;
+        width: 80%;
+        height: 100%;
+        overflow: hidden;
+        background-color: rgba(0, 0, 0, 0.15);
+        z-index: 20;
+
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+}

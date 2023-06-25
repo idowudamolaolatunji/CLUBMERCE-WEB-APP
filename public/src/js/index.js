@@ -66,18 +66,39 @@ if (menu)
     });
 
 
+const mainDashboard = document.querySelector('.main__dashboard')
+const dashboradWidth = mainDashboard.getBoundingClientRect();
+if(dashboradWidth.right < 950) {
+    menu.classList.remove('fa-close');
+    menu.classList.add('fa-bars');
+    menu.addEventListener('click', function(e) {
+        document.querySelector('.section__bottom').classList.toggle('open');
+        if(e.target.classList.contains('fa-bars')) {
+            e.target.classList.remove('fa-bars')
+            e.target.classList.add('fa-close')
+        } else {
+            e.target.classList.add('fa-bars')
+            e.target.classList.remove('fa-close')
+        }
+        console.log(e.target.classList)
+        menuButton.classList.toggle('hidden');
+    });
+
+}
+
+
 console.log('connected')
 
 const notifyIcon = document.querySelector('.notification__icon');
 const notifyBox = document.querySelector('.notification__hovered')
 notifyIcon.addEventListener('click', () => notifyBox.classList.toggle('hidden'));
-document.querySelector('.dashboard__content').addEventListener('click', () => notifyBox.classList.add('hidden'))
+document.querySelector('.main__dashboard').addEventListener('click', () => notifyBox.classList.add('hidden'))
 
 
 const profileImg = document.querySelector('.nav__image')
 const profileBox = document.querySelector('.Profile__hovered')
 profileImg.addEventListener('click', () => profileBox.classList.toggle('hidden'))
-document.querySelector('.dashboard__content').addEventListener('click', () => profileBox.classList.add('hidden'))
+document.querySelector('.main__dashboard').addEventListener('click', () => profileBox.classList.add('hidden'))
 
 
 

@@ -12,8 +12,7 @@ head
     link(rel="stylesheet" href="src/css/general.css")
     link(rel="stylesheet" href="src/css/dashboard.css")
     link(rel="stylesheet" href="src/css/product_page.css")
-    link(rel="stylesheet" href="src/css/main.css")
-    link(rel="stylesheet" href="src/css/query.css")
+
 
 
     title=title
@@ -24,19 +23,18 @@ body
             img.p-logo(src='asset/brand_logo.png' alt='brand product logo')
         nav.product__nav
             ul.product__nav--list
-                // <li class="product__nav--item"><a class="product__nav--link" href="#description">Description</a></li>
                 li.product__nav--item
-                    a.product__nav--link(href='#why') Why Promote
+                    a.product__nav--link.auth__link(href='#why') Why Promote
                 li.product__nav--item
-                    a.product__nav--link(href='#link') Generate Link
+                    a.product__nav--link.auth__link(href='#link') Generate Link
                 li.product__nav--item
-                    a.product__nav--link(href='#img') Images
+                    a.product__nav--link.auth__link(href='#img') Images
                 li.product__nav--item
-                    a.product__nav--link(href='#demo') Demography
+                    a.product__nav--link.auth__link(href='#demo') Demography
                 li.product__nav--item
-                    a.product__nav--link(href='#banner') Promotion banner
+                    a.product__nav--link.auth__link(href='#banner') Promotion banner
                 li.product__nav--item
-                    a.product__nav--link(href='#contact') Contact seller
+                    a.product__nav--link.auth__link(href='#contact') Contact seller
     section.product__section.intro__section
         .product__section--container
             //- <div class="product__intro">
@@ -49,62 +47,54 @@ body
                     span.dashboard__heading {The product name}
                 p.product__intro-text Get ready to earn massive 50% commissions with this 
                     br
-                | extraordinary new weight loss offer&mldr;
+                    | extraordinary new weight loss offer&mldr;
                 p.product__intro-text Get everything you need to start promoting today!
                 .product__image
                     img.product__img(src='asset/img/sample_product1.jpg' alt='product__image')
-                #description.product__description
-                    h2.product__heading--tet What is ${product.name}?
+                .product__description
+                    h2.product__heading--sec What is ${product.name}?
                     span.description__text
-                        span.description__topic Product brand name
-                    | Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt officiis at aspernatur reprehenderit vero sint voluptatibus error pariatur deserunt blanditiis ad velit, repudiandae rem quo! Nemo veniam iure atque labore dolorem esse consequatur eum. Neque, doloribus ab deserunt repudiandae natus aut placeat aspernatur tenetur mollitia doloremque facilis, Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores iusto sit exercitationem atque ipsam provident modi placeat officiis, assumenda quaerat nulla facere deserunt quam omnis eveniet eaque repudiandae, saepe amet molestiae aliquid eum laudantium laborum natus. Deleniti ipsam ipsum eum consequuntur laudantium, dolorem accusantium, maxime animi unde, sint placeat in? porro odio consequuntur.
+                        span.description__topic Product brand name 
+                        | Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt officiis at aspernatur reprehenderit vero sint voluptatibus error pariatur deserunt blanditiis ad velit, repudiandae rem quo! Nemo veniam iure atque labore dolorem esse consequatur eum. Neque, doloribus ab deserunt repudiandae natus aut placeat aspernatur tenetur mollitia doloremque facilis, Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores iusto sit exercitationem atque ipsam provident modi placeat officiis, assumenda quaerat nulla facere deserunt quam omnis eveniet eaque repudiandae, saepe amet molestiae aliquid eum laudantium laborum natus.
 
     section#why.product__section.why-you-should-promote__Section
         .product__section--container
-            h2.product__heading--tet Why You Should Promote ${product.name}
+            h2.product__heading--sec Why You Should Promote ${product.name}
             .why-card__box
                 .why-card
                     i.fa-brand.fa-icon.p-icon
                     h3.why-heading Massive payout
-                    p.why-text
-                    | You get 51% commission each time someone buys our products via your Affiliate Link.
+                    p.why-text You get 51% commission each time someone buys our products via your Affiliate Link.
                 .why-card
                     i.fa-brand.fa-icon.p-icon
                     h3.why-heading Massive market audience
-                    p.why-text
-                    | Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea expedita illum consectetur rem similique! Est ex eum quidem officiis dolore!.
+                    p.why-text Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea expedita illum consectetur rem similique! Est ex eum quidem officiis dolore!.
                 .why-card
                     i.fa-brand.fa-icon.p-icon
                     h3.why-heading Affiliate promotion tool
-                    p.why-text
-                    | No need to use multiple, over complicated sales tatics, everything you need for your complete sales funnel is here in one user-friendly dashboard
+                    p.why-text No need to use multiple, over complicated sales tatics, everything you need for your complete sales funnel is here in one user-friendly dashboard
                 .why-card
                     i.fa-brand.fa-icon.p-icon
                     h3.why-heading Approved physical product
-                    p.why-text
-                    | Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea expedita illum consectetur rem similique! Est ex eum quidem officiis dolore!.
+                    p.why-text Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea expedita illum consectetur rem similique! Est ex eum quidem officiis dolore!.
                 // OR
                 .why-card
                     i.fa-brand.fa-icon.p-icon
                     h3.why-heading Approved digital product
-                    p.why-text
-                    | Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea expedita illum consectetur rem similique! Est ex eum quidem officiis dolore!.
+                    p.why-text Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea expedita illum consectetur rem similique! Est ex eum quidem officiis dolore!.
                 .why-card
                     i.fa-brand.fa-icon.p-icon
                     h3.why-heading Approved digital product
-                    p.why-text
-                    | Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea expedita illum consectetur rem similique! Est ex eum quidem officiis dolore!.
+                    p.why-text Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea expedita illum consectetur rem similique! Est ex eum quidem officiis dolore!.
                 .why-card
                     i.fa-brand.fa-icon.p-icon
                     h3.why-heading reccuring payment
-                    p.why-text
-                    | Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea expedita illum consectetur rem similique! Est ex eum quidem officiis dolore!.
+                    p.why-text Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea expedita illum consectetur rem similique! Est ex eum quidem officiis dolore!.
     section#link.product__section.section__get-link
         .product__section--container
             .link--box
                 h2.dashboard__heading Generate HopLink
-                p.hoplink__text
-                    | Earn commission for every customer you refer to this product using your personalized affiliate hoplink.
+                p.hoplink__text  Earn commission for every customer you refer to this product using your personalized affiliate hoplink.
                 form.hoplink(action='')
                     .hoplink__body
                         input.hoplink__input(type='text' required='' placeholder='Username')
@@ -153,13 +143,11 @@ body
                     .demo-head
                     i.fa-solid.fa-icon.demo-icon
                     p.demo-heading Traffic type
-                    p.demo-text
-                    | We convert and have affiliates successfully making industry-leading ROIs all traffic types such as Facebook, Email, YouTube, TikTok and more!
+                    p.demo-text We convert and have affiliates successfully making industry-leading ROIs all traffic types such as Facebook, Email, YouTube, TikTok and more!
     section#banner.product__section.section__banner
         .product__section--container
             h2.product__heading--sec Product banners
-            p.description__text
-            | Lorem ipsum dolor sit, amet consectetur adipisicing elit. Explicabo nostrum itaque quia autem, ipsum at. Doloribus sunt rem necessitatibus laborum harum nobis animi. Distinctio, modi?
+            p.description__text Lorem ipsum dolor sit, amet consectetur adipisicing elit. Explicabo nostrum itaque quia autem, ipsum at. Doloribus sunt rem necessitatibus laborum harum nobis animi. Distinctio, modi?
             .banner__box
                 a(href='banner1.jpg' target='_blank')
                     img(src='asset/img/banner1.jpg' alt='')
@@ -172,5 +160,10 @@ body
     section#contact.product__section.section__contact-seller
         .product__section--container
             h2.product__heading--sec Contact Seller
-            p.description__text
-            | If you need anything else, email our product manager at aff@brand-example.com and they will assist you as soon as possible. We look forward to working with you.
+            p.description__text If you need anything else, email our product manager at 
+                //- a.email(href=`mailto:${product.contactEmail}`) aff@brand-example.com 
+                span.email aff@brand-example.com 
+                |  and they will assist you as soon as possible. We look forward to working with you.
+
+
+    include _auth_footer
