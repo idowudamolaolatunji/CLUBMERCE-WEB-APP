@@ -50,7 +50,7 @@
     
 
 const menu = document.querySelector('.menubar-control')
-const menuButton = document.querySelector('menu__button');
+const menuButton = document.querySelector('.menu__button');
 if (menu) 
     menu.addEventListener('click', function(e) {
         document.querySelector('.section__bottom').classList.toggle('close');

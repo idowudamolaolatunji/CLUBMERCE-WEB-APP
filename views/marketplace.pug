@@ -61,6 +61,16 @@ block content
             
             .product__category
                 p catergories
+            .product__category-fil
+                form.category__filter 
+                    select.select__input
+                        option(value="most-promoted") Most promoted
+                        option(value="gravity-high-low") Gravity : High-low
+                        option(value="gravity-low-high") Gravity : Low-high
+                        option(value="physical-product") Physical products
+                        option(value="recurring-commission") Recurring commission
+                        option(value="digital-product") Digital products
+                        option(value="least-promoted") Less promoted
         
                     
     .hoplink__overlay.hidden
