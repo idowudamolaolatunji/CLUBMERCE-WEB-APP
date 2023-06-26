@@ -52,12 +52,7 @@ const userSchema = new mongoose.Schema({
     country: String,
     phone: {
         type: String,
-        trim: true,
-        // not sure of this function // Temp
-        reduce: function (el) {
-            if(!el.includes(" ")) return;
-            el.split(' ').join('');
-        }
+        trim: true
     },
     role: {
         type: String,

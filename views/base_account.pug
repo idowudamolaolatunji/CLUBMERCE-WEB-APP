@@ -7,6 +7,7 @@ head
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
 
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer")
+    link(rel="favicon" href="")
 
     //- STYLES 
     link(rel="stylesheet" href="src/css/general.css")
@@ -53,13 +54,12 @@ body
                                     img.profile__image(src="../../asset/img/face.png", alt="customer's dashboard photo")
                                     p.profile__name idowu olatunji
                                 a.profile__link.nav__link(href="/profile") My profile
-
-                                a.profile__button.nav__link(href="/login") signout 
+                                button.profile__button.nav__link#logout signout&nbsp;
                                     i.fa-solid.fa-arrow-right-to-bracket.profile__icon
 
 
         mixin menuItem(link, text, icon, active)                    
-            li(class=`${active ? 'menu__active' : ''}`).menu__item
+            li.menu__item(class=`${active ? 'menu__active' : ''}`)
                 a.menu__link(href=`/${link}`)
                     i.icon.menu__icon(class=`${icon}`)
                     | #{text}
@@ -120,7 +120,7 @@ body
                                 img.menu__profile-image(src='../../asset/img/face.png')
                                 | profile
                         li.menu__item
-                            a.menu__button(href='/login')
+                            button.menu__button#logout
                                 | signout&nbsp;
                                 i.fa-solid.fa-arrow-right-to-bracket
             main.main__dashboard

@@ -3,6 +3,8 @@ const crypto = require('crypto')
 
 const express = require('express')
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const cookieParser = require('cookie-parser')
 
 const app = require("./../app");
 const User = require("./../model/usersModel");
@@ -74,25 +76,42 @@ exports.signup = async (req, res) => {
   }
 }
 
+// Login
 exports.login = async (req, res) => {
   try {
-    const user = await User.findOne({email: req.body.email}).select('+password');
-
-    if(!user || !await user.comparePassword(req.body.password, user.password) || role !== req.body.role) {
-      return res.status(401).json({
+    const { email, password, role} = req.body;
+    const user = await User.findOne({email}).select('+password');
+    const isMatch = await bcrypt.compare(password, user.password);
+    console.log(user);
+    if (!user || !isMatch || !role || user.role != role) {
+      return res.status(404).json({
         status: "fail",
-        message: "user email or password or role incorrect"
+        message: "email or password or role incorrect",
       });
     }
-
+   
+    //=//=//=//=//=//=//=//=//=//
     const token = signToken(user._id);
+    const cookieOptions = {
+      expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
+      httpOnly: true
+    }
+    if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+    res.cookie('JWT', token, cookieOptions);
+    //=//=//=//=//=//=//=//=//=//
+
+    // Remove password from output
+    user.password = undefined;
 
     res.status(200).json({
-      satus: "success",
+      status: "success",
+      message: "Successfully logged in",
+      // token,
       data: {
-        user
+        user,
       }
     })
+
   } catch(err) {
     res.status(400).json({
       status: "fail",
@@ -101,6 +120,18 @@ exports.login = async (req, res) => {
   }
 };
 
+
+// logout
+exports.logout = (req, res) => {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 2 * 1000),
+    httpOnly: true
+  });
+  res.status(200).json({ status: 'success' });
+};
+
+
+// protect
 exports.protect = async (req, res, next) => {
   // remember you will have to get the token from the req.header...
   // also remember that u can access the user id (payload) directly from the token, also the expired time and the issued time 
@@ -109,6 +140,8 @@ exports.protect = async (req, res, next) => {
     let token;
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
       token = req.headers.authorization.split(' ')[1];
+    }  else if (req.cookies.JWT) {
+      token = req.cookies.JWT;
     }
     if(!token)
       return next('You are not authorised')
@@ -125,17 +158,50 @@ exports.protect = async (req, res, next) => {
     if(userExist.changedPasswordAfter(decoded.iat)) {
       return next('User recently changed password, Please login again')
     }
-    req.user = userExist;
-    next()
+    // GRANT ACCESS TO PROTECTED ROUTE
+    req.user = currentUser;
+    res.locals.user = currentUser;
+    next();
 
   } catch(err) {
     res.status(400).json({
       status: "fail",
-      message: err.message,
+      message: err,
     })
   }
   next();
 }
+
+// Only for rendered pages, no errors!
+exports.isLoggedIn = async (req, res, next) => {
+  if (req.cookies.jwt) {
+    try {
+      // 1) verify token
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET
+      );
+
+      // 2) Check if user still exists
+      const currentUser = await User.findById(decoded.id);
+      if (!currentUser) {
+        return next();
+      }
+
+      // 3) Check if user changed password after the token was issued
+      if (currentUser.changedPasswordAfter(decoded.iat)) {
+        return next();
+      }
+
+      // THERE IS A LOGGED IN USER
+      res.locals.user = currentUser;
+      return next();
+    } catch (err) {
+      return next();
+    }
+  }
+  next();
+};
 
 // RESTRICTED TO
 // go to the schema and set enum for the types of user, and set a default to user
@@ -153,7 +219,7 @@ exports.restrictedTo = function(...role) {
   }
 }
 
-/*
+/* 
 // forgot password
 exports.forgotPassword = async (req, res, next) => {
 	try {

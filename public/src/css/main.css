@@ -29,11 +29,13 @@
 .nav__item {
     display: inline-block;
 }
+
 .nav__link {
     text-transform: uppercase;
     color: inherit;
     color: #333;
 }
+
 .nav__link:hover, .nav__link:active, .nav__active {
     background-image: linear-gradient(to left, #2e3192, #f15a29);
     display: inline-block;

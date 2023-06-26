@@ -3,10 +3,13 @@ extends base_auth
 block content
     main
         div.login__form
-            span.spinner
+            //- span.spinner.hidden
+            span.spinner-overlay.hidden
+                span.spinner
             .login__container.grid.grid__two
 
-                form.login(method="POST" action="/api/users/login")
+                //- form.login(method="POST" action="/api/users/login")
+                form.login
                     h3.form__heading Login into your 
                         span.form__extra Clubmerce 
                         | account

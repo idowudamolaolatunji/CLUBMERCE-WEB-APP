@@ -225,6 +225,7 @@ input:focus, input:hover, select:focus,
     border-radius: .6rem;
     font-weight: 500;
     color: #333;
+    font-size: 1.6rem;
 }
 
 .profile__icon {
@@ -343,6 +344,7 @@ input:focus, input:hover, select:focus,
 }.menu__active .menu__icon{ color: #fff; }
 
 
+.menu__button,
 .menu__button:link, .menu__button:visited {
     padding: 1.2rem 2.8rem;
     background-color: #2e3192;

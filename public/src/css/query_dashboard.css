@@ -150,15 +150,14 @@
     }
     .open .main__dashboard {
         right: 0;
-        width: 1fr;
     }
 
     /* temp */
     .open .main__dashboard::after {
         content: "";
         display: inline-block;
-        width: 80%;
-        height: 100%;
+        /* width: 80%;
+        height: 100%; */
         overflow: hidden;
         background-color: rgba(0, 0, 0, 0.15);
         z-index: 20;
@@ -253,7 +252,7 @@
     }
 
     /* affiliate  */
-    .dashboard__insights {
+    .dashboard__insights  {
         grid-template-columns: 1fr 1fr;
         row-gap: 2.8rem;
     }

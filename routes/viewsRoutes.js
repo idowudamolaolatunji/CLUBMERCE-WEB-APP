@@ -1,6 +1,7 @@
 const express = require('express');
 
 const viewController = require('../controller/viewsController')
+const authController = require('../controller/authcontroller')
 const router = express.Router();
 
 //////////////////////////////////////////////
@@ -10,14 +11,14 @@ router.get('/vendor', viewController.vendor);
 router.get('/affiliate', viewController.affiliate);
 router.get('/login', viewController.login);
 router.get('/signup', viewController.signUp);
-router.get('/affiliate_dashboard', viewController.affiliateDashboard);
+router.get('/affiliate_dashboard', authController.isLoggedIn, viewController.affiliateDashboard);
 router.get('/marketplace', viewController.marketPlace);
-router.get('/performance', viewController.reportPerformance);
-router.get('/product', viewController.product);
-router.get('/profile', viewController.profile);
-router.get('/transaction', viewController.transaction);
-router.get('/settings', viewController.settings);
-router.get('/notification', viewController.notification);
-router.get('/vendor_dashboard', viewController.vendorDashboard);
+router.get('/performance', authController.isLoggedIn, viewController.reportPerformance);
+router.get('/product', authController.isLoggedIn, viewController.product);
+router.get('/profile', authController.isLoggedIn, viewController.profile);
+router.get('/transaction', authController.isLoggedIn, viewController.transaction);
+router.get('/settings', authController.isLoggedIn, viewController.settings);
+router.get('/notification', authController.isLoggedIn, viewController.notification);
+router.get('/vendor_dashboard', authController.isLoggedIn, viewController.vendorDashboard);
 
 module.exports = router;

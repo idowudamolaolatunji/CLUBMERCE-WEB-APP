@@ -7,7 +7,7 @@ block content
             .signup__container.grid
                 .signup__form--image
                     img.form__image(src='../../asset/img/signup_new.jpg')
-                form.signup(method="POST" action="/api/users/signup")
+                form.signup
                     h3.form__heading
                         | Create an account with 
                         span.form__extra Clubmerce
@@ -33,7 +33,7 @@ block content
                             label.form__item--label(for='country') Country
                             select.form__item--input.select--input.signup__country(name='country' required='')
                                 option(disable selected value="") Select your country
-                                option Nigeria
+                                option(value="nigeria") Nigeria
                         .form__item
                             label.form__item--label(for='number') Phone Number
                             input.form__item--input.signup__phone(id="phone" name='number' type='tel' placeholder='+1 039 456 827' required='')

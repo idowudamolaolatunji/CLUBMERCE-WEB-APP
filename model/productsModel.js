@@ -8,7 +8,6 @@ const productSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'A product must have a name'],
-        // unique: true,
         trim: true
     },
     image: {
@@ -34,12 +33,12 @@ const productSchema = new mongoose.Schema({
         minLength: [80, "Summary must not be more than 60 characters"],
     },
     productCommission: {
-        type: Number,
-        // required: [true, 'A product must have a price'],
+        type: String,
+        required: [true, 'A product must have a commission percentage'],
     },
-    productType: [String],
-    productNiche: [String],
-    affiliateTools: [String],
+    productType: Boolean,
+    productNiche: Boolean,
+    affiliateTools: Boolean,
     uniqueUrl: [String],
     productGravity: {
         type: Number,
