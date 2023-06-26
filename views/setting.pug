@@ -9,7 +9,7 @@ block content
     //-     span Powered by Paystack: Accepts Mastercard, Visa, Verve, Discover, AMEX, Diners Club and Union Pay.
     //-     button.btn Add payment account
     form.form__data.form-payment-data
-        p.account__details Add a payment account
+        h3.dashboard__heading Add a payment account
         .form__item
             label.form__label(for='paymentBankName') Payment Bank Name
             input#paymentBankName.form__input(type='paymentBankName' value='Acom bank' required)
@@ -25,7 +25,7 @@ block content
 
 
     form.form__data.form-password-data
-        p.password__details Update Account Password
+        h3.dashboard__heading Update Account Password
         .form__item
             label.form__label(for='password-current') Current Password
             input.form__input.signup__password(name='password' type='password-current' placeholder='••••••••••••', required, minlength='8')

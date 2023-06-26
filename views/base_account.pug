@@ -22,6 +22,7 @@ body
             .nav__logo
                 i.fa-solid.fa-close.icon.nav__icon.menubar-control
                 img.logo(src='../../asset/img/logo-removebg.png' alt='clubmerce logo')
+                img.logo-small(src='../../asset/img/favicon.png' alt='clubmerce logo')
             nav.navbar
             
                 if section === 'marketplace'
@@ -29,6 +30,10 @@ body
                         input.nav__input(type='search' placeholder='search...')
                         button.search__button(type='submit')
                             i.fa-solid.fa-magnifying-glass.icon.nav__icon
+                //- form.nav__search
+                //-     input.nav__input(type='search' placeholder='search...')
+                //-     button.search__button(type='submit')
+                //-         i.fa-solid.fa-magnifying-glass.icon.nav__icon
 
                 span.nav__icons
                     span.notification__icon

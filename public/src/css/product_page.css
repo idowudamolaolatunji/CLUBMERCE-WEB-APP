@@ -269,6 +269,7 @@ body {
 /* 600px === 60rem === 37.5em */
 @media screen and (max-width: 37.5em) {
     html { font-size: 56.25%; }
+    body { background-position: center; }
     .product__section--container {
         padding: 0 2.4rem;
     }
@@ -299,21 +300,5 @@ body {
     .images__box, .why-card__box, .banner__box, .demo-grid {
         grid-template-columns: 1fr;
         gap: 2rem;
-    }
-    .auth__lists {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: .8rem;
-    }
-    .auth__item .cp {
-        font-size: 1.4rem;
-    }
-    .auth__item .auth__link {
-        font-size: 1.2rem;
-        color: #333;
-    }
-    .auth__text {
-        font-size: 1rem;
     }
 }

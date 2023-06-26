@@ -1,4 +1,41 @@
 extends base_account 
 
 block content 
-    h3.dashboard__heading Transactions
+    h3.dashboard__heading Transactions and Wallet
+
+    <div class="dashboard__transaction">
+        <div class="wallet__card">
+            <h3 class="dashboard__heading">My wallet</h3>
+            <p class="wallet__amount">NGN <span class="amount">30,000</span></p>
+            <span class="wallet__info">Total Accessable Amount (limit: 20,000)</span>
+        </div>
+
+
+        <div class="withdrawal__card">
+            <h3 class="dashboard__heading">Withdrawal</h3>
+            <form class="withdraw__form">
+                <div class="form__grid-generic">
+                    <div class="form__body-generic">
+                        <label for="bank__number" class="form__label">Bank Account Number</label>
+                        <input type="text" class="form__input" name="bank__number" id="bank__number" />
+                    </div>
+                    <div class="form__body-generic">
+                        <label for="bank__name" class="form__label">Bank Account name</label>
+                        <input type="text" class="form__input" name="bank__name" id="bank__name" />
+                    </div>
+                </div>
+                <div class="form__grid-generic">
+                    <div class="form__body-generic">
+                        <label for="amount" class="form__label">Amount</label>
+                        <input type="text" class="form__input" name="amount" id="amount" />
+                    </div>
+                    <div class="form__body-generic">
+                        <label for="enter__password" class="form__label">Confirm your password</label>
+                        <input type="password" class="form__input" name="enter__password" id="enter__password" />
+                    </div>
+                </div>
+                <button type="submit" class="btn form__submit form__submit-generic">Withdraw</button>
+            </form>
+        </div>
+
+    </div>
