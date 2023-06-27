@@ -1,7 +1,12 @@
 const loginFrom = document.querySelector('.login');
-const signupForm = document.querySelector('.signup')
-const logoutBtn = document.querySelectorAll('#logout')
-const spinner = document.querySelector('.spinner-overlay')
+const signupForm = document.querySelector('.signup');
+const logoutBtn = document.querySelectorAll('#logout');
+const spinner = document.querySelector('.spinner-overlay');
+const menu = document.querySelector('.menubar-control');
+const menuButton = document.querySelector('.menu__button');
+
+
+console.log('connected')
 
 // ALERTS
 const hideAlert = () => {
@@ -10,7 +15,7 @@ const hideAlert = () => {
 };
 
 // type is 'success' or 'error'
-export const showAlert = (type, msg) => {
+const showAlert = (type, msg) => {
     hideAlert();
     const markup = `<div class="alert alert--${type}">${msg}</div>`;
     document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
@@ -18,70 +23,97 @@ export const showAlert = (type, msg) => {
 };
 
 
-// FORMS
+// FORMS functions
 const login = async (email, password, role) => {
-    spinner.classList.remove('hidden');
-    document.body.style.height = '100vh';
-    document.body.style.overflow = 'hidden';
     try {
         console.log(email, password, role);
-
+        
         const res = await fetch('/api/users/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password, role }),
         });
+        // before the reposne gets back...
+        spinner.classList.remove('hidden');
+        if(!spinner.classList.contains('hidden')) 
+            document.body.style.overflow = 'hidden';
+            document.body.style.height = '100vh'
+        
+        // we await the response
         const data = await res.json();
         console.log(data, res, data.status);
         
         if (data.status === 'success') {
             window.setTimeout(() => {
-                alert('Logged in successfully!');
-                location.assign('/affiliate_dashboard');
-
-                // if (role === 'affiliate')
-                //     location.assign('/affiliate_dashboard');
-                // if (role === 'vendor')
-                //     location.assign('/vendor_dashboard');
-                // if (role === 'admin')
-                //     location.assign('/admin_dashboard');
+                showAlert('success', data.message);
+                document.body.style.overflow = 'hidden';
+                if (data.data.user.role === 'affiliate')
+                    location.assign('/affiliate_dashboard');
+                if (data.data.user.role === 'vendor')
+                    location.assign('/vendor_dashboard');
+                if (data.data.user.role === 'admin')
+                    location.assign('/admin_dashboard');
                 spinner.classList.add('hidden');
-            }, 1500);
-        } 
+            }, 2000);
+            document.body.style.overflow = 'auto';
+        } else if(data.status === 'fail') {
+            spinner.classList.add('hidden');
+            document.body.style.overflow = 'scroll';
+            throw new Error(data.message);
+        }
     } catch (err) {
-        alert(err.Response.message);
+        showAlert('error', err.message || 'Something went wrong, Please try again!')
         spinner.classList.add('hidden');
+        document.body.style.height = 'auto';
+        document.body.style.overflow = 'scroll';
     }
 }
 
+
 const logout = async () => {
     try {
-            const res = await fetch('/api/users/logout');
-            const data = await res.json();
-            console.log(data, res);
-            if (data.status ==='success') location.reload(true);
-        } catch (err) {
-            console.log(err);
-            alert('Error logging out! Try again.')
-        }
+        const res = await fetch('/api/users/logout');
+        const data = await res.json();
+        console.log(data, res);
+        if (data.status ==='success') 
+            location.reload(true);
+            location.assign('/login');
+    } catch (err) {
+        showAlert('alert--error', err)
     }
+}
 
 const signup = async (...body) => {
     try {
-        console.log(body);
+        const [fullName, email, password, passwordConfirm, username, country, phone, role] = body
+        console.log({fullName, email, password, passwordConfirm, username, country, phone, role});
 
         const res = await fetch('/api/users/signup', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body),
+            body: JSON.stringify({fullName, email, password, passwordConfirm, username, country, phone, role}),
         });
+        spinner.classList.remove('hidden');
+        if(!spinner.classList.contains('hidden')) 
+            document.body.style.overflow = 'hidden';
+            document.body.style.height = '100vh';
         const data = await res.json();
-        console.log(data, res)
+
+        if(data.status === 'success') {
+            showAlert('success', data.data.message)
+            window.location.reload(true);
+        } else if (data.status === 'fail') {
+            spinner.classList.add('hidden');
+            document.body.style.overflow = 'scroll';
+            throw new Error(data.message);
+        }
     } catch (err) {
-        console.log(err);
+        showAlert('error', err)
     }
 }
 
+
+// FORMS controllers
 if(loginFrom) {
     loginFrom.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -100,7 +132,7 @@ if(signupForm) {
         e.preventDefault();
         const fullName = document.querySelector('.signup__fullname').value;
         const email = document.querySelector('.signup__email').value;
-        const password = document.querySelector('.signup__password').value;
+        const password = document.querySelector('.signup__passwordMain').value;
         const passwordConfirm = document.querySelector('.signup__passwordconfirm').value;
         const usernname = document.querySelector('.signup__username').value;
         const country = document.querySelector('.signup__country').value;
@@ -112,9 +144,7 @@ if(signupForm) {
 
 
 // MENUS
-const menu = document.querySelector('.menubar-control')
-const menuButton = document.querySelector('.menu__button');
-if (menu) 
+if (menu) {
     menu.addEventListener('click', function(e) {
         document.querySelector('.section__bottom').classList.toggle('close');
         if(e.target.classList.contains('fa-close')) {
@@ -127,11 +157,13 @@ if (menu)
         console.log(e.target.classList)
         menuButton.classList.toggle('hidden');
     });
+}
 
 
 const mainDashboard = document.querySelector('.main__dashboard')
 const dashboradWidth = mainDashboard.getBoundingClientRect();
-if(dashboradWidth.right < 950) {
+
+if(dashboradWidth.right <= 950) {
     menu.classList.remove('fa-close');
     menu.classList.add('fa-bars');
     menu.addEventListener('click', function(e) {
@@ -149,8 +181,6 @@ if(dashboradWidth.right < 950) {
 
 }
 
-
-console.log('connected')
 
 // DROPDOWNS
 const notifyIcon = document.querySelector('.notification__icon');

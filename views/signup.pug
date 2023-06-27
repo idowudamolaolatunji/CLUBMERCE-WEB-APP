@@ -3,7 +3,9 @@ extends base_auth
 block content
     main
         .signup__form
-            span.spinner
+            span.spinner-overlay.hidden
+                span.spinner
+
             .signup__container.grid
                 .signup__form--image
                     img.form__image(src='../../asset/img/signup_new.jpg')
@@ -24,7 +26,7 @@ block content
                     .signup__grid.signup__password
                         .form__item
                             label.form__item--label(for='password') Password
-                            input.form__item--input.signup__password(name='password' type='password' placeholder='••••••••••••', required, minlength='8')
+                            input.form__item--input.signup__passwordMain(name='password' type='password' placeholder='••••••••••••', required, minlength='8')
                         .form__item
                             label.form__item--label(for='passwordConfirm') Confirm Password
                             input.form__item--input.signup__passwordconfirm(name='passwordConfirm' type='password' placeholder='••••••••••••', required, minlength='8')
@@ -41,11 +43,11 @@ block content
                             label.form__item--label(for='role') Role
                             select.form__item--input.select--input.signup__role(name='role' required='')
                                 option(disable selected value="") Choose a role 
-                                option(value="affliate") Affiliate
+                                option(value="affiliate") Affiliate
                                 option(value="vendor") Vendor
                     .form__check
-                        input.agree(type='checkbox' required='')
-                        p.form__help
+                        input.agree(type='checkbox' required id='check')
+                        label.form__help(for='check')
                             | I Agree to the 
                             a.form__extra(href='/terms') terms and conditions
                             |  for membership.
@@ -55,6 +57,9 @@ block content
                             span &VerticalLine;
                             | &nbsp; Already have an account? 
                             a.form__extra(href='/login') Login here.
+
+
+
         .email__drop-down.drop-down__shadow.hidden
             // email verification modal
             .email-verify__modal.modal
@@ -69,6 +74,8 @@ block content
                         span.user__email emailaddress@example.com
                         br
                         | Please click the link in your email and verify your email...
+
+
             // email verification confirmed modal
             .email-confirmed__modal.modal.hidden
                 // close icon

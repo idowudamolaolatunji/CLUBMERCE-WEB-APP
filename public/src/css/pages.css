@@ -57,6 +57,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8rem;
+    row-gap: 12rem;
 }
 .content__image {
     width: 100%;

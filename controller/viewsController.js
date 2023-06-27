@@ -53,6 +53,7 @@ exports.marketPlace = async (req, res, next) => {
         const products = await Product.find();
 
         res.status(200).render('marketplace', {
+            title: 'marketPlace',
             products,
             section: 'marketplace'
         });
@@ -60,8 +61,18 @@ exports.marketPlace = async (req, res, next) => {
        next(err)
     }
 }
-exports.product = (req, res) => {
-    res.status(200).render('product');
+exports.product = async (req, res, next) => {
+    try {
+        const product = await Product.findOne({ slug: req.params.slug })
+
+        if(!product) return next('No product with that name')
+        res.status(200).render('product', {
+            title: product.name,
+            product
+        });
+    } catch(err) {
+        next(err)
+    }
 }
 exports.profile = (req, res) => {
     res.status(200).render('profile');

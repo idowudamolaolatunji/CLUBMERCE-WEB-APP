@@ -43,11 +43,6 @@
         transition: all .35s;
     }
 
-    /* marketplace */
-    .close .products__container {
-        grid-template-columns: 1fr 19rem;
-    }
-
     /* popup modal */
     .product__modal {
         width: 65rem;
@@ -178,8 +173,9 @@
         find those bugs and fix them and finish up the interfaces */
         /* =========== */
     }
-    .products__container {
-        grid-template-columns: 1fr 0rem;
+    .products__container, .open .products__container {
+        grid-template-columns: 1fr ;
+        /* gap: 0; */
     } 
     .product__category { 
         display: none;

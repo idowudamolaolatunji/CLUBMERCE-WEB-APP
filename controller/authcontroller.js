@@ -25,12 +25,12 @@ const createCookie = function(statusCode, user, res, message) {
   // takes the user id(payload), secretkey, and an option(expiredin)
   const token = signToken(user._id);
 
-  // const cookieOptions = {
-  //     expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
-  //     httpOnly: true
-  // }
-  // if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-  // res.cookies('JWT', token, cookieOptions);
+  const cookieOptions = {
+      expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
+      httpOnly: true
+  }
+  if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  res.cookies('jwt', token, cookieOptions);
 
   res.status(200).json({
     status: "success",
@@ -51,10 +51,10 @@ exports.signup = async (req, res) => {
   try {
     const newUser = await User.create({
       fullName: req.body.fullName,
-      username: req.body.username,
       email: req.body.email,
       password: req.body.password,
       passwordConfirm: req.body.passwordConfirm,
+      username: req.body.username,
       country: req.body.country,
       phone: req.body.phone,
       role: req.body.role,
@@ -82,14 +82,12 @@ exports.login = async (req, res) => {
     const { email, password, role} = req.body;
     const user = await User.findOne({email}).select('+password');
     const isMatch = await bcrypt.compare(password, user.password);
-    console.log(user);
-    if (!user || !isMatch || !role || user.role != role) {
+    if (!user || !isMatch) {
       return res.status(404).json({
         status: "fail",
-        message: "email or password or role incorrect",
+        message: "email or password incorrect",
       });
     }
-   
     //=//=//=//=//=//=//=//=//=//
     const token = signToken(user._id);
     const cookieOptions = {
@@ -97,7 +95,7 @@ exports.login = async (req, res) => {
       httpOnly: true
     }
     if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-    res.cookie('JWT', token, cookieOptions);
+    res.cookie('jwt', token, cookieOptions);
     //=//=//=//=//=//=//=//=//=//
 
     // Remove password from output
@@ -122,11 +120,16 @@ exports.login = async (req, res) => {
 
 
 // logout
+// exports.logout = (req, res) => {
+//   res.cookie('jwt', 'loggedout', {
+//     expires: new Date(Date.now() + 2 * 1000),
+//     httpOnly: true
+//   });
+//   res.status(200).json({ status: 'success' });
+// };
+
 exports.logout = (req, res) => {
-  res.cookie('jwt', 'loggedout', {
-    expires: new Date(Date.now() + 2 * 1000),
-    httpOnly: true
-  });
+  res.clearCookie('jwt');
   res.status(200).json({ status: 'success' });
 };
 
@@ -140,8 +143,8 @@ exports.protect = async (req, res, next) => {
     let token;
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
       token = req.headers.authorization.split(' ')[1];
-    }  else if (req.cookies.JWT) {
-      token = req.cookies.JWT;
+    }  else if (req.cookies.jwt) {
+      token = req.cookies.jwt;
     }
     if(!token)
       return next('You are not authorised')
@@ -174,31 +177,32 @@ exports.protect = async (req, res, next) => {
 
 // Only for rendered pages, no errors!
 exports.isLoggedIn = async (req, res, next) => {
-  if (req.cookies.jwt) {
-    try {
-      // 1) verify token
-      const decoded = await promisify(jwt.verify)(
-        req.cookies.jwt,
-        process.env.JWT_SECRET
-      );
+  try {
+    if (req.cookies.jwt) {
+      token = req.cookies.jwt;
+    }
 
-      // 2) Check if user still exists
-      const currentUser = await User.findById(decoded.id);
-      if (!currentUser) {
-        return next();
-      }
+    if(!token)
+      return next('You are not loggedin')
+    // 1) verify token
+    const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
 
-      // 3) Check if user changed password after the token was issued
-      if (currentUser.changedPasswordAfter(decoded.iat)) {
-        return next();
-      }
-
-      // THERE IS A LOGGED IN USER
-      res.locals.user = currentUser;
-      return next();
-    } catch (err) {
+    // 2) Check if user still exists
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) {
       return next();
     }
+
+    // 3) Check if user changed password after the token was issued
+    if (currentUser.changedPasswordAfter(decoded.iat)) {
+      return next();
+    }
+
+    // THERE IS A LOGGED IN USER
+    res.locals.user = currentUser;
+    return next();
+  } catch (err) {
+    return next();
   }
   next();
 };
@@ -283,7 +287,7 @@ exports.resetPassword = async (req, res, next) => {
       httpOnly: true
     }
     if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-    res.cookies('JWT', token, cookieOptions);
+    res.cookies('jwt', token, cookieOptions);
 
     res.status(200).json({
       status: "success",
@@ -326,7 +330,7 @@ exports.updatePassword = async (req, res, next) => {
       httpOnly: true
     }
     if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-    res.cookies('JWT', token, cookieOptions);
+    res.cookies('jwt', token, cookieOptions);
 
 		res.status(201).json({
 			status: "success",
