@@ -5,9 +5,20 @@ const spinner = document.querySelector('.spinner-overlay');
 const menu = document.querySelector('.menubar-control');
 const menuButton = document.querySelector('.menu__button');
 
+const forgotPassword = document.querySelector('.forgot')
+const forgotModal = document.querySelector('.forgot-password__modal');
+const forgotClose = document.querySelector('.forgot__close--icon');
+const emailVerifyModal = document.querySelector('.email-verify__modal');
+const emailVerifyClose = document.querySelector('.email-verify__close--icon');
+const emailConfirmModal = document.querySelector('.email-confirmed__modal');
+const emailConfirmClose = document.querySelector('.email-confirmed__close--icon');
+
+// const forgotOverlay = document.querySelector('.forgot-password__drop-down');
+// const emailVerifyOverlay = document.querySelector('.email__drop-down');
 
 console.log('connected')
 
+// REUSEABLE FUNCTION
 // ALERTS
 const hideAlert = () => {
     const el = document.querySelector('.alert');
@@ -21,6 +32,16 @@ const showAlert = (type, msg) => {
     document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
     window.setTimeout(hideAlert, 5000);
 };
+
+// MODALS
+const openModal = function(overlay, modal) {
+    overlay.classList.remove('hidden');
+    modal.classList.remove('hidden');
+}
+const closeModal = function(overlay, modal) {
+    overlay.classList.add('hidden');
+    modal.classList.add('hidden');
+}
 
 
 // FORMS functions
@@ -123,10 +144,8 @@ if(loginFrom) {
         login(email, password, role);
     });
 }
-
 if(logoutBtn) 
     logoutBtn.forEach(el => el.addEventListener('click', logout));
-    
 if(signupForm) {
     signupForm.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -141,6 +160,38 @@ if(signupForm) {
         signup(fullName, email, password, passwordConfirm, usernname, country, phone, role);
     })
 }
+
+// DROPDOWNS
+const notifyIcon = document.querySelector('.notification__icon');
+const notifyBox = document.querySelector('.notification__hovered')
+notifyIcon.addEventListener('click', () => notifyBox.classList.toggle('hidden'));
+document.querySelector('.main__dashboard').addEventListener('click', () => notifyBox.classList.add('hidden'))
+
+
+const profileImg = document.querySelector('.nav__image')
+const profileBox = document.querySelector('.Profile__hovered')
+profileImg.addEventListener('click', () => profileBox.classList.toggle('hidden'))
+document.querySelector('.main__dashboard').addEventListener('click', () => profileBox.classList.add('hidden'))
+
+
+
+// ACCORDIONS
+const accordionItem = document.querySelector('.faq__accordion--item');
+const accordionContentTitle = document.querySelectorAll('.accordion__content--title')
+const accordionContent = document.querySelectorAll('.faq__accordion--content');
+
+
+// accordionItem.forEach(el => el.addEventListener('click', function(e) {
+accordionItem.addEventListener('click', function(e) {
+    console.log('tar:', e.target, 'currTar:', e.currentTarget)
+    
+    const clicked = e.target.closest('.faq__accordion--item');
+    console.log('clicked: ', clicked);
+    if(!clicked) return;
+
+});
+// }));
+
 
 
 // MENUS
@@ -182,42 +233,7 @@ if(dashboradWidth.right <= 950) {
 }
 
 
-// DROPDOWNS
-const notifyIcon = document.querySelector('.notification__icon');
-const notifyBox = document.querySelector('.notification__hovered')
-notifyIcon.addEventListener('click', () => notifyBox.classList.toggle('hidden'));
-document.querySelector('.main__dashboard').addEventListener('click', () => notifyBox.classList.add('hidden'))
 
-
-const profileImg = document.querySelector('.nav__image')
-const profileBox = document.querySelector('.Profile__hovered')
-profileImg.addEventListener('click', () => profileBox.classList.toggle('hidden'))
-document.querySelector('.main__dashboard').addEventListener('click', () => profileBox.classList.add('hidden'))
-
-
-
-// OTHERS
-
-// const forgotPassword = document.querySelector('.forgot')
-// const forgotOverlay = document.querySelector('.forgot-password__drop-down');
-// const forgotModal = document.querySelector('.forgot-password__modal');
-// const forgotClose = document.querySelector('.forgot__close--icon');
-
-// const emailVerifyOverlay = document.querySelector('.email__drop-down');
-// const emailVerifyModal = document.querySelector('.email-verify__modal');
-// const emailVerifyClose = document.querySelector('.email-verify__close--icon');
-
-// const emailConfirmModal = document.querySelector('.email-confirmed__modal');
-// const emailConfirmClose = document.querySelector('.email-confirmed__close--icon');
-
-const openModal = function(overlay, modal) {
-    overlay.classList.remove('hidden');
-    modal.classList.remove('hidden');
-}
-const closeModal = function(overlay, modal) {
-    overlay.classList.add('hidden');
-    modal.classList.add('hidden');
-}
 
 // forgotPassword.addEventListener('click', () => openModal( forgotOverlay, forgotModal));
 // forgotOverlay.addEventListener('click', () => closeModal(forgotOverlay, forgotModal));
@@ -237,19 +253,7 @@ const hoplinkClose = document.querySelector('.hoplink__icon');
 hoplinkOpen.forEach(el =>
     el.addEventListener('click', () => openModal(hoplinkOverlay, hoplinkModal)));
 hoplinkClose.addEventListener('click', () => closeModal(hoplinkOverlay, hoplinkModal))
-// hoplinkOverlay.addEventListener('click', () => closeModal(hoplinkOverlay, hoplinkModal))
 
-// const accordionContainer = document.querySelector('.faq__accordion');
-// const accordionItem = document.querySelectorAll('.faq__accordion--item');
-// const accordionContent = document.querySelector('.faq__accordion--content');
-// accordionContainer.addEventListener('click', function(e) {
-//     // console.log(e.target, e.currentTarget)
-    
-//     const clicked = e.target.closest('.faq__accordion--item')
-//     if(!clicked) return;
 
-//     accordionItem.forEach(accordion => accordion.classList.remove('faq__open'));
-//     clicked.classList.add('faq__open')
 
-// });
 

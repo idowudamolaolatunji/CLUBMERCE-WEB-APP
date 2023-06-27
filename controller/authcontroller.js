@@ -177,35 +177,32 @@ exports.protect = async (req, res, next) => {
 
 // Only for rendered pages, no errors!
 exports.isLoggedIn = async (req, res, next) => {
-  try {
-    if (req.cookies.jwt) {
-      token = req.cookies.jwt;
-    }
+  // if (req.cookies.jwt) {
+  //   try {     
+  //     // 1) verify token
+  //     const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
 
-    if(!token)
-      return next('You are not loggedin')
-    // 1) verify token
-    const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
+  //     // 2) Check if user still exists
+  //     const currentUser = await User.findById(decoded.id);
+  //     if (!currentUser) {
+  //       return next();
+  //     }
 
-    // 2) Check if user still exists
-    const currentUser = await User.findById(decoded.id);
-    if (!currentUser) {
-      return next();
-    }
+  //     // 3) Check if user changed password after the token was issued
+  //     if (currentUser.changedPasswordAfter(decoded.iat)) {
+  //       return next();
+  //     }
 
-    // 3) Check if user changed password after the token was issued
-    if (currentUser.changedPasswordAfter(decoded.iat)) {
-      return next();
-    }
-
-    // THERE IS A LOGGED IN USER
-    res.locals.user = currentUser;
-    return next();
-  } catch (err) {
-    return next();
-  }
-  next();
+  //     // THERE IS A LOGGED IN USER
+  //     res.locals.user = currentUser;
+  //     return next();
+  //   } catch (err) {
+  //     return next('You are not loggedin');
+  //   }
+  // }
+  // next();
 };
+
 
 // RESTRICTED TO
 // go to the schema and set enum for the types of user, and set a default to user
