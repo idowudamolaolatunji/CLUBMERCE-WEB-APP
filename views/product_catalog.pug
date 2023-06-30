@@ -1,0 +1,56 @@
+extends base_account 
+
+block content 
+    h3.dashboard__heading My product dashboard
+    section.vendor__dashboard
+        .dashboard__table
+            <!-- manage products -->
+            <div class="table table-vp">
+                <div class="table-title">
+                    <h4 class="table-heading">Manage Products</h4>
+                </div>
+                <div class="table-head-vp">
+                    <span class="table-head-content">Product</span>
+                    <span class="table-head-content">price</span>
+                    <span class="table-head-content">Type</span>
+                    <span class="table-head-content">gravity</span>
+                    <span class="table-head-content">approved</span>
+                    <span class="table-head-content">actions</span>
+                </div>
+
+                <div class="table-row-vp">
+                    <span class="table-row-content table-row-product">
+                        <img class="table-product__image" src="../product.jpg" alt="" />
+                        <span>
+                            <p class="table-product__name">Test product 1</p>
+                            <p class="table-product__niche">health & fitness</p>
+                        </span>
+                    </span>
+                    <span class="table-row-content"><p class="price">$&nbsp;90</p></span>
+                    <span class="table-row-content"><p class="product-type">Digital product</p></span>
+                    <span class="table-row-content"><p class="grivity">0</p></span>
+                    <span class="table-row-content"><p class="approved status status--success">Approved</p></span>
+                    <span class="table-row-content table-row-btn">
+                        <button class="btn-edit table-btn">Edit</button>
+                        <button class="btn-delete table-btn">Delete</button>
+                    </span>
+                </div>
+                <div class="table-row-vp">
+                    <span class="table-row-content table-row-product">
+                        <img class="table-product__image" src="../product.jpg" alt="" />
+                        <span>
+                            <p class="table-product__name">Test product 1</p>
+                            <p class="table-product__niche">health & fitness</p>
+                        </span>
+                    </span>
+                    <span class="table-row-content"><p class="price">$&nbsp;90</p></span>
+                    <span class="table-row-content"><p class="product-type">Physical product</p></span>
+                    <span class="table-row-content"><p class="grivity">2</p></span>
+                    <span class="table-row-content"><p class="approved status status--pending">pending</p></span>
+                    <span class="table-row-content table-row-btn">
+                        <button class="btn-edit table-btn">Edit</button>
+                        <button class="btn-delete table-btn">Delete</button>
+                    </span>
+                </div>
+            </div>
+        

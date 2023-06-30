@@ -82,9 +82,11 @@ exports.login = async (req, res) => {
     const { email, password, role} = req.body;
     const user = await User.findOne({email}).select('+password');
     const isMatch = await bcrypt.compare(password, user.password);
+    // if (!user || !isMatch || !role === user.role) {
     if (!user || !isMatch) {
       return res.status(404).json({
         status: "fail",
+        // message: "email or password or role is incorrect",
         message: "email or password incorrect",
       });
     }
@@ -200,7 +202,7 @@ exports.isLoggedIn = async (req, res, next) => {
   //     return next('You are not loggedin');
   //   }
   // }
-  // next();
+  next();
 };
 
 

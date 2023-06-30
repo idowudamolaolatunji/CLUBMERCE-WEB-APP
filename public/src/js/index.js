@@ -16,7 +16,24 @@ const emailConfirmClose = document.querySelector('.email-confirmed__close--icon'
 // const forgotOverlay = document.querySelector('.forgot-password__drop-down');
 // const emailVerifyOverlay = document.querySelector('.email__drop-down');
 
-console.log('connected')
+console.log('connected');
+
+// const swiper = new Swiper('.swiper', {
+//     // Optional parameters
+//     direction: 'vertical',
+//     loop: true,
+
+//     // If we need pagination
+//     pagination: {
+//     el: '.swiper-pagination',
+//     },
+
+//     // Navigation arrows
+//     navigation: {
+//     nextEl: '.swiper-button-next',
+//     prevEl: '.swiper-button-prev',
+//     }
+// });
 
 // REUSEABLE FUNCTION
 // ALERTS
@@ -170,7 +187,7 @@ document.querySelector('.main__dashboard').addEventListener('click', () => notif
 
 const profileImg = document.querySelector('.nav__image')
 const profileBox = document.querySelector('.Profile__hovered')
-profileImg.addEventListener('click', () => profileBox.classList.toggle('hidden'))
+profileImg.addEventListener('click', (e) => profileBox.classList.toggle('hidden'))
 document.querySelector('.main__dashboard').addEventListener('click', () => profileBox.classList.add('hidden'))
 
 
@@ -181,16 +198,14 @@ const accordionContentTitle = document.querySelectorAll('.accordion__content--ti
 const accordionContent = document.querySelectorAll('.faq__accordion--content');
 
 
-// accordionItem.forEach(el => el.addEventListener('click', function(e) {
-accordionItem.addEventListener('click', function(e) {
-    console.log('tar:', e.target, 'currTar:', e.currentTarget)
+// accordionItem.addEventListener('click', function(e) {
+//     console.log('tar:', e.target, 'currTar:', e.currentTarget)
     
-    const clicked = e.target.closest('.faq__accordion--item');
-    console.log('clicked: ', clicked);
-    if(!clicked) return;
+//     const clicked = e.target.closest('.faq__accordion--item');
+//     console.log('clicked: ', clicked);
+//     if(!clicked) return;
 
-});
-// }));
+// });
 
 
 

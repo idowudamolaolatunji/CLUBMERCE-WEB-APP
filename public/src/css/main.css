@@ -10,7 +10,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
     z-index: 300;
 }
 
@@ -86,7 +85,7 @@
 }
 
 .hero__section {
-    background-image: linear-gradient(to right bottom,  rgba(0, 0, 0, .35), rgba(0, 0, 0, .35), rgba(241, 91, 41, 0.35)), url('./../../asset/img/hero2_reduced.jpg');
+    background-image: linear-gradient(to right bottom,  rgba(0, 0, 0, .35), rgba(0, 0, 0, .35), rgba(241, 91, 41, 0.35)), url('./../../asset/img/hero_reduced.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -94,9 +93,10 @@
 }
 
 .hero {
-    gap: 5rem;
+    display: grid;
     grid-template-columns: 58fr 68fr;
     justify-content: center;
+    gap: 5rem;
 }
 
 .hero__heading {
@@ -140,8 +140,9 @@
     box-shadow:inset 0 0 0 .22rem #f15a29;
 }
 
-.hero__image--container, .hero__image {
+.hero__image--box, .hero__image {
     display: none;
+    opacity: 0;
 }
 
 .section__features {
@@ -169,7 +170,7 @@
     box-shadow: 0 0 .8rem rgba(0, 0, 0, .1);
 }
 .features__text {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     font-weight: 500;
     line-height: 1.4;
 }
@@ -587,6 +588,11 @@
     height: 4rem;
     display: inline-block;
     border-radius: 1rem;
+}
+
+.footer__contact--info span .footer__links--list {
+    display: none;
+    opacity: 0;
 }
 
 .footer__contact--info .footer__list {

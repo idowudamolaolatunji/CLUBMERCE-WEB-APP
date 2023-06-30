@@ -21,8 +21,8 @@ dotenv.config({path: './config.env'});
 const app = express();
 // body parser
 app.use(express.json());
-
 app.use(cookieParser())
+
 
 // pug
 app.set('view engine', 'pug');

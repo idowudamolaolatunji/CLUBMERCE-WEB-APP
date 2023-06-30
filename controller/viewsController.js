@@ -48,19 +48,28 @@ exports.affiliateDashboard =  (req, res, next) => {
 exports.reportPerformance = (req, res) => {
     res.status(200).render('report_performance');
 }
-exports.marketPlace = async (req, res, next) => {
-    try {
-        const products = await Product.find();
+// exports.marketPlace = async (req, res, next) => {
+//     try {
+//         const products = await Product.find();
 
-        res.status(200).render('marketplace', {
-            title: 'marketPlace',
-            products,
-            section: 'marketplace'
-        });
-    } catch(err) {
-       next(err)
-    }
+//         res.status(200).render('marketplace', {
+//             title: 'marketPlace',
+//             products,
+//             section: 'marketplace'
+//         });
+//     } catch(err) {
+//        next(err)
+//     }
+// }
+
+// temp
+exports.marketPlace = async (req, res, next) => {
+    res.status(200).render('marketplace', {
+        title: 'marketPlace',
+        section: 'marketplace'
+    });
 }
+//////
 exports.product = async (req, res, next) => {
     try {
         const product = await Product.findOne({ slug: req.params.slug })
@@ -91,5 +100,15 @@ exports.notification = async (req, res) => {
 exports.vendorDashboard = async (req, res) => {
     res.status(200).render('vendor_dashboard', {
         title: 'Vendor Dashboard'
+    })
+}
+exports.productCatalog = async (req, res) => {
+    res.status(200).render('product_catalog', {
+        title: 'Your Product'
+    })
+}
+exports.adminDashboard = async (req, res) => {
+    res.status(200).render('admin_dashboard', {
+        title: 'Clubmerce Admin Dashboard'
     })
 }

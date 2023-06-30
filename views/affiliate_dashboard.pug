@@ -5,34 +5,61 @@ block content
         h3.dashboard__heading=`Welcome back, ${user.fullname}`
         .dashboard__insights 
             .insight.insight__one
-                i.fa-solid.fa-coins.insight__icon
-                p.insignt__text NGN 25K
+                span 
+                    p.insignt__text $25K
+                    i.fa-solid.fa-coins.insight__icon
                 p.insignt__title Total enarned
 
             .insight.insight__two
-                i.fa-solid.fa-comments-dollar.insight__icon
-                //- i.fa-solid.fa-shoping-bag.insight__icon
-                p.insignt__text 15
+                span 
+                    p.insignt__text 15
+                    i.fa-solid.fa-comments-dollar.insight__icon
                 p.insignt__title Product Sold
 
             .insight.insight__three
-                i.fa-solid.fa-up-right-from-square.insight__icon
-                p.insignt__text 100
+                span
+                    p.insignt__text 100
+                    i.fa-solid.fa-up-right-from-square.insight__icon
                 p.insignt__title Links clicks
 
             .insight.insight__four
-                i.fa-solid.fa-bullhorn.insight__icon
-                p.insignt__text 20
-                p.insignt__title promotions
+                span
+                    p.insignt__text 20
+                    i.fa-solid.fa-bullhorn.insight__icon
+                p.insignt__title Promotions
 
-        .dashboard__cards
-            //- .box1.box
-            //- .box2.box
-            //- .box3.box
-            //- .box4.box
-            .dashboard__card.card1
-                | Most Recent Commission by Account
-            .dashboard__card.card2
+
+        .dashboard__table
+            <div class="table">
+                <div class="table-title">
+                    <h4 class="table-heading">Recent commission</h4>
+                    <i class="fa-silid fa-vertical-dots table__icon"></i>
+                </div>
+                <div class="table-head">
+                    <span class="table-head-content">Product</span>
+                    <span class="table-head-content">Commission amount</span>
+                    <span class="table-head-content">Status</span>
+                    <span class="table-head-content">date</span>
+                </div>
+
+
+                //- <div class="table-row">
+                    <span class="table-row-content table-row-product">
+                        <img class="table-product__image" src="../product.jpg" alt="" />
+                        <span>
+                            <p class="table-product__name">Test product 2</p>
+                            <p class="table-product__niche">E-books</p>
+                        </span>
+                    </span>
+                    <span class="table-row-content"><p class="price">$&nbsp;90</p></span>
+                    <span class="table-row-content"><p class="status status--pending">pending</p></span>
+                    <span class="table-row-content"><p class="date">12/02/23</p></span>
+                //- </div>
+                <div class="table-row-message">
+                    p.note-no You've have not made any sale commission...</div>
+
+                
+            </div>
 
     //- <div class="generic__overlay">
     //-     <div class="generic__modal product__modal">

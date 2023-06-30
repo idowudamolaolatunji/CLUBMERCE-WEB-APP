@@ -1,73 +1,66 @@
 extends base_account 
 
 block content 
-    h3.dashboard__heading My product dashboard
-    section.vendor__dashboard
-        .dashboard__container.vendor__flex
-            .top__details
-                .top__img-box
-                    img.top__img(src='../asset/img/admin.png' alt='')
-                .top__description
-                    .top__cred 
-                        span 
-                            h3.top__name Britice Health Products
-                            h3.top__niche health and fitness
-                        span 
-                            a.dashboard__button(href="#") Add product
-                    .top__insights
-                        .top__card.insight__one
-                            i.fa-solid.fa-coins.icon
-                            span.top__amount 2k
-                            p.top__title Profits
-                        .top__card.insight__two
-                            i.fa-solid.fa-list-check.icon
-                            span.top__amount 2k
-                            p.top__title Products
-                        .top__card.insight__three
-                            i.fa-solid.fa-bullhorn.icon
-                            span.top__amount 2k
-                            p.top__title Affilliates
-            .bottom__details
-                .bottom__products
-                    .bottom__card
-                        i.fa-solid.fa-ellipsis-vertical.card-icon.dot
-                        .card__image-box 
-                            img.card__image(src='../asset/img/product.jpg' alt='')
-                        .card__description
-                            p.card__title Name of product
-                            p.bottom-card__text summary of product, Lorem ipsum dolor Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla, eveniet? sit amet consectetur adipisicing elit. Numquam, possimus!
-                        //- ul.card__icons
-                        //-     li.card__icon--item
-                        //-         i.fa-solid.fa-truck-fast.card-icon
-                        //-     li.card__icon--iten
-                        //-         i.fa-solid.fa-tools.card-icon
-                        //-     li.card__icon--item
-                        //-         i.fa-solid.fa-link.card-icon
-                        //-     li.card__icon--item
-                        //-         i.fa-regular.fa-square-check.card-icon
-                        //-     li.card__icon--item
-                        //-         i.fa-solid.fa-rotate.card-icon
-                    .bottom__card
-                        i.fa-solid.fa-ellipsis-vertical.card-icon.dot
-                        .card__image-box 
-                            img.card__image(src='../asset/img/product.jpg' alt='')
-                        .card__description
-                            p.card__title Name of product
-                            p.bottom-card__text summary of product, Lorem ipsum dolor Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla, eveniet? sit amet consectetur adipisicing elit. Numquam, possimus!
-                    //-    icons
-                    .bottom__card
-                        i.fa-solid.fa-ellipsis-vertical.card-icon.dot
-                        .card__image-box 
-                            img.card__image(src='../asset/img/product.jpg' alt='')
-                        .card__description
-                            p.card__title Name of product
-                            p.bottom-card__text summary of product, Lorem ipsum dolor Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla, eveniet? sit amet consectetur adipisicing elit. Numquam, possimus!
-                    //-    icons
-                    .bottom__card
-                        i.fa-solid.fa-ellipsis-vertical.card-icon.dot
-                        .card__image-box 
-                            img.card__image(src='../asset/img/product.jpg' alt='')
-                        .card__description
-                            p.card__title Name of product
-                            p.bottom-card__text summary of product, Lorem ipsum dolor Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla, eveniet? sit amet consectetur adipisicing elit. Numquam, possimus!
-                    //-    icons
+    .main__dashboard--container
+        //- h3.dashboard__heading=`Welcome back, ${user.fullname} (Vendor)`
+        h3.dashboard__heading=`Welcome back, (Vendor)`
+        .dashboard__insights 
+            .insight.insight__one
+                span 
+                    p.insignt__text $25K
+                    i.fa-solid.fa-comments-dollar.insight__icon
+                p.insignt__title My profit
+
+            .insight.insight__two
+                span 
+                    p.insignt__text 15
+                    //- i.fa-solid.fa-bag.insight__icon
+                    i.fa-solid.fa-list-check.insight__icon
+                p.insignt__title My Products
+
+            .insight.insight__three
+                span
+                    p.insignt__text 0
+                    i.fa-solid.fa-shopping-cart.insight__icon
+                p.insignt__title Orders
+
+            .insight.insight__four
+                span
+                    p.insignt__text 20
+                    i.fa-solid.fa-bullhorn.insight__icon
+                p.insignt__title Affiliate Gravity
+                
+
+        .dashboard__table
+            <!-- order (vendor) -->
+            <div class="table table-po">
+                <div class="table-title">
+                    <h4 class="table-heading">Product orders</h4>
+                </div>
+                <div class="table-head-po">
+                    <span class="table-head-content">Product</span>
+                    <span class="table-head-content">orders</span>
+                    <span class="table-head-content">Total price</span>
+                    <span class="table-head-content">location</span>
+                    <span class="table-head-content">status</span>
+                </div>
+
+                //- <div class="table-row-po">
+                    <span class="table-row-content table-row-product">
+                        <img class="table-product__image" src="../product.jpg" alt="" />
+                        <span>
+                            <p class="table-product__name">Test product 1</p>
+                            <p class="table-product__niche">health & fitness</p>
+                        </span>
+                    </span>
+                    <span class="table-row-content"><p class="order">5</p></span>
+                    <span class="table-row-content"><p class="price">$&nbsp;120</p></span>
+                    <span class="table-row-content"><p class="brand">Nigeria</p></span>
+                    <span class="table-row-content"><p class="status status--success">success</p></span>
+                //- </div>
+
+                <div class="table-row-message">
+                    p.note-no You've no order at the moment...</div>
+                
+            </div>
+

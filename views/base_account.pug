@@ -21,7 +21,8 @@ body
     section.section__dashboard
         .section__top
             .nav__logo
-                i.fa-solid.fa-close.icon.nav__icon.menubar-control
+                i.fa-solid.fa-close.icon.nav__icon.menubar-control.menu-closed
+                i.fa-solid.fa-bars.icon.nav__icon.menubar-control.menu-opened.hidden
                 img.logo(src='../../asset/img/logo-removebg.png' alt='clubmerce logo')
                 img.logo-small(src='../../asset/img/favicon.png' alt='clubmerce logo')
             nav.navbar
@@ -58,20 +59,20 @@ body
                                     i.fa-solid.fa-arrow-right-to-bracket.profile__icon
 
 
-        mixin menuItem(link, text, icon, active)                    
+        mixin menuItem(link, text, icon, active, target)                    
             li.menu__item(class=`${active ? 'menu__active' : ''}`)
-                a.menu__link(href=`/${link}`)
+                a.menu__link(href=`/${link}` #{target})
                     i.icon.menu__icon(class=`${icon}`)
-                    | #{text}
+                    p #{text}
 
         .section__bottom
             menu.menubar
                 .menu__body
                     ul.menu__list
                         //- -if(user.role === 'affiliate')
-                        +menuItem('affiliate_dashboard', 'Dashboard', 'fa-solid fa-gauge', false)
-                        +menuItem('marketplace', 'Affiliate marketplace', 'fa-solid fa-shop', false)
-                        +menuItem('performance', 'Report and Performance', 'fa-solid fa-chart-simple', false)
+                        +menuItem('affiliate-dashboard', 'Dashboard', 'fa-solid fa-gauge', false)
+                        +menuItem('marketplace', 'Affiliate Marketplace', 'fa-solid fa-shop', false, target="_blank")
+                        +menuItem('performance', 'My Performance', 'fa-solid fa-chart-simple', false)
                         +menuItem('transaction', 'Transactions', 'fa-solid fa-chart-line', false)
                         +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
 

@@ -91,17 +91,16 @@ button {
     display: none;
     opacity: 0;
 }
+.section {
+    padding: 10rem 0;
+}
 
 .hero__section {
     padding: 14rem 0 10rem;
 }
 
-.section {
-    padding: 10rem 0;
-}
-
 .stats__section {
-    padding: 7rem;
+    padding: 7rem 0;
 }
 
 .stats__section,
@@ -199,25 +198,26 @@ button {
 .flex__horizontal { flex-direction: row }
 .flex__vertical { flex-direction: column }
 
-.margin__top--xlg { margin-top: 8rem }
 .margin__top--lg { margin-top: 6.2 }
 .margin__top--md { margin-top: 4.8rem }
 .margin__top--sm { margin-top: 2.4rem; }
 
-.margin__bottom--xlg { margin-bottom: 8rem }
 .margin__bottom--lg { margin-bottom: 6.2rem }
 .margin__bottom--md { margin-bottom: 4.8rem }
 .margin__bottom--sm { margin-bottom: 2.4rem }
 
-.margin__left--xlg { margin-left: 8rem }
 .margin__left--lg { margin-left: 6.2rem }
 .margin__left--md { margin-left: 4.8rem }
 .margin__left--sm { margin-left: 2.4rem }
 
-.margin__right--xlg { margin-right: 8rem }
+/* .margin__right--xlg { margin-right: 8rem } */
 .margin__right--lg { margin-right: 6.4rem }
 .margin__right--md { margin-right: 4.8rem }
 .margin__right--sm { margin-right: 2.4rem }
+
+
+a .font-size-sm-help { font-size: 1.8rem; }
+.margin__r-help { margin-right: 1rem }
 
 .hero__svg {
     position: absolute;

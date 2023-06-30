@@ -2,30 +2,32 @@ extends base
 
 block content 
     main
-        section.hero__section
+        section.section.hero__section
             span.spinner-overlay.hidden
                 span.spinner
             img.hero__svg.svg1(src='asset/svg/svg1.svg')
             img.hero__svg.svg2(src='asset/svg/svg2.svg')
-            .section__container.hero.grid
+            .section__container.hero
                 .section__heading.hero__heading
                     h1.section__heading--primary
                         | Unleash Your Earning Potentials.
                     h3.section__heading--tetrary.lsp
                         | With our innovative platform, you can supercharge your sales strategy and watch your revenue soar!
                     .hero__button--container
-                        a.section__button.btn.hero__button.main__button(href='#') Get started
-                        a.section__button.hero__button.outline__button(href='#') Learn more
+                        a.section__button.btn.hero__button.main__button(href='/get-started') Get started
+                        a.section__button.hero__button.outline__button(href='#how') Learn more
+                        //- a.section__button.hero__button.outline__button(href='#learn') Learn more
+                .hero__image--box
+                        img.hero__image(src="asset/img/hero_reduced.jpg" alt="")
+
         section.section.section__features 
             .section__container.features 
                 .features__card
                     i.fa-solid.fa-magnifying-glass-chart.features__icon 
                     p.features__text Transparent Product Marketplace
-
                 .features__card
                     i.fa-solid.fa-credit-card.features__icon
                     p.features__text Reliable and Integrated Payments
-
                 .features__card
                     i.fa-solid.fa-pie-chart.features__icon
                     p.features__text Top Performing Offers
@@ -33,7 +35,7 @@ block content
                     i.fa-solid.fa-list-check.features__icon
                     p.features__text Personalized Account Management
 
-        section.section.how__section
+        section.section.how__section#how
             .section__container.relative
                 .section__how--flex
                     img.how__steps--line(src='asset/svg/line.svg' alt='')
@@ -70,12 +72,12 @@ block content
                                 | Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                                 | Inventore iste ipsam quos id, excepturi laborum libero
                                 | praesentium dolorenesciunt.
-        section.section.get-started__section
+        section.section.get-started__section#learn
             .section__container
                 .section__heading
                     h2.section__heading--secondary.center get started
                     p.get-started__heading--text
-                        | Whether you&rsquo;re looking to start, scale, or expand your business reach, Clubmerce can help. Join thousands of sellers and more than 1,000 affiliates who are finding success on the Clubmerce platform.
+                        | Whether you're looking to start, scale, or expand your business reach, Clubmerce can help. Join thousands of sellers and more than 1,000 affiliates who are finding success on the Clubmerce platform.
                 .cards
                     .get-started__card.get-started__affiliate
                         img.get-started__image(src='asset/img/affiliate2_reduced.jpg' alt='')
@@ -96,10 +98,10 @@ block content
                                 | iusto harum molestias.
                             a.get-started__button.btn(href='/vendor') Get Started
 
-        section.stats__section
+        section.section.stats__section
             .section__container.stats.grid.grid__three
                 .stats__data--one.stats__data
-                    span.stats1 90K
+                    span 90K
                     p.stats__data--text Lorem ipsum dolor sit.
                 .stats__data--two.stats__data
                     span 80%
@@ -206,13 +208,15 @@ block content
                             p.testimonial__author Lorem.
                         .testimonial__slide--item-img
                             img.testimonial__image(src='asset/img/face.png' alt='')
+                
                 .dots.un-skew
                     span.dot.dot1 &nbsp;
                     span.dot.dot1 &nbsp;
                     span.dot.dot2.dot__active &nbsp;
                     span.dot.dot3 &nbsp;
                     span.dot.dot3 &nbsp;
-        
+
+
         section.section.cta1__section
             .section__container
                 .section__heading

@@ -11,7 +11,10 @@ router.get('/vendor', viewController.vendor);
 router.get('/affiliate', viewController.affiliate);
 router.get('/login', viewController.login);
 router.get('/signup', viewController.signUp);
-router.get('/affiliate_dashboard', authController.isLoggedIn, viewController.affiliateDashboard);
+router.get('/affiliate-dashboard', authController.isLoggedIn, viewController.affiliateDashboard);
+router.get('/vendor-dashboard', authController.isLoggedIn, viewController.vendorDashboard);
+router.get('/admin-dashboard', authController.isLoggedIn, viewController.adminDashboard);
+router.get('/product-catalog', authController.isLoggedIn, viewController.productCatalog);
 router.get('/marketplace', authController.isLoggedIn, viewController.marketPlace);
 router.get('/performance', authController.isLoggedIn, viewController.reportPerformance);
 router.get('/product/:slug', authController.isLoggedIn, viewController.product);
@@ -19,6 +22,5 @@ router.get('/profile', authController.isLoggedIn, viewController.profile);
 router.get('/transaction', authController.isLoggedIn, viewController.transaction);
 router.get('/settings', authController.isLoggedIn, viewController.settings);
 router.get('/notification', authController.isLoggedIn, viewController.notification);
-router.get('/vendor_dashboard', authController.isLoggedIn, viewController.vendorDashboard);
 
 module.exports = router;
