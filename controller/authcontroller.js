@@ -179,29 +179,29 @@ exports.protect = async (req, res, next) => {
 
 // Only for rendered pages, no errors!
 exports.isLoggedIn = async (req, res, next) => {
-  // if (req.cookies.jwt) {
-  //   try {     
-  //     // 1) verify token
-  //     const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
+  if (req.cookies.jwt) {
+    try {     
+      // 1) verify token
+      const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
 
-  //     // 2) Check if user still exists
-  //     const currentUser = await User.findById(decoded.id);
-  //     if (!currentUser) {
-  //       return next();
-  //     }
+      // 2) Check if user still exists
+      const currentUser = await User.findById(decoded.id);
+      if (!currentUser) {
+        return next();
+      }
 
-  //     // 3) Check if user changed password after the token was issued
-  //     if (currentUser.changedPasswordAfter(decoded.iat)) {
-  //       return next();
-  //     }
+      // 3) Check if user changed password after the token was issued
+      if (currentUser.changedPasswordAfter(decoded.iat)) {
+        return next();
+      }
 
-  //     // THERE IS A LOGGED IN USER
-  //     res.locals.user = currentUser;
-  //     return next();
-  //   } catch (err) {
-  //     return next('You are not loggedin');
-  //   }
-  // }
+      // THERE IS A LOGGED IN USER
+      res.locals.user = currentUser;
+      return next();
+    } catch (err) {
+      return next('You are not loggedin');
+    }
+  }
   next();
 };
 
@@ -222,7 +222,7 @@ exports.restrictedTo = function(...role) {
   }
 }
 
-/* 
+// /* 
 // forgot password
 exports.forgotPassword = async (req, res, next) => {
 	try {
@@ -349,7 +349,7 @@ exports.updatePassword = async (req, res, next) => {
   next();
 }
 
-*/
+// */
 
 
 
@@ -357,28 +357,10 @@ exports.updatePassword = async (req, res, next) => {
 
 /*
 
-  well stuctured product schema, and product routes( CRUD: with the product controller fn )
-  well organised user schema, and user routes( CRUD: with the user controller fn )
-  password management and hashing/salting in the model
-  auth controller for sign up, login
-  jwt token for loging in authorization
-  user signup / vendor signup (admin signup can only be created through the database not with any signup form)
-  user login / vendor login / admin login 
-  protected routes for only logged users (through jwt)
-  retricted routes and actions to only logged in-permmitted and specific user type
-  forgot password, and password reset (using nodemailer)
-  current user profile update( password update, profile update: phone num, email, account details )
-  rate limiting( to avoid attack or / and api over usage)
-  vendors dashboard / affiliate dashboard
-  
-
   ************LATER************
   
   payment integration
-  vendor's dashboard products listing and catalog and reports 
   trackable and unique affliate link for promotion
-  affliate dashboard reports and commission
-  report mechnism, report system for recording commission and product
 
 */
 
