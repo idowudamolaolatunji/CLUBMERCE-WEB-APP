@@ -80,6 +80,12 @@ exports.signup = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password, role} = req.body;
+    if(!email || !password) {
+      return res.status(404).json({
+        status: "fail",
+        message: "plaese provide email and password",
+      })
+    }
     const user = await User.findOne({email}).select('+password');
     const isMatch = await bcrypt.compare(password, user.password);
     // if (!user || !isMatch || !role === user.role) {
@@ -148,20 +154,37 @@ exports.protect = async (req, res, next) => {
     }  else if (req.cookies.jwt) {
       token = req.cookies.jwt;
     }
+
     if(!token)
-      return next('You are not authorised')
+      return res.status(401).json({
+        status:  'fail',
+        message: 'You are nor logged in...'
+      });
 
     // verify token, by decoding jwt
     const decoded = await promisify(jwt.verify)(token, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
+    if(!decoded) {
+      res.status(401).json({
+        status:  'fail',
+        message: 'Invalid token!, pls login again...'
+      });
+    }
 
     // check if that user still exist, by finding this user
     const userExist = await User.findById(decoded.id);
-    if(!userExist)
-      return next('user doesnt exist');
+    if(!userExist) 
+      // return next(new Error('user no longer exist'))
+      return res.status(401).json({
+        status:  'fail',
+        message: 'user no longer exist'
+      });
       
     // check if user changed password after token was issued (much complex, but use the instance function in the model)
     if(userExist.changedPasswordAfter(decoded.iat)) {
-      return next('User recently changed password, Please login again')
+      return res.status(401).json({
+        status:  'fail',
+        message: 'You recently changed password, Try again later with correct password..'
+      });
     }
     // GRANT ACCESS TO PROTECTED ROUTE
     req.user = currentUser;
@@ -169,12 +192,11 @@ exports.protect = async (req, res, next) => {
     next();
 
   } catch(err) {
-    res.status(400).json({
+    return res.status(400).json({
       status: "fail",
       message: err,
     })
   }
-  next();
 }
 
 // Only for rendered pages, no errors!
@@ -199,10 +221,10 @@ exports.isLoggedIn = async (req, res, next) => {
       res.locals.user = currentUser;
       return next();
     } catch (err) {
-      return next('You are not loggedin');
+      return next();
     }
+    next()
   }
-  next();
 };
 
 
@@ -222,7 +244,7 @@ exports.restrictedTo = function(...role) {
   }
 }
 
-// /* 
+/* 
 // forgot password
 exports.forgotPassword = async (req, res, next) => {
 	try {
@@ -349,16 +371,33 @@ exports.updatePassword = async (req, res, next) => {
   next();
 }
 
-// */
+*/
 
 
 
 
 
 /*
+  well stuctured product schema, and product routes( CRUD: with the product controller fn )
+  well organised user schema, and user routes( CRUD: with the user controller fn )
+  password management and hashing/salting in the model
+  auth controller for sign up, login
+  jwt token for loging in authorization
+  user signup / vendor signup (admin signup can only be created through the database not with any signup form)
+  user login / vendor login / admin login 
+  protected routes for only logged users (through jwt)
+  retricted routes and actions to only logged in-permmitted and specific user type
+  forgot password, and password reset (using nodemailer)
+  current user profile update( password update, profile update: phone num, email, account details )
+  rate limiting( to avoid attack or / and api over usage)
+  vendors dashboard / affiliate dashboard
+  
+  vendor's dashboard products listing and catalog and reports 
+  report mechnism, report system for recording commission and product
+  affliate dashboard reports and commission
+  
 
   ************LATER************
-  
   payment integration
   trackable and unique affliate link for promotion
 

@@ -218,6 +218,7 @@ button {
 
 a .font-size-sm-help { font-size: 1.8rem; }
 .margin__r-help { margin-right: 1rem }
+.margin__b-help { margin-right: .6rem }
 
 .hero__svg {
     position: absolute;
@@ -371,6 +372,15 @@ color: #080707;
     background-color: #eb4d4b;
 }
 
+.extra__heading {
+    margin-bottom: 2.4rem;
+    background-image: linear-gradient(to left, #2e3192, #f15a29);
+    display: inline-block;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1.8rem;
+}
 
 
 

@@ -73,7 +73,18 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: true,
         select: false
-    }
+    },
+    wallet: {
+        type: Number,
+        default: 0,
+        // select: false,
+    },
+    transactions: [Number],
+    commissions: [Number],
+    createdAt: {
+        type: Date,
+        default: Date.now(),
+    },
 });
 
 // PASSWORD SECURITY, USING THE EXPRESS PRE HOOK MIDDLEWARE

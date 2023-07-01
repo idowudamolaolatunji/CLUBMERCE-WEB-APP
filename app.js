@@ -2,7 +2,6 @@ const path = require('path');
 ////////////////////////////////////////////////////
 
 const express = require('express');
-const dotenv = require('dotenv');
 const morgan = require('morgan');
 const pug = require('pug');
 const helmet = require('helmet')
@@ -16,10 +15,10 @@ const cookieParser = require('cookie-parser')
 const productsRouter = require('./routes/productsRoutes');
 const usersRouter = require('./routes/usersRoute');
 const viewsRouter = require('./routes/viewsRoutes');
+const ordersRouter = require('./routes/ordersRoutes');
 
-dotenv.config({path: './config.env'});
 const app = express();
-// body parser
+// body parser and cookie parser
 app.use(express.json());
 app.use(cookieParser())
 
@@ -54,6 +53,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
     // console.log(req.headers);
+    // console.log(req.params)
     console.log('Hello from the Middleware...');
     next();
 });
@@ -61,6 +61,7 @@ app.use((req, res, next) => {
 app.use('/', viewsRouter)
 app.use('/api/products', productsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/orders', ordersRouter);
 
 module.exports = app;
 

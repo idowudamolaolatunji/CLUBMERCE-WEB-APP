@@ -32,10 +32,6 @@ body
                         input.nav__input(type='search' placeholder='search...')
                         button.search__button(type='submit')
                             i.fa-solid.fa-magnifying-glass.icon.nav__icon
-                //- form.nav__search
-                //-     input.nav__input(type='search' placeholder='search...')
-                //-     button.search__button(type='submit')
-                //-         i.fa-solid.fa-magnifying-glass.icon.nav__icon
 
                 span.nav__icons
                     span.notification__icon
@@ -60,7 +56,7 @@ body
 
 
         mixin menuItem(link, text, icon, active, target)                    
-            li.menu__item(class=`${active ? 'menu__active' : ''}`)
+            li(class=`${active ? 'menu__item menu__active' : 'menu__item'}`)
                 a.menu__link(href=`/${link}` #{target})
                     i.icon.menu__icon(class=`${icon}`)
                     p #{text}
@@ -70,60 +66,66 @@ body
                 .menu__body
                     ul.menu__list
                         //- -if(user.role === 'affiliate')
-                        +menuItem('affiliate-dashboard', 'Dashboard', 'fa-solid fa-gauge', false)
-                        +menuItem('marketplace', 'Affiliate Marketplace', 'fa-solid fa-shop', false, target="_blank")
-                        +menuItem('performance', 'My Performance', 'fa-solid fa-chart-simple', false)
-                        +menuItem('transaction', 'Transactions', 'fa-solid fa-chart-line', false)
-                        +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
+                            +menuItem('affiliate-dashboard', 'Dashboard', 'fa-solid fa-gauge', false)
+                            +menuItem('marketplace', 'Affiliate Marketplace', 'fa-solid fa-shop', false, target="_blank")
+                            +menuItem('affiliate-performance', 'My Performance', 'fa-solid fa-chart-simple', false)
+                            +menuItem('affiliate-transaction', 'Transactions', 'fa-solid fa-chart-line', false)
+                            +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
 
                         //- -if(user.role === 'vendor')
-                            //- +menuItem('dashboard-v1', 'Dashboard', 'fa-solid fa-gauge', true)
-                            //- +menuItem('catalog', 'Product Catalog', 'fa-regular fa-clipboard-list-check', false)
-                            //- +menuItem('performance-v1', 'Report and Performance', 'fa-solid fa-chart-simple', false)
-                            //- +menuItem('transaction', 'Transactions', 'fa-solid fa-chart-line', false)
-                            //- +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
+                            +menuItem('vendor-dashboard', 'Dashboard', 'fa-solid fa-gauge', true)
+                            +menuItem('product-catalog', 'Product Catalog', 'fa-regular fa-clipboard-list-check', false)
+                            +menuItem('vendor-performance', 'Product Performance', 'fa-solid fa-chart-simple', false)
+                            +menuItem('vendor-transaction', 'Transactions', 'fa-solid fa-chart-line', false)
+                            +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
 
-                    //- -if(user.role !== 'admin')
-                    //-     .menu__bottom
-                    //-         ul.menu__list
-                    //-             li.menu__item
-                    //-                 a.menu__link(href="/profile")
-                    //-                     img.menu__profile-image(src='../../asset/img/face.png')
-                    //-                     | profile
-                    //-             li.menu__item
-                    //-                 a.menu__button(href='/login')
-                    //-                     | signout&nbsp;
-                    //-                     i.fa-solid.fa-arrow-right-to-bracket
+                        //- -if(user.role !== 'admin')
+                            .menu__bottom
+                                ul.menu__list
+                                    li.menu__item
+                                        a.menu__link(href="/profile")
+                                            img.menu__profile-image(src='../../asset/img/face.png')
+                                            | profile
+                                    li.menu__item
+                                        a.menu__button(href='/login')
+                                            | signout&nbsp;
+                                            i.fa-solid.fa-arrow-right-to-bracket
 
                         //- -if(user.role === 'admin')
-                            //- +menuItem('dashboard-v1', 'Dashboard', 'fa-solid fa-gauge', true)
-                            //- +menuItem('catalog', 'Product Marketplace', 'fa-solid fa-clipboard-list', false)
-                            //- +menuItem('performance', 'Vendors Performance', 'fa-solid fa-chart-simple', false)
-                            //- +menuItem('performance', 'Affiliates Performance', 'fa-solid fa-chart-simple', false)
-                            //- +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
+                        +menuItem('all-performance', 'All perfomance', 'fa-solid fa-chart-simple', false)
+                        +menuItem('product-marketplace', 'Product Marketplace', 'fa-solid fa-clipboard-list', false)
+                        +menuItem('admin-settings', 'Admin settings', 'fa-solid fa-gear', false)
 
-
-                //- .menu__bottom
-                //-     ul.menu__list
-                //-         li.menu__item
-                //-             a.menu__link(href="/manage-users") Manage Users
-                //-         li.menu__item
-                //-             a.menu__link(href="/manage-product") Manage Products
-                //-         li.menu__item
-                //-             a.menu__button(href='/login')
-                //-                 | signout&nbsp;
-                //-                 i.fa-solid.fa-arrow
-               
+                //- -if(user.role === 'admin')
                 .menu__bottom
                     ul.menu__list
                         li.menu__item
-                            a.menu__link(href="/profile")
-                                img.menu__profile-image(src='../../asset/img/face.png')
-                                | profile
+                            a.menu__link(href="/manage-users") 
+                                i.fa-solid.fa-users.icon.menu__icon
+                                | Manage Users
                         li.menu__item
-                            button.menu__button#logout
+                            a.menu__link(href="/manage-products") 
+                                i.fa-solid.fa-gift.icon.menu__icon
+                                | Manage Products
+                        li.menu__item
+                            a.menu__link(href="/manage-payment")
+                                i.fa-solid.fa-shopping-cart.icon.menu__icon
+                                | Manage Payments
+                        li.menu__item
+                            a.menu__link(href='/login') 
+                                i.fa-solid.fa-arrow-right-to-bracket.icon.menu__icon
                                 | signout&nbsp;
-                                i.fa-solid.fa-arrow-right-to-bracket
+               
+                //- .menu__bottom
+                //-     ul.menu__list
+                //-         li.menu__item
+                //-             a.menu__link(href="/profile")
+                //-                 img.menu__profile-image(src='../../asset/img/face.png')
+                //-                 | profile
+                //-         li.menu__item
+                //-             button.menu__button#logout
+                //-                 | signout&nbsp;
+                //-                 i.fa-solid.fa-arrow-right-to-bracket
             main.main__dashboard
                 .dashboard__content
                     block content

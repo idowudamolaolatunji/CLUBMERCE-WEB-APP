@@ -1,6 +1,7 @@
 const User = require('../model/usersModel')
 const Product = require('../model/productsModel')
 
+// Global
 exports.home = (req, res) => {
     res.status(200).render('home', {
         title: 'Official Website',
@@ -36,6 +37,8 @@ exports.signUp = (req, res) => {
         title: 'Create an account'
     });
 }
+
+// Affiliates
 exports.affiliateDashboard =  (req, res, next) => {
     const user =  User.findOne();
 
@@ -45,8 +48,8 @@ exports.affiliateDashboard =  (req, res, next) => {
     });
     next()
 }
-exports.reportPerformance = (req, res) => {
-    res.status(200).render('report_performance');
+exports.affiliatePerformance = (req, res) => {
+    res.status(200).render('affiliate_performance');
 }
 // exports.marketPlace = async (req, res, next) => {
 //     try {
@@ -69,7 +72,6 @@ exports.marketPlace = async (req, res, next) => {
         section: 'marketplace'
     });
 }
-//////
 exports.product = async (req, res, next) => {
     try {
         const product = await Product.findOne({ slug: req.params.slug })
@@ -83,32 +85,66 @@ exports.product = async (req, res, next) => {
         next(err)
     }
 }
+exports.affiliateTransaction = (req, res) => {
+    res.status(200).render('affiliate_transaction');
+}
+
+// common routes
 exports.profile = (req, res) => {
     res.status(200).render('profile');
-}
-exports.transaction = (req, res) => {
-    res.status(200).render('transaction');
 }
 exports.settings = (req, res) => {
     res.status(200).render('setting');
 }
-exports.notification = async (req, res) => {
+exports.notification = (req, res) => {
     res.status(200).render('notification', {
         title: 'Your Notification'
     })
 }
-exports.vendorDashboard = async (req, res) => {
+
+// Vendors
+exports.vendorDashboard = (req, res) => {
     res.status(200).render('vendor_dashboard', {
         title: 'Vendor Dashboard'
     })
 }
-exports.productCatalog = async (req, res) => {
+exports.vendorPerformance = (req, res) => {
+    res.status(200).render('vendor_performance', {
+        title: 'Product Perfomance'
+    })
+}
+exports.vendorTransaction = (req, res) => {
+    res.status(200).render('vendor_transaction', {
+        title: 'Transaction'
+    })
+}
+exports.productCatalog = (req, res) => {
     res.status(200).render('product_catalog', {
         title: 'Your Product'
     })
 }
-exports.adminDashboard = async (req, res) => {
-    res.status(200).render('admin_dashboard', {
+
+// Admin
+exports.adminAuth = (req, res) => {
+    res.status(200).render('admin_auth');
+}
+exports.allPerformance = (req, res) => {
+    res.status(200).render('all_performance', {
         title: 'Clubmerce Admin Dashboard'
     })
+}
+exports.productMarketplace = (req, res) => {
+    res.status(200).render('product_marketplace-admin');
+}
+exports.adminSettings = (req, res) => {
+    res.status(200).render('admin_setting');
+}
+exports.manageUsers = (req, res) => {
+    res.status(200).render('manage_users')
+}
+exports.manageProducts = (req, res) => {
+    res.status(200).render('manage_products')
+}
+exports.managePayment = (req, res) => {
+    res.status(200).render('manage_payment')
 }

@@ -86,11 +86,11 @@ const login = async (email, password, role) => {
                 showAlert('success', data.message);
                 document.body.style.overflow = 'hidden';
                 if (data.data.user.role === 'affiliate')
-                    location.assign('/affiliate_dashboard');
+                    location.assign('/affiliate-dashboard');
                 if (data.data.user.role === 'vendor')
-                    location.assign('/vendor_dashboard');
+                    location.assign('/vendor-dashboard');
                 if (data.data.user.role === 'admin')
-                    location.assign('/admin_dashboard');
+                    location.assign('/all-perfomance');
                 spinner.classList.add('hidden');
             }, 2000);
             document.body.style.overflow = 'auto';
@@ -114,7 +114,7 @@ const logout = async () => {
         const data = await res.json();
         console.log(data, res);
         if (data.status ==='success') 
-            location.reload(true);
+            window.location.reload(true);
             location.assign('/login');
     } catch (err) {
         showAlert('alert--error', err)
@@ -178,6 +178,7 @@ if(signupForm) {
     })
 }
 
+
 // DROPDOWNS
 const notifyIcon = document.querySelector('.notification__icon');
 const notifyBox = document.querySelector('.notification__hovered')
@@ -206,7 +207,6 @@ const accordionContent = document.querySelectorAll('.faq__accordion--content');
 //     if(!clicked) return;
 
 // });
-
 
 
 // MENUS
@@ -248,8 +248,6 @@ if(dashboradWidth.right <= 950) {
 }
 
 
-
-
 // forgotPassword.addEventListener('click', () => openModal( forgotOverlay, forgotModal));
 // forgotOverlay.addEventListener('click', () => closeModal(forgotOverlay, forgotModal));
 // forgotClose.addEventListener('click', () => closeModal(forgotOverlay, forgotModal));
@@ -260,15 +258,71 @@ if(dashboradWidth.right <= 950) {
 // emailVerifyOverlay.addEventListener('click', () => closeModal(emailVerifyOverlay, emailConfirmModal));
 // emailConfirmClose.addEventListener('click', () => closeModal(emailVerifyOverlay, emailConfirmModal));
 
-const hoplinkOverlay = document.querySelector('.hoplink__overlay')
-const hoplinkModal = document.querySelector('.hoplink__modal')
+const hoplinkGetOverlay = document.querySelector('.get__overlay')
+const hoplinkCopyOverlay = document.querySelector('.copy__overlay')
+const hoplinkGetModal = document.querySelector('.get__modal')
+const hoplinkCopyModal = document.querySelector('.copy__modal')
 const hoplinkOpen = document.querySelectorAll('.promote');
 const hoplinkClose = document.querySelector('.hoplink__icon');
+const hoplinkCopyOk = document.querySelector('.btnOk');
 
 hoplinkOpen.forEach(el =>
-    el.addEventListener('click', () => openModal(hoplinkOverlay, hoplinkModal)));
-hoplinkClose.addEventListener('click', () => closeModal(hoplinkOverlay, hoplinkModal))
+    el.addEventListener('click', () => {
+        openModal(hoplinkGetOverlay, hoplinkGetModal) 
+        document.body.style.overflow = 'hidden';
+    })
+);
+hoplinkClose.addEventListener('click', () => {
+    closeModal(hoplinkGetOverlay, hoplinkGetModal)
+    document.body.style.overflowY = 'visible';
+})
+
+hoplinkCopyOk.addEventListener('click', () => {
+    closeModal(hoplinkCopyOverlay, hoplinkCopyModal)
+    document.body.style.overflowY = 'visible';
+})
 
 
+
+
+const updateUser = async function(name, email, phone, country, state, cityRegion, zipPostal) {
+    try {
+        const res = await fetch('/api/users/update', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                name, email, phone, country, state, cityRegion, zipPostal,
+            }),
+        });
+
+        const data = await res.json();
+        console.log(res, data);
+
+        if (data.status === 'success') {
+            window.setTimeout(() => {
+                showAlert('success', data.message);
+                window.location.reload(true);
+            }, 1500);
+        }
+
+    } catch(err) {
+        showAlert('error', err.Response.data.message)
+    }
+}
+
+const formUpdate = document.querySelector('.form-profile-data');
+if(formUpdate) {
+    formUpdate.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formUpdateName = document.querySelector('#fullName').value
+        const formUpdateEmail = document.querySelector('#email').value
+        const formUpdatePhone = document.querySelector('#phone').value
+        const formUpdateCountry = document.querySelector('#country').value
+        const formUpdateState = document.querySelector('#state').value
+        const formUpdateCityRegion = document.querySelector('#city-region').value
+        const formUpdateZipPostal = document.querySelector('#zip-postal').value
+        updateUser(formUpdateName, formUpdateEmail, formUpdatePhone, formUpdateCountry, formUpdateState, formUpdateCityRegion, formUpdateZipPostal);
+    });
+}
 
 

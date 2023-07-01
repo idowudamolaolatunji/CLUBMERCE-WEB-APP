@@ -61,27 +61,23 @@ block content
 
 
         .email__drop-down.drop-down__shadow.hidden
-            // email verification modal
             .email-verify__modal.modal
-                // close icon
-                span.close__icon.verify__close--icon X
+                i.fasolid.fa-close.close__icon.verify__close--icon 
                 .modal__container
-                    h3.modal__heading
+                    h3.extra__heading 
                         | Successful signup!
                     // icon
-                    p.modal__content
-                        | A link has been sent to&nbsp;
+                    p.modal__content A link has been sent to&nbsp;
                         span.user__email emailaddress@example.com
                         br
                         | Please click the link in your email and verify your email...
 
 
-            // email verification confirmed modal
-            .email-confirmed__modal.modal.hidden
-                // close icon
-                span.close__icon.email-confirm__close--icon X
+        .email__drop-down.drop-down__shadow
+            .email-confirmed__modal.modal
+                i.fasolid.fa-close.close__icon.email-confirm__close--icon 
                 .modal__container
-                    h3.modal__heading Success!
+                    h3.extra__heading  Success!
                     // icon goes here
                     p.modal__text Your email address has been verified successfully!
-                    a.form__button.proceed__button(href='#') Proceed to login
+                    a.form__button.proceed__button(href='/login') Proceed to login

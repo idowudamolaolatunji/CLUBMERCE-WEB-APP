@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
-dotenv.config({path: './config.env'});
+dotenv.config({path: './config.env'}); // always run before the app
 const app = require('./app');
 
 const DB = process.env.CLUBMERCE_DB.replace('<PASSWORD>', process.env.CLUBMERCE_DB_PASSWORD);

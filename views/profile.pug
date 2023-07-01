@@ -21,14 +21,14 @@ block content
             label.form__label(for='state') State
             input#state.form__input(type='state' placeholder="Select a country" required)
         .form__item
-            label.form__label(for='streetAddress') City / Province / Region
-            input#streetAddress.form__input(type='streetAddress' placeholder="Select a country" required)
+            label.form__label(for='city-region') City / Province / Region
+            input#city-region.form__input(type='city-region' placeholder="Select a country" required)
         .form__item
-            label.form__label(for='streetAddress') Zip code / Postal code
-            input#streetAddress.form__input(type='streetAddress' placeholder="Select a country" required)
+            label.form__label(for='zip-postal') Zip code / Postal code
+            input#zip-postal.form__input(type='zip-postal' placeholder="Select a country" required)
         .form__item.form__photo-upload
             //- img.form__user-photo(src='img/user.jpg' alt='User photo')
             img.form__user-photo(src='asset/img/face.png' alt='User photo')
             a.btn-text(href='') Choose new photo
         .form__item
-            button.btn.form-btn Save settings
+            button.btn.form-btn(type="submit") Save settings

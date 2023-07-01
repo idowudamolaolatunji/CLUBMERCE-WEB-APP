@@ -92,7 +92,7 @@ exports.updateMe = async (req, res, next) => {
 		}
 		// update user documents
 		// 1. filter
-		const allowedFileds = [fullName, email, country, gender, phone, state, bankAccount, bankAccountNumber];
+		const allowedFileds = [fullName, email, country, phone, state, cityRegion, zipPostal];
 		const filterBody = filterObj(req.body, allowedFileds);
 		// 2. update
 		const updatedUser = await User.findByIdAndUpdate(req.user.id, filterBody, {
