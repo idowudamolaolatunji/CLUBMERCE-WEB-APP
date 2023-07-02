@@ -4,7 +4,7 @@ const crypto = require('crypto')
 const express = require('express')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const cookieParser = require('cookie-parser')
+// const cookieParser = require('cookie-parser')
 
 const app = require("./../app");
 const User = require("./../model/usersModel");
@@ -112,7 +112,7 @@ exports.login = async (req, res) => {
     res.status(200).json({
       status: "success",
       message: "Successfully logged in",
-      // token,
+      token,
       data: {
         user,
       }
@@ -128,80 +128,130 @@ exports.login = async (req, res) => {
 
 
 // logout
-// exports.logout = (req, res) => {
-//   res.cookie('jwt', 'loggedout', {
-//     expires: new Date(Date.now() + 2 * 1000),
-//     httpOnly: true
-//   });
-//   res.status(200).json({ status: 'success' });
-// };
-
 exports.logout = (req, res) => {
-  res.clearCookie('jwt');
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 2 * 1000),
+    httpOnly: true
+  });
   res.status(200).json({ status: 'success' });
 };
 
+// exports.logout = (req, res) => {
+//   res.clearCookie('jwt');
+//   res.status(200).json({ status: 'success' });
+// };
+
 
 // protect
+// exports.protect = async (req, res, next) => {
+//   // remember you will have to get the token from the req.header...
+//   // also remember that u can access the user id (payload) directly from the token, also the expired time and the issued time 
+//   try {
+//     // get token and check if it's there
+//     let token;
+//     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+//       token = req.headers.authorization.split(' ')[1];
+//     }  else if (req.cookies.jwt) {
+//       token = req.cookies.jwt;
+//     }
+
+//     if(!token)
+//       return res.status(401).json({
+//         status:  'fail',
+//         message: 'You are nor logged in...'
+//       });
+
+//     // verify token, by decoding jwt
+//     const decoded = await promisify(jwt.verify)(token, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
+//     if(!decoded) {
+//       res.status(401).json({
+//         status:  'fail',
+//         message: 'Invalid token!, pls login again...'
+//       });
+//     }
+
+//     // check if that user still exist, by finding this user
+//     const userExist = await User.findById(decoded.id);
+//     if(!userExist) 
+//       // return next(new Error('user no longer exist'))
+//       return res.status(401).json({
+//         status:  'fail',
+//         message: 'user no longer exist'
+//       });
+      
+//     // check if user changed password after token was issued (much complex, but use the instance function in the model)
+//     if(userExist.changedPasswordAfter(decoded.iat)) {
+//       return res.status(401).json({
+//         status:  'fail',
+//         message: 'You recently changed password, Try again later with correct password..'
+//       });
+//     }
+//     // GRANT ACCESS TO PROTECTED ROUTE
+//     req.user = currentUser;
+//     res.locals.user = currentUser;
+//     next();
+
+//   } catch(err) {
+//     return res.status(400).json({
+//       status: "fail",
+//       message: err,
+//     })
+//   }
+//   next();
+// }
 exports.protect = async (req, res, next) => {
   // remember you will have to get the token from the req.header...
   // also remember that u can access the user id (payload) directly from the token, also the expired time and the issued time 
   try {
     // get token and check if it's there
     let token;
-    if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith('Bearer')
+    ) {
       token = req.headers.authorization.split(' ')[1];
-    }  else if (req.cookies.jwt) {
+    } else if (req.cookies.jwt) {
       token = req.cookies.jwt;
     }
-
-    if(!token)
-      return res.status(401).json({
-        status:  'fail',
-        message: 'You are nor logged in...'
-      });
-
-    // verify token, by decoding jwt
+  
+    if (!token) {
+      return next(
+        new Error('You are not logged in! Please log in to get access.', 401)
+      );
+    }
+  
+    // 2) Verification token
     const decoded = await promisify(jwt.verify)(token, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
-    if(!decoded) {
-      res.status(401).json({
-        status:  'fail',
-        message: 'Invalid token!, pls login again...'
-      });
+  
+    // 3) Check if user still exists
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) {
+      return next(
+        new Error(
+          'The user belonging to this token does no longer exist.')
+      );
     }
-
-    // check if that user still exist, by finding this user
-    const userExist = await User.findById(decoded.id);
-    if(!userExist) 
-      // return next(new Error('user no longer exist'))
-      return res.status(401).json({
-        status:  'fail',
-        message: 'user no longer exist'
-      });
-      
-    // check if user changed password after token was issued (much complex, but use the instance function in the model)
-    if(userExist.changedPasswordAfter(decoded.iat)) {
-      return res.status(401).json({
-        status:  'fail',
-        message: 'You recently changed password, Try again later with correct password..'
-      });
+  
+    // 4) Check if user changed password after the token was issued
+    if (currentUser.changedPasswordAfter(decoded.iat)) {
+      return next(
+        new Error('User recently changed password! Please log in again.')
+      );
     }
+  
     // GRANT ACCESS TO PROTECTED ROUTE
     req.user = currentUser;
     res.locals.user = currentUser;
     next();
-
-  } catch(err) {
-    return res.status(400).json({
-      status: "fail",
-      message: err,
-    })
+  }  catch (err) {
+    return next( err)
   }
+  
 }
 
 // Only for rendered pages, no errors!
 exports.isLoggedIn = async (req, res, next) => {
-  if (req.cookies.jwt) {
+  if(req.cookies.jwt) {
     try {     
       // 1) verify token
       const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
@@ -221,10 +271,10 @@ exports.isLoggedIn = async (req, res, next) => {
       res.locals.user = currentUser;
       return next();
     } catch (err) {
-      return next();
+      next();
     }
-    next()
   }
+  next()
 };
 
 
@@ -244,7 +294,7 @@ exports.restrictedTo = function(...role) {
   }
 }
 
-/* 
+// /* 
 // forgot password
 exports.forgotPassword = async (req, res, next) => {
 	try {
@@ -254,7 +304,7 @@ exports.forgotPassword = async (req, res, next) => {
 
 		// generate the random reset token
 		const resetToken = user.createPasswordResetToken()
-		user.save({ validateBeforeSave: false });
+		await user.save({ validateBeforeSave: false });
 
 		// send to user's email
 		const resetUrl = `${req.protocol}://${req.get('host')}/api/users/resetPassword/${resetToken}`;
@@ -295,7 +345,7 @@ exports.resetPassword = async (req, res, next) => {
 		user.passwordConfirm = req.body.passwordConfirm;
 		user.passwordResetToken = undefined;
 		user.passwordResetEpires = undefined;
-		user.save();
+		await user.save();
 
 		// update changedPasswordAt for the user
 		// done in userModel on the user schema
@@ -371,7 +421,7 @@ exports.updatePassword = async (req, res, next) => {
   next();
 }
 
-*/
+// */
 
 
 

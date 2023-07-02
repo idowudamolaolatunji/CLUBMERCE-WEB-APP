@@ -37,41 +37,48 @@ exports.signUp = (req, res) => {
         title: 'Create an account'
     });
 }
+exports.dashboard = async (req, res, next) => {
+    try {
+        const user = await User.findOne();
+
+        res.status(200).render('base_account', {
+            user: user,
+            title: `${user.name}'s dashboard`
+        });
+        next()
+    } catch (err) {
+        next(err)
+    }
+    next();
+}
 
 // Affiliates
-exports.affiliateDashboard =  (req, res, next) => {
-    const user =  User.findOne();
+// exports.affiliateDashboard =  (req, res, next) => {
+//     const user =  User.findOne();
 
-    res.status(200).render('affiliate_dashboard', {
-        user: user,
-        title: `${user.name}'s dashboard`
-    });
-    next()
-}
+//     res.status(200).render('affiliate_dashboard', {
+//         user: user,
+//         title: `${user.name}'s dashboard`
+//     });
+//     next()
+// }
 exports.affiliatePerformance = (req, res) => {
     res.status(200).render('affiliate_performance');
 }
-// exports.marketPlace = async (req, res, next) => {
-//     try {
-//         const products = await Product.find();
-
-//         res.status(200).render('marketplace', {
-//             title: 'marketPlace',
-//             products,
-//             section: 'marketplace'
-//         });
-//     } catch(err) {
-//        next(err)
-//     }
-// }
-
-// temp
 exports.marketPlace = async (req, res, next) => {
-    res.status(200).render('marketplace', {
-        title: 'marketPlace',
-        section: 'marketplace'
-    });
+    try {
+        const products = await Product.find();
+
+        res.status(200).render('marketplace', {
+            title: 'marketPlace',
+            products,
+            section: 'marketplace'
+        });
+    } catch(err) {
+       next(err)
+    }
 }
+
 exports.product = async (req, res, next) => {
     try {
         const product = await Product.findOne({ slug: req.params.slug })
@@ -103,11 +110,11 @@ exports.notification = (req, res) => {
 }
 
 // Vendors
-exports.vendorDashboard = (req, res) => {
-    res.status(200).render('vendor_dashboard', {
-        title: 'Vendor Dashboard'
-    })
-}
+// exports.vendorDashboard = (req, res) => {
+//     res.status(200).render('vendor_dashboard', {
+//         title: 'Vendor Dashboard'
+//     })
+// }
 exports.vendorPerformance = (req, res) => {
     res.status(200).render('vendor_performance', {
         title: 'Product Perfomance'

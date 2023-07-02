@@ -3,6 +3,7 @@ const crypto = require('crypto')
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const slugify = require('slugify')
 
 const userSchema = new mongoose.Schema({
     fullName: {
@@ -81,6 +82,10 @@ const userSchema = new mongoose.Schema({
     },
     transactions: [Number],
     commissions: [Number],
+    affiliateUrl: {
+        type: [mongoose.Schema.Types.Mixed],
+        default: []
+    },
     createdAt: {
         type: Date,
         default: Date.now(),
@@ -102,6 +107,12 @@ userSchema.pre('save', async function(next) {
 
     next();
 });
+
+userSchema.pre('save', function(next) {
+    const slug = slugify(this.username, { lower: true });
+    this.slug = `${slug}-${this._id}`;
+    next();
+})
 
 userSchema.pre('save', function(next) {
     if(!this.isModified('Password') || this.isNew) 

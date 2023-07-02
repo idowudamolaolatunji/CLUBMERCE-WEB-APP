@@ -85,13 +85,14 @@ const login = async (email, password, role) => {
             window.setTimeout(() => {
                 showAlert('success', data.message);
                 document.body.style.overflow = 'hidden';
-                if (data.data.user.role === 'affiliate')
-                    location.assign('/affiliate-dashboard');
-                if (data.data.user.role === 'vendor')
-                    location.assign('/vendor-dashboard');
-                if (data.data.user.role === 'admin')
-                    location.assign('/all-perfomance');
+                // if (data.data.user.role === 'affiliate')
+                //     location.assign('/affiliate-dashboard');
+                // if (data.data.user.role === 'vendor')
+                //     location.assign('/vendor-dashboard');
+                // if (data.data.user.role === 'admin')
+                //     location.assign('/all-perfomance');
                 spinner.classList.add('hidden');
+                location.assign('/dashboard');
             }, 2000);
             document.body.style.overflow = 'auto';
         } else if(data.status === 'fail') {
@@ -114,6 +115,7 @@ const logout = async () => {
         const data = await res.json();
         console.log(data, res);
         if (data.status ==='success') 
+            
             window.location.reload(true);
             location.assign('/login');
     } catch (err) {

@@ -27,7 +27,7 @@ body
                 img.logo-small(src='../../asset/img/favicon.png' alt='clubmerce logo')
             nav.navbar
             
-                if section === 'marketplace'
+                - if(section === 'marketplace')
                     form.nav__search
                         input.nav__input(type='search' placeholder='search...')
                         button.search__button(type='submit')
@@ -57,7 +57,7 @@ body
 
         mixin menuItem(link, text, icon, active, target)                    
             li(class=`${active ? 'menu__item menu__active' : 'menu__item'}`)
-                a.menu__link(href=`/${link}` #{target})
+                a.menu__link(href=`/${link}` target)
                     i.icon.menu__icon(class=`${icon}`)
                     p #{text}
 
@@ -65,14 +65,14 @@ body
             menu.menubar
                 .menu__body
                     ul.menu__list
-                        //- -if(user.role === 'affiliate')
+                        -if(user.role === 'affiliate')
                             +menuItem('affiliate-dashboard', 'Dashboard', 'fa-solid fa-gauge', false)
                             +menuItem('marketplace', 'Affiliate Marketplace', 'fa-solid fa-shop', false, target="_blank")
                             +menuItem('affiliate-performance', 'My Performance', 'fa-solid fa-chart-simple', false)
                             +menuItem('affiliate-transaction', 'Transactions', 'fa-solid fa-chart-line', false)
                             +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
 
-                        //- -if(user.role === 'vendor')
+                        -if(user.role === 'vendor')
                             +menuItem('vendor-dashboard', 'Dashboard', 'fa-solid fa-gauge', true)
                             +menuItem('product-catalog', 'Product Catalog', 'fa-regular fa-clipboard-list-check', false)
                             +menuItem('vendor-performance', 'Product Performance', 'fa-solid fa-chart-simple', false)
@@ -80,55 +80,181 @@ body
                             +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
 
                         //- -if(user.role !== 'admin')
-                            .menu__bottom
-                                ul.menu__list
-                                    li.menu__item
-                                        a.menu__link(href="/profile")
-                                            img.menu__profile-image(src='../../asset/img/face.png')
-                                            | profile
-                                    li.menu__item
-                                        a.menu__button(href='/login')
-                                            | signout&nbsp;
-                                            i.fa-solid.fa-arrow-right-to-bracket
+                        //-     .menu__bottom
+                        //-         ul.menu__list
+                        //-             li.menu__item
+                        //-                 a.menu__link(href="/profile")
+                        //-                     img.menu__profile-image(src='../../asset/img/face.png')
+                        //-                     | profile
+                        //-             li.menu__item
+                        //-                 a.menu__button(href='/login')
+                        //-                     | signout&nbsp;
+                        //-                     i.fa-solid.fa-arrow-right-to-bracket
 
-                        //- -if(user.role === 'admin')
-                        +menuItem('all-performance', 'All perfomance', 'fa-solid fa-chart-simple', false)
-                        +menuItem('product-marketplace', 'Product Marketplace', 'fa-solid fa-clipboard-list', false)
-                        +menuItem('admin-settings', 'Admin settings', 'fa-solid fa-gear', false)
+                        -if(user.role === 'admin')
+                            +menuItem('all-performance', 'All perfomance', 'fa-solid fa-chart-simple', false)
+                            +menuItem('product-marketplace', 'Product Marketplace', 'fa-solid fa-clipboard-list', false)
+                            +menuItem('admin-settings', 'Admin settings', 'fa-solid fa-gear', false)
 
-                //- -if(user.role === 'admin')
-                .menu__bottom
-                    ul.menu__list
-                        li.menu__item
-                            a.menu__link(href="/manage-users") 
-                                i.fa-solid.fa-users.icon.menu__icon
-                                | Manage Users
-                        li.menu__item
-                            a.menu__link(href="/manage-products") 
-                                i.fa-solid.fa-gift.icon.menu__icon
-                                | Manage Products
-                        li.menu__item
-                            a.menu__link(href="/manage-payment")
-                                i.fa-solid.fa-shopping-cart.icon.menu__icon
-                                | Manage Payments
-                        li.menu__item
-                            a.menu__link(href='/login') 
-                                i.fa-solid.fa-arrow-right-to-bracket.icon.menu__icon
-                                | signout&nbsp;
+                -if(user.role === 'admin')
+                    .menu__bottom
+                        ul.menu__list
+                            li.menu__item
+                                a.menu__link(href="/manage-users") 
+                                    i.fa-solid.fa-users.icon.menu__icon
+                                    | Manage Users
+                            li.menu__item
+                                a.menu__link(href="/manage-products") 
+                                    i.fa-solid.fa-gift.icon.menu__icon
+                                    | Manage Products
+                            li.menu__item
+                                a.menu__link(href="/manage-payment")
+                                    i.fa-solid.fa-shopping-cart.icon.menu__icon
+                                    | Manage Payments
+                            li.menu__item
+                                a.menu__link(href='/login') 
+                                    i.fa-solid.fa-arrow-right-to-bracket.icon.menu__icon
+                                    | signout&nbsp;
                
-                //- .menu__bottom
-                //-     ul.menu__list
-                //-         li.menu__item
-                //-             a.menu__link(href="/profile")
-                //-                 img.menu__profile-image(src='../../asset/img/face.png')
-                //-                 | profile
-                //-         li.menu__item
-                //-             button.menu__button#logout
-                //-                 | signout&nbsp;
-                //-                 i.fa-solid.fa-arrow-right-to-bracket
+                -else 
+                    .menu__bottom
+                        ul.menu__list
+                            li.menu__item
+                                a.menu__link(href="/profile")
+                                    img.menu__profile-image(src='../../asset/img/face.png')
+                                    | profile
+                            li.menu__item
+                                button.menu__button#logout
+                                    | signout&nbsp;
+                                    i.fa-solid.fa-arrow-right-to-bracket
             main.main__dashboard
                 .dashboard__content
                     block content
+                        -if(user.role === 'affiliate')
+                            .main__dashboard--container
+                                h3.dashboard__heading=`Welcome back, ${user.fullname}`
+                                .dashboard__insights 
+                                    .insight.insight__one
+                                        span 
+                                            p.insignt__text $25K
+                                            i.fa-solid.fa-coins.insight__icon
+                                        p.insignt__title Total enarned
+
+                                    .insight.insight__two
+                                        span 
+                                            p.insignt__text 15
+                                            i.fa-solid.fa-comments-dollar.insight__icon
+                                        p.insignt__title Product Sold
+
+                                    .insight.insight__three
+                                        span
+                                            p.insignt__text 100
+                                            i.fa-solid.fa-up-right-from-square.insight__icon
+                                        p.insignt__title Links clicks
+
+                                    .insight.insight__four
+                                        span
+                                            p.insignt__text 20
+                                            i.fa-solid.fa-bullhorn.insight__icon
+                                        p.insignt__title Promotions
+
+                                .dashboard__table
+                                    <div class="table">
+                                        <div class="table-title">
+                                            <h4 class="table-heading">Recent commission</h4>
+                                            <i class="fa-silid fa-vertical-dots table__icon"></i>
+                                        </div>
+                                        <div class="table-head">
+                                            <span class="table-head-content">Product</span>
+                                            <span class="table-head-content">Commission amount</span>
+                                            <span class="table-head-content">Status</span>
+                                            <span class="table-head-content">date</span>
+                                        </div>
+
+
+                                        //- <div class="table-row">
+                                            <span class="table-row-content table-row-product">
+                                                <img class="table-product__image" src="../product.jpg" alt="" />
+                                                <span>
+                                                    <p class="table-product__name">Test product 2</p>
+                                                    <p class="table-product__niche">E-books</p>
+                                                </span>
+                                            </span>
+                                            <span class="table-row-content"><p class="price">$&nbsp;90</p></span>
+                                            <span class="table-row-content"><p class="status status--pending">pending</p></span>
+                                            <span class="table-row-content"><p class="date">12/02/23</p></span>
+                                        //- </div>
+                                        <div class="table-row-message">
+                                            p.note-no You've have not made any sale commission...
+                                        </div>
+                                    </div>
+                            
+
+                        -if(user.role === "vendor")
+                            .main__dashboard--container
+                                //- h3.dashboard__heading=`Welcome back, ${user.fullname} (Vendor)`
+                                h3.dashboard__heading=`Welcome back, (Vendor)`
+                                .dashboard__insights 
+                                    .insight.insight__one
+                                        span 
+                                            p.insignt__text $25K
+                                            i.fa-solid.fa-comments-dollar.insight__icon
+                                        p.insignt__title My profit
+
+                                    .insight.insight__two
+                                        span 
+                                            p.insignt__text 15
+                                            //- i.fa-solid.fa-bag.insight__icon
+                                            i.fa-solid.fa-list-check.insight__icon
+                                        p.insignt__title My Products
+
+                                    .insight.insight__three
+                                        span
+                                            p.insignt__text 0
+                                            i.fa-solid.fa-shopping-cart.insight__icon
+                                        p.insignt__title Orders
+
+                                    .insight.insight__four
+                                        span
+                                            p.insignt__text 20
+                                            i.fa-solid.fa-bullhorn.insight__icon
+                                        p.insignt__title Affiliate Gravity
+                                        
+
+                                .dashboard__table
+                                    <!-- order (vendor) -->
+                                    <div class="table table-po">
+                                        <div class="table-title">
+                                            <h4 class="table-heading">Product orders</h4>
+                                        </div>
+                                        <div class="table-head-po">
+                                            <span class="table-head-content">Product</span>
+                                            <span class="table-head-content">orders</span>
+                                            <span class="table-head-content">Total price</span>
+                                            <span class="table-head-content">location</span>
+                                            <span class="table-head-content">status</span>
+                                        </div>
+
+                                        //- <div class="table-row-po">
+                                            <span class="table-row-content table-row-product">
+                                                <img class="table-product__image" src="../product.jpg" alt="" />
+                                                <span>
+                                                    <p class="table-product__name">Test product 1</p>
+                                                    <p class="table-product__niche">health & fitness</p>
+                                                </span>
+                                            </span>
+                                            <span class="table-row-content"><p class="order">5</p></span>
+                                            <span class="table-row-content"><p class="price">$&nbsp;120</p></span>
+                                            <span class="table-row-content"><p class="brand">Nigeria</p></span>
+                                            <span class="table-row-content"><p class="status status--success">success</p></span>
+                                        //- </div>
+
+                                        <div class="table-row-message">
+                                            p.note-no You've no order at the moment...</div>
+                                    </div>
+
+                        -if(user.role == "admin")
+                            p this is the admin
 
                 include _auth_footer
 

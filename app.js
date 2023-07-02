@@ -16,6 +16,7 @@ const productsRouter = require('./routes/productsRoutes');
 const usersRouter = require('./routes/usersRoute');
 const viewsRouter = require('./routes/viewsRoutes');
 const ordersRouter = require('./routes/ordersRoutes');
+const affiliateLinkRouter = require('./routes/affiliateLinkRoutes');
 
 const app = express();
 // body parser and cookie parser
@@ -61,6 +62,7 @@ app.use((req, res, next) => {
 app.use('/', viewsRouter)
 app.use('/api/products', productsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/promote', affiliateLinkRouter);
 app.use('/api/orders', ordersRouter);
 
 module.exports = app;

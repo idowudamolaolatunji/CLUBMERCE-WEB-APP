@@ -32,17 +32,16 @@ const productSchema = new mongoose.Schema({
         maxLength: [130, "Summary must not be more than 200 characters"],
         minLength: [80, "Summary must not be more than 60 characters"],
     },
-    productCategory: {
+    category: {
         type: String,
         required: [true, 'A product must have a Category'],
     },
-    productCommission: {
+    commission: {
         type: String,
         required: [true, 'A product must have a Commission percentage'],
     },
-    productType: Boolean,
+    type: Boolean,
     affiliateTools: Boolean,
-    uniqueUrl: [String],
     productGravity: {
         type: Number,
         default: 1
@@ -58,10 +57,9 @@ const productSchema = new mongoose.Schema({
 // DOCUMENT MIDDLEWARE: runs before .save() and .create()
 productSchema.pre('save', function(next) {
     const slug = slugify(this.name, { lower: true });
-    const randomId = crypto.randomInt(100000, 999999).toString();
-    console.log(slug, randomId);
-    this.slug = slug + randomId;
-    // we would need to concatinate the slug with the random id to make every product slug unique, using the concat method and join the together with a '-'
+    // const randomId = crypto.randomInt(100000, 999999).toString();
+    this.slug = `${slug}-${this._id}`;
+    // we would need to concatinate the slug with the random id or product id to make every product slug unique, using the concat method and join the together with a '-'
     next();
 });
 
