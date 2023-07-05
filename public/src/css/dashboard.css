@@ -150,6 +150,8 @@ input:focus, input:hover, select:focus, textarea:hover,
     padding: 2rem;
     position: absolute;
     transition: all .35s ease-in-out;
+
+    visibility: hidden;
 }
 
 .notification__hovered {
@@ -281,6 +283,7 @@ input:focus, input:hover, select:focus, textarea:hover,
     gap: 1rem
 }
 
+.menu__link,
 .menu__link:link, .menu__link:visited {
     padding: 1.4rem 2.6rem;
     display: flex;
@@ -291,6 +294,7 @@ input:focus, input:hover, select:focus, textarea:hover,
     font-size: 1.4rem;
     text-decoration: none;
     color: #444;
+    cursor: pointer;
 }
 
 .menu__item:hover .menu__link {
@@ -399,7 +403,7 @@ input:focus, input:hover, select:focus, textarea:hover,
     background-color: #ff8880;
 }
 .insight__one {
-    background-color: rgba(255, 107, 97, 0.25);
+    background-color: rgba(255, 107, 97, 0.2);
 }
 .insight__two i {
     /* background-color: #2e3192 */
@@ -407,21 +411,21 @@ input:focus, input:hover, select:focus, textarea:hover,
     
 }
 .insight__two {
-    background-color: rgba(46, 49, 146, 0.25)
+    background-color: rgba(46, 49, 146, 0.2)
 }
 .insight__three i {
     /* background-color: #e98e3e; */
     background-color: #f59f54;
 }
 .insight__three {
-    background-color: rgba(233, 142, 62, 0.25);
+    background-color: rgba(233, 142, 62, 0.2);
 }
 .insight__four i {
     /* background-color: #9bc53d;  */
     background-color: #b5e058; 
 }
 .insight__four {
-    background-color: rgba(154, 197, 61, 0.25);
+    background-color: rgba(154, 197, 61, 0.2);
 }
 
 .insight span {
@@ -607,7 +611,7 @@ input:focus, input:hover, select:focus, textarea:hover,
 .figures {
     margin-top: 1rem;
     font-size: 1.2rem;
-    margin-bottom: 2.8rem;
+    margin-bottom: 4rem;
 }
 
 .product__filtering-btn {

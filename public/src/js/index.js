@@ -2,6 +2,7 @@ const loginFrom = document.querySelector('.login');
 const signupForm = document.querySelector('.signup');
 const logoutBtn = document.querySelectorAll('#logout');
 const spinner = document.querySelector('.spinner-overlay');
+const spin = document.querySelector('.spin');
 const menu = document.querySelector('.menubar-control');
 const menuButton = document.querySelector('.menu__button');
 
@@ -17,6 +18,31 @@ const emailConfirmClose = document.querySelector('.email-confirmed__close--icon'
 // const emailVerifyOverlay = document.querySelector('.email__drop-down');
 
 console.log('connected');
+
+// document.onreadystatechange = function() {
+//     if (document.readyState !== "complete") {
+//         document.body.style.visibility = "hidden";
+//         document.body.scroll = "no";
+//         spin.style.visibility = "visible";
+//     } else {
+//         document.body.style.visibility = "visible";
+//         spin.style.visibility = "hidden";
+//     }
+// }
+
+// MOBILE NAVIGATION
+// const btnNavEl = document.querySelector(".btn-mobile-nav");
+// const headerEl = document.querySelector(".header");
+// btnNavEl.addEventListener("click", function() {
+//     headerEl.classList.toggle("nav-open");
+// });
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 // const swiper = new Swiper('.swiper', {
 //     // Optional parameters
@@ -73,9 +99,7 @@ const login = async (email, password, role) => {
         });
         // before the reposne gets back...
         spinner.classList.remove('hidden');
-        if(!spinner.classList.contains('hidden')) 
-            document.body.style.overflow = 'hidden';
-            document.body.style.height = '100vh'
+        
         
         // we await the response
         const data = await res.json();
@@ -84,21 +108,13 @@ const login = async (email, password, role) => {
         if (data.status === 'success') {
             window.setTimeout(() => {
                 showAlert('success', data.message);
-                document.body.style.overflow = 'hidden';
-                // if (data.data.user.role === 'affiliate')
-                //     location.assign('/affiliate-dashboard');
-                // if (data.data.user.role === 'vendor')
-                //     location.assign('/vendor-dashboard');
-                // if (data.data.user.role === 'admin')
-                //     location.assign('/all-perfomance');
                 spinner.classList.add('hidden');
                 location.assign('/dashboard');
             }, 2000);
-            document.body.style.overflow = 'auto';
-        } else if(data.status === 'fail') {
-            spinner.classList.add('hidden');
-            document.body.style.overflow = 'scroll';
-            throw new Error(data.message);
+        // } else if(data.status === 'fail') {
+        //     spinner.classList.add('hidden');
+        //     document.body.style.overflow = 'scroll';
+        //     throw new Error(data.message);
         }
     } catch (err) {
         showAlert('error', err.message || 'Something went wrong, Please try again!')
@@ -115,13 +131,12 @@ const logout = async () => {
         const data = await res.json();
         console.log(data, res);
         if (data.status ==='success') 
-            
-            window.location.reload(true);
-            location.assign('/login');
+        window.location.reload(true).assign('/login')
     } catch (err) {
-        showAlert('alert--error', err)
+        showAlert('alert--error', 'Error logging out! Try again.')
     }
 }
+
 
 const signup = async (...body) => {
     try {
@@ -152,6 +167,27 @@ const signup = async (...body) => {
     }
 }
 
+const updateSettings = async() => {
+    try {
+        const url =
+          type === 'password'
+            ? 'http://127.0.0.1:3000/api/v1/users/updateMyPassword'
+            : 'http://127.0.0.1:3000/api/v1/users/updateMe';
+    
+        const res = await fetch(url, {
+          method: 'PATCH',
+          data
+        });
+    
+        if (res.data.status === 'success') {
+          showAlert('success', `${type.toUpperCase()} updated successfully!`);
+        }
+      } catch (err) {
+        showAlert('error', err.response.data.message);
+      }
+}
+// const forgotPasswordForm = document.querySelector('.forgot__form');
+
 
 // FORMS controllers
 if(loginFrom) {
@@ -179,6 +215,38 @@ if(signupForm) {
         signup(fullName, email, password, passwordConfirm, usernname, country, phone, role);
     })
 }
+const userDataForm = document.querySelector('')
+
+if (userDataForm)
+  userDataForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const form = new FormData();
+    form.append('name', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+    form.append('photo', document.getElementById('photo').files[0]);
+    console.log(form);
+
+    updateSettings(form, 'data');
+  });
+
+if (userPasswordForm)
+  userPasswordForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    document.querySelector('.btn--save-password').textContent = 'Updating...';
+
+    const passwordCurrent = document.getElementById('password-current').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('password-confirm').value;
+    await updateSettings(
+      { passwordCurrent, password, passwordConfirm },
+      'password'
+    );
+
+    document.querySelector('.btn--save-password').textContent = 'Save password';
+    document.getElementById('password-current').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('password-confirm').value = '';
+  });
 
 
 // DROPDOWNS
@@ -200,15 +268,6 @@ const accordionItem = document.querySelector('.faq__accordion--item');
 const accordionContentTitle = document.querySelectorAll('.accordion__content--title')
 const accordionContent = document.querySelectorAll('.faq__accordion--content');
 
-
-// accordionItem.addEventListener('click', function(e) {
-//     console.log('tar:', e.target, 'currTar:', e.currentTarget)
-    
-//     const clicked = e.target.closest('.faq__accordion--item');
-//     console.log('clicked: ', clicked);
-//     if(!clicked) return;
-
-// });
 
 
 // MENUS
@@ -246,7 +305,6 @@ if(dashboradWidth.right <= 950) {
         console.log(e.target.classList)
         menuButton.classList.toggle('hidden');
     });
-
 }
 
 

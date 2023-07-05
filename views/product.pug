@@ -42,29 +42,30 @@ body
             //- <h3 class="product__intro-text">Get ready to earn massive ${commission rate} commissions with this extraordinary new ${product.niche} offer…?</h3>
             //- <p class="product__intro--text2">Get everything you need to start promoting today!</p>
             //- </div>
+            
             .product__intro
                 h1.product__heading Introducing The 
-                    span.dashboard__heading {The product name}
-                p.product__intro-text Get ready to earn massive 50% commissions with this 
+                    span.dashboard__heading= product.name
+                p.product__intro-text=`Get ready to earn massive ${product.commissionRate}% commission with this` 
                     br
                     | extraordinary new weight loss offer&mldr;
                 p.product__intro-text Get everything you need to start promoting today!
                 .product__image
-                    img.product__img(src='asset/img/sample_product1.jpg' alt='product__image')
+                    img.product__img(src=`asset/img/${product.img}.jpg` alt='product__image')
                 .product__description
-                    h2.product__heading--sec What is ${product.name}?
+                    h2.product__heading--sec=`What is ${product.name}?`
                     span.description__text
-                        span.description__topic Product brand name 
+                        span.description__topic=product.name
                         | Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt officiis at aspernatur reprehenderit vero sint voluptatibus error pariatur deserunt blanditiis ad velit, repudiandae rem quo! Nemo veniam iure atque labore dolorem esse consequatur eum. Neque, doloribus ab deserunt repudiandae natus aut placeat aspernatur tenetur mollitia doloremque facilis, Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores iusto sit exercitationem atque ipsam provident modi placeat officiis, assumenda quaerat nulla facere deserunt quam omnis eveniet eaque repudiandae, saepe amet molestiae aliquid eum laudantium laborum natus.
 
     section#why.product__section.why-you-should-promote__Section
         .product__section--container
-            h2.product__heading--sec Why You Should Promote ${product.name}
+            h2.product__heading--sec=`Why You Should Promote ${product.name}`
             .why-card__box
                 .why-card
                     i.fa-brand.fa-icon.p-icon
                     h3.why-heading Massive payout
-                    p.why-text You get 51% commission each time someone buys our products via your Affiliate Link.
+                    p.why-text=`You get ${product.commissionRate}% commission each time someone buys our products via your Affiliate Link.`
                 .why-card
                     i.fa-brand.fa-icon.p-icon
                     h3.why-heading Massive market audience

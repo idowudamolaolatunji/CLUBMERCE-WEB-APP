@@ -8,7 +8,6 @@ const slugify = require('slugify')
 const userSchema = new mongoose.Schema({
     fullName: {
         type: String,
-        trim: true,
         required: [true, "Enter your full name"],
         maxLength: [40, "Full name must not be more than 40 characters"],
         minLength: [8, "Full name must not be more than 8 characters"],
@@ -60,9 +59,9 @@ const userSchema = new mongoose.Schema({
         enum: ['affiliate', 'vendor', 'admin'],
         default: "affiliate",
     },
-    profilePicture: {
+    image: {
         type: String,
-        default: '/img/avatar'
+        default: 'avatar'
     },
     createdAt: {
         type: Date,
@@ -78,13 +77,20 @@ const userSchema = new mongoose.Schema({
     wallet: {
         type: Number,
         default: 0,
-        // select: false,
+    },
+    clicks: {
+        type: Number,
+        default: 0,
     },
     transactions: [Number],
     commissions: [Number],
     affiliateUrl: {
         type: [mongoose.Schema.Types.Mixed],
         default: []
+    },
+    productSold: {
+        type: Number,
+        default: 0
     },
     createdAt: {
         type: Date,

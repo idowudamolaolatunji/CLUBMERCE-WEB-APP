@@ -4,11 +4,13 @@ const crypto = require('crypto')
 const express = require('express')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-// const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser')
 
 const app = require("./../app");
 const User = require("./../model/usersModel");
-const sendEmail = require('../utils/Email')
+const sendEmail = require('../utils/Email');
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 
 
 ////////////////////////////////////////////////
@@ -47,94 +49,88 @@ const createCookie = function(statusCode, user, res, message) {
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 // signup
-exports.signup = async (req, res) => {
-  try {
-    const newUser = await User.create({
-      fullName: req.body.fullName,
-      email: req.body.email,
-      password: req.body.password,
-      passwordConfirm: req.body.passwordConfirm,
-      username: req.body.username,
-      country: req.body.country,
-      phone: req.body.phone,
-      role: req.body.role,
-    });
+exports.signup = catchAsync(async (req, res) => {
+  const newUser = await User.create({
+    fullName: req.body.fullName,
+    email: req.body.email,
+    password: req.body.password,
+    passwordConfirm: req.body.passwordConfirm,
+    username: req.body.username,
+    country: req.body.country,
+    phone: req.body.phone,
+    role: req.body.role,
+  });
 
-    res.status(201).json({
-      status: "success",
-      message: "Successfully signed up",
-      data: {
-        user: newUser
-      }
-    });
-
-  } catch(err) {
-    res.status(400).json({
-      status: "fail",
-      message: err,
-    })
-  }
-}
+  res.status(201).json({
+    status: "success",
+    message: "Successfully signed up",
+    data: {
+      user: newUser
+    }
+  });
+})
 
 // Login
-exports.login = async (req, res) => {
-  try {
-    const { email, password, role} = req.body;
-    if(!email || !password) {
-      return res.status(404).json({
-        status: "fail",
-        message: "plaese provide email and password",
-      })
-    }
-    const user = await User.findOne({email}).select('+password');
-    const isMatch = await bcrypt.compare(password, user.password);
-    // if (!user || !isMatch || !role === user.role) {
-    if (!user || !isMatch) {
-      return res.status(404).json({
-        status: "fail",
-        // message: "email or password or role is incorrect",
-        message: "email or password incorrect",
-      });
-    }
-    //=//=//=//=//=//=//=//=//=//
-    const token = signToken(user._id);
-    const cookieOptions = {
-      expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
-      httpOnly: true
-    }
-    if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-    res.cookie('jwt', token, cookieOptions);
-    //=//=//=//=//=//=//=//=//=//
-
-    // Remove password from output
-    user.password = undefined;
-
-    res.status(200).json({
-      status: "success",
-      message: "Successfully logged in",
-      token,
-      data: {
-        user,
-      }
-    })
-
-  } catch(err) {
-    res.status(400).json({
-      status: "fail",
-      message: err,
-    });
+exports.login = catchAsync(async (req, res) => {
+  const { email, password, role} = req.body;
+  // if(!email || !password) {
+  //   return res.status(404).json({
+  //     status: "fail",
+  //     message: "plaese provide email and password",
+  //   })
+  // }
+  // const user = await User.findOne({email}).select('+password');
+  // const isMatch = await bcrypt.compare(password, user.password);
+  // // if (!user || !isMatch || !role === user.role) {
+  // if (!user || !isMatch) {
+  //   return res.status(404).json({
+  //     status: "fail",
+  //     // message: "email or password or role is incorrect",
+  //     message: "email or password incorrect",
+  //   });
+  // }
+  if (!email || !password) {
+    return next(new AppError('Please provide email and password!', 400));
   }
-};
+  // 2) Check if user exists rs&& password is correct
+  const user = await User.findOne({ email }).select('+password');
+  const userRole = user.role;
+
+  if ((!user && userRole !== role) || !(await user.comparePassword(password, user.password))) {
+    return next(new AppError('Incorrect email or password', 401));
+  }
+  //=//=//=//=//=//=//=//=//=//
+  const token = signToken(user._id);
+  const cookieOptions = {
+    expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
+    httpOnly: true
+  }
+  if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  res.cookie('jwt', token, cookieOptions);
+  //=//=//=//=//=//=//=//=//=//
+
+  // Remove password from output
+  user.password = undefined;
+
+  res.status(200).json({
+    status: "success",
+    message: "Successfully logged in",
+    token,
+    data: {
+      user,
+    }
+  })
+});
 
 
 // logout
-exports.logout = (req, res) => {
-  res.cookie('jwt', 'loggedout', {
-    expires: new Date(Date.now() + 2 * 1000),
-    httpOnly: true
-  });
-  res.status(200).json({ status: 'success' });
-};
+// exports.logout = (req, res) => {
+//   res.cookie('jwt', 'loggedout', {
+//     expires: new Date(Date.now() + 2 * 1000),
+//     httpOnly: true
+//   });
+//   res.status(200).json({ status: 'success' });
+// };
 
 // exports.logout = (req, res) => {
 //   res.clearCookie('jwt');
@@ -199,62 +195,77 @@ exports.logout = (req, res) => {
 //   }
 //   next();
 // }
-exports.protect = async (req, res, next) => {
-  // remember you will have to get the token from the req.header...
+
+// logout
+exports.logout = (req, res) => {
+  // res.cookie('jwt', 'loggedout', {
+  //   expires: new Date(Date.now() + 10 * 1000),
+  //   httpOnly: true
+  // });
+  res.clearCookie('jwt');
+  res.status(200).json({ status: 'success' });
+};
+
+
+// protect 
+exports.protect = catchAsync(async (req, res, next) => {
+    // remember you will have to get the token from the req.header...
   // also remember that u can access the user id (payload) directly from the token, also the expired time and the issued time 
-  try {
-    // get token and check if it's there
-    let token;
-    if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith('Bearer')
-    ) {
-      token = req.headers.authorization.split(' ')[1];
-    } else if (req.cookies.jwt) {
-      token = req.cookies.jwt;
-    }
-  
-    if (!token) {
-      return next(
-        new Error('You are not logged in! Please log in to get access.', 401)
-      );
-    }
-  
-    // 2) Verification token
-    const decoded = await promisify(jwt.verify)(token, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
-  
-    // 3) Check if user still exists
-    const currentUser = await User.findById(decoded.id);
-    if (!currentUser) {
-      return next(
-        new Error(
-          'The user belonging to this token does no longer exist.')
-      );
-    }
-  
-    // 4) Check if user changed password after the token was issued
-    if (currentUser.changedPasswordAfter(decoded.iat)) {
-      return next(
-        new Error('User recently changed password! Please log in again.')
-      );
-    }
-  
-    // GRANT ACCESS TO PROTECTED ROUTE
-    req.user = currentUser;
-    res.locals.user = currentUser;
-    next();
-  }  catch (err) {
-    return next( err)
+
+  // 1) Getting token and check of it's there
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
-  
-}
+
+  if (!token) {
+    return next(
+      new AppError('You are not logged in! Please log in to get access.', 401)
+    );
+  }
+
+  // 2) Verification token
+  const decoded = await promisify(jwt.verify)(token, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
+
+  // 3) Check if user still exists
+  const currentUser = await User.findById(decoded.id);
+  if (!currentUser) {
+    return next(
+      new AppError(
+        'The user belonging to this token does no longer exist.',
+        401
+      )
+    );
+  }
+
+  // 4) Check if user changed password after the token was issued
+  if (currentUser.changedPasswordAfter(decoded.iat)) {
+    return next(
+      new AppError('User recently changed password! Please log in again.', 401)
+    );
+  }
+
+  // GRANT ACCESS TO PROTECTED ROUTE
+  req.user = currentUser;
+  res.locals.user = currentUser;
+  next();
+});
+
 
 // Only for rendered pages, no errors!
 exports.isLoggedIn = async (req, res, next) => {
-  if(req.cookies.jwt) {
-    try {     
+  if (req.cookies.jwt) {
+    try {
       // 1) verify token
-      const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.CLUBMERCE_JWT_SECRET_TOKEN
+      );
 
       // 2) Check if user still exists
       const currentUser = await User.findById(decoded.id);
@@ -271,10 +282,10 @@ exports.isLoggedIn = async (req, res, next) => {
       res.locals.user = currentUser;
       return next();
     } catch (err) {
-      next();
+      return next();
     }
   }
-  next()
+  next();
 };
 
 
@@ -283,108 +294,104 @@ exports.isLoggedIn = async (req, res, next) => {
 // (i.e an enum is like an array)
 // remember a middleware function like this one, we usually cannot give an argument of our own
 // but there is a way around it, by allowing the function act like a normal function and reurning a middleware function insde of it (i.e like a wrapper function).
-exports.restrictedTo = function(...role) {
+exports.restrictedTo = catchAsync(async function(...role) {
   return function(req, res, next) {
     // now pass in an abitrary amount of argument into the function
     if(!role.includes(req.user.role)) {
-      return next('You do not have permission to perform this action');
+      return next(new AppError('You do not have permission to perform this action', 403));
     }
   // the check if what values are not included in the passed in argument (req.user)
 	next();
   }
-}
+});
 
 // /* 
 // forgot password
-exports.forgotPassword = async (req, res, next) => {
-	try {
-		// get user based on posted email
-		const {email} = req.body.email;
-		const user = await User.findOne({email});
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  // 1) Get user based on POSTed email
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return next(new AppError('There is no user with email address.', 404));
+  }
 
-		// generate the random reset token
-		const resetToken = user.createPasswordResetToken()
-		await user.save({ validateBeforeSave: false });
+  // 2) Generate the random reset token
+  const resetToken = user.createPasswordResetToken();
+  await user.save({ validateBeforeSave: false });
 
-		// send to user's email
-		const resetUrl = `${req.protocol}://${req.get('host')}/api/users/resetPassword/${resetToken}`;
-		const message = `Forgot password? Submit a request with your new Password and Password Confirm to: ${resetUrl}. \n If you didn't request this or forgot password, Please ignore this email!.`;
+  // 3) Send it to user's email
+  const resetURL = `${req.protocol}://${req.get(
+    'host'
+  )}/api/v1/users/resetPassword/${resetToken}`;
 
-		await sendEmail({
-			email: user.email,
-			subject: 'Your password reset token (Vaild for only 10mins)',
-			message,
-		});
+  const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
 
-		res.status(200).json({
-			status: "success",
-			message: "Token sent to email address"
-		});
-    console.log(user, user.passwordResetToken, user.passwordResetEpires)
-
-
-	} catch(err) {
-		user.passwordResetToken = undefined;
-		user.passwordResetEpires = undefined;
-		await user.save({ validateBeforeSave: false });
-		return next(err);
-	}
-  next()
-}
-
-// reset password
-exports.resetPassword = async (req, res, next) => {
-	try {
-		// get user based on token
-		const hashedToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
-		const user = await User.findOne({ passwordResetToken: hashedToken, passwordResetEpires: { $gt: Date.now() }});
-
-		// if token has not expired, there is a user, set new password
-		if(!user) return next('Token is invalid or has expired');
-		user.password = req.body.password;
-		user.passwordConfirm = req.body.passwordConfirm;
-		user.passwordResetToken = undefined;
-		user.passwordResetEpires = undefined;
-		await user.save();
-
-		// update changedPasswordAt for the user
-		// done in userModel on the user schema
-
-		// login user, send jwt
-		const token = signToken(user._id);
-
-    const cookieOptions = {
-      expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
-      httpOnly: true
-    }
-    if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-    res.cookies('jwt', token, cookieOptions);
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: 'Your password reset token (valid for 10 min)',
+      message
+    });
 
     res.status(200).json({
-      status: "success",
-      data: {
-        user,
-      }
-    })
+      status: 'success',
+      message: 'Token sent to email!'
+    });
+  } catch (err) {
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save({ validateBeforeSave: false });
 
-	} catch(err) {
-		res.status(400).json({
-			status: "fail",
-			message: err.message
-		})
-	}
-  next()
-}
+    return next(
+      new AppError('There was an error sending the email. Try again later!'),
+      500
+    );
+  }
+});
+
+// reset password
+exports.resetPassword = catchAsync(async (req, res, next) => {
+
+  // get user based on token
+  const hashedToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
+  const user = await User.findOne({ passwordResetToken: hashedToken, passwordResetEpires: { $gt: Date.now() }});
+
+  // if token has not expired, there is a user, set new password
+  if(!user) return next(new AppError('Token is invalid or has expired', 400));
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  user.passwordResetToken = undefined;
+  user.passwordResetEpires = undefined;
+  await user.save();
+
+  // update changedPasswordAt for the user
+  // done in userModel on the user schema
+
+  // login user, send jwt
+  const token = signToken(user._id);
+
+  const cookieOptions = {
+    expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
+    httpOnly: true
+  }
+  if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  res.cookies('jwt', token, cookieOptions);
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      user,
+    }
+  })
+})
 
 // Updating current logged in user password
-exports.updatePassword = async (req, res, next) => {
-	try {
+exports.updatePassword = catchAsync(async (req, res, next) => {
 		// get user 
 		const user = await User.findById(req.user.id).select('+password');
 		
 		// check if POSTED current password is correct
 		if(!await user.comparePassword(req.body.passwordCurrent, user.password)) {
-			return next('Your current password is incorrect');
+			return next(new AppError('Your current password is wrong.', 401));
 		}
 
 		// if so, update user password
@@ -410,47 +417,17 @@ exports.updatePassword = async (req, res, next) => {
 				user,
 			}
 		});
-    next()
 
-	} catch(err) {
-		res.status(400).json({
-			status: "fail",
-			message: err.message
-		})
-	}
-  next();
-}
-
-// */
-
-
+})
 
 
 
 /*
-  well stuctured product schema, and product routes( CRUD: with the product controller fn )
-  well organised user schema, and user routes( CRUD: with the user controller fn )
-  password management and hashing/salting in the model
-  auth controller for sign up, login
-  jwt token for loging in authorization
-  user signup / vendor signup (admin signup can only be created through the database not with any signup form)
-  user login / vendor login / admin login 
-  protected routes for only logged users (through jwt)
-  retricted routes and actions to only logged in-permmitted and specific user type
-  forgot password, and password reset (using nodemailer)
-  current user profile update( password update, profile update: phone num, email, account details )
-  rate limiting( to avoid attack or / and api over usage)
-  vendors dashboard / affiliate dashboard
-  
   vendor's dashboard products listing and catalog and reports 
   report mechnism, report system for recording commission and product
   affliate dashboard reports and commission
-  
 
   ************LATER************
   payment integration
   trackable and unique affliate link for promotion
-
 */
-
-// how many milliseconds in an hour

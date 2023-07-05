@@ -23,8 +23,8 @@ body
             .nav__logo
                 i.fa-solid.fa-close.icon.nav__icon.menubar-control.menu-closed
                 i.fa-solid.fa-bars.icon.nav__icon.menubar-control.menu-opened.hidden
-                img.logo(src='../../asset/img/logo-removebg.png' alt='clubmerce logo')
-                img.logo-small(src='../../asset/img/favicon.png' alt='clubmerce logo')
+                img.logo(src='asset/img/logo-removebg.png' alt='clubmerce logo')
+                img.logo-small(src='asset/img/favicon.png' alt='clubmerce logo')
             nav.navbar
             
                 - if(section === 'marketplace')
@@ -36,6 +36,7 @@ body
                 span.nav__icons
                     span.notification__icon
                         i.fa-regular.fa-bell.icon.nav__icon
+                        //- notification...
                         .notification__hovered.hidden 
                             h3.dashboard__heading Notification
                             p.notification__amount New (0)
@@ -44,20 +45,21 @@ body
                                 | you have no notification
 
                     span
-                        img.nav__image(src='../../asset/img/face.png' alt="customer's dashboard photo")
+                        img.nav__image(src=`asset/img/${user.image}.png` alt=`customer's (${user.username}) photo`)
+                        //- profile...
                         .Profile__hovered.hidden
                             .profile__content
                                 .profile__owner
-                                    img.profile__image(src="../../asset/img/face.png", alt="customer's dashboard photo")
-                                    p.profile__name idowu olatunji
+                                    img.profile__image(src=`asset/img/${user.image}.png` alt=`customer's (${user.username}) photo`)
+                                    p.profile__name= user.fullName
                                 a.profile__link.nav__link(href="/profile") My profile
                                 button.profile__button.nav__link#logout signout&nbsp;
                                     i.fa-solid.fa-arrow-right-to-bracket.profile__icon
 
 
-        mixin menuItem(link, text, icon, active, target)                    
+        mixin menuItem(link, text, icon, active)                    
             li(class=`${active ? 'menu__item menu__active' : 'menu__item'}`)
-                a.menu__link(href=`/${link}` target)
+                a.menu__link(href=`/${link}`)
                     i.icon.menu__icon(class=`${icon}`)
                     p #{text}
 
@@ -66,30 +68,18 @@ body
                 .menu__body
                     ul.menu__list
                         -if(user.role === 'affiliate')
-                            +menuItem('affiliate-dashboard', 'Dashboard', 'fa-solid fa-gauge', false)
-                            +menuItem('marketplace', 'Affiliate Marketplace', 'fa-solid fa-shop', false, target="_blank")
+                            +menuItem('dashboard', 'Dashboard', 'fa-solid fa-gauge', false)
+                            +menuItem('marketplace', 'Affiliate Marketplace', 'fa-solid fa-shop', false)
                             +menuItem('affiliate-performance', 'My Performance', 'fa-solid fa-chart-simple', false)
                             +menuItem('affiliate-transaction', 'Transactions', 'fa-solid fa-chart-line', false)
                             +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
 
                         -if(user.role === 'vendor')
-                            +menuItem('vendor-dashboard', 'Dashboard', 'fa-solid fa-gauge', true)
-                            +menuItem('product-catalog', 'Product Catalog', 'fa-regular fa-clipboard-list-check', false)
+                            +menuItem('dashboard', 'Dashboard', 'fa-solid fa-gauge', false)
+                            +menuItem('product-catalog', 'Product Catalog', 'fa-solid fa-clipboard-list', false)
                             +menuItem('vendor-performance', 'Product Performance', 'fa-solid fa-chart-simple', false)
                             +menuItem('vendor-transaction', 'Transactions', 'fa-solid fa-chart-line', false)
                             +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
-
-                        //- -if(user.role !== 'admin')
-                        //-     .menu__bottom
-                        //-         ul.menu__list
-                        //-             li.menu__item
-                        //-                 a.menu__link(href="/profile")
-                        //-                     img.menu__profile-image(src='../../asset/img/face.png')
-                        //-                     | profile
-                        //-             li.menu__item
-                        //-                 a.menu__button(href='/login')
-                        //-                     | signout&nbsp;
-                        //-                     i.fa-solid.fa-arrow-right-to-bracket
 
                         -if(user.role === 'admin')
                             +menuItem('all-performance', 'All perfomance', 'fa-solid fa-chart-simple', false)
@@ -97,9 +87,9 @@ body
                             +menuItem('admin-settings', 'Admin settings', 'fa-solid fa-gear', false)
 
                 -if(user.role === 'admin')
-                    .menu__bottom
-                        ul.menu__list
-                            li.menu__item
+                    .menu__bottom 
+                        ul.menu__list 
+                            li.menu__item 
                                 a.menu__link(href="/manage-users") 
                                     i.fa-solid.fa-users.icon.menu__icon
                                     | Manage Users
@@ -109,10 +99,11 @@ body
                                     | Manage Products
                             li.menu__item
                                 a.menu__link(href="/manage-payment")
-                                    i.fa-solid.fa-shopping-cart.icon.menu__icon
+                                    //- i.fa-solid.fa-shopping-cart
+                                    i.fa-solid.fa-credit-card.icon.menu__icon
                                     | Manage Payments
                             li.menu__item
-                                a.menu__link(href='/login') 
+                                a.menu__link#logout
                                     i.fa-solid.fa-arrow-right-to-bracket.icon.menu__icon
                                     | signout&nbsp;
                
@@ -121,7 +112,8 @@ body
                         ul.menu__list
                             li.menu__item
                                 a.menu__link(href="/profile")
-                                    img.menu__profile-image(src='../../asset/img/face.png')
+                                    //- img.menu__profile-image(src='asset/img/face.png')
+                                    img.menu__profile-image(src=`asset/img/${user.image}.png` alt=`customer's (${user.username}) photo`)
                                     | profile
                             li.menu__item
                                 button.menu__button#logout
@@ -132,29 +124,29 @@ body
                     block content
                         -if(user.role === 'affiliate')
                             .main__dashboard--container
-                                h3.dashboard__heading=`Welcome back, ${user.fullname}`
+                                h3.dashboard__heading=`Welcome back, ${user.fullName.split(' ')[0]}`
                                 .dashboard__insights 
                                     .insight.insight__one
                                         span 
-                                            p.insignt__text $25K
+                                            p.insignt__text=`₦ ${user.wallet}`
                                             i.fa-solid.fa-coins.insight__icon
                                         p.insignt__title Total enarned
 
                                     .insight.insight__two
                                         span 
-                                            p.insignt__text 15
+                                            p.insignt__text= user.productSold
                                             i.fa-solid.fa-comments-dollar.insight__icon
                                         p.insignt__title Product Sold
 
                                     .insight.insight__three
                                         span
-                                            p.insignt__text 100
+                                            p.insignt__text= user.clicks
                                             i.fa-solid.fa-up-right-from-square.insight__icon
                                         p.insignt__title Links clicks
 
                                     .insight.insight__four
                                         span
-                                            p.insignt__text 20
+                                            p.insignt__text= user.affiliateUrl.length
                                             i.fa-solid.fa-bullhorn.insight__icon
                                         p.insignt__title Promotions
 
@@ -192,18 +184,18 @@ body
 
                         -if(user.role === "vendor")
                             .main__dashboard--container
-                                //- h3.dashboard__heading=`Welcome back, ${user.fullname} (Vendor)`
-                                h3.dashboard__heading=`Welcome back, (Vendor)`
+                                h3.dashboard__heading=`Welcome back, ${user.fullname} vendor`
                                 .dashboard__insights 
                                     .insight.insight__one
                                         span 
-                                            p.insignt__text $25K
+                                            p.insignt__text=`₦ ${user.wallet}`
                                             i.fa-solid.fa-comments-dollar.insight__icon
                                         p.insignt__title My profit
 
                                     .insight.insight__two
                                         span 
-                                            p.insignt__text 15
+                                            //- p.insignt__text= user.product
+                                            p.insignt__text 0
                                             //- i.fa-solid.fa-bag.insight__icon
                                             i.fa-solid.fa-list-check.insight__icon
                                         p.insignt__title My Products
@@ -222,7 +214,6 @@ body
                                         
 
                                 .dashboard__table
-                                    <!-- order (vendor) -->
                                     <div class="table table-po">
                                         <div class="table-title">
                                             <h4 class="table-heading">Product orders</h4>

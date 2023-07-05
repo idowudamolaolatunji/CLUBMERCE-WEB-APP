@@ -5,6 +5,6 @@ const authController = require('../controller/authcontroller');
 const router = express.Router();
 
 
-router.push('/:productSlug', authController.restrictedTo('affiliate'), affiliateLinkController.createAffiliateLink);
-
-
+router.route('/:productSlug',)
+    // .post( authController.restrictedTo('affiliate'), affiliateLinkController.createAffiliateLink);
+    .post(affiliateLinkController.createAffiliateLink);

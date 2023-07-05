@@ -40,12 +40,12 @@ body
                                 | you have no notification
 
                     span
-                        img.nav__image(src='../../asset/img/face.png' alt="customer's dashboard photo")
+                        img.nav__image(src=`asset/img/${user.image}.png` alt=`customer's (${user.username}) photo`)
                         .Profile__hovered.hidden
                             .profile__content
                                 .profile__owner
-                                    img.profile__image(src="../../asset/img/face.png", alt="customer's dashboard photo")
-                                    p.profile__name idowu olatunji
+                                    img.profile__image(src=`asset/img/${user.image}.png` alt=`customer's (${user.username}) photo`)
+                                    p.profile__name= user.fullName
                                 a.profile__link.nav__link(href="/profile") My profile
                                 button.profile__button.nav__link#logout signout&nbsp;
                                     i.fa-solid.fa-arrow-right-to-bracket.profile__icon
@@ -53,7 +53,7 @@ body
         main.main__dashboard
             .dashboard__content
                 h3.dashboard__heading
-                    a(href="/affiliate-dashboard") 
+                    a(href="/dashboard") 
                         i.fa-solid.fa-arrow-left.font-size-sm-help.margin__r-help 
                     | Clubmerce marketplace
 
@@ -63,9 +63,9 @@ body
                 
                 .products__container
                     aside.product__filtering
-                        form.product__filter 
-                            p Sort results by
-                            select.select__input
+                        form.product__filter.form__item  
+                            label.form__label(for="select") Sort results by
+                            select.select__input(id="select")
                                 option(value="most-promoted") Most promoted
                                 option(value="gravity-high-low") Gravity : High-low
                                 option(value="gravity-low-high") Gravity : Low-high
@@ -80,90 +80,52 @@ body
 
                     span
                         h6.dashboard__subheading Top offers
-                        //- p.figures Total #{products.length}
-                        p.figures Total 60
-                        //- each product in products
-                        .products__cards--box
-                            .product__card
-                                .product__side--left    
-                                    .side--top
-                                        .product__image--container
-                                            //- img.product__image(src='../../asset/img/affiliate.png' alt=product.name)
-                                            img.product__image(src='../../asset/img/affiliate.png' alt="random image alt text")
-                                        .product__heading 
-                                            //- h2.product__title= product.name
-                                            h2.product__title random name for product
-                                            p.product__niche health and fitness
-                                            //- =product.niche
-                                            .product__content
-                                                //- h4.product__description #{product.summary}...
-                                                h4.product__description Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugiat atque commodi omnis consectetur deserunt incidunt harum quasi. Natus veniam tempore placeat, voluptas autem quam quod modi commodi..
-                                    .side--bottom
-                                        ul.product__info
-                                            //- each icon in product.others
-                                            li.product__info--item 
-                                                i.fa-solid.fa-truck-fast.product__icon.icon
-                                                | Digital Product
-                                            li.product__info--item 
-                                                i.fa-solid.fa-tools.product__icon.icon
-                                                | Affiliate tools
-                                            li.product__info--item 
-                                                i.fa-solid.fa-link.product__icon.icon
-                                                | Unique Link
-                                            li.product__info--item 
-                                                i.fa-regular.fa-square-check.product__icon.icon
-                                                | Approved
-                                            li.product__info--item 
-                                                i.fa-solid.fa-rotate.product__icon.icon
-                                                | Recurring
-                                            
+                        p.figures Total #{products.length}
+                        //- p.figures Total 60
 
-                                .product__side--right
-                                    span.product__commission
-                                        p.commision avg commission 
-                                        span.commission__amount NGN 7500
-                                    button.btn.product__button.promote Promote
-                                    a.product__button.page(href="/product") affiliate page
-                            .product__card
-                                .product__side--left    
-                                    .side--top
-                                        .product__image--container
-                                            //- img.product__image(src='../../asset/img/affiliate.png' alt=product.name)
-                                            img.product__image(src='../../asset/img/affiliate.png' alt="random image alt text")
-                                        .product__heading 
-                                            //- h2.product__title= product.name
-                                            h2.product__title random name for product
-                                            p.product__niche health and fitness
-                                            //- =product.niche
-                                            .product__content
-                                                //- h4.product__description #{product.summary}...
-                                                h4.product__description Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugiat atque commodi omnis consectetur deserunt incidunt harum quasi. Natus veniam tempore placeat, voluptas autem quam quod modi commodi..
-                                    .side--bottom
-                                        ul.product__info
-                                            //- each icon in product.others
-                                            li.product__info--item 
-                                                i.fa-solid.fa-truck-fast.product__icon.icon
-                                                | Digital Product
-                                            li.product__info--item 
-                                                i.fa-solid.fa-tools.product__icon.icon
-                                                | Affiliate tools
-                                            li.product__info--item 
-                                                i.fa-solid.fa-link.product__icon.icon
-                                                | Unique Link
-                                            li.product__info--item 
-                                                i.fa-regular.fa-square-check.product__icon.icon
-                                                | Approved
-                                            li.product__info--item 
-                                                i.fa-solid.fa-rotate.product__icon.icon
-                                                | Recurring
-                                            
+                        .products__cards--box 
+                            each product in products
 
-                                .product__side--right
-                                    span.product__commission
-                                        p.commision avg commission 
-                                        span.commission__amount NGN 7500
-                                    button.btn.product__button.promote Promote
-                                    a.product__button.page(href="/product") affiliate page
+                                .product__card
+                                    .product__side--left    
+                                        .side--top
+                                            .product__image--container
+                                                //- img.product__image(src='../../asset/img/affiliate.png' alt=product.name)
+                                                img.product__image(src='../../asset/img/affiliate.png' alt="random image alt text")
+                                            .product__heading 
+                                                h2.product__title= product.name
+                                                //- h2.product__title random name for product
+                                                //- p.product__niche health and fitness
+                                                p.product__niche=product.niche
+                                                .product__content
+                                                    h4.product__description #{product.summary}...
+                                                    //- h4.product__description Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugiat atque commodi omnis consectetur deserunt incidunt harum quasi. Natus veniam tempore placeat, voluptas autem quam quod modi commodi..
+                                        .side--bottom
+                                            ul.product__info
+                                                //- each icon in product.others
+                                                li.product__info--item 
+                                                    i.fa-solid.fa-truck-fast.product__icon.icon
+                                                    | Digital Product
+                                                li.product__info--item 
+                                                    i.fa-solid.fa-tools.product__icon.icon
+                                                    | Affiliate tools
+                                                li.product__info--item 
+                                                    i.fa-solid.fa-link.product__icon.icon
+                                                    | Unique Link
+                                                li.product__info--item 
+                                                    i.fa-regular.fa-square-check.product__icon.icon
+                                                    | Approved
+                                                li.product__info--item 
+                                                    i.fa-solid.fa-rotate.product__icon.icon
+                                                    | Recurring
+                                                
+
+                                    .product__side--right
+                                        span.product__commission
+                                            p.commision avg commission 
+                                            span.commission__amount NGN 7500
+                                        a.btn.product__button.promote(href=`/:${product.slug}`) Promote
+                                        a.product__button.page(href="/product") affiliate page
 
                                 
                 .hoplink__overlay.get__overlay.hidden
@@ -181,7 +143,7 @@ body
                     button.btn.hoplink__submit.submit(type='submit') Generate Hoplink
 
 
-                .hoplink__overlay.copy__overlay
+                .hoplink__overlay.copy__overlay.hidden
                 .hoplink__modal.copy__modal
                     h2.dashboard__heading Copy HopLink
                     p.hoplink__text Paste this URL into your promotional materials.

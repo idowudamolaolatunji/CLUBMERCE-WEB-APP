@@ -37,61 +37,57 @@ exports.signUp = (req, res) => {
         title: 'Create an account'
     });
 }
-exports.dashboard = async (req, res, next) => {
+
+exports.dashboard = async (req, res) => {
     try {
-        const user = await User.findOne();
+        const user = await User.findById(req.user.id);
 
         res.status(200).render('base_account', {
             user: user,
-            title: `${user.name}'s dashboard`
+            title: `${user.role}'s dashboard`
         });
-        next()
     } catch (err) {
-        next(err)
+        res.json({message: 'No user with this Id'})
     }
-    next();
 }
 
 // Affiliates
-// exports.affiliateDashboard =  (req, res, next) => {
-//     const user =  User.findOne();
-
-//     res.status(200).render('affiliate_dashboard', {
-//         user: user,
-//         title: `${user.name}'s dashboard`
-//     });
-//     next()
-// }
 exports.affiliatePerformance = (req, res) => {
     res.status(200).render('affiliate_performance');
 }
-exports.marketPlace = async (req, res, next) => {
+exports.marketPlace = async (req, res) => {
     try {
         const products = await Product.find();
 
         res.status(200).render('marketplace', {
-            title: 'marketPlace',
+            title: 'Affiliate marketPlace',
             products,
             section: 'marketplace'
         });
     } catch(err) {
-       next(err)
+        res.status(400).json({message: err})
     }
 }
-
-exports.product = async (req, res, next) => {
+exports.getProduct = async (req, res) => {
     try {
+        // 1) Get the data, for the requested product (including reviews and guides)
         const product = await Product.findOne({ slug: req.params.slug })
-
-        if(!product) return next('No product with that name')
+        
+        if (!product) {
+            return res.json({message: 'There is no product with that name.'})
+        }
+        
+        // 2) Build template
+        // 3) Render template using data from 1)
         res.status(200).render('product', {
             title: product.name,
             product
         });
     } catch(err) {
-        next(err)
+        res.status(400).json({message: err})
     }
 }
+
 exports.affiliateTransaction = (req, res) => {
     res.status(200).render('affiliate_transaction');
 }
@@ -109,12 +105,8 @@ exports.notification = (req, res) => {
     })
 }
 
+
 // Vendors
-// exports.vendorDashboard = (req, res) => {
-//     res.status(200).render('vendor_dashboard', {
-//         title: 'Vendor Dashboard'
-//     })
-// }
 exports.vendorPerformance = (req, res) => {
     res.status(200).render('vendor_performance', {
         title: 'Product Perfomance'
@@ -130,6 +122,7 @@ exports.productCatalog = (req, res) => {
         title: 'Your Product'
     })
 }
+
 
 // Admin
 exports.adminAuth = (req, res) => {

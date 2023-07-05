@@ -7,31 +7,31 @@ mongoose.Promise = global.Promise
 //create orders
 exports.createOrders = async (req, res) => {
     try {
-        const product = await Product.findById(req.body.productId)
+        const product = await Product.findById(req.params.id)
     
         if(!product){
             return res.status(404).json({
                 message: 'Product Not Found!'
             })
         }
-
         const newOrder = await Order.create({
-            _id: mongoose.Types.ObjectId(),
+            // _id: mongoose.Types.ObjectId(),
             quantity: req.body.quantity,
-            product: req.body.productId
+            product: req.body.productId,
+            emailAddress: req.body.emailAddress,
+            fullname: req.body.fullname,
+            country: req.body.country,
+            state: req.body.state,
+            city: req.body.city,
+            postalCode: req.body.postalCode,
+            address: req.body.address,
         });
 
         res.status(200).json({
             status: 'success',
             message: 'Order created successfully',
             data: {
-                _id: data._id,
-                product: data.product,
-                quantity: data.quantity
-            },
-            link: {
-                type: 'GET',
-                url: 'http://localhost:3000/order/' + data._id
+                order: newOrder,
             }
         })
     } catch(err) {
@@ -46,7 +46,8 @@ exports.createOrders = async (req, res) => {
 //get all orders
 exports.getAllOrders = async (req, res) => {
     try {
-        const orders = await Order.find().sort({ date: -1}).populate('product', 'name')
+        const orders = await Order.find().sort({ date: -1});
+        // const orders = await Order.find().sort({ date: -1}).populate('product', 'name')
         
         if(orders.length < 1){
             return res.json({msg: 'No order has been made yet'})
@@ -54,17 +55,9 @@ exports.getAllOrders = async (req, res) => {
         res.status(200).json({
             status: 'success',
             count: orders.length,
-            result: orders.map(order => {
-                return {
-                    _id: order._id,
-                    product: order.product,
-                    quantity: order.quantity,
-                    link: {
-                    type: 'GET',
-                    url: 'http://localhost:3000/order/' + order._id
-                    }
-                }
-            })
+            data: {
+                order: orders,
+            }
         })
     } catch(err) {
         res.status(400).json({
@@ -77,7 +70,8 @@ exports.getAllOrders = async (req, res) => {
 //get a single order
 exports.getOrder = async (req, res) => {
     try {
-        const order = await Order.findById(req.params.orderId).populate('product', 'name description amount')
+        const order = await Order.findById(req.params.id);
+        // const order = await Order.findById(req.params.id).populate('product', 'name description amount')
         if(!order){
             return res.status(404).json({
                 message: 'Order Not Found!'
@@ -100,7 +94,7 @@ exports.getOrder = async (req, res) => {
 //edit order
 exports.updateOrder = async (req, res) => {
     try {
-        const order = await Order.findById(req.params.orderId)
+        const order = await Order.findById(req.params.id)
         
         if(!order){
             res.status(404).json({
@@ -131,11 +125,11 @@ exports.updateOrder = async (req, res) => {
 //delete order
 exports.deleteOrder = async(req, res) => {
     try {
-        const order = await Order.findByIdAndRemove({_id: req.params.orderId});
+        const order = await Order.findByIdAndRemove(req.params.id);
         res.status(200).json({
             status: 'success',
             message: 'Order deleted successfully',
-            success
+            data: null
         })
     } catch(err) {
         res.status(500).json({

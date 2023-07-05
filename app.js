@@ -54,7 +54,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
     // console.log(req.headers);
-    // console.log(req.params)
+    console.log(req.params)
     console.log('Hello from the Middleware...');
     next();
 });
@@ -62,8 +62,8 @@ app.use((req, res, next) => {
 app.use('/', viewsRouter)
 app.use('/api/products', productsRouter);
 app.use('/api/users', usersRouter);
-app.use('/api/promote', affiliateLinkRouter);
-app.use('/api/orders', ordersRouter);
+// app.use('/api/promote', affiliateLinkRouter);
+// app.use('/api/orders', ordersRouter);
 
 module.exports = app;
 

@@ -240,7 +240,7 @@ a .font-size-sm-help { font-size: 1.8rem; }
     z-index: 400;
 }
 
-.spinner {
+.spinner, .spin {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -255,6 +255,7 @@ a .font-size-sm-help { font-size: 1.8rem; }
     z-index: 500;
 }
 
+.spin::after, .spin::before,
 .spinner::after, .spinner::before {
     content: "";
     display: inline-block;
@@ -266,12 +267,16 @@ a .font-size-sm-help { font-size: 1.8rem; }
     top: 50%;
     transform: translate(-50%, -50%);
 }
-.spinner::after {
+.spinner::after, .spin::after {
     left: -1rem;
 }
-.spinner::before {
+.spinner::before, .spin::before {
     right: -2rem;
 } 
+
+.spin {
+    visibility: hidden;
+}
 
 @keyframes spin {
     100% { transform: translate(-50%, -50%) rotate(360deg); }
