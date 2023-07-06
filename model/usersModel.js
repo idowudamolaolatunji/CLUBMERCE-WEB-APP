@@ -59,16 +59,17 @@ const userSchema = new mongoose.Schema({
         enum: ['affiliate', 'vendor', 'admin'],
         default: "affiliate",
     },
+    zipCode: String,
+    businessName: String,
+    region: String,
     image: {
         type: String,
         default: 'avatar'
     },
-    createdAt: {
-        type: Date,
-        default: Date.now(),
-    },
-    bankAccount: String,
+    slug: String,
+    bankName: String,
     bankAccountNumber: Number,
+    bankHolderName: String,
     active: {
         type: Boolean,
         default: true,
@@ -82,11 +83,12 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    transactions: [Number],
-    commissions: [Number],
-    affiliateUrl: {
+    // recievedTransaction: mongoose.Schema.Types.ObjectId, ref: 'Transaction',
+    transactions:  mongoose.Schema.Types.Mixed,
+    commissions: Number,
+    affiliateLinks: {
         type: [mongoose.Schema.Types.Mixed],
-        default: []
+        // default: this.length
     },
     productSold: {
         type: Number,

@@ -5,13 +5,8 @@ const orderSchema = new mongoose.Schema({
 	productId: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Product",
-		required: true,
 	},
-	walletId: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'Wallet',
-    },
+	vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 	paid: {
 		type: Boolean,
 		default: true

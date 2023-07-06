@@ -7,11 +7,13 @@ head
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
 
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer")
+    //- link(rel="icon" href='../asset/img/favicon.png')
+
 
     //- STYLES 
-    link(rel="stylesheet" href="src/css/general.css")
-    link(rel="stylesheet" href="src/css/dashboard.css")
-    link(rel="stylesheet" href="src/css/productPage.css")
+    link(rel="stylesheet" href="/src/css/general.css")
+    link(rel="stylesheet" href="/src/css/dashboard.css")
+    link(rel="stylesheet" href="/src/css/productPage.css")
 
 
 
@@ -20,7 +22,7 @@ body
 
     header.product__header
         .product__logo
-            img.p-logo(src='asset/brand_logo.png' alt='brand product logo')
+            img.p-logo(src='/asset/brand_logo.png' alt='brand product logo')
         nav.product__nav
             ul.product__nav--list
                 li.product__nav--item
@@ -37,21 +39,18 @@ body
                     a.product__nav--link.auth__link(href='#contact') Contact seller
     section.product__section.intro__section
         .product__section--container
-            //- <div class="product__intro">
-            //- <h1 class="product__heading">Introducing The ${product.name}</h1>
-            //- <h3 class="product__intro-text">Get ready to earn massive ${commission rate} commissions with this extraordinary new ${product.niche} offer…?</h3>
-            //- <p class="product__intro--text2">Get everything you need to start promoting today!</p>
-            //- </div>
             
             .product__intro
-                h1.product__heading Introducing The 
+                h1.product__heading Introducing 
                     span.dashboard__heading= product.name
-                p.product__intro-text=`Get ready to earn massive ${product.commissionRate}% commission with this` 
+                //- p.product__intro-text=`Get ready to earn massive ${product.commissionRate}% commission with this` 
+                p.product__intro-text=`Get ready to earn massive 28% commission with this` 
                     br
                     | extraordinary new weight loss offer&mldr;
                 p.product__intro-text Get everything you need to start promoting today!
                 .product__image
-                    img.product__img(src=`asset/img/${product.img}.jpg` alt='product__image')
+                    //- img.product__img(src=`/asset/img/${product.img}.jpg` alt='product__image')
+                    img.product__img(src=`/asset/img/product.jpg` alt='product__image')
                 .product__description
                     h2.product__heading--sec=`What is ${product.name}?`
                     span.description__text
@@ -63,32 +62,27 @@ body
             h2.product__heading--sec=`Why You Should Promote ${product.name}`
             .why-card__box
                 .why-card
-                    i.fa-brand.fa-icon.p-icon
+                    i.fa-solid.fa-coins.p-icon
                     h3.why-heading Massive payout
                     p.why-text=`You get ${product.commissionRate}% commission each time someone buys our products via your Affiliate Link.`
                 .why-card
-                    i.fa-brand.fa-icon.p-icon
+                    i.fa-solid.fa-users.p-icon
                     h3.why-heading Massive market audience
                     p.why-text Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea expedita illum consectetur rem similique! Est ex eum quidem officiis dolore!.
                 .why-card
-                    i.fa-brand.fa-icon.p-icon
+                    i.fa-solid.fa-tools.p-icon
                     h3.why-heading Affiliate promotion tool
                     p.why-text No need to use multiple, over complicated sales tatics, everything you need for your complete sales funnel is here in one user-friendly dashboard
                 .why-card
-                    i.fa-brand.fa-icon.p-icon
+                    i.fa-solid.fa-truck-fast.p-icon
                     h3.why-heading Approved physical product
                     p.why-text Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea expedita illum consectetur rem similique! Est ex eum quidem officiis dolore!.
-                // OR
                 .why-card
-                    i.fa-brand.fa-icon.p-icon
+                    i.fa-solid.fa-mobile.p-icon
                     h3.why-heading Approved digital product
                     p.why-text Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea expedita illum consectetur rem similique! Est ex eum quidem officiis dolore!.
                 .why-card
-                    i.fa-brand.fa-icon.p-icon
-                    h3.why-heading Approved digital product
-                    p.why-text Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea expedita illum consectetur rem similique! Est ex eum quidem officiis dolore!.
-                .why-card
-                    i.fa-brand.fa-icon.p-icon
+                    i.i.fa-solid.fa-rotate.p-icon
                     h3.why-heading reccuring payment
                     p.why-text Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea expedita illum consectetur rem similique! Est ex eum quidem officiis dolore!.
     section#link.product__section.section__get-link
@@ -96,12 +90,12 @@ body
             .link--box
                 h2.dashboard__heading Generate HopLink
                 p.hoplink__text  Earn commission for every customer you refer to this product using your personalized affiliate hoplink.
-                form.hoplink(action='')
+                form.hoplink-form
                     .hoplink__body
-                        input.hoplink__input(type='text' required='' placeholder='Username')
+                        input.hoplink__input.hoplink-username(type='text' placeholder='Username' required)
                         p.hoplink__body--text Required
                     .hoplink__body
-                        input.hoplink__input(type='text' required='' placeholder='Tracing Id')
+                        input.hoplink__input.hoplink-trackingid(type='text' placeholder='Tracing Id')
                         p.hoplink__body--text Optional
                     button.btn.hoplink__submit(type='submit') Generate Hoplink
     section#img.product__section.section__images
@@ -110,17 +104,17 @@ body
             p.description__text You are permitted to use the following imagery in your promotions. You are not allowed to use any imagery found on this website aside from that detailed below. Click to open the image in a new window then right-click &quot;Save Image As&quot; to save to your computer.
                 .images__box
                     a(href='product.jpg' target='_blank')
-                        img(src='asset/img/product.jpg' alt='')
+                        img(src='/asset/img/product.jpg' alt='')
                     a(href='product.jpg' target='_blank')
-                        img(src='asset/img/product.jpg' alt='')
+                        img(src='/asset/img/product.jpg' alt='')
                     a(href='product.jpg' target='_blank')
-                        img(src='asset/img/product.jpg' alt='')
+                        img(src='/asset/img/product.jpg' alt='')
                     a(href='product.jpg' target='_blank')
-                        img(src='asset/img/product.jpg' alt='')
+                        img(src='/asset/img/product.jpg' alt='')
                     a(href='product.jpg' target='_blank')
-                        img(src='asset/img/product.jpg' alt='')
+                        img(src='/asset/img/product.jpg' alt='')
                     a(href='product.jpg' target='_blank')
-                        img(src='asset/img/product.jpg' alt='')
+                        img(src='/asset/img/product.jpg' alt='')
     section#demo.product__section.section__demography
         .product__section--container
             h2.product__heading--sec Demography
@@ -151,13 +145,13 @@ body
             p.description__text Lorem ipsum dolor sit, amet consectetur adipisicing elit. Explicabo nostrum itaque quia autem, ipsum at. Doloribus sunt rem necessitatibus laborum harum nobis animi. Distinctio, modi?
             .banner__box
                 a(href='banner1.jpg' target='_blank')
-                    img(src='asset/img/banner1.jpg' alt='')
+                    img(src='/asset/img/banner1.jpg' alt='')
                 a(href='banner2.jpg' target='_blank')
-                    img(src='asset/img/banner2.jpg' alt='')
+                    img(src='/asset/img/banner2.jpg' alt='')
                 a(href='banner3.jpg' target='_blank')
-                    img(src='asset/img/banner3.jpg' alt='')
+                    img(src='/asset/img/banner3.jpg' alt='')
                 a(href='banner4.jpg' target='_blank')
-                    img(src='asset/img/banner4.jpg' alt='')
+                    img(src='/asset/img/banner4.jpg' alt='')
     section#contact.product__section.section__contact-seller
         .product__section--container
             h2.product__heading--sec Contact Seller
@@ -167,3 +161,5 @@ body
                 |  and they will assist you as soon as possible. We look forward to working with you.
 
     include _auth_footer
+
+    script(src="/src/js/index.js")

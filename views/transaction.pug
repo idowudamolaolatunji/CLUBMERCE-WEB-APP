@@ -1,0 +1,114 @@
+extends base_account 
+
+block content 
+
+    -if(user.role === 'affiliate')
+        h3.dashboard__heading Transactions and Wallet
+        .dashboard__transaction
+            .wallet__card
+                h3.dashboard__heading My wallet
+                p.wallet__amount &#x20A6; 
+                    span.amount=user.wallet
+                span.wallet__info Total Accessable Amount (limit: ₦10,000)
+            .withdrawal__card
+                h3.dashboard__heading Withdrawal
+                form.withdraw__form
+                .form__body-ungeneric
+                    input#bank__details.form__input-ungeneric(type='radio')
+                    label.form__label-ungeneric(for='bank__details')
+                        p.bank__holder-name= user.bankHolderName
+                        p.bank__name= user.bankName
+                        p.bank__number= user.bankAccount
+                .form__grid-generic
+                    .form__body-generic
+                    label.form__label(for='amount') Amount
+                    input#amount.form__input(type='text' name='amount' placeholder="Withdrawal amount")
+                    .form__body-generic
+                    label.form__label(for='enter__password') Confirm your password
+                    input#enter__password.form__input(type='password' name='enter__password' placeholder='••••••••••••')
+                button.btn.form__submit.form__submit-generic(type='submit') Withdraw
+
+
+
+        .dashboard__table
+            .table
+                .table-title
+                    h4.table-heading Recent transaction
+                    i.fa-silid.fa-vertical-dots.table__icon
+                .table-head-po
+                    span.table-head-content Trasaction id
+                    span.table-head-content Type
+                    span.table-head-content amount
+                    span.table-head-content Status
+                    span.table-head-content date
+                .table-row-po
+                    span.table-row-content
+                        p.id dh373y82wu9wshd8w
+                    span.table-row-content
+                        p.type WITHDRAWAL
+                    span.table-row-content
+                        p.price= `₦ ${user.wallet}`
+                    span.table-row-content
+                        p.status.status--pending pending
+                    span.table-row-content
+                        p.date 12/02/23
+                //- .table-row-message
+                    | p.note-no No recent transaction...
+
+
+
+
+
+    -if(user.role === 'vendor')
+        h3.dashboard__heading Transactions and Wallet
+
+        .dashboard__transaction
+            .wallet__card
+                h3.dashboard__heading My wallet
+                p.wallet__amount &#x20A6; 
+                    span.amount= user.wallet
+                span.wallet__info Total Accessable Amount (limit: ₦20,000)
+            .withdrawal__card
+                h3.dashboard__heading Withdrawal
+                form.withdraw__form
+                    .form__body-ungeneric
+                        input#bank__details.form__input-ungeneric(type='radio')
+                        label.form__label-ungeneric(for='bank__details')
+                            p.bank__holder-name= user.bankHolderName
+                            p.bank__name= user.bankName
+                            p.bank__number= user.bankAccount
+                    .form__grid-generic
+                        .form__body-generic
+                            label.form__label(for='amount') Amount
+                            input#amount.form__input(type='text' name='amount' placeholder="Withdrawal amount")
+                        .form__body-generic
+                            label.form__label(for='enter__password') Confirm your password
+                            input#enter__password.form__input(type='password' name='enter__password' placeholder='••••••••••••')
+                        button.btn.form__submit.form__submit-generic(type='submit') Withdraw
+
+
+
+        .dashboard__table
+            .table
+                .table-title
+                    h4.table-heading Recent transaction
+                    i.fa-silid.fa-vertical-dots.table__icon
+                .table-head-po
+                    span.table-head-content Trasaction id
+                    span.table-head-content Type
+                    span.table-head-content amount
+                    span.table-head-content Status
+                    span.table-head-content date
+                .table-row-po
+                    span.table-row-content
+                        p.id dh373y82wu9wshd8w
+                    span.table-row-content
+                        p.type WITHDRAWAL
+                    span.table-row-content
+                        p.price= `₦ ${user.wallet}`
+                    span.table-row-content
+                        p.status.status--pending pending
+                    span.table-row-content
+                        p.date 12/02/23
+                //- .table-row-message
+                    | p.note-no No recent transaction...

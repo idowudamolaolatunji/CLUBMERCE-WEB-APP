@@ -1,0 +1,40 @@
+DOCTYPE
+html(lang="en")
+
+head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer")
+
+    //- STYLES 
+    link(rel="stylesheet" href="src/css/general.css")
+    link(rel="stylesheet" href="src/css/order_and_payment.css")
+
+    
+body
+
+    <form id="paymentForm" >
+    <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email-address" required />
+    </div>
+    <div class="form-group">
+        <label for="amount">Amount</label>
+        <input type="tel" id="amount" required />
+    </div>
+    <div class="form-group">
+        <label for="first-name">First Name</label>
+        <input type="text" id="first-name" />
+    </div>
+    <div class="form-group">
+        <label for="last-name">Last Name</label>
+        <input type="text" id="last-name" />
+    </div>
+    <div class="form-submit">
+        <button type="submit"> Pay </button>
+    </div>
+    </form>
+
+    script(src="src/js/payment.js")

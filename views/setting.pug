@@ -1,46 +1,71 @@
 extends base_account 
 
 block content 
-    h3.dashboard__heading Your Account 
+    -if(user.role === 'affiliate' || user.role === 'vendor')
 
-    //- p.payment__details Add a payment method
-    //- .payment-data 
-    //-     h4 Paystack 
-    //-     span Powered by Paystack: Accepts Mastercard, Visa, Verve, Discover, AMEX, Diners Club and Union Pay.
-    //-     button.btn Add payment account
-    form.form__data.form-payment-data
-        h3.dashboard__heading Add a payment account
-        .form__item
-            label.form__label(for='paymentBankName') Payment Bank Name
-            input#paymentBankName.form__input(type='paymentBankName' value='Acom bank' required)
-        .form__item
-            label.form__label(for='paymentAcctNum') Payment Account Number
-            input#paymentAcctNum.form__input(type='number' value='002567890' required)
-        .form__item
-            label.form__label(for='HoldersName') Holder's Name
-            input#HoldersName.form__input(type='HoldersName' placeholder="Name as in bank document" required)
-        .form__item.right
-            button.btn.form-btn Add payment account
-    
+        //- p.payment__details Add a payment method
+        //- .payment-data 
+        //-     h4 Paystack 
+        //-     span Powered by Paystack: Accepts Mastercard, Visa, Verve, Discover, AMEX, Diners Club and Union Pay.
+        //-     button.btn Add payment account
+        h3.dashboard__heading Your Account Settings
+        form.form__data.form-payment-data
+            h3.dashboard__heading Add a payment account
+            .form__item
+                label.form__label(for='paymentBankName') Payment Bank Name
+                input#paymentBankName.form__input(type='paymentBankName' value='Acom bank' required)
+            .form__item
+                label.form__label(for='paymentAcctNum') Payment Account Number
+                input#paymentAcctNum.form__input(type='number' value='002567890' required)
+            .form__item
+                label.form__label(for='HoldersName') Holder's Name
+                input#HoldersName.form__input(type='HoldersName' value="ddvd freedw"  placeholder="Name as in bank document" required)
+            .form__item.right
+                button.btn.form-btn Add payment account
+        
 
 
-    form.form__data.form-password-data
-        h3.dashboard__heading Update Account Password
-        .form__item
-            label.form__label(for='password-current') Current Password
-            input.form__input.signup__password(name='password' type='password-current' placeholder='••••••••••••', required, minlength='8')
-        .form__item
-            label.form__label(for='password') New Password
-            input.form__input.signup__password(name='password' type='password' placeholder='••••••••••••', required, minlength='8')
-        .form__item
-            label.form__label(for='password-confirm') Confirm New Password
-            input.form__input.signup__passwordconfirm(name='password-confirm' type='password' placeholder='••••••••••••', required, minlength='8')
-        .form__item.right
+        form.form__data.form-password-data
+            h3.dashboard__heading Update Account Password
+            .form__item
+                label.form__label(for='password-current') Current Password
+                input.form__input.signup__password(name='password' type='password-current' placeholder='••••••••••••', required, minlength='8')
+            .form__item
+                label.form__label(for='password') New Password
+                input.form__input.signup__password(name='password' type='password' placeholder='••••••••••••', required, minlength='8')
+            .form__item
+                label.form__label(for='password-confirm') Confirm New Password
+                input.form__input.signup__passwordconfirm(name='password-confirm' type='password' placeholder='••••••••••••', required, minlength='8')
+            .form__item.right
+                    button.btn.form-btn Save password
+
+
+        -if(user.role === 'affiliate')
+            .delete-data
+                h4 Delete My Account 
+                span Every info about this account, transactions, affiliate links, sold product histories, personal details and other sensitive informations would be removed as you click 
+                    strong(style="color:#f15a29;") Delete My Account!
+                button.btn Delete My Account
+
+        -if(user.role === 'vendor')
+            .delete-data
+                h4 Delete Vendor Account 
+                span Every info about this vendor account, transactions, products, purchases, orders and order histories, personal details and other sensitive informations would be removed as you click 
+                    strong(style="color:#f15a29;") Delete My Account!
+                button.btn Delete My Account
+
+    -if(user.role === 'admin')
+        h3.dashboard__heading Admin Settings 
+        form.form__data.form-password-data
+            h3.dashboard__heading Update Account Password
+            .form__item
+                label.form__label(for='password-current') Current Password
+                input.form__input.signup__password(name='password' type='password-current' placeholder='••••••••••••', required, minlength='8')
+            .form__item
+                label.form__label(for='password') New Password
+                input.form__input.signup__password(name='password' type='password' placeholder='••••••••••••', required, minlength='8')
+            .form__item
+                label.form__label(for='password-confirm') Confirm New Password
+                input.form__input.signup__passwordconfirm(name='password-confirm' type='password' placeholder='••••••••••••', required, minlength='8')
+            .form__item.right
                 button.btn.form-btn Save password
-
-
-    .delete-data
-        h4 Delete My Account 
-        span Every info about this account, transactions, affiliate links, interactions, bank details and other sensitive informations would be removed as you click 
-            strong(style="color:#f15a29;") Delete My Account!
-        button.btn Delete My Account

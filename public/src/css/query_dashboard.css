@@ -3,8 +3,6 @@
    =========================================== */
 /* 1135px === 113.5rem === 70.94em */
 @media screen and (max-width: 70.94em) {
-    /* VENDOR */
-
     /* popup modal */
     .product__modal {
         width: 65rem;
@@ -16,6 +14,9 @@
 
     /* marketplace */
     .product__card { height: auto; }
+    .products__container {
+        grid-template-columns: 25fr 100fr;
+    }
 }
 
 

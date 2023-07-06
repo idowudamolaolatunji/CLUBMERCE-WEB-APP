@@ -38,23 +38,15 @@ exports.signUp = (req, res) => {
     });
 }
 
-exports.dashboard = async (req, res) => {
-    try {
-        const user = await User.findById(req.user.id);
-
-        res.status(200).render('base_account', {
-            user: user,
-            title: `${user.role}'s dashboard`
-        });
-    } catch (err) {
-        res.json({message: 'No user with this Id'})
-    }
+// visitors
+exports.paymentForm = (req, res) => {
+    res.status(200).render('payment');
+}
+exports.getOrderProductPage = (req, res) => {
+    res.status(200).render('order_product');
 }
 
 // Affiliates
-exports.affiliatePerformance = (req, res) => {
-    res.status(200).render('affiliate_performance');
-}
 exports.marketPlace = async (req, res) => {
     try {
         const products = await Product.find();
@@ -70,13 +62,11 @@ exports.marketPlace = async (req, res) => {
 }
 exports.getProduct = async (req, res) => {
     try {
-        // 1) Get the data, for the requested product (including reviews and guides)
+        // 1) Get the data, for the requested product
         const product = await Product.findOne({ slug: req.params.slug })
-        
         if (!product) {
             return res.json({message: 'There is no product with that name.'})
         }
-        
         // 2) Build template
         // 3) Render template using data from 1)
         res.status(200).render('product', {
@@ -88,41 +78,37 @@ exports.getProduct = async (req, res) => {
     }
 }
 
-exports.affiliateTransaction = (req, res) => {
-    res.status(200).render('affiliate_transaction');
-}
-
 // common routes
+exports.dashboard = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        res.status(200).render('base_account', {
+            user,
+            title: `${user.role}'s dashboard`
+        });
+    } catch (err) {
+        res.json({message: 'No user with this Id'});
+    }
+}
 exports.profile = (req, res) => {
     res.status(200).render('profile');
 }
 exports.settings = (req, res) => {
     res.status(200).render('setting');
 }
-exports.notification = (req, res) => {
-    res.status(200).render('notification', {
-        title: 'Your Notification'
-    })
+exports.performance = (req, res) => {
+    res.status(200).render('performance');
 }
-
+exports.transaction = (req, res) => {
+    res.status(200).render('transaction');
+}
 
 // Vendors
-exports.vendorPerformance = (req, res) => {
-    res.status(200).render('vendor_performance', {
-        title: 'Product Perfomance'
-    })
-}
-exports.vendorTransaction = (req, res) => {
-    res.status(200).render('vendor_transaction', {
-        title: 'Transaction'
-    })
-}
 exports.productCatalog = (req, res) => {
     res.status(200).render('product_catalog', {
         title: 'Your Product'
     })
 }
-
 
 // Admin
 exports.adminAuth = (req, res) => {
@@ -136,9 +122,6 @@ exports.allPerformance = (req, res) => {
 exports.productMarketplace = (req, res) => {
     res.status(200).render('product_marketplace-admin');
 }
-exports.adminSettings = (req, res) => {
-    res.status(200).render('admin_setting');
-}
 exports.manageUsers = (req, res) => {
     res.status(200).render('manage_users')
 }
@@ -146,5 +129,5 @@ exports.manageProducts = (req, res) => {
     res.status(200).render('manage_products')
 }
 exports.managePayment = (req, res) => {
-    res.status(200).render('manage_payment')
+    res.status(200).render('manage_payments')
 }

@@ -5,6 +5,7 @@ const slugify = require('slugify');
 
 
 const productSchema = new mongoose.Schema({
+    vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     name: {
         type: String,
         required: [true, 'A product must have a name'],
@@ -40,26 +41,33 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: [true, 'A product must have a Commission percentage'],
     },
+    
     type: Boolean,
     affiliateTools: Boolean,
-    productGravity: {
-        type: Number,
-        default: 1
-    },
+    
+    slug: String,
     subImages: [String],
     banners: [String],
+    clicks: {
+        type: Number,
+        default: 0,
+    },
+    purchases: { type: Number, default: 0 },
+    productGravity: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'AffiliateLink',
+        default: 0
+    },
     createdAt: {
         type: Date,
         default: Date.now(),
     },
 });
 
+
 // DOCUMENT MIDDLEWARE: runs before .save() and .create()
 productSchema.pre('save', function(next) {
     const slug = slugify(this.name, { lower: true });
-    // const randomId = crypto.randomInt(100000, 999999).toString();
     this.slug = `${slug}-${this._id}`;
-    // we would need to concatinate the slug with the random id or product id to make every product slug unique, using the concat method and join the together with a '-'
     next();
 });
 

@@ -1,0 +1,51 @@
+extends base_account 
+
+block content 
+    <div class="table table-mp">
+        <div class="table-title">
+            <h4 class="table-heading">Manage Products</h4>
+        </div>
+        <div class="table-head-mp">
+            <span class="table-head-content">Product</span>
+            <span class="table-head-content">brand name</span>
+            <span class="table-head-content">category</span>
+            <span class="table-head-content">price</span>
+            <span class="table-head-content">approved</span>
+            <span class="table-head-content">actions</span>
+        </div>
+
+        <div class="table-row-mp">
+            <span class="table-row-content table-row-product">
+                <img class="table-product__image" src="../product.jpg" alt="" />
+                <span>
+                    <p class="table-product__name">Test product 1</p>
+                    <p class="table-product__niche">health & fitness</p>
+                </span>
+            </span>
+            <span class="table-row-content"><p class="brand">My drug kit</p></span>
+            <span class="table-row-content"><p class="category">Health</p></span>
+            <span class="table-row-content"><p class="price">$&nbsp;90</p></span>
+            <span class="table-row-content"><p class="approved status status--success">Approved</p></span>
+            <span class="table-row-content table-row-btn">
+                <button class="btn-edit table-btn">Edit</button>
+                <button class="btn-delete table-btn">Delete</button>
+            </span>
+        </div>
+        <div class="table-row-mp">
+            <span class="table-row-content table-row-product">
+                <img class="table-product__image" src="../product.jpg" alt="" />
+                <span>
+                    <p class="table-product__name">Test product 1</p>
+                    <p class="table-product__niche">health & fitness</p>
+                </span>
+            </span>
+            <span class="table-row-content"><p class="brand">My drug kit</p></span>
+            <span class="table-row-content"><p class="category">Health</p></span>
+            <span class="table-row-content"><p class="price">$&nbsp;90</p></span>
+            <span class="table-row-content"><p class="approved status status--pending">pending</p></span>
+            <span class="table-row-content table-row-btn">
+                <button class="btn-edit table-btn">Edit</button>
+                <button class="btn-delete table-btn">Delete</button>
+            </span>
+        </div>
+    </div>

@@ -2,6 +2,20 @@ extends base
 
 block content 
     main
+        <div id="spinOverlay">
+            <div class="spin">
+                <div></div>   
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+            </div>
+        </div>
         section.section.hero__section
             img.hero__svg.svg1(src='asset/svg/svg1.svg')
             img.hero__svg.svg2(src='asset/svg/svg2.svg')
@@ -160,7 +174,7 @@ block content
         section.section.testimonial__section.center
             h2.section__heading--secondary Testimonials
             .container__skew
-                .testimonial__slide.un-skew
+                .testimonial__slide
                     .testimonial__slide--item
                         .testimonial__slide--item-text
                             p.testimonial__content
@@ -179,15 +193,6 @@ block content
                             p.testimonial__author Lorem.
                         .testimonial__slide--item-img
                             img.testimonial__image(src='asset/img/face.png' alt='')
-                    .testimonial__slide--item.testimonial__active
-                        .testimonial__slide--item-text
-                            p.testimonial__content
-                                | Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                                | Quibusdam eius ducimus dolore at illo nobis distinctio
-                                | nostrum, id alias eaque!
-                            p.testimonial__author Lorem.
-                        .testimonial__slide--item-img
-                            img.testimonial__image(src='asset/img/face.png' alt='')
                     .testimonial__slide--item
                         .testimonial__slide--item-text
                             p.testimonial__content
@@ -206,13 +211,22 @@ block content
                             p.testimonial__author Lorem.
                         .testimonial__slide--item-img
                             img.testimonial__image(src='asset/img/face.png' alt='')
-                
-                .dots.un-skew
-                    span.dot.dot1 &nbsp;
-                    span.dot.dot1 &nbsp;
-                    span.dot.dot2.dot__active &nbsp;
-                    span.dot.dot3 &nbsp;
-                    span.dot.dot3 &nbsp;
+                    .testimonial__slide--item
+                        .testimonial__slide--item-text
+                            p.testimonial__content
+                                | Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                                | Quibusdam eius ducimus dolore at illo nobis distinctio
+                                | nostrum, id alias eaque!
+                            p.testimonial__author Lorem.
+                        .testimonial__slide--item-img
+                            img.testimonial__image(src='asset/img/face.png' alt='')
+
+                    .dots
+                        span.dot.dot1 &nbsp;
+                        span.dot.dot1 &nbsp;
+                        span.dot.dot2.dot__active &nbsp;
+                        span.dot.dot3 &nbsp;
+                        span.dot.dot3 &nbsp;
 
 
         section.section.cta1__section
@@ -222,38 +236,4 @@ block content
                         | Need affiliate to promote your products?
                     h3.cta__content--text Get Started As A Vendor
                     a.section__button.btn.cta__button(href='/vendor') Get started
-        //
-            <section class="p-product__section">
-            <div class="section__container">
-            <h2 class="section__heading--secondary">popular product</h2>
-            <p class="section__content--text">Lorem ipsum, dolor sit amet consectetur adipisicing emodi maxime alias et beatae!</p>
-            <div class="grid__two">
-            <div class="p-product__card card">
-            <div class="p-product__card--top">
-            <img class="p-product__image" src="" alt="" />
-            </div>
-            <div class="p-product__card--buttom">
-            <div class="p-product__content">
-            <p class="p-product__content--text">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis modi ipsam assumenda voluptates, quae id. Quasi officia quos aspernatur tempore?
-            </p>
-            <button class="btn btn__p-product">Lorem.</button>
-            </div>
-            </div>
-            </div>
-            <div class="p-product__card card">
-            <div class="p-product__card--top">
-            <img class="p-product__image" src="" alt="" />
-            </div>
-            <div class="p-product__card--buttom">
-            <div class="p-product__content">
-            <p class="p-product__content--text">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis modi ipsam assumenda voluptates, quae id. Quasi officia quos aspernatur tempore?
-            </p>
-            <button class="btn btn__p-product">Lorem.</button>
-            </div>
-            </div>
-            </div>
-            </div>
-            </div>
-            </section>
+        

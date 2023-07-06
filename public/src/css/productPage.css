@@ -51,6 +51,7 @@ body {
 }
 .product__heading, .product__heading .dashboard__heading {
     font-size: 3.6rem;
+    text-transform: capitalize;
     margin-bottom: 0rem;
 }
 .product__heading { margin-bottom: 2rem; }
@@ -70,6 +71,7 @@ body {
 .product__img {
     height: 40rem;
     width: 70rem;
+    border-radius: .25rem;
 }
 .description__text {
     font-size: 1.6rem;

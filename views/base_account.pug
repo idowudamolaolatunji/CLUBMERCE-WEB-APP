@@ -53,7 +53,7 @@ body
                                     img.profile__image(src=`asset/img/${user.image}.png` alt=`customer's (${user.username}) photo`)
                                     p.profile__name= user.fullName
                                 a.profile__link.nav__link(href="/profile") My profile
-                                button.profile__button.nav__link#logout signout&nbsp;
+                                button.profile__button.nav__link#logoutNavBtn signout&nbsp;
                                     i.fa-solid.fa-arrow-right-to-bracket.profile__icon
 
 
@@ -70,21 +70,21 @@ body
                         -if(user.role === 'affiliate')
                             +menuItem('dashboard', 'Dashboard', 'fa-solid fa-gauge', false)
                             +menuItem('marketplace', 'Affiliate Marketplace', 'fa-solid fa-shop', false)
-                            +menuItem('affiliate-performance', 'My Performance', 'fa-solid fa-chart-simple', false)
-                            +menuItem('affiliate-transaction', 'Transactions', 'fa-solid fa-chart-line', false)
+                            +menuItem('performance', 'My Performance', 'fa-solid fa-chart-simple', false)
+                            +menuItem('transaction', 'Transactions', 'fa-solid fa-chart-line', false)
                             +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
 
                         -if(user.role === 'vendor')
                             +menuItem('dashboard', 'Dashboard', 'fa-solid fa-gauge', false)
                             +menuItem('product-catalog', 'Product Catalog', 'fa-solid fa-clipboard-list', false)
-                            +menuItem('vendor-performance', 'Product Performance', 'fa-solid fa-chart-simple', false)
-                            +menuItem('vendor-transaction', 'Transactions', 'fa-solid fa-chart-line', false)
+                            +menuItem('performance', 'Product Performance', 'fa-solid fa-chart-simple', false)
+                            +menuItem('transaction', 'Transactions', 'fa-solid fa-chart-line', false)
                             +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
 
                         -if(user.role === 'admin')
                             +menuItem('all-performance', 'All perfomance', 'fa-solid fa-chart-simple', false)
                             +menuItem('product-marketplace', 'Product Marketplace', 'fa-solid fa-clipboard-list', false)
-                            +menuItem('admin-settings', 'Admin settings', 'fa-solid fa-gear', false)
+                            +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
 
                 -if(user.role === 'admin')
                     .menu__bottom 
@@ -92,18 +92,18 @@ body
                             li.menu__item 
                                 a.menu__link(href="/manage-users") 
                                     i.fa-solid.fa-users.icon.menu__icon
-                                    | Manage Users
+                                    p Manage Users
                             li.menu__item
                                 a.menu__link(href="/manage-products") 
                                     i.fa-solid.fa-gift.icon.menu__icon
-                                    | Manage Products
+                                    p Manage Products
                             li.menu__item
                                 a.menu__link(href="/manage-payment")
                                     //- i.fa-solid.fa-shopping-cart
                                     i.fa-solid.fa-credit-card.icon.menu__icon
-                                    | Manage Payments
+                                    p Manage Payments
                             li.menu__item
-                                a.menu__link#logout
+                                a.menu__link#logoutMenu
                                     i.fa-solid.fa-arrow-right-to-bracket.icon.menu__icon
                                     | signout&nbsp;
                
@@ -114,9 +114,9 @@ body
                                 a.menu__link(href="/profile")
                                     //- img.menu__profile-image(src='asset/img/face.png')
                                     img.menu__profile-image(src=`asset/img/${user.image}.png` alt=`customer's (${user.username}) photo`)
-                                    | profile
+                                    p profile
                             li.menu__item
-                                button.menu__button#logout
+                                button.menu__button#logoutMenuBtn
                                     | signout&nbsp;
                                     i.fa-solid.fa-arrow-right-to-bracket
             main.main__dashboard
@@ -146,45 +146,41 @@ body
 
                                     .insight.insight__four
                                         span
-                                            p.insignt__text= user.affiliateUrl.length
+                                            //- p.insignt__text= user.affiliateUrl.length
+                                            p.insignt__text= user.affiliateLinks.length
                                             i.fa-solid.fa-bullhorn.insight__icon
                                         p.insignt__title Promotions
 
                                 .dashboard__table
-                                    <div class="table">
-                                        <div class="table-title">
-                                            <h4 class="table-heading">Recent commission</h4>
-                                            <i class="fa-silid fa-vertical-dots table__icon"></i>
-                                        </div>
-                                        <div class="table-head">
-                                            <span class="table-head-content">Product</span>
-                                            <span class="table-head-content">Commission amount</span>
-                                            <span class="table-head-content">Status</span>
-                                            <span class="table-head-content">date</span>
-                                        </div>
-
-
-                                        //- <div class="table-row">
-                                            <span class="table-row-content table-row-product">
-                                                <img class="table-product__image" src="../product.jpg" alt="" />
-                                                <span>
-                                                    <p class="table-product__name">Test product 2</p>
-                                                    <p class="table-product__niche">E-books</p>
-                                                </span>
-                                            </span>
-                                            <span class="table-row-content"><p class="price">$&nbsp;90</p></span>
-                                            <span class="table-row-content"><p class="status status--pending">pending</p></span>
-                                            <span class="table-row-content"><p class="date">12/02/23</p></span>
-                                        //- </div>
-                                        <div class="table-row-message">
+                                    .table
+                                        .table-title
+                                            h4.table-heading Recent commission
+                                            i.fa-silid.fa-vertical-dots.table__icon
+                                        .table-head
+                                            span.table-head-content Product
+                                            span.table-head-content Commission amount
+                                            span.table-head-content Status
+                                            span.table-head-content date
+                                        //- .table-row
+                                            span.table-row-content.table-row-product
+                                            img.table-product__image(src='../product.jpg' alt='')
+                                            span
+                                                p.table-product__name Test product 2
+                                                p.table-product__niche E-books
+                                            span.table-row-content
+                                            p.price $&nbsp;90
+                                            span.table-row-content
+                                            p.status.status--pending pending
+                                            span.table-row-content
+                                            p.date 12/02/23
+                                        .table-row-message
                                             p.note-no You've have not made any sale commission...
-                                        </div>
-                                    </div>
+
                             
 
                         -if(user.role === "vendor")
                             .main__dashboard--container
-                                h3.dashboard__heading=`Welcome back, ${user.fullname} vendor`
+                                h3.dashboard__heading=`Welcome back, ${user.business ? user.fullName.split(' ')[0] : user.businessName}`
                                 .dashboard__insights 
                                     .insight.insight__one
                                         span 
@@ -208,41 +204,38 @@ body
 
                                     .insight.insight__four
                                         span
-                                            p.insignt__text 20
+                                            p.insignt__text 0
                                             i.fa-solid.fa-bullhorn.insight__icon
                                         p.insignt__title Affiliate Gravity
                                         
 
                                 .dashboard__table
-                                    <div class="table table-po">
-                                        <div class="table-title">
-                                            <h4 class="table-heading">Product orders</h4>
-                                        </div>
-                                        <div class="table-head-po">
-                                            <span class="table-head-content">Product</span>
-                                            <span class="table-head-content">orders</span>
-                                            <span class="table-head-content">Total price</span>
-                                            <span class="table-head-content">location</span>
-                                            <span class="table-head-content">status</span>
-                                        </div>
+                                    .table.table-po
+                                        .table-title
+                                            h4.table-heading Product orders
+                                        .table-head-po
+                                            span.table-head-content Product
+                                            span.table-head-content orders
+                                            span.table-head-content Total price
+                                            span.table-head-content location
+                                            span.table-head-content status
+                                        //- .table-row-po
+                                            span.table-row-content.table-row-product
+                                            img.table-product__image(src='../product.jpg' alt='')
+                                            span
+                                                p.table-product__name Test product 1
+                                                p.table-product__niche health &amp; fitness
+                                            span.table-row-content
+                                            p.order 5
+                                            span.table-row-content
+                                            p.price $&nbsp;120
+                                            span.table-row-content
+                                            p.brand Nigeria
+                                            span.table-row-content
+                                            p.status.status--success success
+                                        .table-row-message
+                                            p.note-no You've no order at the moment...
 
-                                        //- <div class="table-row-po">
-                                            <span class="table-row-content table-row-product">
-                                                <img class="table-product__image" src="../product.jpg" alt="" />
-                                                <span>
-                                                    <p class="table-product__name">Test product 1</p>
-                                                    <p class="table-product__niche">health & fitness</p>
-                                                </span>
-                                            </span>
-                                            <span class="table-row-content"><p class="order">5</p></span>
-                                            <span class="table-row-content"><p class="price">$&nbsp;120</p></span>
-                                            <span class="table-row-content"><p class="brand">Nigeria</p></span>
-                                            <span class="table-row-content"><p class="status status--success">success</p></span>
-                                        //- </div>
-
-                                        <div class="table-row-message">
-                                            p.note-no You've no order at the moment...</div>
-                                    </div>
 
                         -if(user.role == "admin")
                             p this is the admin

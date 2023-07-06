@@ -15,29 +15,29 @@ router.get('/signup', viewController.signUp);
 
 // affiliates
 router.get('/marketplace', authController.isLoggedIn, viewController.marketPlace);
-router.get('/marketplace/:slug', authController.isLoggedIn, viewController.getProduct);
-router.get('/affiliate-performance', authController.isLoggedIn, viewController.affiliatePerformance);
-router.get('/affiliate-transaction', authController.isLoggedIn, viewController.affiliateTransaction);
+router.get('/marketplace/:slug', authController.protect, viewController.getProduct);
+
+// vendors
+router.get('/product-catalog', authController.isLoggedIn, viewController.productCatalog);
 
 // common routes
 router.get('/dashboard', authController.protect, viewController.dashboard);
 router.get('/settings', authController.isLoggedIn, viewController.settings);
 router.get('/profile', authController.isLoggedIn, viewController.profile);
-router.get('/notification', authController.isLoggedIn, viewController.notification);
-
-// vendors
-router.get('/product-catalog', authController.isLoggedIn, viewController.productCatalog);
-router.get('/vendor-performance', authController.isLoggedIn, viewController.vendorPerformance);
-router.get('/vendor-transaction', authController.isLoggedIn, viewController.vendorTransaction);
+router.get('/performance', authController.isLoggedIn, viewController.performance);
+router.get('/transaction', authController.isLoggedIn, viewController.transaction);
 
 // admin
-router.get('/clubmerce-admin-auth', authController.isLoggedIn, viewController.adminAuth);
-router.get('/all-performance', authController.isLoggedIn, viewController.allPerformance);
+router.get('/admin-auth-login', viewController.adminAuth);
+router.get('/all-performance', authController.protect, viewController.allPerformance);
 router.get('/product-marketplace', authController.isLoggedIn, viewController.productMarketplace);
-router.get('/admin-settings', authController.isLoggedIn, viewController.adminSettings);
 router.get('/manage-users', authController.isLoggedIn, viewController.manageUsers);
 router.get('/manage-products', authController.isLoggedIn, viewController.manageProducts);
 router.get('/manage-payment', authController.isLoggedIn, viewController.managePayment);
+
+// visitors
+router.get('/pay', viewController.paymentForm);
+router.get('/order-product/:productSlug', viewController.getOrderProductPage);
 
 
 module.exports = router;

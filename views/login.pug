@@ -2,10 +2,25 @@ extends base_auth
 
 block content
     main
+        <div id="spinOverlay">
+            <div class="spin">
+                <div></div>   
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+            </div>
+        </div>
+        
         div.login__form
             //- span.spinner.hidden
-            span.spinner-overlay.hidden
-                span.spinner
+            //- span.spinner-overlay.hidden
+            //-     span.spinner
             .login__container.grid.grid__two
 
                 //- form.login(method="POST" action="/api/users/login")
@@ -21,11 +36,11 @@ block content
                         label.form__item--label(for="password") Password
                         input.form__item--input.login__password(id="password" name="password" type="password" placeholder='••••••••••••', required, minlength='8')
 
-                    div.form__item.select
-                        label.form__item--label(for="role") Role
-                        select.form__item--input.select--input.login__role(id="role" name="role" required)
-                            option Affiliate
-                            option Vendor
+                    //- div.form__item.select
+                    //-     label.form__item--label(for="role") Role
+                    //-     select.form__item--input.select--input.login__role(id="role" name="role" required)
+                    //-         option Affiliate
+                    //-         option Vendor
 
                     button.form__button(type="submit") Login
 

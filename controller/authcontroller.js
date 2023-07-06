@@ -11,6 +11,8 @@ const User = require("./../model/usersModel");
 const sendEmail = require('../utils/Email');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
+const Product = require("./../model/productsModel");
+const generateLink = require('./../utils/generateLink')
 
 
 ////////////////////////////////////////////////
@@ -73,22 +75,7 @@ exports.signup = catchAsync(async (req, res) => {
 // Login
 exports.login = catchAsync(async (req, res) => {
   const { email, password, role} = req.body;
-  // if(!email || !password) {
-  //   return res.status(404).json({
-  //     status: "fail",
-  //     message: "plaese provide email and password",
-  //   })
-  // }
-  // const user = await User.findOne({email}).select('+password');
-  // const isMatch = await bcrypt.compare(password, user.password);
-  // // if (!user || !isMatch || !role === user.role) {
-  // if (!user || !isMatch) {
-  //   return res.status(404).json({
-  //     status: "fail",
-  //     // message: "email or password or role is incorrect",
-  //     message: "email or password incorrect",
-  //   });
-  // }
+
   if (!email || !password) {
     return next(new AppError('Please provide email and password!', 400));
   }
@@ -124,85 +111,9 @@ exports.login = catchAsync(async (req, res) => {
 
 
 // logout
-// exports.logout = (req, res) => {
-//   res.cookie('jwt', 'loggedout', {
-//     expires: new Date(Date.now() + 2 * 1000),
-//     httpOnly: true
-//   });
-//   res.status(200).json({ status: 'success' });
-// };
-
-// exports.logout = (req, res) => {
-//   res.clearCookie('jwt');
-//   res.status(200).json({ status: 'success' });
-// };
-
-
-// protect
-// exports.protect = async (req, res, next) => {
-//   // remember you will have to get the token from the req.header...
-//   // also remember that u can access the user id (payload) directly from the token, also the expired time and the issued time 
-//   try {
-//     // get token and check if it's there
-//     let token;
-//     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-//       token = req.headers.authorization.split(' ')[1];
-//     }  else if (req.cookies.jwt) {
-//       token = req.cookies.jwt;
-//     }
-
-//     if(!token)
-//       return res.status(401).json({
-//         status:  'fail',
-//         message: 'You are nor logged in...'
-//       });
-
-//     // verify token, by decoding jwt
-//     const decoded = await promisify(jwt.verify)(token, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
-//     if(!decoded) {
-//       res.status(401).json({
-//         status:  'fail',
-//         message: 'Invalid token!, pls login again...'
-//       });
-//     }
-
-//     // check if that user still exist, by finding this user
-//     const userExist = await User.findById(decoded.id);
-//     if(!userExist) 
-//       // return next(new Error('user no longer exist'))
-//       return res.status(401).json({
-//         status:  'fail',
-//         message: 'user no longer exist'
-//       });
-      
-//     // check if user changed password after token was issued (much complex, but use the instance function in the model)
-//     if(userExist.changedPasswordAfter(decoded.iat)) {
-//       return res.status(401).json({
-//         status:  'fail',
-//         message: 'You recently changed password, Try again later with correct password..'
-//       });
-//     }
-//     // GRANT ACCESS TO PROTECTED ROUTE
-//     req.user = currentUser;
-//     res.locals.user = currentUser;
-//     next();
-
-//   } catch(err) {
-//     return res.status(400).json({
-//       status: "fail",
-//       message: err,
-//     })
-//   }
-//   next();
-// }
-
-// logout
 exports.logout = (req, res) => {
-  // res.cookie('jwt', 'loggedout', {
-  //   expires: new Date(Date.now() + 10 * 1000),
-  //   httpOnly: true
-  // });
   res.clearCookie('jwt');
+  res.redirect('/login')
   res.status(200).json({ status: 'success' });
 };
 
@@ -224,6 +135,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
 
   if (!token) {
+    res.redirect('/login')
     return next(
       new AppError('You are not logged in! Please log in to get access.', 401)
     );
@@ -305,7 +217,7 @@ exports.restrictedTo = catchAsync(async function(...role) {
   }
 });
 
-// /* 
+/* 
 // forgot password
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 1) Get user based on POSTed email
@@ -348,9 +260,9 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   }
 });
 
+
 // reset password
 exports.resetPassword = catchAsync(async (req, res, next) => {
-
   // get user based on token
   const hashedToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
   const user = await User.findOne({ passwordResetToken: hashedToken, passwordResetEpires: { $gt: Date.now() }});
@@ -383,6 +295,82 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     }
   })
 })
+*/
+
+
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  // 1) Get user based on POSTed email
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return next(new AppError('There is no user with email address.', 404));
+  }
+
+  // 2) Generate the random reset token
+  const resetToken = user.createPasswordResetToken();
+  await user.save({ validateBeforeSave: false });
+
+  // 3) Send it to user's email
+  try {
+    const resetURL = `${req.protocol}://${req.get(
+      'host'
+    )}/api/v1/users/resetPassword/${resetToken}`;
+    await new Email(user, resetURL).sendPasswordReset();
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Token sent to email!'
+    });
+  } catch (err) {
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    return next(
+      new AppError('There was an error sending the email. Try again later!'),
+      500
+    );
+  }
+});
+
+exports.resetPassword = catchAsync(async (req, res, next) => {
+  // 1) Get user based on the token
+  const hashedToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
+
+  const user = await User.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() }
+  });
+
+  // 2) If token has not expired, and there is user, set the new password
+  if (!user) {
+    return next(new AppError('Token is invalid or has expired', 400));
+  }
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
+  await user.save();
+
+  // 3) Update changedPasswordAt property for the user
+  // 4) Log the user in, send JWT
+  const cookieOptions = {
+    expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
+    httpOnly: true
+  }
+  if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  res.cookies('jwt', token, cookieOptions);
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      user,
+    }
+  })
+});
+
 
 // Updating current logged in user password
 exports.updatePassword = catchAsync(async (req, res, next) => {
@@ -419,7 +407,6 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 		});
 
 })
-
 
 
 /*

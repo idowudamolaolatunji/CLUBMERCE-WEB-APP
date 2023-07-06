@@ -53,9 +53,27 @@
     .logo {
         height: 6rem;
     }
+    .navbar {
+        background-color:#fff;
+        height: 50vh;
+        max-width: 30rem;
+        position: fixed;
+
+        border: 1px solid red;
+    }
     .navbar, .nav__list { 
-        display: none;
-        opacity: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+
+        position: absolute;
+        top: 30%;
+        right: 20%;
+    }
+    .navigation-icons {
+        font-size: 2.4rem;
+        display: block;
+        opacity: 1;
     }
     .hero__heading {
         height: 40rem;

@@ -4,6 +4,9 @@ const app = require('../app');
 const catchAsync = require('../utils/catchAsync')
 const Product = require('../model/productsModel');
 const APIFeatures = require('../utils/apiFeatures');
+
+// const User = require("./../model/usersModel");
+// const generateLink = require('./../utils/generateLink')
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
 
@@ -98,7 +101,7 @@ exports.aliasTopProduct = (req, res, next) => {
 
 exports.getAllProduct = async(req, res) => {
     try {
-        const features = new APIFeatures(Product.find(filter), req.query)
+        const features = new APIFeatures(Product.find(), req.query)
         .filter()
         .sort()
         .limitFields()
@@ -193,3 +196,41 @@ exports.deleteProduct = async(req, res) => {
         })
     }
 };
+
+
+// exports.createAffLink = async (req, res, next) => {
+//     try {
+//       const { username, trackingId } = req.body;
+//       let productSlug;
+//       if(req.params.productSlug) {
+//         productSlug = req.params.productSlug;
+//       // }else if() {
+//       }
+  
+//       if(!username) return res.status(400).json({ message: 'Please provide your username' });
+  
+//       const user = await User.findOne({ username });
+//       if(!user  || user.username !== req.user.username) return res.status(400).json({ message: 'Username is not valid or does not belong to you' });
+  
+//       const userId = await user.slug;
+//       const productId = await Product.findOne({ slug: productSlug });
+//       if(!productId) return res.status(400).json({ message: 'No product with this ID' });
+  
+//       const affiliateUrl = generateLink(userId, productId, trackingId);
+//       if(!(await User.affiliateUrl.includes(affiliateUrl))) {
+//         await User.affiliateUrl.push(affiliateUrl);
+//         await user.save();
+//       }
+  
+//       res.status(200).json({
+//         status: 'success',
+//         message: 'Your affiliate link created successfully...'
+//       });
+      
+//     } catch(err) {
+//       res.status(400).json({
+//         status: 'fail',
+//         message: 'something went wrong...'
+//       });
+//     }
+// }

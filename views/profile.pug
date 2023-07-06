@@ -1,36 +1,76 @@
 extends base_account 
 
 block content 
-    h3.dashboard__heading Your Profile
+    -if(user.role === 'affiliate')
+        h3.dashboard__heading Your Profile
 
-    form.form__data.form-profile-data
-        h3.dashboard__heading Update profile info
-        .form__item
-            label.form__label(for='fullName') Full name
-            input#fullName.form__input(type='text', value='Jonas Schmedtmann',)
-        .form__item
-            label.form__label(for='email') Email address
-            input#email.form__input(type='email' value='max@example.com')
-        .form__item
-            label.form__label(for='phone') Phone number
-            input#phone.form__input(type='tel' value='+1234567890')
-        .form__item
-            label.form__label(for='country') Country
-            input#country.form__input(type='country' placeholder="Select a country")
-        .form__item
-            label.form__label(for='state') State
-            input#state.form__input(type='state' placeholder="Select a country")
-        .form__item
-            label.form__label(for='city-region') City / Province / Region
-            input#city-region.form__input(type='city-region' placeholder="Select a country")
-        .form__item
-            label.form__label(for='zip-postal') Zip code / Postal code
-            input#zip-postal.form__input(type='zip-postal' placeholder="Select a country")
-        .form__item.form__photo-upload
-            //- img.form__user-photo(src='img/user.jpg' alt='User photo')
-            img.form__user-photo(src=`asset/img/${user.image}.png` alt='User photo')
-            input.form__upload(type='file', accept='image/*', id='photo', name='photo')
-            label.btn-text(for='photo') Choose new photo
-            //- a.btn-text(href='') Choose new photo
-        .form__item
-            button.btn.form-btn(type="submit") Save settings
+        form.form__data.form-profile-data
+            h3.dashboard__heading Update profile info
+            .form__item
+                label.form__label(for='fullName') Full name
+                input#fullName.form__input(type='text', value=user.fullName)
+            .form__item
+                label.form__label(for='email') Email address
+                input#email.form__input(type='email' value=user.email)
+            .form__item
+                label.form__label(for='phone') Phone number
+                input#phone.form__input(type='tel' value=user.phone)
+            .form__item
+                label.form__label(for='country') Country
+                input#country.form__input(type='country' value=user.country placeholder="Enter a country")
+            .form__item
+                label.form__label(for='state') State
+                input#state.form__input(type='state' value=user.state placeholder="Enter a state")
+            .form__item
+                label.form__label(for='city-region') City / Province / Region
+                input#city-region.form__input(type='city-region' value=user. placeholder="Enter a country")
+            .form__item
+                label.form__label(for='zip-postal') Zip code / Postal code
+                input#zip-postal.form__input(type='zip-postal' value=user.zipCode placeholder="Enter a country")
+            .form__item.form__photo-upload
+                //- img.form__user-photo(src='img/user.jpg' alt='User photo')
+                img.form__user-photo(src=`asset/img/${user.image}.png` alt='User photo')
+                input.form__upload(type='file', accept='image/*', id='photo', name='photo')
+                label.btn-text(for='photo') Choose new photo
+                //- a.btn-text(href='') Choose new photo
+            .form__item
+                button.btn.form-btn(type="submit") Save settings
+
+
+    -if(user.role === 'vendor')
+        h3.dashboard__heading Your Profile
+
+        form.form__data.form-profile-data
+            h3.dashboard__heading Update profile info
+            .form__item
+                label.form__label(for='fullName') Full name
+                input#fullName.form__input(type='text', value=user.fullName)
+            .form__item
+                label.form__label(for='businessName') Business name
+                input#businessName.form__input(type='text', value=user.businessName placeholder="Enter your business name")
+            .form__item
+                label.form__label(for='email') Email address
+                input#email.form__input(type='email' value=user.email)
+            .form__item
+                label.form__label(for='phone') Phone number
+                input#phone.form__input(type='tel' value=user.phone)
+            .form__item
+                label.form__label(for='country') Country
+                input#country.form__input(type='country' value=user.country placeholder="Enter a country")
+            .form__item
+                label.form__label(for='state') State
+                input#state.form__input(type='state' value=user.state placeholder="Enter a state")
+            .form__item
+                label.form__label(for='city-region') City / Province / Region
+                input#city-region.form__input(type='city-region' value=user. placeholder="Enter a country")
+            .form__item
+                label.form__label(for='zip-postal') Zip code / Postal code
+                input#zip-postal.form__input(type='zip-postal' value=user.zipCode placeholder="Enter a country")
+            .form__item.form__photo-upload
+                //- img.form__user-photo(src='img/user.jpg' alt='User photo')
+                img.form__user-photo(src=`asset/img/${user.image}.png` alt='User photo')
+                input.form__upload(type='file', accept='image/*', id='photo', name='photo')
+                label.btn-text(for='photo') Choose new photo
+                //- a.btn-text(href='') Choose new photo
+            .form__item
+                button.btn.form-btn(type="submit") Save settings

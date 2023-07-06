@@ -8,12 +8,12 @@ head
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
 
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer")
-    //- link(rel="favicon" href="")
+    link(rel="favicon" href='../asset/img/favicon.png')
 
     //- STYLES 
-    link(rel="stylesheet" href="src/css/general.css")
-    link(rel="stylesheet" href="src/css/dashboard.css")
-    link(rel="stylesheet" href="src/css/query_dashboard.css")
+    link(rel="stylesheet" href="../src/css/general.css")
+    link(rel="stylesheet" href="../src/css/dashboard.css")
+    link(rel="stylesheet" href="../src/css/query_dashboard.css")
 
 
     title=title
@@ -21,8 +21,8 @@ body
 
     section.section__dashboard
         .section__top.margin__left--sm
-            img.logo(src='../../asset/img/logo-removebg.png' alt='clubmerce logo')
-            img.logo-small(src='../../asset/img/favicon.png' alt='clubmerce logo')
+            img.logo(src='../asset/img/logo-removebg.png' alt='clubmerce logo')
+            img.logo-small(src='../asset/img/favicon.png' alt='clubmerce logo')
             nav.navbar
                 form.nav__search
                     input.nav__input(type='search' placeholder='search...')
@@ -76,12 +76,35 @@ body
                         
                         .product__category
                             p catergories
-
+                                ul.catergory__list
+                                    //- each category of categories
+                                    li.category__item Arts (0)
+                                    li.category__item Betting (0)
+                                    li.category__item Books (0)
+                                    li.category__item Business (0)
+                                    li.category__item Computers (0)
+                                    li.category__item Cooking (0)
+                                    li.category__item Food and Wine (0)
+                                    li.category__item E-Business and E-Marketing (0)
+                                    li.category__item Education (0)
+                                    li.category__item Entertainment (0)
+                                    li.category__item Jobs (0)
+                                    li.category__item Games (0)
+                                    li.category__item Green Products (0)
+                                    li.category__item Health and Fitness (0)
+                                    li.category__item Home and Garden (0)
+                                    li.category__item Internet (0)
+                                    li.category__item Investing (0)
+                                    li.category__item Languages (0)
+                                    li.category__item Reciepe (0)
+                                    li.category__item Parenting and Families (0)
+                                    li.category__item Self-Help (0)
+                                    li.category__item Spirituality (0)
+                                    li.category__item Sports (0)
 
                     span
                         h6.dashboard__subheading Top offers
                         p.figures Total #{products.length}
-                        //- p.figures Total 60
 
                         .products__cards--box 
                             each product in products
@@ -90,16 +113,12 @@ body
                                     .product__side--left    
                                         .side--top
                                             .product__image--container
-                                                //- img.product__image(src='../../asset/img/affiliate.png' alt=product.name)
-                                                img.product__image(src='../../asset/img/affiliate.png' alt="random image alt text")
+                                                img.product__image(src='../../asset/img/product.jpg' alt=product.name)
                                             .product__heading 
                                                 h2.product__title= product.name
-                                                //- h2.product__title random name for product
-                                                //- p.product__niche health and fitness
-                                                p.product__niche=product.niche
+                                                p.product__niche=product.category
                                                 .product__content
                                                     h4.product__description #{product.summary}...
-                                                    //- h4.product__description Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugiat atque commodi omnis consectetur deserunt incidunt harum quasi. Natus veniam tempore placeat, voluptas autem quam quod modi commodi..
                                         .side--bottom
                                             ul.product__info
                                                 //- each icon in product.others
@@ -123,9 +142,10 @@ body
                                     .product__side--right
                                         span.product__commission
                                             p.commision avg commission 
-                                            span.commission__amount NGN 7500
-                                        a.btn.product__button.promote(href=`/:${product.slug}`) Promote
-                                        a.product__button.page(href="/product") affiliate page
+                                            span.commission__amount= `₦ ${product.price}`
+                                            -console.log(product.slug)
+                                        a.btn.product__button.promote(data-set=product.slug) Promote
+                                        a.product__button.page(target="_blank" href=`/marketplace/${product.slug}`) affiliate page
 
                                 
                 .hoplink__overlay.get__overlay.hidden
@@ -133,22 +153,22 @@ body
                     i.fa-solid.fa-close.icon.hoplink__icon
                     h2.dashboard__heading Generate HopLink
                     p.hoplink__text Earn commission for every customer you refer to this product using your personalized affiliate hoplink.
-                    form.hoplink
-                    .hoplink__body
-                        input.hoplink__input(type='text' required='' placeholder='Username')
-                        p.hoplink__body--text Required
-                    .hoplink__body
-                        input.hoplink__input(type='text' placeholder='Tracing Id')
-                        p.hoplink__body--text Optional
-                    button.btn.hoplink__submit.submit(type='submit') Generate Hoplink
+                    form.hoplink#hoplink
+                        .hoplink__body
+                            input.hoplink__input#hoplink-username(type='text' required='' placeholder='Username')
+                            p.hoplink__body--text Required
+                        .hoplink__body
+                            input.hoplink__input#hoplink-trackingid(type='text' placeholder='Tracing Id')
+                            p.hoplink__body--text Optional
+                        button.btn.hoplink__submit.submit(type='submit') Generate Hoplink
 
 
-                .hoplink__overlay.copy__overlay.hidden
-                .hoplink__modal.copy__modal
-                    h2.dashboard__heading Copy HopLink
-                    p.hoplink__text Paste this URL into your promotional materials.
-                    p.hoplink__copy https://clubmerce.com/product/8594rfjnvvfnfv/fbdfhjnbire84
-                    
-                    button.btn.hoplink__submit.btnOk Ok
+                //- .hoplink__overlay.copy__overlay
+                    .hoplink__modal.copy__modal
+                        h2.dashboard__heading Copy HopLink
+                        p.hoplink__text Paste this URL into your promotional materials.
+                        p.hoplink__copy https://clubmerce.com/product/85vfhbhfcbvhjfbvhjbchvbfvhjfvhf94rfjnvvfnfv/fbdfhjnbire84
+                        
+                        button.btn.hoplink__submit.btnOk Ok
 
     script( src="src/js/index.js")

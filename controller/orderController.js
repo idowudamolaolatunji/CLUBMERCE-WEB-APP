@@ -1,23 +1,24 @@
+const crypto = require('crypto')
+
 const mongoose = require('mongoose');
-const Product = require('../model/productsModel')
+const axios = require('axios');
+
+const User = require('../model/usersModel');
+const Product = require('../model/productsModel');
 const Order = require('../model/orderModel')
 
-mongoose.Promise = global.Promise
 
-//create orders
-exports.createOrders = async (req, res) => {
+// making orders and payments
+exports.OrdersAndPayment = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id)
+        // Fetch the product information from the database
+        const user = await User.findOne({ slug: req.params.userSlug });
+        const product = await Product.findOne({ slug: req.params.productSlug }).populate('vendor')
     
-        if(!product){
-            return res.status(404).json({
-                message: 'Product Not Found!'
-            })
-        }
-        const newOrder = await Order.create({
-            // _id: mongoose.Types.ObjectId(),
+        if(!product) return res.status(404).json({ message: 'Product Not Found!' })
+        const orderInfo = {
             quantity: req.body.quantity,
-            product: req.body.productId,
+            product: product.name,
             emailAddress: req.body.emailAddress,
             fullname: req.body.fullname,
             country: req.body.country,
@@ -25,28 +26,83 @@ exports.createOrders = async (req, res) => {
             city: req.body.city,
             postalCode: req.body.postalCode,
             address: req.body.address,
+        };
+        const paymentInfo = {
+            bankName: req.body.bankName,
+            holdersName: holdersName,
+            accountNumber: req.body.accountNumber
+        }
+
+        // Calculate the total amount for the order
+        const totalAmount = product.price * orderInfo.quantity;
+          
+        
+        // Make a transfer request to the Paystack payment API
+        const response = await axios.post('https://api.paystack.co/transfer', {
+            source: 'balance',
+            reason: 'Transfer to bank account',
+            amount: totalAmount * 100, // Convert amount to kobo (Paystack uses kobo as the currency unit)
+            recipient: paymentInfo, // Recipient bank account details
+            currency: 'NGN', // Currency code (e.g., NGN for Nigerian Naira)
+        }, {
+            headers: {
+            Authorization: `Bearer ${PAYSTACK_SECRET_KEY}`, // Replace with your Paystack secret key
+            'Content-Type': 'application/json',
+            },
         });
 
-        res.status(200).json({
-            status: 'success',
-            message: 'Order created successfully',
-            data: {
-                order: newOrder,
-            }
-        })
-    } catch(err) {
-        res.status(400).json({
-            status: 'fail',
-            message: err
-        })
+        const paymentResponse = response.json();
+
+
+           
+        // Check the payment response for success
+        if (paymentResponse.status === 200) {
+            const transactionId = paymentResponse.data.transactionId;
+            const paidAmount = paymentResponse.data.paidAmount;
+
+            // Update the vendor's wallet balances and transaction
+            product.purchases += 1;
+            product.vendor.wallet += paidAmount-product.commission;
+            product.vendor.transactions.push({transactionId, paidAmount: paidAmount-product.commission, date: Date.now() });
+            
+            
+            // Update the affiliate commission wallet balances
+            const randomId = crypto.randomInt(100000, 999999).toString();
+            user.wallet += product.commission;
+            user.transactions.push({transactionId: randomId, paidAmount: product.commission, date: Date.now() });
+            user.productSold  += 1;
+
+            // Save the updated wallet balances
+            await product.vendor.save();
+            await user.save({ validateBeforeSave: false });
+
+            const order = await Order.create({
+                orderId: transactionId,
+                vendor: product.vendor,
+                amount: paidAmount-product.commission,
+                orderInfo,
+            });
+        
+            res.status(200).json({
+                status: 'success',
+                message: 'Transaction completed successfully',
+                data: {
+                    newOrder: order,
+                }
+            });
+
+        } else {
+        res.status(400).json({ status: 'fail', message: 'Payment failed' });
+        }
+    } catch (error) {
+        res.status(500).json({ status: 'fail', message: 'Internal server error' });
     }
 }
-
-
+        
 //get all orders
 exports.getAllOrders = async (req, res) => {
     try {
-        const orders = await Order.find().sort({ date: -1});
+        const orders = await Order.find().sort({ createdAt: -1});
         // const orders = await Order.find().sort({ date: -1}).populate('product', 'name')
         
         if(orders.length < 1){
@@ -58,14 +114,15 @@ exports.getAllOrders = async (req, res) => {
             data: {
                 order: orders,
             }
-        })
+        });
     } catch(err) {
-        res.status(400).json({
+        res.status(500).json({
             status: 'fail',
-            message: err
+            message: 'Internal server error'
         })
     }
 }
+
 
 //get a single order
 exports.getOrder = async (req, res) => {
@@ -89,52 +146,4 @@ exports.getOrder = async (req, res) => {
             message: err
         })
     }
-}
-
-//edit order
-exports.updateOrder = async (req, res) => {
-    try {
-        const order = await Order.findById(req.params.id)
-        
-        if(!order){
-            res.status(404).json({
-                status: 'fail',
-                message: `Order with the Id: ${id} cannot be found`
-            })
-        }
-
-        const updatedOrder = await order.updateOne(order.id, req.body.quantity, {
-            new: true,
-            runValidation: true,
-        })
-        res.status(200).json({
-            status: 'success',
-            message: 'Order updated successfully',
-            data: {
-                order: updatedOrder
-            }
-        })
-    }catch(err) {
-        res.status(400).json({
-            status: 'fail',
-            message: err
-        })
-    }
-}
-
-//delete order
-exports.deleteOrder = async(req, res) => {
-    try {
-        const order = await Order.findByIdAndRemove(req.params.id);
-        res.status(200).json({
-            status: 'success',
-            message: 'Order deleted successfully',
-            data: null
-        })
-    } catch(err) {
-        res.status(500).json({
-            status: 'fail',
-            message: err
-        })
-    }
-}
+};
