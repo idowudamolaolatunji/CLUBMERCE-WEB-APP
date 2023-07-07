@@ -197,6 +197,7 @@ exports.isLoggedIn = async (req, res, next) => {
       return next();
     }
   }
+  res.redirect('/login')
   next();
 };
 

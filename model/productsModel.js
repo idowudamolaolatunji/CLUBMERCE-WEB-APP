@@ -42,7 +42,7 @@ const productSchema = new mongoose.Schema({
         required: [true, 'A product must have a Commission percentage'],
     },
     
-    type: Boolean,
+    type: String,
     affiliateTools: Boolean,
     
     slug: String,
@@ -52,7 +52,7 @@ const productSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    purchases: { type: Number, default: 0 },
+    purchasesCount: { type: Number, default: 0 },
     productGravity: {
         type: mongoose.Schema.Types.ObjectId, ref: 'AffiliateLink',
         default: 0

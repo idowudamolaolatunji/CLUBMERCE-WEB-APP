@@ -61,7 +61,7 @@ exports.OrdersAndPayment = async (req, res) => {
             const paidAmount = paymentResponse.data.paidAmount;
 
             // Update the vendor's wallet balances and transaction
-            product.purchases += 1;
+            product.purchasesCount += 1;
             product.vendor.wallet += paidAmount-product.commission;
             product.vendor.transactions.push({transactionId, paidAmount: paidAmount-product.commission, date: Date.now() });
             
