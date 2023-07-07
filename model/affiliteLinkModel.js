@@ -9,6 +9,5 @@ const affiliateLinkSchema = new mongoose.Schema({
 });
 
 const AffiliateLink = mongoose.model('AffiliateLink', affiliateLinkSchema);
-
 module.exports = AffiliateLink;
 

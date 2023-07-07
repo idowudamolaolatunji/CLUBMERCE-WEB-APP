@@ -17,20 +17,22 @@ exports.createAffiliateLink = async (req, res) => {
     const promotionLink = `${req.protocol}://${req.get('host')}/unique_/${user.slug}/${product.slug}`
 
     // create and Save the affiliate promotion url to the database
-    const newLinkDetails = await AffiliateLink.create({
-      user: user.username,
-      product: product.slug,
-      link: promotionLink,
-    });
     
     // Update the user's affiliateLinks array only if link itsnt already in array
-    if(user.affiliateLinks.includes(product.slug)) {
-      return res.json({message: 'Url already exist', link: promotionLink})
-    }
+    if(!user.affiliateLinks.includes(promotionLink)) {
+        const newLinkDetails = await AffiliateLink.create({
+            user: user.username,
+            product: product.slug,
+            link: promotionLink,
+        });
 
-    user.affiliateLinks.push(newLinkDetails.link);
-    await user.save({ validateBeforeSave: false });
-    res.json({ status: 'success', link: promotionLink });
+        user.affiliateLinks.push(newLinkDetails.link);
+        user.promotionLinksCounts = user.affiliateLinks.length;
+        product.productGravity = user.affiliateLinks.length;
+        await user.save({ validateBeforeSave: false });
+        res.json({ status: 'success', link: promotionLink });
+    } else
+        return res.json({message: 'Url already exist', link: promotionLink})
 
   } catch (error) {
     console.error(error);
@@ -70,6 +72,23 @@ exports.countClicksRedirects = async (req, res) => {
     }
 }
 
+exports.getAllLinks = async (req, res) => {
+  try {
+    const afflink = await AffiliateLink.find();
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        afflink
+      }
+    })
+  } catch(err) {
+    res.status(400).json({
+      status: 'fail',
+      message: 'error'
+    })
+  }
+}
 
 /*
 // client-side javascript implemetation

@@ -7,10 +7,10 @@ const orderSchema = new mongoose.Schema({
 		ref: "Product",
 	},
 	vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-	paid: {
-		type: Boolean,
-		default: true
-	},
+	// paid: {
+	// 	type: Boolean,
+	// 	default: true
+	// },
 	quantity: {
 		type: Number,
 		default: 1,

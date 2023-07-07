@@ -54,7 +54,8 @@ const productSchema = new mongoose.Schema({
     },
     purchasesCount: { type: Number, default: 0 },
     productGravity: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'AffiliateLink',
+        // type: mongoose.Schema.Types.ObjectId, ref: 'User',
+        type: Number,
         default: 0
     },
     createdAt: {

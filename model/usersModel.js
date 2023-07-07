@@ -85,6 +85,7 @@ const userSchema = new mongoose.Schema({
     },
     // recievedTransaction: mongoose.Schema.Types.ObjectId, ref: 'Transaction',
     transactions:  mongoose.Schema.Types.Mixed,
+    promotionLinksCounts: { type: Number, default: 0 },
     commissions: Number,
     affiliateLinks: {
         type: [mongoose.Schema.Types.Mixed],
