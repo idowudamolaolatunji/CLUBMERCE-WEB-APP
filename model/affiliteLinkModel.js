@@ -5,7 +5,7 @@ const affiliateLinkSchema = new mongoose.Schema({
   product: { type: String, ref: 'Product' },
   link: String,
   clicks: { type: Number, default: 0 },
-  createdDate: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: Date.now() },
 });
 
 const AffiliateLink = mongoose.model('AffiliateLink', affiliateLinkSchema);

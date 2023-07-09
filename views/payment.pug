@@ -10,31 +10,36 @@ head
 
     //- STYLES 
     link(rel="stylesheet" href="src/css/general.css")
+    link(rel="stylesheet" href="src/css/dashboard.css")
     link(rel="stylesheet" href="src/css/order_and_payment.css")
 
     
 body
-
-    <form id="paymentForm" >
-    <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email-address" required />
-    </div>
-    <div class="form-group">
-        <label for="amount">Amount</label>
-        <input type="tel" id="amount" required />
-    </div>
-    <div class="form-group">
-        <label for="first-name">First Name</label>
-        <input type="text" id="first-name" />
-    </div>
-    <div class="form-group">
-        <label for="last-name">Last Name</label>
-        <input type="text" id="last-name" />
-    </div>
-    <div class="form-submit">
-        <button type="submit"> Pay </button>
-    </div>
-    </form>
+    <main>
+        <form id="paymentForm" >
+            h2 Payment
+            <div class="form__item">
+                <label class="form__label" for="bank-name">Bank Name</label>
+                <input class="form__input" type="text" id="bank-name" required />
+            </div>
+            <div class="form__item">
+                <label class="form__label" for="holder-name">Holder Name</label>
+                <input class="form__input" type="text" id="holder-name" />
+            </div>
+            <div class="form__item">
+                <label class="form__label" for="account-number">Account Number</label>
+                <input class="form__input" type="text" id="account-number" required />
+            </div>
+            <div class="form__item">
+                <label class="form__label" for="cvv">CVV</label>
+                <input class="form__input" type="password" id="cvv" maxlength="3" placeholder='•••' />
+            </div>
+            //- <div class="form-grid">
+            //- </div>
+            <div class="form-submit">
+                <button class="btn form-btn" type="submit"> Pay </button>
+            </div>
+        </form>
+    </main>
 
     script(src="src/js/payment.js")

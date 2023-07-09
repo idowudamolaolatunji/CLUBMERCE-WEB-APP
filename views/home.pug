@@ -112,14 +112,14 @@ block content
 
         section.section.stats__section
             .section__container.stats.grid.grid__three
-                .stats__data--one.stats__data
+                .stats__data--one.stats__data(data-value="90" data-symbol="K")
                     span 90K
                     p.stats__data--text Lorem ipsum dolor sit.
-                .stats__data--two.stats__data
+                .stats__data--two.stats__data(data-value="80" data-symbol="%")
                     span 80%
                     p.stats__data--text Lorem ipsum dolor sit.
-                .stats__data--three.stats__data
-                    span N1M
+                .stats__data--three.stats__data(data-currency="₦" data-value="500" data-symbol="M")
+                    span ₦500M
                     p.stats__data--text Lorem ipsum dolor sit.
 
         section.section.faq__section
@@ -131,7 +131,7 @@ block content
                             h3.accordion__heading
                                 | Lorem ipsum dolor sit amet consectetur, adipisicing elit.
                             span &minus;
-                        .faq__accordion--content.faq__open
+                        .faq__accordion--content
                             p.accordion__content--text
                                 | Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure velit magni libero, aut
                                 | esse commodi voluptatibus. Nobis qui nulla hic velit. Impedit laboriosam natus ipsa ad
@@ -142,7 +142,7 @@ block content
                             h3.accordion__heading
                                 | Lorem ipsum dolor sit amet consectetur, adipisicing elit.
                             span &minus;
-                        .faq__accordion--content.faq__close
+                        .faq__accordion--content
                             p.accordion__content--text
                                 | Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure velit magni libero, aut
                                 | esse commodi voluptatibus. Nobis qui nulla hic velit. Impedit laboriosam natus ipsa ad
@@ -153,7 +153,7 @@ block content
                             h3.accordion__heading
                                 | Lorem ipsum dolor sit amet consectetur, adipisicing elit.
                             span &minus;
-                        .faq__accordion--content.faq__close
+                        .faq__accordion--content
                             p.accordion__content--text
                                 | Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure velit magni libero, aut
                                 | esse commodi voluptatibus. Nobis qui nulla hic velit. Impedit laboriosam natus ipsa ad
@@ -164,7 +164,7 @@ block content
                             h3.accordion__heading
                                 | Lorem ipsum dolor sit amet consectetur, adipisicing elit.
                             span &minus;
-                        .faq__accordion--content.faq__close
+                        .faq__accordion--content
                             p.accordion__content--text
                                 | Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure velit magni libero, aut
                                 | esse commodi voluptatibus. Nobis qui nulla hic velit. Impedit laboriosam natus ipsa ad
@@ -193,7 +193,7 @@ block content
                             p.testimonial__author Lorem.
                         .testimonial__slide--item-img
                             img.testimonial__image(src='asset/img/face.png' alt='')
-                    .testimonial__slide--item
+                    .testimonial__slide--item.testimonial__slide--active
                         .testimonial__slide--item-text
                             p.testimonial__content
                                 | Lorem ipsum, dolor sit amet consectetur adipisicing elit.
@@ -221,12 +221,16 @@ block content
                         .testimonial__slide--item-img
                             img.testimonial__image(src='asset/img/face.png' alt='')
 
-                    .dots
-                        span.dot.dot1 &nbsp;
-                        span.dot.dot1 &nbsp;
-                        span.dot.dot2.dot__active &nbsp;
-                        span.dot.dot3 &nbsp;
-                        span.dot.dot3 &nbsp;
+            .controls
+                button.prev-btn Prev
+                button.next-btn Next
+
+            .dots
+                span.dot.dot1 &nbsp;
+                span.dot.dot1 &nbsp;
+                span.dot.dot2 &nbsp;
+                span.dot.dot3 &nbsp;
+                span.dot.dot3 &nbsp;
 
 
         section.section.cta1__section

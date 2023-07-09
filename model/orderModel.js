@@ -7,10 +7,11 @@ const orderSchema = new mongoose.Schema({
 		ref: "Product",
 	},
 	vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-	// paid: {
-	// 	type: Boolean,
-	// 	default: true
-	// },
+	orderStaus: {
+        type: String,
+		enum: ['pending', 'delivered'],
+        default: 'pending',
+    },
 	quantity: {
 		type: Number,
 		default: 1,

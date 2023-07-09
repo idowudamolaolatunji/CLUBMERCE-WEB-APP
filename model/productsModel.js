@@ -37,14 +37,20 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: [true, 'A product must have a Category'],
     },
-    commission: {
-        type: String,
+    commissionPercentage: {
+        type: Number,
         required: [true, 'A product must have a Commission percentage'],
     },
-    
-    type: String,
+    commissionAmount: {
+        type: Number,
+        required: [true, 'A product must have a Commission Amount'],
+    },
+    type: {
+        type: String,
+        enum: ['Digital', 'Physical'],
+        default: 'Physical'
+    },
     affiliateTools: Boolean,
-    
     slug: String,
     subImages: [String],
     banners: [String],
@@ -53,8 +59,13 @@ const productSchema = new mongoose.Schema({
         default: 0,
     },
     purchasesCount: { type: Number, default: 0 },
+    ordersCount: { type: Number, default: 0 },
     productGravity: {
-        // type: mongoose.Schema.Types.ObjectId, ref: 'User',
+        // type: mongoose.Schema.Types.ObjectId, ref: 'AffiliateLink',
+        type: Number,
+        default: 0
+    },
+    profits: {
         type: Number,
         default: 0
     },

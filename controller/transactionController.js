@@ -1,6 +1,8 @@
+const axios = require('axios')
+
 const app = require('../app');
-const User = require('../model/userModel');
-const Transaction = require('../model/transactionModel')
+const User = require('../model/usersModel');
+const Transaction = require('../model/transactionModel');
 
 
 // Get all transactions for a specific user
@@ -49,14 +51,14 @@ exports.getAllTransactions = async (req, res) => {
 exports.makeTransferCreateTransaction = async (req, res) => {
     try {
         const { userId, bankAccount, amount, description } = req.body;
-    
+        
         // Perform necessary validations and checks
+        const user = await User.findById(userId);
         if (!userId || !bankAccount || !amount) {
-                return res.status(400).json({ message: 'Missing required fields' });
+            return res.status(400).json({ message: 'Missing required fields' });
         }
         
         // Check if the user exists
-        const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({ messaghe: 'User not found' });
         }
@@ -80,6 +82,7 @@ exports.makeTransferCreateTransaction = async (req, res) => {
             const transaction = await Transaction.create({
             transactionId,
             user: userId,
+            description,
             amount,
             });
     

@@ -73,7 +73,7 @@ exports.signup = catchAsync(async (req, res) => {
 })
 
 // Login
-exports.login = catchAsync(async (req, res) => {
+exports.login = catchAsync(async (req, res, next) => {
   const { email, password, role} = req.body;
 
   if (!email || !password) {
@@ -81,9 +81,8 @@ exports.login = catchAsync(async (req, res) => {
   }
   // 2) Check if user exists rs&& password is correct
   const user = await User.findOne({ email }).select('+password');
-  const userRole = user.role;
 
-  if ((!user && userRole !== role) || !(await user.comparePassword(password, user.password))) {
+  if (!user || !(await user.comparePassword(password, user.password) )) {
     return next(new AppError('Incorrect email or password', 401));
   }
   //=//=//=//=//=//=//=//=//=//
@@ -111,11 +110,30 @@ exports.login = catchAsync(async (req, res) => {
 
 
 // logout
-exports.logout = (req, res) => {
-  res.clearCookie('jwt');
-  res.redirect('/login')
-  res.status(200).json({ status: 'success' });
+exports.logout = async (req, res) => {
+    try {
+        // Get the JWT token from the request headers
+        const token = req.headers.authorization.split(' ')[1];
+
+        // Verify and decode the token
+        const decoded = jwt.verify(token, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
+
+        // Find the user based on the decoded token
+        const user = await User.findById(decoded.userId);
+
+        // Clear the token from the user's token list
+        user.tokens = user.tokens.filter((t) => t.token !== token); 
+        console.log(user.tokens)
+
+        // Save the updated user
+        await user.save();
+
+        res.status(200).json({ message: 'Logout successful' });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to logout' });
+    }
 };
+  
 
 
 // protect 
@@ -169,6 +187,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 });
 
 
+
 // Only for rendered pages, no errors!
 exports.isLoggedIn = async (req, res, next) => {
   if (req.cookies.jwt) {
@@ -197,7 +216,8 @@ exports.isLoggedIn = async (req, res, next) => {
       return next();
     }
   }
-  res.redirect('/login')
+
+  // No token found
   next();
 };
 

@@ -82,9 +82,10 @@ exports.getProduct = async (req, res) => {
 exports.dashboard = async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
+        // const products = await Product.find({ vendor: user._id });
         res.status(200).render('base_account', {
             user,
-            title: `${user.role}'s dashboard`
+            title: `${user.role}'s dashboard`,
         });
     } catch (err) {
         res.json({message: 'No user with this Id'});
@@ -104,10 +105,17 @@ exports.transaction = (req, res) => {
 }
 
 // Vendors
-exports.productCatalog = (req, res) => {
-    res.status(200).render('product_catalog', {
-        title: 'Your Product'
-    })
+exports.productCatalog = async(req, res) => {
+    try {
+        const products = await Product.find({ vendor: req.user.id });
+        
+        res.status(200).render('product_catalog', {
+            title: 'Your Product',
+            products
+        })
+    } catch(err) {
+        res.json({message: 'You dont have any product'});
+    }
 }
 
 // Admin

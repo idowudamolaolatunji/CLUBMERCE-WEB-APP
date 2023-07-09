@@ -1,8 +1,6 @@
 const loginFrom = document.querySelector('.login');
 const signupForm = document.querySelector('.signup');
-const logoutNav = document.querySelector('#logoutNavBtn');
-const logoutMenu = document.querySelector('#logoutMenu');
-const logoutMenuBtn = document.querySelector('#logoutMenuBtn');
+const logoutAll = document.querySelectorAll('#logout');
 // const spinner = document.querySelector('.spinner-overlay');
 const menu = document.querySelector('.menubar-control');
 const menuButton = document.querySelector('.menu__button');
@@ -42,7 +40,80 @@ const adminAuthForm = document.querySelector('#admin-login');
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+// Function to animate the statistics
+function animateStatistics() {
+  const statItems = document.querySelectorAll('.stats__data');
+
+  statItems.forEach((item) => {
+    const targetValue = parseInt(item.getAttribute('data-value'));
+    const symbol = item.getAttribute('data-symbol');
+    const currency = item.getAttribute('data-currency');
+    let currentValue = 0;
+    const increment = Math.ceil(targetValue / 100); // Adjust increment value for smoother animation
+
+    const animation = setInterval(() => {
+      if (currentValue >= targetValue) {
+        clearInterval(animation);
+        item.querySelector('span').textContent = `${currency ? currency : ''}${targetValue}${symbol}`; // Ensure final value is displayed accurately
+      } else {
+        currentValue += increment;
+        if (currentValue > targetValue) {
+          currentValue = targetValue;
+        }
+
+        item.querySelector('span').textContent = `${currency ? currency : ''}${currentValue}${symbol}`;
+      }
+    }, 5000);
+  });
+}
+
+// Function to handle scroll event
+function handleScroll() {
+  const statsSection = document.querySelector('.stats__section');
+  const statsSectionTop = statsSection.offsetTop;
+  const statsSectionHeight = statsSection.offsetHeight;
+  const windowBottom = window.pageYOffset + window.innerHeight;
+
+  if (windowBottom > statsSectionTop && window.pageYOffset < statsSectionTop + statsSectionHeight) {
+    animateStatistics();
+    window.removeEventListener('scroll', handleScroll);
+  }
+}
+
+// Add scroll event listener
+window.addEventListener('scroll', handleScroll);
+
+
+// Get DOM elements
+const accordionItems = document.querySelectorAll('.faq__accordion--item');
+
+// Add event listeners to accordion items
+accordionItems.forEach((accordionItem) => {
+    const title = accordionItem.querySelector('.accordion__content--title');
+    const content = accordionItem.querySelector('.faq__accordion--content');
+
+    // Toggle accordion item on title click
+    title.addEventListener('click', () => {
+        accordionItem.classList.toggle('faq__open');
+
+        if (accordionItem.classList.contains('faq__open')) {
+            content.style.display = 'block';
+        } else {
+            content.style.display = 'none';
+        }
+    });
+});
+
+
+
 
 
 
@@ -73,40 +144,60 @@ const closeModal = function(overlay, modal) {
 }
 
 
+// Function to display the email verification modal
+const showEmailVerificationModal = (email) => {
+    // const modalContainer = document.querySelector('.email-verify__modal');
+    const modalContainer = document.querySelector('.email__drop-down');
+    const emailSpan = modalContainer.querySelector('.user__email');
+    emailSpan.textContent = email;
+    modalContainer.classList.remove('hidden');
+};
+
+// Function to close the email verification modal
+const closeEmailVerificationModal = () => {
+    const modalContainer = document.querySelector('.email__drop-down');
+    modalContainer.classList.add('hidden');
+};
+
+
+
 // FORMS functions
 const login = async (email, password, role) => {
     try {
-        console.log(email, password, role);
-        
         const res = await fetch('/api/users/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password, role }),
         });
-        // before the reposne gets back...
-        // spinner.classList.remove('hidden');
-        spinOverlay.style.visibility = 'visible'
-        
-        
-        // we await the response
-        const data = await res.json();
-        if(data.data.role === 'admin') {
-            return location.assign('/login');
+    
+        if (!res.ok) {
+            throw new Error('Login request failed');
         }
-        
+    
+        const data = await res.json();
+    
+        if (data.data.role === 'admin') {
+            showAlert('error', 'Admins cannot log in through this form.');
+            spinOverlay.style.visibility = 'hidden';
+            return;
+        }
+    
         if (data.status === 'success') {
+            showAlert('success', data.message);
             window.setTimeout(() => {
-                showAlert('success', data.message);
-                // spinner.classList.add('hidden');
+                // Redirect immediately after displaying success message
                 location.assign('/dashboard');
                 spinOverlay.style.visibility = 'hidden'
-            }, 2500);
+            }, 1500);
+    
+        } else {
+            throw new Error(data.message || 'Login failed');
         }
     } catch (err) {
-        showAlert('error', err.message || 'Something went wrong, Please try again!')
+        showAlert('error', err.message || 'Something went wrong, please try again!');
     }
-}
-
+  };
+  
 
 const adminAuthLogin = async (email, password) => {
     try {
@@ -121,14 +212,23 @@ const adminAuthLogin = async (email, password) => {
         spinOverlay.style.visibility = 'visible'
         // we await the response
         const data = await res.json();
-        if(!data.data.role === 'admin' ) return;
-        
         if (data.status === 'success') {
+            if(data.data.role !== 'admin' ) {
+                showAlert('error', 'Only admins can log in through this form.');
+                spinOverlay.style.visibility = 'hidden';
+                return;
+            }
+        
             window.setTimeout(() => {
                 showAlert('success', data.message);
                 location.assign('/dashboard');
                 spinOverlay.style.visibility = 'hidden'
             }, 2000);
+        } else {
+            window.setTimeout(() => {
+                spinOverlay.style.visibility = 'hidden';
+                window.location.reload(true)
+            }, 500)
         }
     } catch (err) {
         showAlert('error', err.message || 'Something went wrong, Please try again!')
@@ -139,16 +239,23 @@ const logout = async () => {
     try {
         const res = await fetch('/api/users/logout');
         const data = await res.json();
-        spinOverlay.style.visibility = 'visible'
-        if(data.status === 'error' || data.status === 'success')
-            showAlert('success', 'Bye for now...');
-            location.assign('/login')
-            window.location.reload(true)
-            spinOverlay.style.visibility = 'hidden'
+        if (data.status === 'success') {
+            showAlert('success', 'Logged out successfully.');
+      
+            // Redirect the admin user to the admin login page
+            if (data.data.role === 'admin') {
+              location.assign('/auth/admin');
+            } else {
+              // Redirect other users to the default login page
+              location.assign('/login');
+            }
+        } else {
+        showAlert('error', 'Logout failed. Please try again.');
+        }
     } catch (err) {
-        return;
+        showAlert('error', 'Something went wrong. Please try again.');
     }
-}
+};
 
 
 const signup = async (...body) => {
@@ -161,22 +268,112 @@ const signup = async (...body) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({fullName, email, password, passwordConfirm, username, country, phone, role}),
         });
-        spinner.classList.remove('hidden');
-        if(!spinner.classList.contains('hidden')) 
             spinOverlay.style.visibility = 'visible'
-        const data = await res.json();
+            const data = await res.json();
 
-        if(data.status === 'success') {
-            showAlert('success', data.data.message)
-            spinOverlay.style.visibility = 'hidden'
-            window.location.reload(true);
-        } else if (data.status === 'fail') {
-            throw new Error(data.message || 'Error signing up');
-        }
+            if (data.status === 'success') {
+                showAlert('success', data.data.message);
+                spinOverlay.style.visibility = 'hidden';
+                // Add code here to display the email verification modal
+                showEmailVerificationModal(email);
+              } else if (data.status === 'fail') {
+                throw new Error(data.message || 'Error signing up');
+              }
     } catch (err) {
         showAlert('error', err)
     }
 }
+
+// Event listener for close button in the email verification modal
+document.addEventListener('DOMContentLoaded', () => {
+    const closeButton = document.querySelector('.verify__close--icon');
+    closeButton.addEventListener('click', closeEmailVerificationModal);
+});
+
+
+// FORMS controllers
+if(loginFrom) {
+    loginFrom.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.querySelector('.login__email').value;
+        const password = document.querySelector('.login__password').value;
+        const role = document.querySelector('.login__role').value;
+        login(email, password, role);
+    });
+}
+if(adminAuthForm) {
+    adminAuthForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.querySelector('#admin-email').value;
+        const password = document.querySelector('#admin-password').value;
+        adminAuthLogin(email, password);
+    });
+}
+if(logoutAll) logoutAll.forEach(el => el.addEventListener('click', logout));
+
+if(signupForm) {
+    signupForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const fullName = document.querySelector('.signup__fullname').value;
+        const email = document.querySelector('.signup__email').value;
+        const password = document.querySelector('.signup__passwordMain').value;
+        const passwordConfirm = document.querySelector('.signup__passwordconfirm').value;
+        const usernname = document.querySelector('.signup__username').value;
+        const country = document.querySelector('.signup__country').value;
+        const phone = document.querySelector('.signup__phone').value;
+        const role = document.querySelector('.signup__role').value;
+        signup(fullName, email, password, passwordConfirm, usernname, country, phone, role);
+    })
+}
+
+
+
+const uploadBtn = document.querySelector('.add-btn');
+const productOverlay = document.querySelector('.product__overlay');
+const productModal = document.querySelector('.product__modal');
+const productClose = document.querySelector('.form__close');
+const productForm = document.querySelector('.product__form');
+
+
+uploadBtn.addEventListener('click', function() {
+    openModal(productOverlay, productModal);
+    console.log('clicked')
+});
+productClose.addEventListener('click', function() {
+    closeModal(productOverlay, productModal)
+});
+
+const UploadProduct = async function(name, summary, description, price, commission, type, category, tools, link, recurring) {
+    try {
+        const res = await fetch('/api/products', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({name, summary, description, price, commission, type, category, tools, link, recurring}),
+        });
+        const data = await res.json();
+        console.log(res, data);
+    } catch(err) {
+        console.log(err)
+    }
+}
+
+if(productForm)
+    productForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.querySelector('#product__name').value
+        const summary = document.querySelector('#product__summary').value
+        const description = document.querySelector('#product__description').value
+        const price = document.querySelector('#product__price').value
+        const commission = document.querySelector('#product__commission').value
+        const type = document.querySelector('#product__type').value
+        const category = document.querySelector('#product__category').value
+        const tools = document.querySelector('#product__tools').value
+        const link = document.querySelector('#product__link').value
+        const recurring = document.querySelector('#product__recurring').value
+        UploadProduct(name, summary, description, price, commission, type, category, tools, link, recurring)
+    });
+
+
 
 // const orderProductPage = async function() {
 //     try {
@@ -217,41 +414,7 @@ const signup = async (...body) => {
 // const forgotPasswordForm = document.querySelector('.forgot__form');
 
 
-// FORMS controllers
-if(loginFrom) {
-    loginFrom.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const email = document.querySelector('.login__email').value;
-        const password = document.querySelector('.login__password').value;
-        const role = document.querySelector('.login__role').value;
-        login(email, password, role);
-    });
-}
-if(adminAuthForm) {
-    adminAuthForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const email = document.querySelector('#admin-email').value;
-        const password = document.querySelector('#admin-password').value;
-        adminAuthLogin(email, password);
-    });
-}
-if(logoutNav) logoutNav.addEventListener('click', logout);
-if(logoutMenu) logoutMenu.addEventListener('click', logout);
-if(logoutMenuBtn) logoutMenuBtn.addEventListener('click', logout);
-if(signupForm) {
-    signupForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const fullName = document.querySelector('.signup__fullname').value;
-        const email = document.querySelector('.signup__email').value;
-        const password = document.querySelector('.signup__passwordMain').value;
-        const passwordConfirm = document.querySelector('.signup__passwordconfirm').value;
-        const usernname = document.querySelector('.signup__username').value;
-        const country = document.querySelector('.signup__country').value;
-        const phone = document.querySelector('.signup__phone').value;
-        const role = document.querySelector('.signup__role').value;
-        signup(fullName, email, password, passwordConfirm, usernname, country, phone, role);
-    })
-}
+
 // const userDataForm = document.querySelector('')
 
 // if (userDataForm)
@@ -286,7 +449,7 @@ if(signupForm) {
 //   });
 
 
-/*
+
 // DROPDOWNS
 const notifyIcon = document.querySelector('.notification__icon');
 const notifyBox = document.querySelector('.notification__hovered')
@@ -302,14 +465,14 @@ if(notifyIcon)
     document.querySelector('.main__dashboard').addEventListener('click', () => profileBox.classList.add('hidden'))
 
 
-
+/*
 // ACCORDIONS
 const accordionItem = document.querySelector('.faq__accordion--item');
 const accordionContentTitle = document.querySelectorAll('.accordion__content--title')
 const accordionContent = document.querySelectorAll('.faq__accordion--content');
 
 
-
+*/
 // MENUS
 if (menu) {
     menu.addEventListener('click', function(e) {
@@ -346,7 +509,7 @@ if(dashboradWidth.right <= 950) {
         menuButton.classList.toggle('hidden');
     });
 }
-*/
+
 
 // forgotPassword.addEventListener('click', () => openModal( forgotOverlay, forgotModal));
 // forgotOverlay.addEventListener('click', () => closeModal(forgotOverlay, forgotModal));

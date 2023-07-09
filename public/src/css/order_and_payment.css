@@ -1,41 +1,27 @@
 /* Styling for form container */
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 30px 10px;
+}
+
 #paymentForm {
-    width: 300px;
-    margin: 0 auto;
+    width: 400px;
+    border: 1px solid #eee;
+    border-radius: .8rem;
+    /* margin: 0 auto; */
+    padding: 2.8rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
 }
   
-  /* Styling for form groups */
-.form-group {
-    margin-bottom: 20px;
-}
-  
-  /* Styling for labels */
-label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-  
-  /* Styling for input fields */
-input[type="email"],
-input[type="tel"],
-input[type="text"] {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-  
-  /* Styling for submit button */
-button[type="submit"] {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-  
-button[type="submit"]:hover {
-    background-color: #45a049;
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.6rem;
+  width : auto;
 }

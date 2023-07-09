@@ -4,146 +4,113 @@ block content
     h3.dashboard__heading My product dashboard
     section.vendor__dashboard
         .dashboard__table
-            <!-- manage products -->
-            <div class="table table-vp">
-                <div class="table-title">
-                    <h4 class="table-heading">Manage Products</h4>
-                    <button class="add-btn table-btn">Add new product</button>
-                </div>
-                <div class="table-head-vp">
-                    <span class="table-head-content">Product</span>
-                    <span class="table-head-content">price</span>
-                    <span class="table-head-content">Type</span>
-                    <span class="table-head-content">Aff. commission</span>
-                    <span class="table-head-content">approved</span>
-                    <span class="table-head-content">actions</span>
-                </div>
+            //- manage products 
+            .table.table-vp
+                .table-title
+                    h4.table-heading Manage Products
+                    button.add-btn.table-btn Add new product
+                .table-head-vp
+                    span.table-head-content Product
+                    span.table-head-content price
+                    span.table-head-content Type
+                    span.table-head-content Aff. commission
+                    span.table-head-content approved
+                    span.table-head-content actions
 
-                <div class="table-row-vp">
-                    <span class="table-row-content table-row-product">
-                        <img class="table-product__image" src="../product.jpg" alt="" />
-                        <span>
-                            <p class="table-product__name">Test product 1</p>
-                            <p class="table-product__category">health & fitness</p>
-                        </span>
-                    </span>
-                    <span class="table-row-content"><p class="price">$&nbsp;90</p></span>
-                    <span class="table-row-content"><p class="product-type">Digital product</p></span>
-                    <span class="table-row-content"><p class="aff-comm">30%</p></span>
-                    <span class="table-row-content"><p class="approved status status--success">Approved</p></span>
-                    <span class="table-row-content table-row-btn">
-                        <button class="btn-edit table-btn">Edit</button>
-                        <button class="btn-delete table-btn">Delete</button>
-                    </span>
-                </div>
-                <div class="table-row-vp">
-                    <span class="table-row-content table-row-product">
-                        <img class="table-product__image" src="../product.jpg" alt="" />
-                        <span>
-                            <p class="table-product__name">Test product 1</p>
-                            <p class="table-product__niche">health & fitness</p>
-                        </span>
-                    </span>
-                    <span class="table-row-content"><p class="price">$&nbsp;90</p></span>
-                    <span class="table-row-content"><p class="product-type">Physical product</p></span>
-                    <span class="table-row-content"><p class="aff-comm">25%</p></span>
-                    <span class="table-row-content"><p class="approved status status--pending">pending</p></span>
-                    <span class="table-row-content table-row-btn">
-                        <button class="btn-edit table-btn">Edit</button>
-                        <button class="btn-delete table-btn">Delete</button>
-                    </span>
-                </div>
-            </div>
-    
+                -if(products.lenght > 0)
+                    each product of product
+                        .table-row-vp
+                            span.table-row-content.table-row-product
+                                img.table-product__image(src=`asset/img/product.jpg` alt='')
+                                span
+                                    p.table-product__name= product.name
+                                    p.table-product__category= product.category
+                            span.table-row-content
+                                p.price= `₦ ${product.price}`
+                            span.table-row-content
+                                //- -if(product.type)
+                                p.product-type= `${product.type} product`
+                            span.table-row-content
+                                p.aff-comm= `${product.commissionPercentage}%`
+                            span.table-row-content
+                                p.approved.status.status--success Approved
+                            span.table-row-content.table-row-btn
+                                button.btn-edit.ta ble-btn(id=`${product._id}--edit`) Edit
+                                button.btn-delete.table-btn(id=`${product._id}--delete`) Delete
+                -else 
+                    .table-row-message
+                        //- p.note-no Upload your product today, Let out affiliate make you money.
+                        p.note-no You have no existing product.
 
 
 
 
-    <div class="generic__overlay hidden"></div>
-    <div class="generic__modal product__modal hidden">
-        <i class="fa-solid fa-close icon form__close-icon"></i>
-        <h3 class="dashboard__heading">Add new product</h3>
-        <form action="" class="product__form">
-            <div class="form__body-generic">
-                <label for="product__name" class="form__label">Product Name</label> 
-                <input type='text' name="product__name" id="product__name" required placeholder='Product name' class="form__input">
-            </div>
-            <!-- product image here -->
-            <div class="form__body-generic">
-                <label for="product__summary" class="form__label">Product Summary</label> 
-                <textarea style="height: 6rem;" type='text' name="product__summary" id="product__summary" required placeholder='Product Summary (not more than 120 characters)' class="form__input"></textarea>
-            </div>
-            <div class="form__body-generic">
-                <label for="product__description" class="form__label">Product Description</label> 
-                <textarea style="height: 15rem;" type='text' name="product__description" id="product__description" required placeholder='Product Description' class="form__input"></textarea>
-            </div>
-            <div class="form__grid-generic">
-                <div class="form__body-generic">
-                    <label for="product__price" class="form__label">Product Price</label> 
-                    <input type='text' name="product__price" id="product__price" required placeholder='Product price (NGN)' class="form__input">
-                </div>
-                <div class="form__body-generic">
-                    <label for="product__commission" class="form__label">Product Commission</label> 
-                    <input type='text' name="product__commission" id="product__commission" required placeholder='Product Commission in (%)' class="form__input">
-                </div>
-            </div>
-            <div class="form__grid-generic">
-                <div class="form__body-generic">
-                    <label for="product__type" class="form__label">Product Type</label>
-                    <select class="form__select" name="product__type" id="product__type">
-                        <option value="physical">Physical Product</option>
-                        <option value="digital">Digital Product</option>
-                    </select>
-                </div>
-                <div class="form__body-generic">
-                    <label for="product__niche" class="form__label">Product Niche</label>
-                    <select class="form__select" name="product__niche" id="product__niche">
-                        <option value="physical">All categories</option>
-                    </select>
-                </div>
-            </div>
+    .generic__overlay.product__overlay.hidden
+        .generic__modal.product__modal.hidden
+            i.fa-solid.fa-close.icon.form__close-icon
+            h3.dashboard__heading Add new product
+            form.product__form
+                .form__body-generic
+                    label.form__label(for='product__name') Product Name
+                    input#product__name.form__input(type='text' name='product__name' required='' placeholder='Product name')
+                //-  product image here 
+                .form__body-generic
+                    label.form__label(for='product__summary') Product Summary
+                    textarea#product__summary.form__input(style='height: 6rem;' type='text' name='product__summary' required='' placeholder='Product Summary (not more than 120 characters)')
+                .form__body-generic
+                    label.form__label(for='product__description') Product Description
+                    textarea#product__description.form__input(style='height: 15rem;' type='text' name='product__description' required='' placeholder='Product Description')
+                .form__grid-generic
+                    .form__body-generic
+                        label.form__label(for='product__price') Product Price
+                        input#product__price.form__input(type='text' name='product__price' required='' placeholder='Product price (NGN)')
+                    .form__body-generic
+                        label.form__label(for='product__commission') Product Commission
+                        input#product__commission.form__input(type='text' name='product__commission' required='' placeholder='Product Commission in (%)')
+                .form__grid-generic
+                    .form__body-generic
+                        label.form__label(for='product__type') Product Type
+                        select#product__type.form__select(name='product__type')
+                            option(value='physical') Physical Product
+                            option(value='digital') Digital Product
+                    .form__body-generic
+                        label.form__label(for='product__category') Product Category
+                        select#product__category.form__select(name='product__category')
+                            option(value='physical') All categories
+                .form__grid3-generic
+                    .form__body-generic
+                        label.form__label(for='product__tools') Affiliate Tools
+                        input#product__tools.form__input(type='checkbox' name='product__tools')
+                    .form__body-generic
+                        label.form__label(for='product__link') Product Unique Url
+                        input#product__link.form__input(type='checkbox' name='product__link')
+                    .form__body-generic
+                        label.form__label(for='product__recurring') Recurring Commissions
+                        input#product__recurring.form__input(type='checkbox' name='product__recurring')
+                .product__sub-images
+                    p.form__label.photo-head Product sub images (Max of 6) upload
+                    .sub-images
+                        //- img.sub-image.sub-image1(src='asset/img/img-temp.png' alt='product sub image')
+                        img.sub-image.sub-image1(src='asset/img/product.jpg' alt='product sub image')
+                        img.sub-image.sub-image2(src='asset/img/product.jpg' alt='product sub image')
+                        img.sub-image.sub-image3(src='asset/img/product.jpg' alt='product sub image')
+                        img.sub-image.sub-image4(src='asset/img/product.jpg' alt='product sub image')
+                        img.sub-image.sub-image5(src='asset/img/product.jpg' alt='product sub image')
+                    
+                a.btn-upload.btn__image-upload(href='') Upload new image
 
-            <div class="form__grid3-generic">
-                <div class="form__body-generic">
-                    <label for="product__tools" class="form__label">Affiliate Tools</label>
-                    <input type="checkbox" class="form__input" name="product__tools" id="product__tools" />
-                </div>
-                <div class="form__body-generic">
-                    <label for="product__link" class="form__label">Product Unique Url</label>
-                    <input type="checkbox" class="form__input" name="product__link" id="product__link" />
-                </div>
-                <div class="form__body-generic">
-                    <label for="product__recurring" class="form__label">Recurring Commissions</label>
-                    <input type="checkbox" class="form__input" name="product__recurring" id="product__recurring" />
-                </div>
-            </div>
-            
-            <div class="product__sub-images">
-                <p class="form__label photo-head">Product sub images (Max of 6) upload</p>
-                <div class="sub-images">
-                    //- img.sub-image.sub-image1(src='asset/img/img-temp.png' alt='product sub image')
-                    img.sub-image.sub-image1(src='asset/img/product.jpg' alt='product sub image')
-                    img.sub-image.sub-image2(src='asset/img/product.jpg' alt='product sub image')
-                    img.sub-image.sub-image3(src='asset/img/product.jpg' alt='product sub image')
-                    img.sub-image.sub-image4(src='asset/img/product.jpg' alt='product sub image')
-                    img.sub-image.sub-image5(src='asset/img/product.jpg' alt='product sub image')
-                </div>
-                    a.btn-upload.btn__image-upload(href='') Upload new image
-            </div> 
 
-            <!-- three min and six max images -->
-            <!-- four max banners -->
-            <div class="product__banners">
-                <p class="form__label photo-head">Product banner (Max of 4) upload</p>
-                <div class="banners">
-                    img.banner.banner1(src='asset/img/banner1.jpg' alt='product sub image')
-                    img.banner.banner2(src='asset/img/banner2.jpg' alt='product sub image')
-                    img.banner.banner3(src='asset/img/banner3.jpg' alt='product sub image')
-                    img.banner.banner4(src='asset/img/banner4.jpg' alt='product sub image')
-                </div>
+                //-  three min and six max image
+                //-  four max banner
+                .product__banners
+                    p.form__label.photo-head Product banner (Max of 4) upload
+                    .banners
+                        img.banner.banner1(src='asset/img/banner1.jpg' alt='product sub image')
+                        img.banner.banner2(src='asset/img/banner2.jpg' alt='product sub image')
+                        img.banner.banner3(src='asset/img/banner3.jpg' alt='product sub image')
+                        img.banner.banner4(src='asset/img/banner4.jpg' alt='product sub image')
+
                     a.btn-upload.btn__banner-upload(href='') Upload banner
-            </div> 
-            <button type="submit" class="btn form__submit form__submit-generic">Add product</button>
-        </form>
-    </div>
+                button.btn.form__submit.form__submit-generic(type="submit") Add product
+       
     

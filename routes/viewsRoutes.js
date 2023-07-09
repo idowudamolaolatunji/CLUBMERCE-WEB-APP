@@ -37,7 +37,7 @@ router.get('/manage-payment', authController.isLoggedIn, viewController.managePa
 
 // visitors
 router.get('/pay', viewController.paymentForm);
-router.get('/order-product/:productSlug', viewController.getOrderProductPage);
+router.get('/order-product/:username/:productSlug', viewController.getOrderProductPage);
 
 
 module.exports = router;

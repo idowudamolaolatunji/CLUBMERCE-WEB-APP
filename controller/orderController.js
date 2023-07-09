@@ -5,7 +5,9 @@ const axios = require('axios');
 
 const User = require('../model/usersModel');
 const Product = require('../model/productsModel');
-const Order = require('../model/orderModel')
+const Order = require('../model/orderModel');
+const Commissions = require('../model/commissionModel');
+
 
 
 // making orders and payments
@@ -53,34 +55,33 @@ exports.OrdersAndPayment = async (req, res) => {
 
         const paymentResponse = response.json();
 
-
            
         // Check the payment response for success
         if (paymentResponse.status === 200) {
             const transactionId = paymentResponse.data.transactionId;
             const paidAmount = paymentResponse.data.paidAmount;
 
-            // Update the vendor's wallet balances and transaction
-            product.purchasesCount += 1;
-            product.vendor.wallet += paidAmount-product.commission;
-            product.vendor.transactions.push({transactionId, paidAmount: paidAmount-product.commission, date: Date.now() });
-            
-            
-            // Update the affiliate commission wallet balances
-            const randomId = crypto.randomInt(100000, 999999).toString();
-            user.wallet += product.commission;
-            user.transactions.push({transactionId: randomId, paidAmount: product.commission, date: Date.now() });
-            user.productSold  += 1;
+            // Update the vendor, affiliate, commissions, product and their wallet balances
+            user.wallet += product.commissionAmount;
+            user.productSold += 1;
+            product.ordersCount += 1
+            // product.vendor.wallet += paidAmount - product.commissionAmount;
+            product.profits += paidAmount - product.commissionAmount;
+            // product.purchasesCount += 1;
 
-            // Save the updated wallet balances
-            await product.vendor.save();
+            await product.save();
             await user.save({ validateBeforeSave: false });
 
             const order = await Order.create({
                 orderId: transactionId,
                 vendor: product.vendor,
-                amount: paidAmount-product.commission,
+                amount: paidAmount - product.commissionAmount,
                 orderInfo,
+            });
+            const commission = await Commissions.create({
+                product: product._id,
+                user: user._id,
+                commissions: product.commissionAmount,
             });
         
             res.status(200).json({
@@ -88,6 +89,7 @@ exports.OrdersAndPayment = async (req, res) => {
                 message: 'Transaction completed successfully',
                 data: {
                     newOrder: order,
+                    affCommission: commission,
                 }
             });
 

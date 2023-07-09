@@ -277,6 +277,10 @@
     overflow: hidden;
     height: 50rem;
     position: relative;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .center {
@@ -289,16 +293,16 @@
     gap: 4.8rem;
     height: auto;
 
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .testimonial__slide--item {
     height: auto;
     width: 30rem;
     position: relative;
+    transition: all .35s ease-in-out;
 }
 
 .testimonial__slide--item::after, 
@@ -322,6 +326,13 @@
     bottom: 10%;
     right: 10%;
     transform: translate(-90%, -10%);
+}
+
+.testimonial__slide--item.testimonial__slide--active {
+    transform: scale(1.5); 
+    z-index: 1;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
+    margin: 0 6.2rem;
 }
 
 .testimonial__slide--item-text {
@@ -360,11 +371,6 @@
 .dots {
     display: flex;
     gap: 1rem;
-    position: absolute;
-    bottom: -50%;
-    left: 50%;
-    transform: translate(-50%, 0%);
-    z-index: 30;
 }
 
 .dot {
@@ -495,7 +501,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all .35s;
 }
 
 .accordion__content--title span:hover, .accordion__content--title span:active {
@@ -504,10 +509,8 @@
 
 .faq__accordion--content {
     padding: 0 3.6rem 1.8rem;
-}
-
-.faq__close {
     display: none ;
+    transition: all .35s;
 }
 
 .faq__accordion--item .faq__open {
