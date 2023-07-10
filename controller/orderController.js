@@ -1,13 +1,16 @@
-const crypto = require('crypto')
+const crypto = require('crypto');
 
 const mongoose = require('mongoose');
 const axios = require('axios');
+const _ = require("lodash");
+const request = require("request");
 
 const User = require('../model/usersModel');
 const Product = require('../model/productsModel');
 const Order = require('../model/orderModel');
 const Commissions = require('../model/commissionModel');
 
+const { initializePayment, verifyPayment } = require("../utils/paystack")(request);
 
 
 // making orders and payments
@@ -21,7 +24,7 @@ exports.OrdersAndPayment = async (req, res) => {
         const orderInfo = {
             quantity: req.body.quantity,
             product: product.name,
-            emailAddress: req.body.emailAddress,
+            email: req.body.email,
             fullname: req.body.fullname,
             country: req.body.country,
             state: req.body.state,
@@ -29,77 +32,158 @@ exports.OrdersAndPayment = async (req, res) => {
             postalCode: req.body.postalCode,
             address: req.body.address,
         };
-        const paymentInfo = {
-            bankName: req.body.bankName,
-            holdersName: holdersName,
-            accountNumber: req.body.accountNumber
-        }
-
+        
         // Calculate the total amount for the order
         const totalAmount = product.price * orderInfo.quantity;
-          
-        
-        // Make a transfer request to the Paystack payment API
-        const response = await axios.post('https://api.paystack.co/transfer', {
-            source: 'balance',
-            reason: 'Transfer to bank account',
-            amount: totalAmount * 100, // Convert amount to kobo (Paystack uses kobo as the currency unit)
-            recipient: paymentInfo, // Recipient bank account details
-            currency: 'NGN', // Currency code (e.g., NGN for Nigerian Naira)
-        }, {
-            headers: {
-            Authorization: `Bearer ${PAYSTACK_SECRET_KEY}`, // Replace with your Paystack secret key
-            'Content-Type': 'application/json',
-            },
+
+        // Call the payment processing function
+        processPayment(totalAmount, req.body, orderInfo, product, user, res);
+         
+        const order = await Order.create({
+            orderId: transactionId,
+            vendor: product.vendor,
+            amount: paidAmount - product.commissionAmount,
+            orderInfo,
         });
-
-        const paymentResponse = response.json();
-
-           
-        // Check the payment response for success
-        if (paymentResponse.status === 200) {
-            const transactionId = paymentResponse.data.transactionId;
-            const paidAmount = paymentResponse.data.paidAmount;
-
-            // Update the vendor, affiliate, commissions, product and their wallet balances
-            user.wallet += product.commissionAmount;
-            user.productSold += 1;
-            product.ordersCount += 1
-            // product.vendor.wallet += paidAmount - product.commissionAmount;
-            product.profits += paidAmount - product.commissionAmount;
-            // product.purchasesCount += 1;
-
-            await product.save();
-            await user.save({ validateBeforeSave: false });
-
-            const order = await Order.create({
-                orderId: transactionId,
-                vendor: product.vendor,
-                amount: paidAmount - product.commissionAmount,
-                orderInfo,
-            });
-            const commission = await Commissions.create({
-                product: product._id,
-                user: user._id,
-                commissions: product.commissionAmount,
-            });
+    
+        res.status(200).json({
+            status: 'success',
+            message: 'Transaction completed successfully',
+            data: {
+                newOrder: order,
+            }
+        });
         
-            res.status(200).json({
-                status: 'success',
-                message: 'Transaction completed successfully',
-                data: {
-                    newOrder: order,
-                    affCommission: commission,
-                }
-            });
-
-        } else {
-        res.status(400).json({ status: 'fail', message: 'Payment failed' });
-        }
     } catch (error) {
         res.status(500).json({ status: 'fail', message: 'Internal server error' });
     }
 }
+
+
+
+
+exports.pay = async (req, res, next) => {
+    try {
+      res.render("pay");
+    } catch (e) {
+      return next(new ErrorResponse(e.message, 500));
+    }
+}
+
+exports.errorPage = async(req, res, next) => {
+    try {
+      res.render("error");
+    } catch (e) {
+      return next(new ErrorResponse(e.message, 500));
+    }
+}
+
+exports.successPage = async(req, res, next) => {
+    try {
+      res.render("success");
+    } catch (e) {
+      return next(new ErrorResponse(e.message, 500));
+    }
+}
+
+
+const processPayment = async (amount, paymentData, orderInfo, product, user, res) => {
+    const form = _.pick(paymentData, ["amount", "email", "fullname"]);
+    form.metadata = {
+        full_name: form.full_name,
+    };
+    form.amount *= 100;
+  
+    initializePayment(form, (error, body) => {
+        if (error) {
+            //handle errors
+            console.log(error);
+            return res.redirect("/error");
+        }
+    
+        response = JSON.parse(body);
+        console.log(response);
+        res.redirect(response.data.authorization_url);
+    });
+  
+    const verifyPayment = async (req, res, next) => {
+        const session = await mongoose.startSession();
+        session.startTransaction();
+    
+        try {
+            const ref = req.query.reference;
+            verifyPayment(ref, async (err, body) => {
+                if (err) {
+                    console.log(err);
+                    return res.redirect("/error");
+                }
+
+                response = JSON.parse(body);
+
+                user.wallet += product.commissionAmount;
+                user.productSold += 1;
+                product.ordersCount += 1
+                product.vendor.wallet += paidAmount - product.commissionAmount;
+                product.profits += paidAmount - product.commissionAmount;
+                product.purchasesCount += 1;
+
+                await product.save();
+                await user.save({ validateBeforeSave: false });
+
+                const commission = await Commissions.create({
+                    product: product._id,
+                    user: user._id,
+                    commissions: product.commissionAmount,
+                });
+
+                Transaction.create({
+                    user: user._id,
+                    trnxType: "CR",
+                    purpose: "order",
+                    amount: amount,
+                    }, { session });
+
+                return res.redirect("/success");
+            });
+            session.commitTransaction();
+        } catch (error) {
+            session.abortTransaction();
+            return res.redirect("/error");
+        }
+    };
+  };
+  
+
+
+// Check the payment response for success
+// if (paymentResponse.status === 200) {
+//     const transactionId = paymentResponse.data.transactionId;
+//     const paidAmount = paymentResponse.data.paidAmount;
+
+//     // Update the vendor, affiliate, commissions, product and their wallet balances
+//     user.wallet += product.commissionAmount;
+//     user.productSold += 1;
+//     product.ordersCount += 1
+//     // product.vendor.wallet += paidAmount - product.commissionAmount;
+//     product.profits += paidAmount - product.commissionAmount;
+//     // product.purchasesCount += 1;
+
+//     await product.save();
+//     await user.save({ validateBeforeSave: false });
+
+
+    // const commission = await Commissions.create({
+    //     product: product._id,
+    //     user: user._id,
+    //     commissions: product.commissionAmount,
+    // });
+// } else {
+//     res.status(400).json({ status: 'fail', message: 'Payment failed' });
+// }
+
+
+
+
         
 //get all orders
 exports.getAllOrders = async (req, res) => {

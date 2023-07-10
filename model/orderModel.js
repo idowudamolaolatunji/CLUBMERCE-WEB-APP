@@ -17,7 +17,7 @@ const orderSchema = new mongoose.Schema({
 		default: 1,
 	},
 	price: Number,
-	emailAddress: {
+	email: {
 		type: String,
 		required: [true, `Please provide us a reciever email address`],
 		trim: true,

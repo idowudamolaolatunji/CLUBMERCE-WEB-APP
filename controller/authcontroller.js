@@ -46,31 +46,88 @@ const createCookie = function(statusCode, user, res, message) {
   });
 }
 
+// Generate the email confirmation link
+function generateEmailConfirmationLink(email) {
+    // Generate a unique token or code to include in the confirmation link
+    const confirmationToken = generateUniqueTokenOrCode();
+  
+    // Return the confirmation link with the token or code
+    return `http://example.com/confirm-email?token=${confirmationToken}&email=${email}`;
+  }
+  
+ 
+
+  
+
 
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 // signup
 exports.signup = catchAsync(async (req, res) => {
-  const newUser = await User.create({
-    fullName: req.body.fullName,
-    email: req.body.email,
-    password: req.body.password,
-    passwordConfirm: req.body.passwordConfirm,
-    username: req.body.username,
-    country: req.body.country,
-    phone: req.body.phone,
-    role: req.body.role,
-  });
+    const newUser = await User.create({
+        fullName: req.body.fullName,
+        email: req.body.email,
+        password: req.body.password,
+        passwordConfirm: req.body.passwordConfirm,
+        username: req.body.username,
+        country: req.body.country,
+        phone: req.body.phone,
+        role: req.body.role,
+    });
 
-  res.status(201).json({
-    status: "success",
-    message: "Successfully signed up",
-    data: {
-      user: newUser
-    }
-  });
+    const token = signToken( newUser._id )
+
+    // Create a verification URL for the user
+    const verificationUrl = `${req.protocol}://${req.get('host')}/api/auth/verify-email/${token}`;
+    const message = `
+        Please verify your email address \n
+        Click ${verificationUrl}"> \n to verify your email...`;
+
+    await sendEmail({
+      email: newUser.email,
+      subject: 'Verify Your Email Address',
+      message
+    });
+
+
+    res.status(201).json({
+        status: "success",
+        message: "Successfully signed up, Confirm Email",
+        data: {
+            user: newUser
+        }
+    });
 })
+
+// Verification route
+exports.verifyEmail = async (req, res) => {
+    try {
+        // Verify the token
+        const decoded = jwt.verify(req.params.token, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
+    
+        // Find the user based on the decoded token
+        const user = await User.findById(decoded.userId);
+    
+        if (user) {
+            // Update the user's email verification status
+            user.isEmailVerified = true;
+            await user.save();
+    
+            // Redirect the user to a success page
+            res.redirect('/email-verified');
+        } else {
+            // Handle user not found error
+            res.status(404).json({ error: 'User not found' });
+        }
+    } catch (error) {
+      // Handle invalid token or other errors
+      res.status(400).json({ error: 'Invalid token' });
+    }
+};
+  
+
+
 
 // Login
 exports.login = catchAsync(async (req, res, next) => {
@@ -82,8 +139,8 @@ exports.login = catchAsync(async (req, res, next) => {
   // 2) Check if user exists rs&& password is correct
   const user = await User.findOne({ email }).select('+password');
 
-  if (!user || !(await user.comparePassword(password, user.password) )) {
-    return next(new AppError('Incorrect email or password', 401));
+  if (!user || !(await user.comparePassword(password, user.password)) || role !== user.role) {
+    return next(new AppError('Incorrect email or password or role', 401));
   }
   //=//=//=//=//=//=//=//=//=//
   const token = signToken(user._id);
@@ -112,21 +169,15 @@ exports.login = catchAsync(async (req, res, next) => {
 // logout
 exports.logout = async (req, res) => {
     try {
-        // Get the JWT token from the request headers
-        const token = req.headers.authorization.split(' ')[1];
+        const token = req.cookies.jwt;
 
-        // Verify and decode the token
-        const decoded = jwt.verify(token, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
+        if (!token) {
+        return res.status(401).json({ error: 'You are not logged in' });
+        }
 
-        // Find the user based on the decoded token
-        const user = await User.findById(decoded.userId);
-
-        // Clear the token from the user's token list
-        user.tokens = user.tokens.filter((t) => t.token !== token); 
-        console.log(user.tokens)
-
-        // Save the updated user
-        await user.save();
+        // Clear the token cookie
+        res.clearCookie('jwt');
+        res.redirect('/login')
 
         res.status(200).json({ message: 'Logout successful' });
     } catch (error) {

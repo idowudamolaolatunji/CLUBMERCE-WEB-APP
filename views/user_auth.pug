@@ -19,15 +19,13 @@ block content
         
         div.login__form
             .login__container.grid.grid__two
-
-                //- form.login(method="POST" action="/api/users/login")
-                form.login
+                form.login#login
                     h3.form__heading Login into your 
                         span.form__extra Clubmerce 
                         | account
                     div.form__item
                         label.form__item--label(for="email") Email Address
-                        input.form__item--input.login__email(id="email" type="email" placeholder="max123@example.com" required autoComplete="on")
+                        input.form__item--input.login__email(id="email" type="email" placeholder="max123@example.com" required )
 
                     div.form__item
                         label.form__item--label(for="password") Password
@@ -55,6 +53,7 @@ block content
         //- forgot password modal
         div.forgot-password__drop-down.drop-down__shadow.hidden
             div.forgot-password__modal.modal.hidden
+            //- <!-- close icon -->
             span.close__icon.forgot__closse--icon
                 i.fa-solid.fa-close.icon
 

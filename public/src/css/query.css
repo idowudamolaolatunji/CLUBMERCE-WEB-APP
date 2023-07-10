@@ -57,7 +57,7 @@
         background-color:#fff;
         height: 50vh;
         max-width: 30rem;
-        position: fixed;
+        /* position: fixed; */
 
         border: 1px solid red;
     }
@@ -67,13 +67,27 @@
         gap: 4rem;
 
         position: absolute;
-        top: 30%;
-        right: 20%;
+        top: 100%;
+        right: 0%;
+        width: 40rem;
+        height: 100vh;
+        background-color:#fff;
+        border-bottom-right-radius: 1rem;
+        border-bottom-left-radius: 1rem;
+        padding: 2.4rem;
+
+
+        /* temp */
+        opacity: 0;
+        display: none;
     }
     .navigation-icons {
         font-size: 2.4rem;
         display: block;
         opacity: 1;
+
+        /* temp */
+        opacity: 0;
     }
     .hero__heading {
         height: 40rem;
@@ -254,7 +268,7 @@
     }
     .center { text-align: left; }
     .section__container {
-        padding: 0 3.2rem ;
+        padding: 0 2rem ;
     }
     .features {
         display: flex;
@@ -282,6 +296,14 @@
 
 /* 450px === 45rem === 28.125em */
 @media screen and (max-width: 28.125em) {
+    .hero__heading {
+        margin-top: 1.8rem;
+        padding: 0rem;
+    }
+    .hero__button {
+        padding-left: 1.4rem;
+        padding-right: 1.4rem;
+    }
     .features__card { max-width: 100%;}
     .how__image {
         height: 24rem;

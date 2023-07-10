@@ -68,7 +68,7 @@ exports.makeTransferCreateTransaction = async (req, res) => {
         if(amount > 10000 && user.wallet >= amount) return res.json({ message: 'Minimul withdrawal is 10,000' });
 
         // Make a transfer request to the company payment API
-        const transferResponse = await axios.post('PAYMENT_API_ENDPOINT/transfer', {
+        const transferResponse = await axios.post('/transfer', {
             userId,
             bankAccount,
             amount,

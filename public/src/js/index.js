@@ -1,12 +1,14 @@
 const loginFrom = document.querySelector('.login');
 const signupForm = document.querySelector('.signup');
 const logoutAll = document.querySelectorAll('#logout');
+
+
 // const spinner = document.querySelector('.spinner-overlay');
 const menu = document.querySelector('.menubar-control');
 const menuButton = document.querySelector('.menu__button');
 
 const spinOverlay = document.querySelector('#spinOverlay');
-const spin = document.querySelector('.spin');
+// const spin = document.querySelector('.spin');
 
 const forgotPassword = document.querySelector('.forgot')
 const forgotModal = document.querySelector('.forgot-password__modal');
@@ -15,12 +17,10 @@ const emailVerifyModal = document.querySelector('.email-verify__modal');
 const emailVerifyClose = document.querySelector('.email-verify__close--icon');
 const emailConfirmModal = document.querySelector('.email-confirmed__modal');
 const emailConfirmClose = document.querySelector('.email-confirmed__close--icon');
-
-const adminAuthForm = document.querySelector('#admin-login');
-
-
 // const forgotOverlay = document.querySelector('.forgot-password__drop-down');
 // const emailVerifyOverlay = document.querySelector('.email__drop-down');
+
+const adminAuthForm = document.querySelector('#admin-login');
 
 
 // document.onreadystatechange = function() {
@@ -30,6 +30,7 @@ const adminAuthForm = document.querySelector('#admin-login');
 //         spinOverlay.style.visibility = "hidden";
 //     }
 // }
+
 
 // MOBILE NAVIGATION
 // const btnNavEl = document.querySelector(".btn-mobile-nav");
@@ -43,6 +44,217 @@ const adminAuthForm = document.querySelector('#admin-login');
 
 
 
+
+// REUSEABLE FUNCTION
+// ALERTS
+const hideAlert = () => {
+    const el = document.querySelector('.alert');
+    if (el) el.parentElement.removeChild(el);
+};
+
+// type is 'success' or 'error'
+const showAlert = (type, msg) => {
+    hideAlert();
+    const markup = `<div class="alert alert--${type}">${msg}</div>`;
+    document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
+    window.setTimeout(hideAlert, 5000);
+};
+
+
+// FORMS functions
+const login = async (email, password, role) => {
+    try {
+        const res = await fetch('/api/users/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password, role }),
+        });
+
+        if (!res.ok) {
+            throw new Error('Login request failed');
+        }
+    
+        console.log(res)
+        spinOverlay.style.visibility = 'visible';
+    
+        const data = await res.json();
+        console.log(res, data)
+    
+        if (data.data.role === 'admin') {
+            showAlert('error', 'Admins cannot log in through this form.');
+            spinOverlay.style.visibility = 'hidden';
+            return;
+        }
+    
+        if (data.status === 'success') {
+            showAlert('success', data.message);
+            window.setTimeout(() => {
+                // Redirect immediately after displaying success message
+                location.assign('/dashboard');
+                spinOverlay.style.visibility = 'hidden'
+            }, 1500);
+    
+        } else {
+            throw new Error(data.message || 'Login failed');
+        }
+    } catch (err) {
+        showAlert('error', err.message || 'Something went wrong, please try again!');
+    }
+};
+if(loginFrom) {
+    loginFrom.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.querySelector('.login__email').value;
+        const password = document.querySelector('.login__password').value;
+        const role = document.querySelector('.login__role').value;
+        login(email, password, role);
+
+        console.log(email, password, role)
+    });
+}
+
+// MODALS
+const openModal = function(overlay, modal) {
+    overlay.classList.remove('hidden');
+    modal.classList.remove('hidden');
+}
+const closeModal = function(overlay, modal) {
+    overlay.classList.add('hidden');
+    modal.classList.add('hidden');
+}
+
+// Function to display the email verification modal
+const showEmailVerificationModal = (email) => {
+    // const modalContainer = document.querySelector('.email-verify__modal');
+    const modalContainer = document.querySelector('.email__drop-down');
+    const emailSpan = modalContainer.querySelector('.user__email');
+    emailSpan.textContent = email;
+    modalContainer.classList.remove('hidden');
+};
+
+// Function to close the email verification modal
+const closeEmailVerificationModal = () => {
+    const modalContainer = document.querySelector('.email__drop-down');
+    modalContainer.classList.add('hidden');
+};
+
+
+
+const testimonialContainer = document.querySelector('.testimonial__slide');
+const testimonialSlides = Array.from(document.querySelectorAll('.testimonial__slide--item'));
+const dots = Array.from(document.querySelectorAll('.dot'));
+
+const slideWidth = testimonialSlides[0].getBoundingClientRect().width;
+const gap = 40; // Adjust the gap between slide items as needed
+
+let currentSlide = testimonialSlides.findIndex((slide) => slide.classList.contains('testimonial__slide--active'));
+let isDragging = false;
+let startPosX = 0;
+let currentTranslate = 0;
+let prevSlide = testimonialSlides.length - 1;
+let autoplayInterval;
+
+function setSlidePosition() {
+  testimonialContainer.style.transform = `translateX(${currentTranslate}px)`;
+}
+
+function animateSlide() {
+  testimonialContainer.style.transition = 'transform 0.5s ease-in-out';
+  setSlidePosition();
+}
+
+function showSlide(index) {
+  currentSlide = index;
+
+  const slidesLength = testimonialSlides.length;
+  const containerWidth = testimonialContainer.getBoundingClientRect().width;
+
+  currentTranslate = (containerWidth - slideWidth) / 2 - (slideWidth + gap) * currentSlide;
+
+  animateSlide();
+
+  testimonialSlides.forEach((slide, i) => {
+    slide.classList.toggle('testimonial__slide--active', i === currentSlide);
+    slide.style.transform = '';
+    slide.style.transition = '';
+  });
+
+  dots.forEach((dot, i) => {
+    dot.classList.toggle('dot__active', i === currentSlide);
+  });
+}
+
+function nextSlide() {
+  prevSlide = currentSlide;
+  currentSlide = (currentSlide + 1) % testimonialSlides.length;
+  showSlide(currentSlide);
+}
+
+function startAutoplay() {
+  autoplayInterval = setInterval(nextSlide, 3000); // Change slide every 3 seconds (adjust as needed)
+}
+
+function stopAutoplay() {
+  clearInterval(autoplayInterval);
+}
+
+function handleDragStart(event) {
+  isDragging = true;
+  startPosX = event.clientX;
+  testimonialContainer.style.transition = '';
+}
+
+function handleDragEnd(event) {
+  if (isDragging) {
+    const endPosX = event.clientX;
+    const deltaX = startPosX - endPosX;
+    const threshold = slideWidth * 0.3; // Adjust threshold distance for slide change
+
+    if (deltaX > threshold) {
+      nextSlide();
+    } else if (deltaX < -threshold) {
+      prevSlide = currentSlide;
+      currentSlide = (currentSlide - 1 + testimonialSlides.length) % testimonialSlides.length;
+      showSlide(currentSlide);
+    }
+
+    isDragging = false;
+    animateSlide();
+  }
+}
+
+testimonialContainer.addEventListener('mousedown', handleDragStart);
+testimonialContainer.addEventListener('mouseup', handleDragEnd);
+testimonialContainer.addEventListener('mouseleave', handleDragEnd);
+
+dots.forEach((dot, index) => {
+  dot.addEventListener('click', () => {
+    showSlide(index);
+    stopAutoplay();
+    startAutoplay();
+  });
+});
+
+document.querySelector('.prev-btn').addEventListener('click', () => {
+  prevSlide = currentSlide;
+  currentSlide = (currentSlide - 1 + testimonialSlides.length) % testimonialSlides.length;
+  showSlide(currentSlide);
+  stopAutoplay();
+  startAutoplay();
+});
+
+document.querySelector('.next-btn').addEventListener('click', () => {
+  nextSlide();
+  stopAutoplay();
+  startAutoplay();
+});
+
+window.addEventListener('resize', () => {
+  showSlide(currentSlide);
+});
+
+showSlide(currentSlide);
+startAutoplay();
 
 
 
@@ -71,25 +283,27 @@ function animateStatistics() {
 
         item.querySelector('span').textContent = `${currency ? currency : ''}${currentValue}${symbol}`;
       }
-    }, 5000);
+    }, 50);
   });
 }
 
-// Function to handle scroll event
-function handleScroll() {
-  const statsSection = document.querySelector('.stats__section');
-  const statsSectionTop = statsSection.offsetTop;
-  const statsSectionHeight = statsSection.offsetHeight;
-  const windowBottom = window.pageYOffset + window.innerHeight;
-
-  if (windowBottom > statsSectionTop && window.pageYOffset < statsSectionTop + statsSectionHeight) {
-    animateStatistics();
-    window.removeEventListener('scroll', handleScroll);
-  }
+// Intersection Observer callback function
+function handleIntersection(entries, observer) {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      animateStatistics();
+      observer.unobserve(entry.target);
+    }
+  });
 }
 
-// Add scroll event listener
-window.addEventListener('scroll', handleScroll);
+// Create an Intersection Observer instance
+const observer = new IntersectionObserver(handleIntersection, { threshold: 0.2 });
+
+// Observe the stats section element
+const statsSection = document.querySelector('.stats__section');
+observer.observe(statsSection);
+
 
 
 // Get DOM elements
@@ -113,91 +327,6 @@ accordionItems.forEach((accordionItem) => {
 });
 
 
-
-
-
-
-
-// REUSEABLE FUNCTION
-// ALERTS
-const hideAlert = () => {
-    const el = document.querySelector('.alert');
-    if (el) el.parentElement.removeChild(el);
-};
-
-// type is 'success' or 'error'
-const showAlert = (type, msg) => {
-    hideAlert();
-    const markup = `<div class="alert alert--${type}">${msg}</div>`;
-    document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
-    window.setTimeout(hideAlert, 5000);
-};
-
-// MODALS
-const openModal = function(overlay, modal) {
-    overlay.classList.remove('hidden');
-    modal.classList.remove('hidden');
-}
-const closeModal = function(overlay, modal) {
-    overlay.classList.add('hidden');
-    modal.classList.add('hidden');
-}
-
-
-// Function to display the email verification modal
-const showEmailVerificationModal = (email) => {
-    // const modalContainer = document.querySelector('.email-verify__modal');
-    const modalContainer = document.querySelector('.email__drop-down');
-    const emailSpan = modalContainer.querySelector('.user__email');
-    emailSpan.textContent = email;
-    modalContainer.classList.remove('hidden');
-};
-
-// Function to close the email verification modal
-const closeEmailVerificationModal = () => {
-    const modalContainer = document.querySelector('.email__drop-down');
-    modalContainer.classList.add('hidden');
-};
-
-
-
-// FORMS functions
-const login = async (email, password, role) => {
-    try {
-        const res = await fetch('/api/users/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password, role }),
-        });
-    
-        if (!res.ok) {
-            throw new Error('Login request failed');
-        }
-    
-        const data = await res.json();
-    
-        if (data.data.role === 'admin') {
-            showAlert('error', 'Admins cannot log in through this form.');
-            spinOverlay.style.visibility = 'hidden';
-            return;
-        }
-    
-        if (data.status === 'success') {
-            showAlert('success', data.message);
-            window.setTimeout(() => {
-                // Redirect immediately after displaying success message
-                location.assign('/dashboard');
-                spinOverlay.style.visibility = 'hidden'
-            }, 1500);
-    
-        } else {
-            throw new Error(data.message || 'Login failed');
-        }
-    } catch (err) {
-        showAlert('error', err.message || 'Something went wrong, please try again!');
-    }
-  };
-  
 
 const adminAuthLogin = async (email, password) => {
     try {
@@ -285,30 +414,21 @@ const signup = async (...body) => {
 }
 
 // Event listener for close button in the email verification modal
-document.addEventListener('DOMContentLoaded', () => {
-    const closeButton = document.querySelector('.verify__close--icon');
+const closeButton = document.querySelector('.verify__close--icon');
+if(closeButton) {
     closeButton.addEventListener('click', closeEmailVerificationModal);
-});
 
 
 // FORMS controllers
-if(loginFrom) {
-    loginFrom.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const email = document.querySelector('.login__email').value;
-        const password = document.querySelector('.login__password').value;
-        const role = document.querySelector('.login__role').value;
-        login(email, password, role);
-    });
-}
-if(adminAuthForm) {
-    adminAuthForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const email = document.querySelector('#admin-email').value;
-        const password = document.querySelector('#admin-password').value;
-        adminAuthLogin(email, password);
-    });
-}
+
+// if(adminAuthForm) {
+//     adminAuthForm.addEventListener('submit', function(e) {
+//         e.preventDefault();
+//         const email = document.querySelector('#admin-email').value;
+//         const password = document.querySelector('#admin-password').value;
+//         adminAuthLogin(email, password);
+//     });
+// }
 if(logoutAll) logoutAll.forEach(el => el.addEventListener('click', logout));
 
 if(signupForm) {
@@ -327,21 +447,23 @@ if(signupForm) {
 }
 
 
-
 const uploadBtn = document.querySelector('.add-btn');
 const productOverlay = document.querySelector('.product__overlay');
 const productModal = document.querySelector('.product__modal');
 const productClose = document.querySelector('.form__close');
 const productForm = document.querySelector('.product__form');
 
+if(uploadBtn)
+    uploadBtn.addEventListener('click', function() {
+        openModal(productOverlay, productModal);
+        console.log('clicked')
+    });
 
-uploadBtn.addEventListener('click', function() {
-    openModal(productOverlay, productModal);
-    console.log('clicked')
-});
-productClose.addEventListener('click', function() {
-    closeModal(productOverlay, productModal)
-});
+if(productClose)
+    productClose.addEventListener('click', function() {
+        closeModal(productOverlay, productModal)
+    });
+
 
 const UploadProduct = async function(name, summary, description, price, commission, type, category, tools, link, recurring) {
     try {
@@ -456,24 +578,21 @@ const notifyBox = document.querySelector('.notification__hovered')
 const profileImg = document.querySelector('.nav__image')
 const profileBox = document.querySelector('.Profile__hovered')
 
+
 if(notifyIcon)
     notifyIcon.addEventListener('click', () => notifyBox.classList.toggle('hidden'));
     document.querySelector('.main__dashboard').addEventListener('click', () => notifyBox.classList.add('hidden'))
 
-if(notifyIcon)
+if(profileImg)
     profileImg.addEventListener('click', (e) => profileBox.classList.toggle('hidden'))
     document.querySelector('.main__dashboard').addEventListener('click', () => profileBox.classList.add('hidden'))
 
 
-/*
-// ACCORDIONS
-const accordionItem = document.querySelector('.faq__accordion--item');
-const accordionContentTitle = document.querySelectorAll('.accordion__content--title')
-const accordionContent = document.querySelectorAll('.faq__accordion--content');
-
-
-*/
 // MENUS
+const mainDashboard = document.querySelector('.main__dashboard')
+const dashboradWidth = mainDashboard.getBoundingClientRect();
+
+
 if (menu) {
     menu.addEventListener('click', function(e) {
         document.querySelector('.section__bottom').classList.toggle('close');
@@ -487,28 +606,27 @@ if (menu) {
         console.log(e.target.classList)
         menuButton.classList.toggle('hidden');
     });
+
+    if (dashboradWidth.right <= 950) {
+        menu.classList.remove('fa-close');
+        menu.classList.add('fa-bars');
+        menu.addEventListener('click', function(e) {
+            document.querySelector('.section__bottom').classList.toggle('open');
+            if(e.target.classList.contains('fa-bars')) {
+                e.target.classList.remove('fa-bars')
+                e.target.classList.add('fa-close')
+            } else {
+                e.target.classList.add('fa-bars')
+                e.target.classList.remove('fa-close')
+            }
+            console.log(e.target.classList)
+            menuButton.classList.toggle('hidden');
+        });
+    }
 }
 
 
-const mainDashboard = document.querySelector('.main__dashboard')
-const dashboradWidth = mainDashboard.getBoundingClientRect();
 
-if(dashboradWidth.right <= 950) {
-    menu.classList.remove('fa-close');
-    menu.classList.add('fa-bars');
-    menu.addEventListener('click', function(e) {
-        document.querySelector('.section__bottom').classList.toggle('open');
-        if(e.target.classList.contains('fa-bars')) {
-            e.target.classList.remove('fa-bars')
-            e.target.classList.add('fa-close')
-        } else {
-            e.target.classList.add('fa-bars')
-            e.target.classList.remove('fa-close')
-        }
-        console.log(e.target.classList)
-        menuButton.classList.toggle('hidden');
-    });
-}
 
 
 // forgotPassword.addEventListener('click', () => openModal( forgotOverlay, forgotModal));
@@ -527,13 +645,13 @@ const hoplinkGetModal = document.querySelector('.get__modal')
 const hoplinkClose = document.querySelector('.hoplink__icon');
 
 
-
-hoplinkOpen.forEach(el =>
-    el.addEventListener('click', () => {
-        openModal(hoplinkGetOverlay, hoplinkGetModal) 
-        document.body.style.overflow = 'hidden';
-    })
-);
+if(hoplinkOpen)
+    hoplinkOpen.forEach(el =>
+        el.addEventListener('click', () => {
+            openModal(hoplinkGetOverlay, hoplinkGetModal) 
+            document.body.style.overflow = 'hidden';
+        })
+    );
 
 const getHoplink = async function(username, trackingId) {
     try {
@@ -552,7 +670,7 @@ const getHoplink = async function(username, trackingId) {
 }
 
 
-if(hoplinkForm)
+if(hoplinkForm) {
     hoplinkForm.addEventListener('submit', function(e) {
         e.preventDefault();
         const hoplinkUsername = document.querySelector('.hoplink-username').value;
@@ -563,10 +681,11 @@ if(hoplinkForm)
     })
 
 
-hoplinkClose.addEventListener('click', () => {
-    closeModal(hoplinkGetOverlay, hoplinkGetModal)
-    document.body.style.overflowY = 'visible';
-})
+    hoplinkClose.addEventListener('click', () => {
+        closeModal(hoplinkGetOverlay, hoplinkGetModal)
+        document.body.style.overflowY = 'visible';
+    })
+}
 
 
 // const hoplinkCopyOverlay = document.querySelector('.copy__overlay')
@@ -629,4 +748,4 @@ if(formUpdate) {
     });
 }
 
-// document.querySeletor('a').addEventListener('click', () => spinOverlay.style.visibility = 'visible')
+}

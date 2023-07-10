@@ -15,31 +15,16 @@ head
 
     
 body
-    <main>
-        <form id="paymentForm" >
-            h2 Payment
-            <div class="form__item">
-                <label class="form__label" for="bank-name">Bank Name</label>
-                <input class="form__input" type="text" id="bank-name" required />
-            </div>
-            <div class="form__item">
-                <label class="form__label" for="holder-name">Holder Name</label>
-                <input class="form__input" type="text" id="holder-name" />
-            </div>
-            <div class="form__item">
-                <label class="form__label" for="account-number">Account Number</label>
-                <input class="form__input" type="text" id="account-number" required />
-            </div>
-            <div class="form__item">
-                <label class="form__label" for="cvv">CVV</label>
-                <input class="form__input" type="password" id="cvv" maxlength="3" placeholder='•••' />
-            </div>
-            //- <div class="form-grid">
-            //- </div>
-            <div class="form-submit">
-                <button class="btn form-btn" type="submit"> Pay </button>
-            </div>
-        </form>
-    </main>
+    main
+        .row.justify-content-center
+            .col-lg-6.container3.text-white.p-5
+                .container.pt-3
+                    form(name='myForm', action='/paystack/pay', method='POST')
+                        input#email(type='email', name='email', placeholder='Email', required)
+                        hr
+                        input#amount(type='number', name='amount', placeholder='Amount', required, min=100)
+                        .bttn.pt-2
+                            button(type='submit') ORDER
+            
 
     script(src="src/js/payment.js")

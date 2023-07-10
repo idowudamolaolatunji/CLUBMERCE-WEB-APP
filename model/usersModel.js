@@ -66,6 +66,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'avatar'
     },
+    isEmailVerified: {
+        type: Boolean,
+        default: false
+    },
     slug: String,
     bankName: String,
     bankAccountNumber: Number,
