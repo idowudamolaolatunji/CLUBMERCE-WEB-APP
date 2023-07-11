@@ -15,6 +15,7 @@ head
     link(rel="stylesheet" href="/src/css/dashboard.css")
     link(rel="stylesheet" href="/src/css/productPage.css")
 
+    script(defer src="/src/js/hoplink.js")
 
 
     title=title
@@ -54,8 +55,8 @@ body
                 .product__description
                     h2.product__heading--sec=`What is ${product.name}?`
                     span.description__text
-                        span.description__topic=product.name
-                        | Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt officiis at aspernatur reprehenderit vero sint voluptatibus error pariatur deserunt blanditiis ad velit, repudiandae rem quo! Nemo veniam iure atque labore dolorem esse consequatur eum. Neque, doloribus ab deserunt repudiandae natus aut placeat aspernatur tenetur mollitia doloremque facilis, Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores iusto sit exercitationem atque ipsam provident modi placeat officiis, assumenda quaerat nulla facere deserunt quam omnis eveniet eaque repudiandae, saepe amet molestiae aliquid eum laudantium laborum natus.
+                        span.description__topic=product.name 
+                        | &nbsp; Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt officiis at aspernatur reprehenderit vero sint voluptatibus error pariatur deserunt blanditiis ad velit, repudiandae rem quo! Nemo veniam iure atque labore dolorem esse consequatur eum. Neque, doloribus ab deserunt repudiandae natus aut placeat aspernatur tenetur mollitia doloremque facilis, Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores iusto sit exercitationem atque ipsam provident modi placeat officiis, assumenda quaerat nulla facere deserunt quam omnis eveniet eaque repudiandae, saepe amet molestiae aliquid eum laudantium laborum natus.
 
     section#why.product__section.why-you-should-promote__Section
         .product__section--container
@@ -160,6 +161,15 @@ body
                 span.email aff@brand-example.com 
                 |  and they will assist you as soon as possible. We look forward to working with you.
 
-    include _auth_footer
 
-    script(src="/src/js/index.js")
+    .hoplink__overlay.copy__overlay.hidden
+        .hoplink__modal.copy__modal
+            h2.dashboard__heading Copy HopLink
+            p.hoplink__text Paste this URL into your promotional materials.
+            p.hoplink__copy https://clubmerce.com
+            
+            .flexible
+                button.btn.hoplink__submit.btnOk Ok
+                button.hoplink__copy-button.outline Copy
+
+    include _auth_footer

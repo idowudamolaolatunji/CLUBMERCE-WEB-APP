@@ -131,9 +131,13 @@ const processPayment = async (amount, paymentData, orderInfo, product, user, res
                 await user.save({ validateBeforeSave: false });
 
                 const commission = await Commissions.create({
+                    // product: '64aa2367cd868dcbb0eebf13',
+                    // user: '64a5de9235821d01a124ee96',
+                    // commissions: 5000,
                     product: product._id,
                     user: user._id,
                     commissions: product.commissionAmount,
+                    status: 'pending'
                 });
 
                 Transaction.create({
@@ -151,39 +155,8 @@ const processPayment = async (amount, paymentData, orderInfo, product, user, res
             return res.redirect("/error");
         }
     };
-  };
+};
   
-
-
-// Check the payment response for success
-// if (paymentResponse.status === 200) {
-//     const transactionId = paymentResponse.data.transactionId;
-//     const paidAmount = paymentResponse.data.paidAmount;
-
-//     // Update the vendor, affiliate, commissions, product and their wallet balances
-//     user.wallet += product.commissionAmount;
-//     user.productSold += 1;
-//     product.ordersCount += 1
-//     // product.vendor.wallet += paidAmount - product.commissionAmount;
-//     product.profits += paidAmount - product.commissionAmount;
-//     // product.purchasesCount += 1;
-
-//     await product.save();
-//     await user.save({ validateBeforeSave: false });
-
-
-    // const commission = await Commissions.create({
-    //     product: product._id,
-    //     user: user._id,
-    //     commissions: product.commissionAmount,
-    // });
-// } else {
-//     res.status(400).json({ status: 'fail', message: 'Payment failed' });
-// }
-
-
-
-
         
 //get all orders
 exports.getAllOrders = async (req, res) => {

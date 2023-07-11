@@ -15,6 +15,8 @@ head
     link(rel="stylesheet" href="../src/css/dashboard.css")
     link(rel="stylesheet" href="../src/css/query_dashboard.css")
 
+    script(defer src="/src/js/hoplink.js")
+    script(defer src="/src/js/dashboard.js")
 
     title=title
 body
@@ -143,32 +145,31 @@ body
                                         span.product__commission
                                             p.commision avg commission 
                                             span.commission__amount= `₦ ${product.price}`
-                                            -console.log(product.slug)
-                                        a.btn.product__button.promote(data-set=product.slug) Promote
+                                        a.btn.product__button.promote(data-product=product.slug) Promote
                                         a.product__button.page(target="_blank" href=`/marketplace/${product.slug}`) affiliate page
 
                                 
-                .hoplink__overlay.get__overlay.hidden
-                .hoplink__modal.get__modal.hidden
-                    i.fa-solid.fa-close.icon.hoplink__icon
-                    h2.dashboard__heading Generate HopLink
-                    p.hoplink__text Earn commission for every customer you refer to this product using your personalized affiliate hoplink.
-                    form.hoplink#hoplink
-                        .hoplink__body
-                            input.hoplink__input#hoplink-username(type='text' required='' placeholder='Username')
-                            p.hoplink__body--text Required
-                        .hoplink__body
-                            input.hoplink__input#hoplink-trackingid(type='text' placeholder='Tracing Id')
-                            p.hoplink__body--text Optional
-                        button.btn.hoplink__submit.submit(type='submit') Generate Hoplink
+                    .hoplink__overlay.get__overlay.hidden
+                    .hoplink__modal.get__modal.hidden
+                        i.fa-solid.fa-close.icon.hoplink__icon
+                        h2.dashboard__heading Generate HopLink
+                        p.hoplink__text Earn commission for every customer you refer to this product using your personalized affiliate hoplink.
+                        form.hoplink#hoplink
+                            .hoplink__body
+                                input.hoplink__input#hoplink-username(type='text' required='' placeholder='Username')
+                                p.hoplink__body--text Required
+                            .hoplink__body
+                                input.hoplink__input#hoplink-trackingid(type='text' placeholder='Tracing Id')
+                                p.hoplink__body--text Optional
+                            button.btn.hoplink__submit.submit(type='submit') Generate Hoplink
 
 
                 //- .hoplink__overlay.copy__overlay
                     .hoplink__modal.copy__modal
                         h2.dashboard__heading Copy HopLink
-                        p.hoplink__text Paste this URL into your promotional materials.
+                        .flexible
+                            p.hoplink__text Paste this URL into your promotional materials.
+                            button.hoplink__copy-button(type="button")
                         p.hoplink__copy https://clubmerce.com/product/85vfhbhfcbvhjfbvhjbchvbfvhjfvhf94rfjnvvfnfv/fbdfhjnbire84
                         
                         button.btn.hoplink__submit.btnOk Ok
-
-    script( src="src/js/index.js")

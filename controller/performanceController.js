@@ -3,30 +3,6 @@ const User = require('../model/usersModel');
 const Product = require('../model/productsModel');
 
 
-exports.affiliateAndProductPerformance = async (req, res) => {
-    try {
-        // Retrieve all users except admins and vendors (based on your user roles)
-        // const users = await User.find({ role: { $ne: 'admin' } });
-        const users = await User.find({ role: { $nin: ['admin', 'vendor'] } }).select('clicks').select('commission');
-
-        // and products
-        const products = await Product.find().select('purchasesCount').select('clicks');
-        console.log(users, products);
-  
-        // Perform calculations
-        const totalLinkClicks = users.reduce((total, user) => total + user.clicks, 0);
-        const totalPurchases = products.reduce((total, product) => total + product.purchasesCount, 0);
-        const totalProductClicks = products.reduce((total, product) => total + product.clicks, 0);
-        // const 
-
-
-
-    } catch(err) {}
-}
-
-
-
-
 // Admin gets every performance
 exports.allPerformance = async (req, res) => {
     try {
@@ -57,12 +33,12 @@ exports.allPerformance = async (req, res) => {
         res.status(200).json({
             status: 'success', 
             data: { 
-                performance
+                performance,
             }
         });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ message: 'Internal server error' });
     }
-  };
+};
   

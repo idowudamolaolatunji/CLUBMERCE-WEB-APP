@@ -14,7 +14,7 @@ head
     link(rel="stylesheet" href="src/css/dashboard.css")
     link(rel="stylesheet" href="src/css/query_dashboard.css")
 
-    script(src="src/js/index.js")
+    script(defer src="src/js/dashboard.js")
 
     title=title
 body
@@ -54,7 +54,7 @@ body
                                     img.profile__image(src=`asset/img/${user.image}.png` alt=`customer's (${user.username}) photo`)
                                     p.profile__name= user.fullName
                                 a.profile__link.nav__link(href="/profile") My profile
-                                button.profile__button.nav__link#logout signout&nbsp;
+                                button.profile__button.nav__link.nav__logout signout&nbsp;
                                     i.fa-solid.fa-arrow-right-to-bracket.profile__icon
 
 
@@ -104,7 +104,7 @@ body
                                     i.fa-solid.fa-credit-card.icon.menu__icon
                                     p Manage Payments
                             li.menu__item
-                                a.menu__link#logout
+                                a.menu__link.admin__menu--logout
                                     i.fa-solid.fa-arrow-right-to-bracket.icon.menu__icon
                                     | signout&nbsp;
                
@@ -117,7 +117,7 @@ body
                                     img.menu__profile-image(src=`asset/img/${user.image}.png` alt=`customer's (${user.username}) photo`)
                                     p profile
                             li.menu__item
-                                button.menu__button#logout
+                                button.menu__button.menu__logout
                                     | signout&nbsp;
                                     i.fa-solid.fa-arrow-right-to-bracket
             main.main__dashboard
@@ -150,7 +150,7 @@ body
                                             //- p.insignt__text= user.affiliateUrl.length
                                             p.insignt__text= user.affiliateLinks.length
                                             i.fa-solid.fa-bullhorn.insight__icon
-                                        p.insignt__title Promotions
+                                        p.insignt__title Promotion url
 
                                 .dashboard__table
                                     .table
@@ -162,24 +162,28 @@ body
                                             span.table-head-content Commission amount
                                             span.table-head-content Status
                                             span.table-head-content date
-                                        .table-row
-                                            span.table-row-content.table-row-product
-                                                img.table-product__image(src='../product.jpg' alt='')
-                                                span
-                                                    p.table-product__name Test product 2
-                                                    p.table-product__niche E-books
-                                            span.table-row-content
-                                                .price $&nbsp;90
-                                            span.table-row-content
-                                                .status.status--pending pending
-                                            span.table-row-content
-                                                .date 12/02/23
-                                        .table-row-message
-                                            p.note-no You've have not made any sale commission...
+
+                                        -if(commission > 0)
+                                            .table-row
+                                                span.table-row-content.table-row-product
+                                                    img.table-product__image(src=`asset/img/product.jpg` alt='')
+                                                    span
+                                                        p.table-product__name= commission.product
+                                                        p.table-product__niche= commission.product.category
+                                                span.table-row-content
+                                                    .price `₦ ${commission.amount}`
+                                                span.table-row-content
+                                                    .status.status--pending= commission.status
+                                                span.table-row-content
+                                                    .date= commission.createdAt
+                                        - else
+                                            .table-row-message
+                                                p.note-no You've have not made any sale commission...
 
                             
 
                         -if(user.role === "vendor")
+                            -console.log(products, user)
                             .main__dashboard--container
                                 h3.dashboard__heading=`Welcome back, ${user.business ? user.fullName.split(' ')[0] : user.businessName}`
                                 .dashboard__insights 

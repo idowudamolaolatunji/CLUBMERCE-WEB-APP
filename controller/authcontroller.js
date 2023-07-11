@@ -12,8 +12,9 @@ const sendEmail = require('../utils/Email');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 const Product = require("./../model/productsModel");
-const generateLink = require('./../utils/generateLink')
 
+
+express().use(cookieParser())
 
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
@@ -46,18 +47,28 @@ const createCookie = function(statusCode, user, res, message) {
   });
 }
 
-// Generate the email confirmation link
-function generateEmailConfirmationLink(email) {
-    // Generate a unique token or code to include in the confirmation link
-    const confirmationToken = generateUniqueTokenOrCode();
-  
-    // Return the confirmation link with the token or code
-    return `http://example.com/confirm-email?token=${confirmationToken}&email=${email}`;
-  }
-  
- 
 
-  
+const sendSignUpEmailToken = async (user) => {
+    try {
+        const token = signToken( user._id )
+
+        // Create a verification URL for the user
+        const verificationUrl = `${req.protocol}://${req.get('host')}/api/auth/verify-email/${token}`;
+        const message = `
+            Please verify your email address \n
+            Click ${verificationUrl}"> \n to verify your email...`;
+
+        await sendEmail({
+        email: user.email,
+        subject: 'Verify Your Email Address',
+        message
+        });
+
+        return token;
+    } catch(err) {
+        console.log(err)
+    }
+}
 
 
 //////////////////////////////////////////////
@@ -76,20 +87,8 @@ exports.signup = catchAsync(async (req, res) => {
         role: req.body.role,
     });
 
-    const token = signToken( newUser._id )
-
-    // Create a verification URL for the user
-    const verificationUrl = `${req.protocol}://${req.get('host')}/api/auth/verify-email/${token}`;
-    const message = `
-        Please verify your email address \n
-        Click ${verificationUrl}"> \n to verify your email...`;
-
-    await sendEmail({
-      email: newUser.email,
-      subject: 'Verify Your Email Address',
-      message
-    });
-
+    
+    // sendSignUpEmailToken(newUser)
 
     res.status(201).json({
         status: "success",
@@ -131,59 +130,53 @@ exports.verifyEmail = async (req, res) => {
 
 // Login
 exports.login = catchAsync(async (req, res, next) => {
-  const { email, password, role} = req.body;
+    const { email, password, role} = req.body;
 
-  if (!email || !password) {
-    return next(new AppError('Please provide email and password!', 400));
-  }
-  // 2) Check if user exists rs&& password is correct
-  const user = await User.findOne({ email }).select('+password');
-
-  if (!user || !(await user.comparePassword(password, user.password)) || role !== user.role) {
-    return next(new AppError('Incorrect email or password or role', 401));
-  }
-  //=//=//=//=//=//=//=//=//=//
-  const token = signToken(user._id);
-  const cookieOptions = {
-    expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
-    httpOnly: true
-  }
-  if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-  res.cookie('jwt', token, cookieOptions);
-  //=//=//=//=//=//=//=//=//=//
-
-  // Remove password from output
-  user.password = undefined;
-
-  res.status(200).json({
-    status: "success",
-    message: "Successfully logged in",
-    token,
-    data: {
-      user,
+    if (!email || !password) {
+        return next(new AppError('Please provide email and password!', 400));
     }
-  })
-});
+    // 2) Check if user exists rs&& password is correct
+    const user = await User.findOne({ email }).select('+password');
+
+    if (!user || !(await user.comparePassword(password, user.password)) || role !== user.role) {
+        return next(new AppError('Incorrect email or password or role', 401));
+    }
+    //=//=//=//=//=//=//=//=//=//
+    const token = signToken(user._id);
+    const cookieOptions = {
+        expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
+        httpOnly: true
+    }
+    if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+    res.cookie('jwt', token, cookieOptions);
+    //=//=//=//=//=//=//=//=//=//
+
+    // Remove password from output
+    user.password = undefined;
+
+    res.status(200).json({
+        status: "success",
+        message: "Successfully logged in",
+        token,
+        data: {
+            user,
+        }
+    })
+  });
 
 
 // logout
-exports.logout = async (req, res) => {
-    try {
-        const token = req.cookies.jwt;
+exports.logout = catchAsync(async (req, res) => {
+    const token = req.cookies.jwt;
 
-        if (!token) {
+    if (!token) {
         return res.status(401).json({ error: 'You are not logged in' });
-        }
-
-        // Clear the token cookie
-        res.clearCookie('jwt');
-        res.redirect('/login')
-
-        res.status(200).json({ message: 'Logout successful' });
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to logout' });
     }
-};
+
+    // Clear the token cookie
+    res.clearCookie('jwt').redirect('/login')
+
+})
   
 
 
@@ -383,9 +376,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
   // 3) Send it to user's email
   try {
-    const resetURL = `${req.protocol}://${req.get(
-      'host'
-    )}/api/v1/users/resetPassword/${resetToken}`;
+    const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
     await new Email(user, resetURL).sendPasswordReset();
 
     res.status(200).json({
@@ -403,6 +394,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     );
   }
 });
+
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
   // 1) Get user based on the token
@@ -446,47 +438,36 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
 // Updating current logged in user password
 exports.updatePassword = catchAsync(async (req, res, next) => {
-		// get user 
-		const user = await User.findById(req.user.id).select('+password');
-		
-		// check if POSTED current password is correct
-		if(!await user.comparePassword(req.body.passwordCurrent, user.password)) {
-			return next(new AppError('Your current password is wrong.', 401));
-		}
+  // get user 
+  const user = await User.findById(req.user.id).select('+password');
+  
+  // check if POSTED current password is correct
+  if(!await user.comparePassword(req.body.passwordCurrent, user.password)) {
+    return next(new AppError('Your current password is wrong.', 401));
+  }
 
-		// if so, update user password
-		user.passsword = req.body.passsword;
-		user.passwordConfirm = req.body.passwordConfirm;
-		await user.save();
-		// User.findByIdAndUpdate, will not work here...
+  // if so, update user password
+  user.passsword = req.body.passsword;
+  user.passwordConfirm = req.body.passwordConfirm;
+  await user.save();
+  // User.findByIdAndUpdate, will not work here...
 
-		// log user in, send jwt
-		const token = signToken(user._id);
+  // log user in, send jwt
+  const token = signToken(user._id);
 
-    const cookieOptions = {
-      expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
-      httpOnly: true
+  const cookieOptions = {
+    expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
+    httpOnly: true
+  }
+  if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  res.cookies('jwt', token, cookieOptions);
+
+  res.status(201).json({
+    status: "success",
+    token,
+    data: {
+      user,
     }
-    if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-    res.cookies('jwt', token, cookieOptions);
-
-		res.status(201).json({
-			status: "success",
-			token,
-			data: {
-				user,
-			}
-		});
+  });
 
 })
-
-
-/*
-  vendor's dashboard products listing and catalog and reports 
-  report mechnism, report system for recording commission and product
-  affliate dashboard reports and commission
-
-  ************LATER************
-  payment integration
-  trackable and unique affliate link for promotion
-*/

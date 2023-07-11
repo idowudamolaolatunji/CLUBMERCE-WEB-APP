@@ -24,39 +24,39 @@ block content
             .signup__container.grid
                 .signup__form--image
                     img.form__image(src='../../asset/img/signup_new.jpg')
-                form.signup
+                form.signup(autocomplete="off")
                     h3.form__heading
                         | Create an account with 
                         span.form__extra Clubmerce
                     .signup__grid.signup__name
                         .form__item
                             label.form__item--label(for='fullName') Fullname
-                            input.form__item--input.signup__fullname(name='fullName' type='text' placeholder='Enter your Full Name' required='')
+                            input.form__item--input.signup__fullname(type='text' id="fullName" placeholder='Enter your Full Name' required='')
                         .form__item
                             label.form__item--label(for='username') Username
-                            input.form__item--input.signup__username(name='username' type='text' placeholder='Choose a Username' required='')
+                            input.form__item--input.signup__username(type='text' id="username" placeholder='Choose a Username' required='')
                     .form__item
                         label.form__item--label(for='email') Email Address
-                        input.form__item--input.signup__email(name='email' type='email' placeholder='max123@example.com' required='')
+                        input.form__item--input.signup__email(type='email' id="email"  placeholder='max123@example.com' required='')
                     .signup__grid.signup__password
                         .form__item
                             label.form__item--label(for='password') Password
-                            input.form__item--input.signup__passwordMain(name='password' type='password' placeholder='••••••••••••', required, minlength='8')
+                            input.form__item--input.signup__passwordMain(type='password' id="password" placeholder='••••••••••••', required, minlength='8')
                         .form__item
                             label.form__item--label(for='passwordConfirm') Confirm Password
-                            input.form__item--input.signup__passwordconfirm(name='passwordConfirm' type='password' placeholder='••••••••••••', required, minlength='8')
+                            input.form__item--input.signup__passwordconfirm(type='password' id="passwordConfirm" placeholder='••••••••••••', required, minlength='8')
                     .signup__grid
                         .form__item.select
                             label.form__item--label(for='country') Country
-                            select.form__item--input.select--input.signup__country(name='country' required='')
+                            select.form__item--input.select--input.signup__country(id="country" required='')
                                 option(disable selected value="") Select your country
                                 option(value="nigeria") Nigeria
                         .form__item
-                            label.form__item--label(for='number') Phone Number
-                            input.form__item--input.signup__phone(id="phone" name='number' type='tel' placeholder='+1 039 456 827' required='')
+                            label.form__item--label(for='phone') Phone Number
+                            input.form__item--input.signup__phone(id="phone" type='tel' placeholder='+1 039 456 827' required='')
                         .form__item.select
                             label.form__item--label(for='role') Role
-                            select.form__item--input.select--input.signup__role(name='role' required='')
+                            select.form__item--input.select--input.signup__role(id="role" required='')
                                 option(disable selected value="") Choose a role 
                                 option(value="affiliate") Affiliate
                                 option(value="vendor") Vendor
@@ -77,11 +77,11 @@ block content
 
         .email__drop-down.drop-down__shadow.hidden
             .email-verify__modal.modal
-                i.fasolid.fa-close.close__icon.verify__close--icon 
+                i.fa-solid.fa-close.close__icon.verify__close--icon 
                 .modal__container
                     h3.extra__heading 
                         | Successful signup!
-                    // icon
+                    i.fa-solid.fa-thumbs-up.welcome
                     p.modal__content A link has been sent to&nbsp;
                         span.user__email emailaddress@example.com
                         br

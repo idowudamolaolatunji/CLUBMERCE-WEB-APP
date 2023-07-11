@@ -93,6 +93,20 @@ button {
     display: none;
     opacity: 0;
 }
+
+.flexible {
+    display: flex;
+    justify-content: space-between;
+}
+
+.outline {
+    padding: 0;
+    color: #444;
+    font-weight: 600;
+    background-color: transparent;
+    margin-right: 1rem;
+}
+
 .section {
     padding: 10rem 0;
 }

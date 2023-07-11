@@ -1,5 +1,6 @@
 const User = require('../model/usersModel')
 const Product = require('../model/productsModel')
+const Commissions = require('../model/commissionModel')
 
 // Global
 exports.home = (req, res) => {
@@ -82,9 +83,13 @@ exports.getProduct = async (req, res) => {
 exports.dashboard = async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
-        // const products = await Product.find({ vendor: user._id });
+        const products = await Product.find({ vendor: user._id });
+        const commission = await Commissions.find({ user: req.user.id})
+
         res.status(200).render('base_account', {
             user,
+            products,
+            commission,
             title: `${user.role}'s dashboard`,
         });
     } catch (err) {

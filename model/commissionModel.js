@@ -10,6 +10,10 @@ const commissionSchema = new mongoose.Schema({
         ref: 'User'
     },
     commissionAmount: Number,
+    status: {
+        type: String,
+        default: 'pending'
+    },
     createdAt: {
         type: Date,
         default: Date.now(),
