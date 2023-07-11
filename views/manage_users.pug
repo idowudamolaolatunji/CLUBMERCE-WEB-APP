@@ -1,53 +1,43 @@
 extends base_account 
 
 block content 
-    <div class="table table-mu">
-        <div class="table-title">
-            <h4 class="table-heading">Manage All Users</h4>
-        </div>
-        <div class="table-head-mu">
-            <span class="table-head-content">User</span>
-            <span class="table-head-content">Email</span>
-            <span class="table-head-content">row</span>
-            <span class="table-head-content">nationality</span>
-            <span class="table-head-content">status</span>
-            <span class="table-head-content">actions</span>
-        </div>
+    //- manage all users
+    
+    .dashboard__table
+        .table.table-mu
+            .table-title
+                h4.table-heading Manage All Users
+            .table-head-mu
+                span.table-head-content User
+                span.table-head-content Email
+                span.table-head-content row
+                span.table-head-content nationality
+                span.table-head-content status
+                span.table-head-content actions
 
-        <div class="table-row-mu">
-            <span class="table-row-content table-row-product">
-                <img class="table-user__image" src="../product.jpg" alt="" />
-                <span>
-                    <p class="table-user__name">Test user 1</p>
-                    <p class="table-user__username">test123</p>
-                </span>
-            </span>
-            <span class="table-row-content"><p class="email">test1234@exapmle.com</p></span>
-            <span class="table-row-content"><p class="role">Affiliate</p></span>
-            <span class="table-row-content"><p class="country"></p>Nigeria</span>
-            <span class="table-row-content"><p class="status status--active">active</p></span>
+        each user of users
+            .table-row-mu
+                span.table-row-content.table-row-product
+                    img.table-user__image(src='asset/img/avatar.jpg' alt='')
+                    span
+                        p.table-user__name= user.fullName
+                        p.table-user__username= user.username
+                span.table-row-content
+                    p.email= user.email
+                span.table-row-content
+                    p.role= user.role
+                span.table-row-content
+                    p.country= user.country
+                span.table-row-content
+                    p.status.status--active= user.active
+                span.table-row-content.table-row-btn
+                    button.btn-delete.table-btn Delete
+                    //- button.btn-edit.table-btn Edit
 
-            <span class="table-row-content table-row-btn">
-                <button class="btn-edit table-btn">Edit</button>
-                <button class="btn-delete table-btn">Delete</button>
-            </span>
-        </div>
-        <div class="table-row-mu">
-            <span class="table-row-content table-row-product">
-                <img class="table-user__image" src="../product.jpg" alt="" />
-                <span>
-                    <p class="table-user__name">Test user 2</p>
-                    <p class="table-user__niche">testuser23</p>
-                </span>
-            </span>
-            <span class="table-row-content"><p class="email">test12edfdfrefrefrrf34@exapmle.com</p></span>
-            <span class="table-row-content"><p class="role">Vendor</p></span>
-            <span class="table-row-content"><p class="country">United state</p></span>
-            <span class="table-row-content"><p class="status status--inactive">inactive</p></span>
-
-            <span class="table-row-content table-row-btn">
-                <button class="btn-edit table-btn">Edit</button>
-                <button class="btn-delete table-btn">Delete</button>
-            </span>
-        </div>
-    </div>
+            //- .delete__overlay
+                .delete__modal
+                    i.fa-solid.fa-close.delete__icon
+                    p.delete__text Are you sure you want to delete this &grave;${item}&grave;
+                    .delete__action
+                        button.delete__button.btn-yes Yes
+                        button.delete__button.btn-no No

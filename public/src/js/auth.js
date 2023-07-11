@@ -69,7 +69,7 @@ const login = async (email, password, role) => {
                 location.assign('/dashboard');
                 spinOverlay.style.visibility = 'hidden'
             }, 3000);
-            showAlert('success', data.message);
+            showAlert('success', 'Auth Successful!');
             
         } else if(data.status === 'fail') {
             spinOverlay.style.visibility = 'hidden';
@@ -87,7 +87,7 @@ const adminAuthLogin = async (email, password) => {
     try {
         console.log(email, password);
         
-        const res = await fetch('/api/users/login', {
+        const res = await fetch('/api/users/login-admin', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password }),
@@ -96,8 +96,9 @@ const adminAuthLogin = async (email, password) => {
         spinOverlay.style.visibility = 'visible'
         // we await the response
         const data = await res.json();
+        console.log(data)
         if (data.status === 'success') {
-            if(data.data.role !== 'admin' ) {
+            if(data.data.role === 'vendor' || data.data.role === 'affiliate') {
                 showAlert('error', 'Only admins can log in through this form.');
                 spinOverlay.style.visibility = 'hidden';
                 return;

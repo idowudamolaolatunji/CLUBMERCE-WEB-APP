@@ -8,65 +8,58 @@ block content
 
         section.vendor__dashboard
             .dashboard__table
-                <div class="table table-app">
-                    <div class="table-title">
-                        <h4 class="table-heading">Affiliate Performance</h4>
-                    </div>
-                    <div class="table-head-app">
-                        <span class="table-head-content">Product</span>
-                        <span class="table-head-content">commission</span>
-                        <span class="table-head-content">Link purchase</span>
-                        <span class="table-head-content">link clicks</span>
-                        <span class="table-head-content">promotion link</span>
-                    </div>
+                .table.table-app
+                    .table-title
+                        h4.table-heading Affiliate Performance
+                    .table-head-app
+                        span.table-head-content Product
+                        span.table-head-content commission
+                        span.table-head-content Link purchase
+                        span.table-head-content link clicks
+                        span.table-head-content promotion link
+                    .table-row-app
+                        span.table-row-content.table-row-product
+                            img.table-product__image(src='../product.jpg' alt='')
+                            span
+                                p.table-product__name Test product 1
+                                p.table-product__category health &amp; fitness
+                        span.table-row-content
+                            mmission $&nbsp;230
+                        span.table-row-content
+                            p.purchase 4
+                        span.table-row-content
+                            p.click 20
+                        span.table-row-content
+                            p.promotion 1
 
-                    <div class="table-row-app">
-                        <span class="table-row-content table-row-product">
-                            <img class="table-product__image" src="../product.jpg" alt="" />
-                            <span>
-                                <p class="table-product__name">Test product 1</p>
-                                <p class="table-product__category">health & fitness</p>
-                            </span>
-                        </span>
-                        <span class="table-row-content"><p class="commission">$&nbsp;230</p></span>
-                        <span class="table-row-content"><p class="purchase">4</p></span>
-                        <span class="table-row-content"><p class="click">20</p></span>
-                        <span class="table-row-content"><p class="promotion">1</p></span>
-                        
-                    </div>
-                </div>
     
     -if(user.role === 'vendor')
         h3.dashboard__heading My product perfomance
         section.vendor__dashboard
             .dashboard__table
-                <div class="table table-vpp">
-                    <div class="table-title">
-                        <h4 class="table-heading">Products Perfomance</h4>
-                    </div>
-                    <div class="table-head-vpp">
-                        <span class="table-head-content">Product</span>
-                        <span class="table-head-content">purchases</span>
-                        <span class="table-head-content">order</span>
-                        <span class="table-head-content">profit</span>
-                        <span class="table-head-content">Aff gravity</span>
-                        <span class="table-head-content">Clicks</span>
-                    </div>
-
-                    <div class="table-row-vpp">
-                        <span class="table-row-content table-row-product">
-                            <img class="table-product__image" src="../product.jpg" alt="" />
-                            <span>
-                                <p class="table-product__name">Test product 1</p>
-                                <p class="table-product__category">health & fitness</p>
-                            </span>
-                        </span>
-                        <span class="table-row-content"><p class="purchase">12</p></span>
-                        <span class="table-row-content"><p class="order">27</p></span>
-                        <span class="table-row-content"><p class="profit">$&nbsp;460</p></span>
-                        <span class="table-row-content"><p class="aff-gravity">20</p></span>
-                        <span class="table-row-content"><p class="click">230</p></span>
-                        
-                    </div>
-                    
-                </div>
+                .table.table-vpp
+                    .table-title
+                        h4.table-heading Products Perfomance
+                    .table-head-vpp
+                        span.table-head-content Product
+                        span.table-head-content purchases
+                        span.table-head-content order
+                        span.table-head-content profit
+                        span.table-head-content Aff gravity
+                        span.table-head-content Clicks
+                    .table-row-vpp
+                        span.table-row-content.table-row-product
+                            img.table-product__image(src='../product.jpg' alt='')
+                            span
+                                p.table-product__name Test product 1
+                                p.table-product__category health &amp; fitness
+                        span.table-row-content
+                            p.purchase 12
+                        span.table-row-content
+                            p.order 27
+                        span.table-row-content
+                            p.profit $&nbsp;460
+                        span.table-row-content
+                            p.aff-gravity 20
+                        span.table-row-content
+                            p.click 230

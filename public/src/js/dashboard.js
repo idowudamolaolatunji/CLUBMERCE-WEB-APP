@@ -121,6 +121,7 @@ const logout = async () => {
         showAlert('error', 'Something went wrong. Please try again.');
     }
 };
+
 if(menuLogout) menuLogout.forEach(el => el.addEventListener('click', logout));
 if(navLogout) navLogout.forEach(el => el.addEventListener('click', logout));
 if(adminLogout) adminLogout.forEach(el => el.addEventListener('click', logout));
@@ -130,7 +131,6 @@ if(adminLogout) adminLogout.forEach(el => el.addEventListener('click', logout));
 if(uploadBtn) {
     uploadBtn.addEventListener('click', function() {
         openModal(productOverlay, productModal);
-        console.log('clicked')
     });
 }
 
@@ -171,6 +171,137 @@ if(productForm) {
     });
 }
 
+
+// delete product
+const showDeleteModal = function(item) {
+    const html = `
+      <div class="delete__overlay">
+          <div class='delete__modal'>
+              <i class="fa-solid fa-close delete__icon"></i>
+              <p class="delete__text">
+                  Are you sure you want to delete this ${item}?
+              </p>
+              <div class="delete__action">
+                  <button class="delete__button btn-yes">Yes</button>
+                  <button class="delete__button btn-no">No</button>
+              </div>
+          </div>
+      </div>
+    `;
+  
+    document.body.insertAdjacentHTML('afterbegin', html);
+}
+
+const deleteButton = document.querySelectorAll('.btn-delete');
+const closeAdjacentModal = () => {
+    const deleteOverlay = document.querySelector('.delete__overlay');
+    if (deleteOverlay) {
+      deleteOverlay.remove();
+    }
+  };
+
+
+if(deleteButton)
+    deleteButton.forEach(el => el.addEventListener('click', function(e) {
+        const productId = this.dataset.productId; // Get the product ID from the data attribute
+        const existingModal = document.querySelector('.delete__overlay');
+        if (existingModal) {
+            return; // Exit the function if the modal already exists
+        }
+        showDeleteModal('product');
+        console.log(productId)
+
+        document.querySelector('.btn-yes').addEventListener('click', function() {
+            // Call the deleteProduct function with the product ID
+            deleteProduct(productId);
+            // location.reload(true)
+        })
+        document.querySelector('.btn-no').addEventListener('click', () => {
+        closeAdjacentModal();
+        })
+        document.querySelector('.delete__icon').addEventListener('click', () => {
+            closeAdjacentModal();
+        } )
+    }));
+
+// Function to delete the product
+async function deleteProduct (productId) {
+    // Perform the delete request using the product ID
+    try {
+        const res = await fetch(`/api/products/${productId}`, {
+            method: 'DELETE',
+        })
+            
+        const data = await res.json()
+        console.log(data);
+        
+    } catch(error)  {
+        console.error(error);
+    }
+}
+
+
+
+
+
+
+
+
+/*
+// update 
+// const updateBtn = document.querySelector('.add-btn');
+// const productUploadOverlay = document.querySelector('.product-update__overlay');
+// const productUploadModal = document.querySelector('.product-update__modal');
+// const productUpdateClose = document.querySelector('.form-update__close-icon');
+// const productUploadForm = document.querySelector('.product__form');
+
+
+
+if(updateBtn) {
+    updateBtn.addEventListener('click', function() {
+        openModal(productOverlay, productModal);
+        console.log('clicked')
+    });
+}
+
+if(productUpdateClose) {
+    productClose.addEventListener('click', function() {
+        closeModal(productOverlay, productModal)
+    });
+}
+
+const UploadUpdateProduct = async function(name, summary, description, price, commission, type, category, tools, link, recurring) {
+    try {
+        const res = await fetch('/api/products', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({name, summary, description, price, commission, type, category, tools, link, recurring}),
+        });
+        const data = await res.json();
+        console.log(res, data);
+    } catch(err) {
+        console.log(err)
+    }
+}
+
+
+if(productUploadForm) {
+    productUploadForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.querySelector('#product-update__name').value
+        const summary = document.querySelector('#product-update__summary').value
+        const description = document.querySelector('#product-update__description').value
+        const price = document.querySelector('#product-update__price').value
+        const commission = document.querySelector('#product-update__commission').value
+        const type = document.querySelector('#product-update__type').value
+        const category = document.querySelector('#product-update__category').value
+        const tools = document.querySelector('#product-update__tools').value
+        const link = document.querySelector('#product-update__link').value
+        const recurring = document.querySelector('#product-update__recurring').value
+        UploadUpdateProduct(name, summary, description, price, commission, type, category, tools, link, recurring)
+    });
+}
+*/
 
 // const orderProductPage = async function() {
 //     try {

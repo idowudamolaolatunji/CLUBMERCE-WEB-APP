@@ -29,7 +29,6 @@ router.get('/transaction', authController.isLoggedIn, viewController.transaction
 
 // admin
 router.get('/admin-auth-login', viewController.adminAuth);
-router.get('/all-performance', authController.protect, viewController.allPerformance);
 router.get('/product-marketplace', authController.isLoggedIn, viewController.productMarketplace);
 router.get('/manage-users', authController.isLoggedIn, viewController.manageUsers);
 router.get('/manage-products', authController.isLoggedIn, viewController.manageProducts);

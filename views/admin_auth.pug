@@ -14,6 +14,9 @@ head
     link(rel="stylesheet" href="src/css/form.css")
     link(rel="stylesheet" href="src/css/main.css")
 
+    script(defer src="src/js/auth.js")
+
+
     title Admin auth
 body
 
@@ -48,5 +51,3 @@ body
                         input.form__item--input#admin-password(name="password" type="password" placeholder='••••••••••••', required, minlength='8')
 
                     button.form__button(type="submit") Login
-
-    script(src="src/js/index.js")

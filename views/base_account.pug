@@ -83,7 +83,7 @@ body
                             +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
 
                         -if(user.role === 'admin')
-                            +menuItem('all-performance', 'All perfomance', 'fa-solid fa-chart-simple', false)
+                            +menuItem('dashboard', 'All perfomance', 'fa-solid fa-chart-simple', false)
                             +menuItem('product-marketplace', 'Product Marketplace', 'fa-solid fa-clipboard-list', false)
                             +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
 
@@ -243,8 +243,38 @@ body
                                         .table-row-message
                                             p.note-no You've no order at the moment...
 
+                   
 
                         -if(user.role == "admin")
-                            p this is the admin
+                            .main__dashboard--container
+                                h3.dashboard__heading=`Welcome to Admin Dashboard`
+                                .dashboard__insights 
+                                    .insight.insight__one
+                                        span 
+                                            p.insignt__text 0
+                                            i.fa-solid.fa-coins.insight__icon
+                                        p.insignt__title Total Users
+
+                                    .insight.insight__two
+                                        span 
+                                            p.insignt__text 0
+                                            i.fa-solid.fa-comments-dollar.insight__icon
+                                        p.insignt__title Total Products
+
+                                    .insight.insight__three
+                                        span
+                                            p.insignt__text 0
+                                            i.fa-solid.fa-up-right-from-square.insight__icon
+                                        p.insignt__title conversion Rate
+
+                                    .insight.insight__four
+                                        span
+                                            p.insignt__text 0
+                                            i.fa-solid.fa-bullhorn.insight__icon
+                                        p.insignt__title CTR
+                           
+
+                               
+                                        
 
                 include _auth_footer

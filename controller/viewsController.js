@@ -1,6 +1,7 @@
 const User = require('../model/usersModel')
 const Product = require('../model/productsModel')
-const Commissions = require('../model/commissionModel')
+const Commissions = require('../model/commissionModel') 
+const Transaction = require('../model/transactionModel') 
 
 // Global
 exports.home = (req, res) => {
@@ -127,20 +128,40 @@ exports.productCatalog = async(req, res) => {
 exports.adminAuth = (req, res) => {
     res.status(200).render('admin_auth');
 }
-exports.allPerformance = (req, res) => {
-    res.status(200).render('all_performance', {
-        title: 'Clubmerce Admin Dashboard'
-    })
-}
+
 exports.productMarketplace = (req, res) => {
     res.status(200).render('product_marketplace-admin');
 }
-exports.manageUsers = (req, res) => {
-    res.status(200).render('manage_users')
+exports.manageUsers = async (req, res) => {
+    try {
+        const users = await User.find();
+        res.status(200).render('manage_users', {
+            title: 'All Users',
+            users
+        })
+    } catch(err) {
+        res.json({message: 'There is no user yet!'});
+    }
 }
-exports.manageProducts = (req, res) => {
-    res.status(200).render('manage_products')
+exports.manageProducts = async (req, res) => {
+    try {
+        const products = await Product.find();
+        res.status(200).render('manage_products', {
+            title: 'All Products',
+            products
+        })
+    } catch(err) {
+        res.json({message: 'There is no user yet!'});
+    }
 }
-exports.managePayment = (req, res) => {
-    res.status(200).render('manage_payments')
+exports.managePayment = async (req, res) => {
+    try {
+        const transactions = await Transaction.find();
+        res.status(200).render('manage_payments', {
+            title: 'All Transactions',
+            transactions
+        });
+    } catch(err) {
+        res.json({message: 'There is no user yet!'});
+    }
 }

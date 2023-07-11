@@ -9,6 +9,7 @@ router.post("/verify-email/:token", authController.verifyEmail);
 router.get('/logout', authController.logout)
 ;
 router.post("/login", authController.login);
+router.post("/login-admin", authController.loginAdmin);
 router.post("/forgotPassword", authController.forgotPassword)
 router.patch("/resetPassword/:token", authController.resetPassword)
 
