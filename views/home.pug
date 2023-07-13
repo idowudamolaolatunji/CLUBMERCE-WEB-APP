@@ -16,6 +16,11 @@ block content
                 <div></div>    
             </div>
         </div>
+
+        <div class="animation animation-box--1"></div>
+        <div class="animation animation-box--2"></div>
+        <div class="animation animation-box--3"></div>
+        <div class="animation animation-box--4"></div>
         section.section.hero__section
             img.hero__svg.svg1(src='asset/svg/svg1.svg')
             img.hero__svg.svg2(src='asset/svg/svg2.svg')
@@ -30,22 +35,48 @@ block content
                         a.section__button.hero__button.outline__button(href='#how') Learn more
                         //- a.section__button.hero__button.outline__button(href='#learn') Learn more
                 .hero__image--box
-                        img.hero__image(src="asset/img/hero_reduced.jpg" alt="")
+                        img.hero__image.bbbb(src="asset/img/hero_reduced.jpg" alt="")
+                        img.hero__image.mmmm(src="asset/img/test-2.png" alt="")
+                        
 
         section.section.section__features 
             .section__container.features 
                 .features__card
-                    i.fa-solid.fa-magnifying-glass-chart.features__icon 
+                    .features__icons
+                        i.fa-solid.fa-magnifying-glass-chart.features__icon 
                     p.features__text Transparent Product Marketplace
                 .features__card
-                    i.fa-solid.fa-credit-card.features__icon
+                    .features__icons
+                        i.fa-solid.fa-credit-card.features__icon
                     p.features__text Reliable and Integrated Payments
                 .features__card
-                    i.fa-solid.fa-pie-chart.features__icon
+                    .features__icons
+                        i.fa-solid.fa-pie-chart.features__icon
                     p.features__text Top Performing Offers
                 .features__card
-                    i.fa-solid.fa-list-check.features__icon
+                    .features__icons
+                        i.fa-solid.fa-list-check.features__icon
                     p.features__text Personalized Account Management
+                .features__card
+                    .features__icons
+                        i.fa-solid.fa-check.features__icon
+                    p.features__text Trusted and Registered
+                .features__card
+                    .features__icons
+                        i.fa-solid.fa-list-check.features__icon
+                    p.features__text Fast Selling Product
+
+        section.section.stats__section
+            .section__container.stats.grid.grid__three
+                .stats__data--one.stats__data(data-value="90" data-symbol="K")
+                    span 90K
+                    p.stats__data--text.margin__top--xsm Affiliate promoters.
+                .stats__data--two.stats__data(data-value="80" data-symbol="%")
+                    span 80%
+                    p.stats__data--text.margin__top--xsm Physical Product.
+                .stats__data--three.stats__data(data-currency="₦" data-value="50" data-symbol="M")
+                    span ₦50M
+                    p.stats__data--text.margin__top--xsm Transaction and payout.
 
         section.section.how__section#how
             .section__container.relative
@@ -59,19 +90,13 @@ block content
                                 | how it works
                             // <h3 class="section__content--title"><span class="number">01</span>Signup As An Affiliate</h3>
                             h3.section__content--title Signup As An Affiliate
-                            p.section__content--text
-                                | Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                | Inventore iste ipsam quos id, excepturi laborum libero
-                                | praesentium dolorenesciunt.
+                            p.section__content--text Becoming an affiliate opens doors to a world of possibilities. By partnering with our trusted brand, you can leverage your influence and network to promote our products and earn attractive commissions. 
                     .grid.how.grid__two.grid__align--center
                         .section__content
                             h3.section__content--title
                                 // <span class="number">02</span>Visit The Affiliate MarketPlace
                                 | Visit The Affiliate MarketPlace
-                            p.section__content--text
-                                | Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                | Inventore iste ipsam quos id, excepturi laborum libero
-                                | praesentium dolorenesciunt.
+                            p.section__content--text  As an affiliate, you'll gain access to our vibrant marketplace, where countless products and services await your promotional prowess.
                         .section__image.how__section--image.how__two
                             img.how__image(src='asset/svg/People sightseeing outdoors-cuate.svg' alt='')
                     .grid.how.grid__two.grid__align--center
@@ -80,47 +105,41 @@ block content
                         .section__content
                             // <h3 class="section__content--title"><span class="number">03</span>Promote and earn</h3>
                             h3.section__content--title Promote and earn
-                            p.section__content--text
-                                | Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                | Inventore iste ipsam quos id, excepturi laborum libero
-                                | praesentium dolorenesciunt.
+                            p.section__content--text As an affiliate, you'll gain access to a diverse range of products and services from top-notch brands. Promote these offerings to your audience through various channels such as your website, blog, social media platforms, or email newsletters.
+
+        section.section.brands__section
+            .section__container
+                h2.section__heading--secondary.center Our Favourite Brands
+                .brands
+                    span.brands__logo
+                        img(src='asset/logo/logo1.png')
+                    span.brands__logo
+                        img(src='asset/logo/logo3.png')
+                    span.brands__logo
+                        img(src='asset/logo/logo4.png')
+                    span.brands__logo
+                        img(src='asset/logo/logo5.png')
+                
+
+        
         section.section.get-started__section#learn
             .section__container
                 .section__heading
                     h2.section__heading--secondary.center get started
-                    p.get-started__heading--text
-                        | Whether you're looking to start, scale, or expand your business reach, Clubmerce can help. Join thousands of sellers and more than 1,000 affiliates who are finding success on the Clubmerce platform.
+                    p.get-started__heading--text Whether you're looking to start, scale, or expand your business reach, Clubmerce can help. Join thousands of sellers and more than 1,000 affiliates who are finding success on the Clubmerce platform.
                 .cards
                     .get-started__card.get-started__affiliate
                         img.get-started__image(src='asset/img/affiliate2_reduced.jpg' alt='')
                         .get-started__content
                             p.get-started__content--title Become an affiliate
-                            p.get-started__content--text
-                                | Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                | Architecto dicta quasi id repudiandae vel provident eum voluptas
-                                | iusto harum molestias.
+                            p.get-started__content--text Turn your influence into income and unlock a world of unlimited possibilities. Benefit from competitive commissions, exclusive resources, and a supportive community. 
                             a.get-started__button.btn(href='/affiliate') Get Started
                     .get-started__card.get-started__vendor
                         img.get-started__image(src='asset/img/vendor2_reduced.jpg' alt='')
                         .get-started__content
                             p.get-started__content--title Become an vendor
-                            p.get-started__content--text
-                                | Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                | Architecto dicta quasi id repudiandae vel provident eum voluptas
-                                | iusto harum molestias.
+                            p.get-started__content--text Become a Vendor on Our Marketplace. Join our thriving community of vendors and gain access to a global audience hungry for innovative products. 
                             a.get-started__button.btn(href='/vendor') Get Started
-
-        section.section.stats__section
-            .section__container.stats.grid.grid__three
-                .stats__data--one.stats__data(data-value="90" data-symbol="K")
-                    span 90K
-                    p.stats__data--text Lorem ipsum dolor sit.
-                .stats__data--two.stats__data(data-value="80" data-symbol="%")
-                    span 80%
-                    p.stats__data--text Lorem ipsum dolor sit.
-                .stats__data--three.stats__data(data-currency="₦" data-value="500" data-symbol="M")
-                    span ₦500M
-                    p.stats__data--text Lorem ipsum dolor sit.
 
         section.section.faq__section
             .section__container
@@ -128,104 +147,87 @@ block content
                 .faq__accordion
                     .faq__accordion--item
                         .accordion__content--title
-                            h3.accordion__heading
-                                | Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            h3.accordion__heading What is clubmerce?
                             span &minus;
                         .faq__accordion--content
-                            p.accordion__content--text
-                                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure velit magni libero, aut
-                                | esse commodi voluptatibus. Nobis qui nulla hic velit. Impedit laboriosam natus ipsa ad
-                                | voluptas rerum corporis cumque at minima a architecto, nulla excepturi consequatur unde
-                                | ipsam laudantium rem quo obcaecati ex possimus in est! Harum, odio quis?
+                            p.accordion__content--text Clubmerce is an innovative affiliate marketing platform that connects brands, vendors, and affiliate marketers in a seamless ecosystem. With Clubmerce, affiliates can promote a wide range of products and services while earning commissions on successful product purchase.
                     .faq__accordion--item
                         .accordion__content--title
-                            h3.accordion__heading
-                                | Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            h3.accordion__heading What types of products can I promote as an affiliate?
                             span &minus;
                         .faq__accordion--content
-                            p.accordion__content--text
-                                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure velit magni libero, aut
-                                | esse commodi voluptatibus. Nobis qui nulla hic velit. Impedit laboriosam natus ipsa ad
-                                | voluptas rerum corporis cumque at minima a architecto, nulla excepturi consequatur unde
-                                | ipsam laudantium rem quo obcaecati ex possimus in est! Harum, odio quis?
+                            p.accordion__content--text As an affiliate, you can promote a diverse range of products or services including physical products, digital products, services, travel and hospitality, beauty and personal care, financial products, home and garden items, food and beverage products, fashion and accessories, and lifestyle and wellness products.
                     .faq__accordion--item
                         .accordion__content--title
-                            h3.accordion__heading
-                                | Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            h3.accordion__heading Is there a minimum payout threshold for affiliate earnings?
                             span &minus;
                         .faq__accordion--content
-                            p.accordion__content--text
-                                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure velit magni libero, aut
-                                | esse commodi voluptatibus. Nobis qui nulla hic velit. Impedit laboriosam natus ipsa ad
-                                | voluptas rerum corporis cumque at minima a architecto, nulla excepturi consequatur unde
-                                | ipsam laudantium rem quo obcaecati ex possimus in est! Harum, odio quis?
+                            p.accordion__content--text The minimum payout threshold for affiliate earnings on Clubmerce is $50. Once your earnings reach this threshold, you become eligible for withdrawal. This ensures that you receive a substantial amount before initiating the payout process. Clubmerce values your efforts as an affiliate and aims to provide a fair and transparent system for earning commissions.
                     .faq__accordion--item
                         .accordion__content--title
-                            h3.accordion__heading
-                                | Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            h3.accordion__heading Can I promote multiple products from different vendors on this platform?
                             span &minus;
                         .faq__accordion--content
-                            p.accordion__content--text
-                                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure velit magni libero, aut
-                                | esse commodi voluptatibus. Nobis qui nulla hic velit. Impedit laboriosam natus ipsa ad
-                                | voluptas rerum corporis cumque at minima a architecto, nulla excepturi consequatur unde
-                                | ipsam laudantium rem quo obcaecati ex possimus in est! Harum, odio quis?
+                            p.accordion__content--text Yes, on Clubmerce, you have the flexibility to promote multiple products or services from different vendors within the platform. As an affiliate, you can explore a diverse marketplace and choose from a wide range of offerings. This allows you to diversify your promotional efforts, target various niches, and cater to the interests of your audience. Clubmerce provides a centralized platform where you can easily manage and track your promotions across different vendors, making it convenient to engage with multiple products or services simultaneously.
+                    .faq__accordion--item
+                        .accordion__content--title
+                            h3.accordion__heading How can I maximize my affiliate marketing success on this platform?
+                            span &minus;
+                        .faq__accordion--content
+                            p.accordion__content--text To maximize your affiliate marketing success on Clubmerce, consider implementing the following strategies:
 
+                            p.accordion__content--text 1. Choose the Right Products: Select products or services that align with your target audience's interests and needs.
+
+                            p.accordion__content--text 2. Build a Strong Online Presence: Establish a compelling online presence through a website, blog, or social media channels.
+
+                            p.accordion__content--text 3. Leverage Promotional Tools: Utilize the marketing tools and resources provided by Clubmerce, such as banners, text links, and product widgets.
+
+                            p.accordion__content--text 4. Engage Your Audience: Interact with your audience through engaging content, comments, and social media engagement.
+
+                            p.accordion__content--text 5. Track and Analyze Performance: Regularly monitor your affiliate performance using Clubmerce's tracking and analytics tools.
         section.section.testimonial__section.center
-            h2.section__heading--secondary Testimonials
+            h2.section__heading--secondary.test Testimonials
+            //- p.get-started__heading--text.color-white Life-Changing Experiences: Hear What Our Customers Have to Say
             .container__skew
                 .testimonial__slide
                     .testimonial__slide--item
                         .testimonial__slide--item-text
-                            p.testimonial__content
-                                | Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                                | Quibusdam eius ducimus dolore at illo nobis distinctio
-                                | nostrum, id alias eaque!
-                            p.testimonial__author Lorem.
+                            p.testimonial__content Clubmerce has been a game-changer for me! As a stay-at-home mom, I needed a flexible way to earn income. Thanks to Clubmerce, I started promoting products I love and earning commissions
+                            p.testimonial__author Chika.
                         .testimonial__slide--item-img
                             img.testimonial__image(src='asset/img/face.png' alt='')
                     .testimonial__slide--item
                         .testimonial__slide--item-text
-                            p.testimonial__content
-                                | Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                                | Quibusdam eius ducimus dolore at illo nobis distinctio
-                                | nostrum, id alias eaque!
-                            p.testimonial__author Lorem.
+                            p.testimonial__content I earn a consistent income by promoting products online. It has given me the freedom to work on my own terms and live a life of financial abundance. Clubmerce is the real deal!
+                            p.testimonial__author Emeka.
                         .testimonial__slide--item-img
                             img.testimonial__image(src='asset/img/face.png' alt='')
                     .testimonial__slide--item.testimonial__slide--active
                         .testimonial__slide--item-text
-                            p.testimonial__content
-                                | Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                                | Quibusdam eius ducimus dolore at illo nobis distinctio
-                                | nostrum, id alias eaque!
-                            p.testimonial__author Lorem.
+                            p.testimonial__content Clubmerce provided the perfect platform to achieve that. I now promote products I genuinely believe in and earn commissions while doing what I love. 
+                            p.testimonial__author Ngozi.
                         .testimonial__slide--item-img
                             img.testimonial__image(src='asset/img/face.png' alt='')
                     .testimonial__slide--item
                         .testimonial__slide--item-text
-                            p.testimonial__content
-                                | Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                                | Quibusdam eius ducimus dolore at illo nobis distinctio
-                                | nostrum, id alias eaque!
-                            p.testimonial__author Lorem.
+                            p.testimonial__content Clubmerce has been a blessing in disguise! As an aspiring entrepreneur, I was searching for ways to monetize my online presence. When I stumbled upon Clubmerce, I found the perfect solution.
+                            p.testimonial__author Funke.
                         .testimonial__slide--item-img
                             img.testimonial__image(src='asset/img/face.png' alt='')
                     .testimonial__slide--item
                         .testimonial__slide--item-text
-                            p.testimonial__content
-                                | Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                                | Quibusdam eius ducimus dolore at illo nobis distinctio
-                                | nostrum, id alias eaque!
-                            p.testimonial__author Lorem.
+                            p.testimonial__content I never thought making money online could be so rewarding. With Clubmerce, I've been able to harness the power of affiliate marketing and earn a substantial income.
+                            p.testimonial__author Ahmed .
                         .testimonial__slide--item-img
                             img.testimonial__image(src='asset/img/face.png' alt='')
 
             .controls
-                button.prev-btn Prev
-                button.next-btn Next
+                button.prev-btn.controls-btn
+                    i.fa-solid.fa-arrow-left.controls-icons
+                button.next-btn.controls-btn
+                    i.fa-solid.fa-arrow-right.controls-icons
 
-            .dots
+            //- .dots
                 span.dot.dot1 &nbsp;
                 span.dot.dot1 &nbsp;
                 span.dot.dot2 &nbsp;

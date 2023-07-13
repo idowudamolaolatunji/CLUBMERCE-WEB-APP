@@ -105,7 +105,7 @@ const adminAuthLogin = async (email, password) => {
             }
         
             window.setTimeout(() => {
-                showAlert('success', data.message);
+                showAlert('success', 'Auth Successful');
                 location.assign('/dashboard');
                 spinOverlay.style.visibility = 'hidden'
             }, 2000);

@@ -69,8 +69,8 @@ block content
             .form__item.form__photo-upload
                 //- img.form__user-photo(src='img/user.jpg' alt='User photo')
                 img.form__user-photo(src=`asset/img/${user.image}.png` alt='User photo')
-                input.form__upload(type='file', accept='image/*', id='photo', name='photo')
-                label.btn-text(for='photo') Choose new photo
+                input.form__upload(type='file', accept='image/*', id='image', name='image')
+                label.btn-text(for='image') Choose new photo
                 //- a.btn-text(href='') Choose new photo
             .form__item
                 button.btn.form-btn(type="submit") Save settings

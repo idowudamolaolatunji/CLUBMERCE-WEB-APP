@@ -9,6 +9,8 @@ const User = require('../model/usersModel');
 const Product = require('../model/productsModel');
 const Order = require('../model/orderModel');
 const Commissions = require('../model/commissionModel');
+const UserPerformance = require('../model/userPerformanceModel');
+const ProductPerformance = require('../model/productPerformanceModel');
 
 const { initializePayment, verifyPayment } = require("../utils/paystack")(request);
 
@@ -140,7 +142,17 @@ const processPayment = async (amount, paymentData, orderInfo, product, user, res
                     status: 'pending'
                 });
 
-                Transaction.create({
+
+                const userPerformed = await UserPerformance.create({
+                    user: user._id,
+                    product: product._id,
+                    commission: product.commissionAmount,
+                    purchases,
+                    clicks,
+                    links,
+                })
+                
+                await Transaction.create({
                     user: user._id,
                     trnxType: "CR",
                     purpose: "order",

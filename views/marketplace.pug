@@ -8,15 +8,16 @@ head
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
 
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer")
-    link(rel="favicon" href='../asset/img/favicon.png')
+    link(rel="icon" href="../asset/img/favicon.png" type="image/png")
+
 
     //- STYLES 
     link(rel="stylesheet" href="../src/css/general.css")
     link(rel="stylesheet" href="../src/css/dashboard.css")
     link(rel="stylesheet" href="../src/css/query_dashboard.css")
 
-    script(defer src="/src/js/hoplink.js")
     script(defer src="/src/js/dashboard.js")
+    script(defer src="/src/js/hoplink.js")
 
     title=title
 body
@@ -32,7 +33,7 @@ body
                         i.fa-solid.fa-magnifying-glass.icon.nav__icon
 
                 span.nav__icons
-                    span.notification__icon
+                    //- span.notification__icon
                         i.fa-regular.fa-bell.icon.nav__icon
                         .notification__hovered.hidden 
                             h3.dashboard__heading Notification
@@ -60,7 +61,14 @@ body
                     | Clubmerce marketplace
 
                 span.product__filtering-btn
-                    i.fa-solid.fa-filter.product__filtering-icon
+                    select.select__input(id="select")
+                        option(value="most-promoted") Most promoted
+                        option(value="gravity-high-low") Gravity : High-low
+                        option(value="gravity-low-high") Gravity : Low-high
+                        option(value="physical-product") Physical products
+                        option(value="recurring-commission") Recurring commission
+                        option(value="digital-product") Digital products
+                        option(value="least-promoted") Less promoted
                 
                 
                 .products__container
@@ -148,6 +156,52 @@ body
                                         a.btn.product__button.promote(data-product=product.slug) Promote
                                         a.product__button.page(target="_blank" href=`/marketplace/${product.slug}`) affiliate page
 
+
+
+                                figure.product__card-mobile
+                                    .product__side.front    
+                                        .front--top
+                                            .product__image--container
+                                                img.product__image(src='../../asset/img/product.jpg' alt=product.name)
+                                            .product__heading 
+                                                h2.product__title= product.name
+                                                    
+                                                .product__content
+                                                    h4.product__description #{product.summary}...
+                                                    a.product__button.page(target="_blank" href=`/marketplace/${product.slug}`) affiliate page
+                                        .front--bottom
+                                            ul.product__info
+                                                //- each icon in product.others
+                                                li.product__info--item 
+                                                    i.fa-solid.fa-truck-fast.product__icon.icon
+                                                    p Digital Product
+                                                li.product__info--item 
+                                                    i.fa-solid.fa-tools.product__icon.icon
+                                                    p Affiliate tools
+                                                li.product__info--item 
+                                                    i.fa-solid.fa-link.product__icon.icon
+                                                    p Unique Link
+                                                li.product__info--item 
+                                                    i.fa-regular.fa-square-check.product__icon.icon
+                                                    p Approved
+                                                li.product__info--item 
+                                                    i.fa-solid.fa-rotate.product__icon.icon
+                                                    p Recurring
+                                                
+
+                                    .product__side.back
+                                        .link--box
+                                            h2.dashboard__heading Generate HopLink
+                                            p.hoplink__text  Earn commission for every customer you refer to this product using your personalized affiliate hoplink.
+                                            form.hoplink-form
+                                                .hoplink__body
+                                                    input.hoplink__input.hoplink-username(type='text' placeholder='Username' required)
+                                                    p.hoplink__body--text Required
+                                                .hoplink__body
+                                                    input.hoplink__input.hoplink-trackingid(type='text' placeholder='Tracing Id')
+                                                    p.hoplink__body--text Optional
+                                                button.btn.hoplink__submit(type='submit') Generate Hoplink
+
                                 
                     .hoplink__overlay.get__overlay.hidden
                     .hoplink__modal.get__modal.hidden
@@ -173,3 +227,5 @@ body
                         p.hoplink__copy https://clubmerce.com/product/85vfhbhfcbvhjfbvhjbchvbfvhjfvhf94rfjnvvfnfv/fbdfhjnbire84
                         
                         button.btn.hoplink__submit.btnOk Ok
+            
+            include _auth_footer

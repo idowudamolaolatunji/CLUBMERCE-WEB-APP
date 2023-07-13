@@ -21,12 +21,12 @@ block content
                         p.bank__number= user.bankAccount
                 .form__grid-generic
                     .form__body-generic
-                    label.form__label(for='amount') Amount
-                    input#amount.form__input(type='text' name='amount' placeholder="Withdrawal amount")
+                        label.form__label(for='amount') Amount
+                        input#amount.form__input(type='text' name='amount' placeholder="Withdrawal amount")
                     .form__body-generic
-                    label.form__label(for='enter__password') Confirm your password
-                    input#enter__password.form__input(type='password' name='enter__password' placeholder='••••••••••••')
-                button.btn.form__submit.form__submit-generic(type='submit') Withdraw
+                        label.form__label(for='enter__password') Confirm your password
+                        input#enter__password.form__input(type='password' name='enter__password' placeholder='••••••••••••')
+                    button.btn.form__submit.form__submit-generic(type='submit') Withdraw
 
 
 
@@ -41,19 +41,24 @@ block content
                     span.table-head-content amount
                     span.table-head-content Status
                     span.table-head-content date
-                .table-row-po
-                    span.table-row-content
-                        p.id dh373y82wu9wshd8w
-                    span.table-row-content
-                        p.type WITHDRAWAL
-                    span.table-row-content
-                        p.price= `₦ ${user.wallet}`
-                    span.table-row-content
-                        p.status.status--pending pending
-                    span.table-row-content
-                        p.date 12/02/23
-                //- .table-row-message
-                    | p.note-no No recent transaction...
+
+                    //- -if(transactions > 1)
+                    //-     each transaction of transactions
+                    //-         .table-row-po
+                    //-             span.table-row-content
+                    //-                 p.id= transaction.transactionId
+                    //-             span.table-row-content
+                    //-                 //- p.type= transaction.purpose
+                    //-                 p.type= '-'
+                    //-             span.table-row-content
+                    //-                 p.price= `₦ ${transaction.amount}`
+                    //-             span.table-row-content
+                    //-                 p.status.status--pending pending
+                    //-             span.table-row-content
+                    //-                 p.date 12/02/23
+                    //-     -else
+                .table-row-message
+                    p.note-no No recent transaction...
 
 
 
@@ -99,16 +104,20 @@ block content
                     span.table-head-content amount
                     span.table-head-content Status
                     span.table-head-content date
-                .table-row-po
-                    span.table-row-content
-                        p.id dh373y82wu9wshd8w
-                    span.table-row-content
-                        p.type WITHDRAWAL
-                    span.table-row-content
-                        p.price= `₦ ${user.wallet}`
-                    span.table-row-content
-                        p.status.status--pending pending
-                    span.table-row-content
-                        p.date 12/02/23
-                //- .table-row-message
-                    | p.note-no No recent transaction...
+
+                
+                //- -if(transactions > 1)
+                    each transaction of transactions
+                        .table-row-po
+                            span.table-row-content
+                                p.id= transaction.transactionId
+                            span.table-row-content
+                                p.type WITHDRAWAL
+                            span.table-row-content
+                                p.price= `₦ ${transaction.amount}`
+                            span.table-row-content
+                                p.status.status--success success
+                            span.table-row-content
+                                p.date 12/02/23
+                .table-row-message
+                    p.note-no No recent transaction...

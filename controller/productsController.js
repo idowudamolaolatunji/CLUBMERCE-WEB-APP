@@ -1,4 +1,5 @@
 const multer = require('multer');
+const sharp = require('sharp');
 
 const app = require('../app');
 const catchAsync = require('../utils/catchAsync')

@@ -1,7 +1,6 @@
 .section__dashboard {
     display: flex;
     flex-direction: column;
-    overflow: hidden;
 }
 
 .section__top {
@@ -12,6 +11,7 @@
     height: 7rem;
     gap: 2rem;
     border-bottom: 1.5px solid #ddd;
+    overflow: hidden;
 }
 
 .section__bottom {
@@ -151,20 +151,18 @@ input:focus, input:hover, select:focus, textarea:hover,
     position: absolute;
     transition: all .35s ease-in-out;
 
-    visibility: hidden;
+    z-index: 3000;
 }
 
 .notification__hovered {
     overflow-y: auto;
     top: 4rem;
     right: 0rem;
-    z-index: 250;
 }
 
 .Profile__hovered {
     top: 6.2rem;
     right: 5rem;
-    z-index: 200;
 }
 .notification__amount {
     font-size: 1.4rem;
@@ -233,8 +231,8 @@ input:focus, input:hover, select:focus, textarea:hover,
 .menubar {
     background-color: #fff;
     border-right: 1.5px solid #ddd;
-    min-height: fit-content;
-    backface-visibility: hidden;
+    height: 90vh;
+    overflow: hidden;
 }
 
 /* close menu */
@@ -243,13 +241,18 @@ input:focus, input:hover, select:focus, textarea:hover,
     overflow: hidden;
 }
 .close .menu__item .menu__link:link {
-    gap: 2.8rem;
+    gap: 3rem;
 }
 .close .menu__link p {
     display: flex;
     flex-wrap: nowrap !important;
 }
 .close .menubar .menu__button {
+    display: block;
+    opacity: 1;
+}
+
+.close .menubar .admin__menu--logout {
     display: none;
     opacity: 0;
 }
@@ -261,10 +264,10 @@ input:focus, input:hover, select:focus, textarea:hover,
     overflow: hidden;
 }
 .open .menu__item .menu__link:link {
-    gap: 1.4rem;
+    gap: 1.6rem;
 }
-.open .menubar .menu__button {
-    display: inline-block;
+.open .menubar .menu__button , .open .menubar .admin__menu--logout {
+    display: block;
     opacity: 1;
 }
 /* ****** */
@@ -342,6 +345,7 @@ input:focus, input:hover, select:focus, textarea:hover,
     display: inline-block;
     opacity: 1;
 }
+
      
 /*
 ////////////////////////////////////////////////
@@ -354,10 +358,10 @@ input:focus, input:hover, select:focus, textarea:hover,
 */
 .main__dashboard {
     padding: 2.4rem 3.6rem;
-    height: 89vh;
-    overflow: auto;
+    overflow-y: scroll !important;
     z-index: 20;
     transition: all .35s;
+    height: 90vh;
     background-color: #fff;
 }
 .main__dashboard .footer__auth {
@@ -617,12 +621,13 @@ input:focus, input:hover, select:focus, textarea:hover,
 .product__filtering-btn {
     display: none;
     opacity: 0;
-    position: absolute;
-    top: 10rem;
-    right: 5rem;
 }
 .product__filtering-icon {
     color: #444;
+}
+.product__card-mobile {
+    display: none;
+    opacity: 0;
 }
 .products__cards--box {
     /* max-width: 70rem; */

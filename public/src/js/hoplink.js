@@ -1,11 +1,5 @@
 'use strict';
 
-const hoplinkForm = document.querySelector('.hoplink-form');
-const hoplinkOpen = document.querySelectorAll('.promote');
-const hoplinkGetOverlay = document.querySelector('.get__overlay')
-const hoplinkGetModal = document.querySelector('.get__modal')
-const hoplinkClose = document.querySelector('.hoplink__icon');
-
 
 // ALERTS
 const hideAlert = () => {
@@ -31,26 +25,97 @@ const closeModal = function(overlay, modal) {
     modal.classList.add('hidden');
 }
 
+const hoplinkForm = document.querySelector('.hoplink-form');
+const hoplinkModalForm = document.querySelector('#hoplink');
+const hoplinkOpen = document.querySelectorAll('.promote');
+const hoplinkGetOverlay = document.querySelector('.get__overlay')
+const hoplinkGetModal = document.querySelector('.get__modal')
+const hoplinkClose = document.querySelector('.hoplink__icon');
+const hoplinkModalCopyOk = document.querySelector('.btnModalOk');
+const modalCopyButton = document.querySelector('.hoplink__modal-copy-button')
+
+
+let productSlug
+if(hoplinkOpen) {
+    hoplinkOpen.forEach(el => el.addEventListener('click', function() {
+        openModal(hoplinkGetOverlay, hoplinkGetModal);
+        productSlug = this.dataset.productSlug;
+        console.log(productSlug)
+    }));
+}
+
+const getModalHoplink = async function(username, trackingId, productSlug) {
+    try {
+        const res = await fetch(`/api/promotion/generate-affiliate-link/${productSlug}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({username, trackingId}),
+        });
+
+        if(!res.ok) return;
+
+        const data = await res.json();
+
+
+        if(data.status === 'success' || data.message === 'Url already exist') {
+            showAlert('success', 'Link created');
+            closeModal(hoplinkGetOverlay, hoplinkGetModal);
+            hoplinkCopyOverlay.classList.toggle('hidden');
+            hoplinkText.textContent = data.link;
+            
+            modalCopyButton.addEventListener('click', function() {
+                let text = hoplinkText.textContent;
+                
+                navigator.clipboard.writeText(text)
+                .then(() => {
+                // Optional: Update the button text to indicate successful copying
+                modalCopyButton.innerText = "Copied!";
+                })
+                .catch((error) => {
+                console.error("Failed to copy text:", error);
+                });
+            })
+        } else if(data.message === 'Enter a valid user...' || data.message === 'Please provide your username') {
+            hoplinkCopyOverlay.classList.add('hidden');
+            showAlert('error', data.message)
+        }
+    } catch (err) {
+        showAlert('error', 'Something Went Wrong')
+    }
+}
+
+if(hoplinkModalForm) {
+    hoplinkModalForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const hoplinkUsername = document.querySelector('#hoplink-username').value;
+        const hoplinkTrackId = document.querySelector('#hoplink-trackingid').value;
+        getModalHoplink(hoplinkUsername, hoplinkTrackId, productSlug)
+    })
+}
+
+
+if(hoplinkClose) {
+    hoplinkClose.addEventListener('click', function() {
+        closeModal(hoplinkGetOverlay, hoplinkGetModal)
+    })
+}
+
+if(hoplinkModalCopyOk)
+    hoplinkModalCopyOk.addEventListener('click', () => {
+        closeModal(hoplinkCopyOverlay, hoplinkCopyModal);
+    })
+
+
+
+
+
+
 const hoplinkCopyOverlay = document.querySelector('.copy__overlay')
 const hoplinkCopyModal = document.querySelector('.copy__modal')
 const hoplinkCopyOk = document.querySelector('.btnOk');
 const hoplinkText = document.querySelector('.hoplink__copy')
 const copyButton = document.querySelector('.hoplink__copy-button')
-
-
-hoplinkCopyOk.addEventListener('click', () => {
-    closeModal(hoplinkCopyOverlay, hoplinkCopyModal);
-    location.reload(true);
-})
-
-
-if(hoplinkOpen) {
-    hoplinkOpen.forEach(el =>
-        el.addEventListener('click', () => {
-            openModal(hoplinkGetOverlay, hoplinkGetModal);
-        })
-    );
-}
 
 
 const getHoplink = async function(username, trackingId, productSlug) {
@@ -102,13 +167,10 @@ if(hoplinkForm) {
     })
 }
 
-
-
-if(hoplinkClose) {
-    hoplinkClose.addEventListener('click', () => {
-        closeModal(hoplinkGetOverlay, hoplinkGetModal);
-        console.log('close me...')
+if(hoplinkCopyOk)
+    hoplinkCopyOk.addEventListener('click', () => {
+        closeModal(hoplinkCopyOverlay, hoplinkCopyModal);
+        location.reload(true);
     })
-}
 
 

@@ -1,4 +1,7 @@
 const multer = require('multer');
+const sharp = require('sharp');
+
+const cloudinary = require('cloudinary').v2
 
 const app = require('../app');
 const catchAsync = require('../utils/catchAsync');
@@ -8,36 +11,42 @@ const User = require('./../model/usersModel');
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
 
-const multerStorage = multer.memoryStorage();
-
-const multerFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image')) {
-    cb(null, true);
-  } else {
-    cb(new AppError('Not an image! Please upload only images.', 400), false);
-  }
-};
-
-const upload = multer({
-  storage: multerStorage,
-  fileFilter: multerFilter
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET,
 });
 
-exports.uploadUserPhoto = upload.single('photo');
+// const multerStorage = multer.memoryStorage();
 
-exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
-  if (!req.file) return next();
+// const multerFilter = (req, file, cb) => {
+//   if (file.mimetype.startsWith('image')) {
+//     cb(null, true);
+//   } else {
+//     cb(new AppError('Not an image! Please upload only images.', 400), false);
+//   }
+// };
 
-  req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+// const upload = multer({
+//   storage: multerStorage,
+//   fileFilter: multerFilter
+// });
 
-  await sharp(req.file.buffer)
-    .resize(500, 500)
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(`public/asset/img/user/${req.file.filename}`);
+// exports.uploadUserPhoto = upload.single('photo');
 
-  next();
-});
+// exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
+//   if (!req.file) return next();
+
+//   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+
+//   await sharp(req.file.buffer)
+//     .resize(500, 500)
+//     .toFormat('jpeg')
+//     .jpeg({ quality: 90 })
+//     .toFile(`public/asset/img/user/${req.file.filename}`);
+
+//   next();
+// });
 
 
 exports.getMe = (req, res, next) => {
@@ -160,6 +169,26 @@ exports.updateMe = catchAsync(async (req, res, next) => {
         status: "success",
         data: {
             user: updatedUser
+        }
+    })
+});
+
+exports.updateBankDetails = catchAsync(async (req, res, next) => {
+    
+    // update user bank details
+    // 1. filter
+    const allowedFileds = [bankName, bankAccountNumber, holdersName];
+    const filterBody = filterObj(req.body, allowedFileds);
+    // 2. update
+    const updatedDetails = await User.findByIdAndUpdate(req.user.id, filterBody, {
+        new: true,
+        runValidators: true
+    });
+
+    res.status(200).json({
+        status: "success",
+        data: {
+            userDetails: updatedDetails
         }
     })
 });

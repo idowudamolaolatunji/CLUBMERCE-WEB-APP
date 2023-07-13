@@ -3,7 +3,7 @@
 const uploadBtn = document.querySelector('.add-btn');
 const productOverlay = document.querySelector('.product__overlay');
 const productModal = document.querySelector('.product__modal');
-const productClose = document.querySelector('.form__close');
+const productClose = document.querySelector('.form__close-icon');
 const productForm = document.querySelector('.product__form');
 
 // DROPDOWNS
@@ -22,6 +22,18 @@ const dashboradWidth = mainDashboard.getBoundingClientRect();
 const menuLogout = document.querySelectorAll('.menu__logout');
 const navLogout = document.querySelectorAll('.nav__logout');
 const adminLogout = document.querySelectorAll('.admin__menu--logout');
+
+
+const forgotPassword = document.querySelector('.forgot')
+const forgotModal = document.querySelector('.forgot-password__modal');
+const forgotClose = document.querySelector('.forgot__close--icon');
+const emailVerifyModal = document.querySelector('.email-verify__modal');
+const emailVerifyClose = document.querySelector('.email-verify__close--icon');
+const emailConfirmModal = document.querySelector('.email-confirmed__modal');
+const emailConfirmClose = document.querySelector('.email-confirmed__close--icon');
+
+// const forgotOverlay = document.querySelector('.forgot-password__drop-down');
+// const emailVerifyOverlay = document.querySelector('.email__drop-down');
 
 
 // MODALS
@@ -86,17 +98,16 @@ if (menu) {
 if(notifyIcon) {
     notifyIcon.addEventListener('click', () => {
         notifyBox.classList.remove('hidden')
-        console.log('Clicked notification')
     });
     mainDashboard.addEventListener('click', () => notifyBox.classList.add('hidden'))
 }
 
 if(profileImg) {
     profileImg.addEventListener('click', (e) => {
-        profileBox.classList.remove('hidden')
-        console.log('Clicked profile image')
+        profileBox.classList.toggle('hidden')
     })
     mainDashboard.addEventListener('click', () => profileBox.classList.add('hidden'))
+    document.body.addEventListener('click', () => profileBox.classList.add('hidden'))
 }
 
 
@@ -126,17 +137,15 @@ if(menuLogout) menuLogout.forEach(el => el.addEventListener('click', logout));
 if(navLogout) navLogout.forEach(el => el.addEventListener('click', logout));
 if(adminLogout) adminLogout.forEach(el => el.addEventListener('click', logout));
 
-
+if(productClose) {
+    productClose.addEventListener('click', function() {
+        closeModal(productOverlay, productModal)
+    });
+}
 
 if(uploadBtn) {
     uploadBtn.addEventListener('click', function() {
         openModal(productOverlay, productModal);
-    });
-}
-
-if(productClose) {
-    productClose.addEventListener('click', function() {
-        closeModal(productOverlay, productModal)
     });
 }
 
@@ -214,7 +223,7 @@ if(deleteButton)
         document.querySelector('.btn-yes').addEventListener('click', function() {
             // Call the deleteProduct function with the product ID
             deleteProduct(productId);
-            // location.reload(true)
+            location.reload(true)
         })
         document.querySelector('.btn-no').addEventListener('click', () => {
         closeAdjacentModal();
@@ -239,11 +248,6 @@ async function deleteProduct (productId) {
         console.error(error);
     }
 }
-
-
-
-
-
 
 
 
@@ -303,81 +307,6 @@ if(productUploadForm) {
 }
 */
 
-// const orderProductPage = async function() {
-//     try {
-//          const res = await fetch(`/product-sales/${userSlug}/${productSlug}`, { method: 'GET' })
-         
-//          if(res.status === 'success')
-//              // Redirect to the order page
-//              window.location.href = `/order-page/:${productSlug}`;
-//          else {
-//              return;
-//          }
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ error: 'Internal server error' });
-//     }
-// }
- 
-
-// const updateSettings = async() => {
-//     try {
-//         const url =
-//           type === 'password'
-//             ? 'http://127.0.0.1:3000/api/users/updateMyPassword'
-//             : 'http://127.0.0.1:3000/api/users/updateMe';
-    
-//         const res = await fetch(url, {
-//           method: 'PATCH',
-//           data
-//         });
-    
-//         if (res.data.status === 'success') {
-//           showAlert('success', `${type.toUpperCase()} updated successfully!`);
-//         }
-//       } catch (err) {
-//         showAlert('error', err.response.data.message);
-//       }
-// }
-// const forgotPasswordForm = document.querySelector('.forgot__form');
-
-
-
-// const userDataForm = document.querySelector('')
-
-// if (userDataForm)
-//   userDataForm.addEventListener('submit', e => {
-//     e.preventDefault();
-//     const form = new FormData();
-//     form.append('name', document.getElementById('name').value);
-//     form.append('email', document.getElementById('email').value);
-//     form.append('photo', document.getElementById('photo').files[0]);
-//     console.log(form);
-
-//     updateSettings(form, 'data');
-//   });
-
-// if (userPasswordForm)
-//   userPasswordForm.addEventListener('submit', async e => {
-//     e.preventDefault();
-//     document.querySelector('.btn--save-password').textContent = 'Updating...';
-
-//     const passwordCurrent = document.getElementById('password-current').value;
-//     const password = document.getElementById('password').value;
-//     const passwordConfirm = document.getElementById('password-confirm').value;
-//     await updateSettings(
-//       { passwordCurrent, password, passwordConfirm },
-//       'password'
-//     );
-
-//     document.querySelector('.btn--save-password').textContent = 'Save password';
-//     document.getElementById('password-current').value = '';
-//     document.getElementById('password').value = '';
-//     document.getElementById('password-confirm').value = '';
-//   });
-
-
-
 
 
 // forgotPassword.addEventListener('click', () => openModal( forgotOverlay, forgotModal));
@@ -431,3 +360,13 @@ if(formUpdate) {
         updateUser(formUpdateName, formUpdateEmail, formUpdatePhone, formUpdateCountry, formUpdateState, formUpdateCityRegion, formUpdateZipPostal);
     });
 }
+
+
+
+// const forgotPasswordForm = document.querySelector('.forgot__form');
+
+
+
+
+
+

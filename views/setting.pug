@@ -21,7 +21,7 @@ block content
                 label.form__label(for='HoldersName') Holder's Name
                 input#HoldersName.form__input(type='HoldersName' value="ddvd freedw"  placeholder="Name as in bank document" required)
             .form__item.right
-                button.btn.form-btn Add payment account
+                button.btn.form-btn.btn--save-bank Add payment account
         
 
 
@@ -29,15 +29,15 @@ block content
             h3.dashboard__heading Update Account Password
             .form__item
                 label.form__label(for='password-current') Current Password
-                input.form__input.signup__password(name='password' type='password-current' placeholder='••••••••••••', required, minlength='8')
+                input.form__input.signup__password(id='password-current' name='password-current' type='passwor' placeholder='••••••••••••', required, minlength='8')
             .form__item
                 label.form__label(for='password') New Password
-                input.form__input.signup__password(name='password' type='password' placeholder='••••••••••••', required, minlength='8')
+                input.form__input.signup__password(id='password' name='password' type='password' placeholder='••••••••••••', required, minlength='8')
             .form__item
                 label.form__label(for='password-confirm') Confirm New Password
-                input.form__input.signup__passwordconfirm(name='password-confirm' type='password' placeholder='••••••••••••', required, minlength='8')
+                input.form__input.signup__passwordconfirm(id='password-confirm' name='password-confirm' type='password' placeholder='••••••••••••', required, minlength='8')
             .form__item.right
-                    button.btn.form-btn Save password
+                    button.btn.form-btn.btn--save-password Save password
 
 
         -if(user.role === 'affiliate')

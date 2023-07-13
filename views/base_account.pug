@@ -7,7 +7,8 @@ head
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
 
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer")
-    //- link(rel="favicon" href="")
+    link(rel="icon" href="../asset/img/favicon.png" type="image/png")
+
 
     //- STYLES 
     link(rel="stylesheet" href="src/css/general.css")
@@ -35,7 +36,7 @@ body
                             i.fa-solid.fa-magnifying-glass.icon.nav__icon
 
                 span.nav__icons
-                    span.notification__icon
+                    //- span.notification__icon
                         i.fa-regular.fa-bell.icon.nav__icon
                         //- notification...
                         .notification__hovered.hidden 
@@ -185,7 +186,7 @@ body
                         -if(user.role === "vendor")
                             -console.log(products, user)
                             .main__dashboard--container
-                                h3.dashboard__heading=`Welcome back, ${user.business ? user.fullName.split(' ')[0] : user.businessName}`
+                                h3.dashboard__heading=`Welcome back, ${!user.business ? user.fullName.split(' ')[0] : user.businessName}`
                                 .dashboard__insights 
                                     .insight.insight__one
                                         span 
@@ -273,6 +274,34 @@ body
                                             i.fa-solid.fa-bullhorn.insight__icon
                                         p.insignt__title CTR
                            
+
+
+                                .dashboard__table
+                                    .table.table-po
+                                        .table-title
+                                            h4.table-heading Product orders
+                                        .table-head-po
+                                            span.table-head-content Product
+                                            span.table-head-content orders
+                                            span.table-head-content Total price
+                                            span.table-head-content location
+                                            span.table-head-content status
+                                        //- .table-row-po
+                                            span.table-row-content.table-row-product
+                                                img.table-product__image(src='../product.jpg' alt='')
+                                                span
+                                                    p.table-product__name Test product 1
+                                                    p.table-product__niche health &amp; fitness
+                                            span.table-row-content
+                                                p.order 5
+                                            span.table-row-content
+                                                p.price $&nbsp;120
+                                            span.table-row-content
+                                                p.brand Nigeria
+                                            span.table-row-content
+                                                p.status.status--success success
+                                    .table-row-message
+                                        p.note-no You've no order at the moment...
 
                                
                                         

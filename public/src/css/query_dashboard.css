@@ -25,7 +25,6 @@
     .main__dashboard {
         padding: 2.4rem;
     }
-    /* AFFILIATE */
     .dashboard__insights {
         gap: 1.8rem;
         transition: all .35s;
@@ -73,7 +72,7 @@
         opacity: 0;
     }
     .open .menubar, .open .main__dashboard {
-        position: absolute;
+        position: fixed;
         top: 7rem;
     }
     .open .menubar {
@@ -86,6 +85,10 @@
     .open .main__dashboard {
         /* right: 0; */
         left: 7rem;
+        background-color: rgba(0, 0, 0, .1);
+    }
+    .copy__modal {
+        width: 50rem;
     }
     
     /* popup modal */
@@ -117,7 +120,8 @@
     .product__filtering-btn {
         display: block;
         opacity: 1;
-        position: absolute;
+        margin: -3rem 0 3rem;
+    }
 }
 
 
@@ -132,6 +136,25 @@
     .close .bottom__products {
         gap: 2.4rem;
     }
+    .menubar {
+        
+        overflow-y: hidden;
+    }
+    .menubar .menu__button,  .menubar .admin__menu--logout {
+        display: none;
+        opacity: 0;
+    }
+    .menu__bottom {
+        margin-top: 1.4rem;
+    }
+    .menu__body {
+        padding: 2.4rem 0 0;
+        padding-bottom: 1.8rem;
+    }
+    .menu__list {
+        gap: .62rem;
+    }
+    
 }
 
 
@@ -149,8 +172,6 @@
         gap: 1.4rem;
         margin-right: 3.6rem;
     }
-
-    /* affiliate  */
     .dashboard__insights  {
         grid-template-columns: 1fr 1fr;
         row-gap: 2.8rem;
@@ -175,6 +196,9 @@
         gap: 6rem;
         align-items: center;
     }
+    .main__dashboard {
+        padding: 2.4rem 1.2rem;
+    }
     .nav__input {
         width: 15rem;
     }
@@ -198,6 +222,7 @@
         opacity: 1;
         height: 4rem;
     }
+    .copy__modal { width: 40rem; }
 
     /* popup modal */
     .generic__modal {
@@ -221,4 +246,116 @@
         padding: 2.4rem;
         height: auto;
     }
-}}
+    .form__data, .delete-data {
+        padding: 1rem;
+    }
+
+    .product__card {
+        display: none;
+        opacity: 0;
+    }
+    .products__cards--box  {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+    .product__card-mobile {
+        display: block;
+        opacity: 1;
+
+        perspective: 150rem;
+        height: 48rem;
+        position: relative;
+    }
+    .product__side {
+        height: 48rem;
+        width: 100%;
+        backface-visibility: hidden;
+        border-radius: 1rem;
+        transition: all 1s;
+        position: absolute;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+        box-shadow: .2rem .2rem .6rem rgba(0, 0, 0, .1);
+    }
+    .product__card-mobile:hover .front {
+        transform: rotateY(-180deg);
+      }
+      
+    .product__card-mobile:hover .back {
+        transform: rotateY(0);
+    }
+      
+    .back {
+        padding: 1.6rem;
+        transform: rotateY(180deg);
+    }
+
+    .product__image--container {
+        height: 20rem;
+        width: 100%;
+        border-radius: 0;
+        margin-bottom: 1.4rem;
+    }
+    .product__image {
+        width: 100%;
+    }
+    .product__heading {
+        padding: 1.4rem;
+    }
+    .product__title {
+        font-size: 2rem;
+    }
+    .front--bottom {
+        padding: 1.4rem;
+    }
+    .product__info--item p {
+        display: none;
+    }
+    .product__button--box {
+        display: flex;
+        flex-direction: column;
+        gap: 1.8rem;
+        align-items: center;
+    }
+}
+
+/* 450px === 45rem === 28.125em */
+@media screen and (max-width: 30em) {
+    .section__top {
+        gap: 0rem;
+    }
+    .products__cards--box  {
+        grid-template-columns: 1fr;
+        gap: 4.8rem;
+    }
+}
+
+/* 400px === 40rem === 23.125em */
+@media screen and (max-width: 25.125em) {
+    .dashboard__insights {
+        display: flex;
+        flex-direction: column;
+        gap: 2.4rem;
+        align-items: stretch;
+    }
+
+    .insight {
+       width: 100%;
+    }
+    .section__top {
+        gap: 2rem;
+    }
+    .nav__input {
+        width: 10rem;
+        transition: all .35s;
+    }
+    .nav__input:focus {
+        width: 65%;
+        position: absolute;
+        z-index: 2000;
+
+        background-color: #fff;
+        box-shadow: .2rem .2rem 4rem rgba(0, 0, 0, .1);
+    }
+}

@@ -221,6 +221,8 @@ button {
 .margin__bottom--lg { margin-bottom: 6.2rem }
 .margin__bottom--md { margin-bottom: 4.8rem }
 .margin__bottom--sm { margin-bottom: 2.4rem }
+.margin__top--xsm { margin-top: 1.4rem }
+
 
 .margin__left--lg { margin-left: 6.2rem }
 .margin__left--md { margin-left: 4.8rem }
@@ -592,3 +594,9 @@ color: #080707;
         font-size: 1rem;
     }
 }
+
+
+.section--hidden {
+    opacity: 0;
+    transform: translateY(8rem);
+  }
