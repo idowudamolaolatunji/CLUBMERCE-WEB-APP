@@ -1,21 +1,86 @@
-'use strict';
-
 const spinOverlay = document.querySelector('#spinOverlay');
-document.onreadystatechange = function() {
-    if (document.readyState !== "complete") {
-        spinOverlay.style.visibility = "visible";
-    } else {
-        spinOverlay.style.visibility = "hidden";
+document.addEventListener("DOMContentLoaded", function() {
+  spinOverlay.style.visibility = "visible";
+});
+
+window.addEventListener("load", function() {
+  spinOverlay.style.visibility = "hidden";
+});
+
+
+function changeText() {
+  const textSets = [
+    { extraText: 'Earning Potentials.' },
+    { extraText: 'Financial Success.' },
+    { extraText: 'Money Vibe.' }
+  ];
+
+  const outputElement = document.querySelector('.section__heading.hero__heading h1.section__heading--primary');
+
+  let currentSetIndex = 0;
+
+  function updateText() {
+    outputElement.textContent = 'Unleash Your ' + textSets[currentSetIndex].extraText;
+
+    currentSetIndex++;
+    if (currentSetIndex >= textSets.length) {
+      currentSetIndex = 0;
     }
+  }
+
+  // Wait for the page to completely load
+  window.addEventListener('load', () => {
+    // Start the text changing loop
+    setInterval(updateText, 2000);
+  });
 }
+
+changeText();
+
 
 
 // MOBILE NAVIGATION
-// const btnNavEl = document.querySelector(".btn-mobile-nav");
-// const headerEl = document.querySelector(".header");
-// btnNavEl.addEventListener("click", function() {
-//     headerEl.classList.toggle("nav-open");
-// });
+
+const navMenuBtn = document.querySelector(".navigation-controls");
+const navList = document.querySelector(".nav__list-m");
+const icon = document.querySelector('.navigation-icon');
+
+if (navMenuBtn) {
+  navMenuBtn.addEventListener("click", function() {
+    if (icon.classList.contains('fa-close')) {
+      navList.style.transform = 'translateX(100%)';
+      setTimeout(() => {
+        navList.style.visibility = 'hidden';
+      }, 500);
+    } else {
+      navList.style.visibility = 'visible';
+      navList.style.transform = 'translateX(0)';
+    }
+    icon.classList.toggle('fa-close');
+  });
+}
+
+
+const allSections = document.querySelectorAll(".section");
+const revealSection = (entries, observer) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.remove("section--hidden");
+      observer.unobserve(entry.target);
+    }
+  });
+};
+
+const rowObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.11
+});
+
+allSections.forEach((section) => {
+  rowObserver.observe(section);
+  section.classList.add("section--hidden");
+});
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,25 +96,28 @@ const closeModal = function(overlay, modal) {
 }
 
 
-// Get DOM elements
+// // Get DOM elements
 const accordionItems = document.querySelectorAll('.faq__accordion--item');
 
-// Add event listeners to accordion items
 accordionItems.forEach((accordionItem) => {
-    const title = accordionItem.querySelector('.accordion__content--title');
-    const content = accordionItem.querySelector('.faq__accordion--content');
+  const title = accordionItem.querySelector('.accordion__content--title');
+  const content = accordionItem.querySelector('.faq__accordion--content');
 
-    // Toggle accordion item on title click
-    title.addEventListener('click', () => {
-        accordionItem.classList.toggle('faq__open');
+  title.addEventListener('click', () => {
+    const isOpen = accordionItem.classList.contains('faq__open');
 
-        if (accordionItem.classList.contains('faq__open')) {
-            content.style.display = 'block';
-        } else {
-            content.style.display = 'none';
-        }
+    accordionItems.forEach((item) => {
+      item.classList.remove('faq__open');
+      item.querySelector('.faq__accordion--content').style.display = 'none';
     });
+
+    if (!isOpen) {
+      accordionItem.classList.add('faq__open');
+      content.style.display = 'block';
+    }
+  });
 });
+
 
 
 const slider = function() {

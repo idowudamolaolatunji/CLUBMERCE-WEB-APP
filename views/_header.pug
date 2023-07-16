@@ -3,25 +3,43 @@ header.header
     .logo--box
         img.logo(src="asset/img/logo-removebg.png")
     nav.navar
-        .nav__logo
-            i.fa-solid.fa-close.navigation-icons.navigation-cloce
-            i.fa-solid.fa-bars.navigation-icons.navigation-open
+        button.navigation-controls
+            i.fa-solid.fa-bars.navigation-icon
         ul.nav__list
             li.nav__item
                 a.nav__link(href="/") Home
             li.nav__item
-                a.nav__link(href="/get-started") Get started&nbsp;
+                a.nav__link(href="/get-started") Get started
                     //- i.fa-solid.fa-angle-down
             li.nav__item
-                a.nav__link(href="/affiliate") Affiliate&nbsp;
+                a.nav__link(href="/affiliate") Affiliate
                     //- i.fa-solid.fa-angle-down
             li.nav__item
-                a.nav__link(href="/vendor") Vendor&nbsp;
+                a.nav__link(href="/vendor") Vendor
                     //- i.fa-solid.fa-angle-down
             li.nav__item
-                a.nav__link(href="/login") Login
+                a.nav__link.nav-login(href="/login") Login
             li.nav__item
-                a.nav__link.nav__button(href="/signup") signup
+                a.nav__link.nav__button.nav-sign(href="/signup") signup
+
+
+        ul.nav__list-m
+            li.nav__item
+                a.nav__link(href="/") Home
+            li.nav__item
+                a.nav__link(href="/get-started") Get started
+                    //- i.fa-solid.fa-angle-down
+            li.nav__item
+                a.nav__link(href="/affiliate") Affiliate
+                    //- i.fa-solid.fa-angle-down
+            li.nav__item
+                a.nav__link(href="/vendor") Vendor
+                    //- i.fa-solid.fa-angle-down
+            span.flexible
+                li.nav__item
+                    a.nav__link.nav__button.nav-sign(href="/signup") Signup
+                li.nav__item
+                    a.nav__link.nav-login(href="/login") Login
 
 
                 

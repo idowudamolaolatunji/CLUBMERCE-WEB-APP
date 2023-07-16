@@ -1,6 +1,6 @@
 
 // type is either 'password' or 'data'
-export const updateSettings = async (data, type) => {
+const updateSettings = async (data, type) => {
     try {
         let url;
         if(type === 'password') url = 'http://127.0.0.1:3000/api/users/updateMyPassword'
@@ -99,3 +99,48 @@ const showDeleteModal = function(item) {
     document.body.insertAdjacentHTML('afterbegin', html);
 }
 
+const closeAdjacentModal = () => {
+  const deleteOverlay = document.querySelector('.delete__overlay');
+  if (deleteOverlay) {
+    deleteOverlay.remove();
+  }
+};
+
+
+const deleteMyAccount = async function() {
+  try {
+    const res = await fetch(`/api/products/${userId}`, {
+      method: 'DELETE',
+    });
+
+    const data = await res.json();
+    console.log(data);
+
+    if(data.status === 'success') {
+      window.setTimeout(() => {
+        showAlert('success', data.message);
+        location.reload(true)
+      }, 1500);
+    }
+  } catch (err) {
+    showAlert('error', data.message);
+  }
+} 
+
+
+const deleteMe = document.querySelector('.delete-account')
+deleteMe.addEventListener('click', function(e) {
+
+  showDeleteModal('Account');
+  const userId = e.dataset.id;
+
+  document.querySelector('.btn-yes').addEventListener('click', function() {
+    deleteMyAccount(userId);
+  })
+  document.querySelector('.btn-no').addEventListener('click', () => {
+      closeAdjacentModal();
+  })
+  document.querySelector('.delete__icon').addEventListener('click', () => {
+      closeAdjacentModal();
+  } )
+})

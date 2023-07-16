@@ -48,27 +48,28 @@ const createCookie = function(statusCode, user, res, message) {
 }
 
 
+
 const sendSignUpEmailToken = async (user) => {
-    try {
-        const token = signToken( user._id )
+  try {
+    const token = signToken(user._id);
 
-        // Create a verification URL for the user
-        const verificationUrl = `${req.protocol}://${req.get('host')}/api/auth/verify-email/${token}`;
-        const message = `
-            Please verify your email address \n
-            Click ${verificationUrl}"> \n to verify your email...`;
+    // Create a verification URL for the user
+    const verificationUrl = `${req.protocol}://${req.get('host')}/api/users/verify-email/${token}`;
+    const message = `
+      Please verify your email address\n
+      Click <a href="${verificationUrl}">${verificationUrl}</a> to verify your email...`;
 
-        await sendEmail({
-        email: user.email,
-        subject: 'Verify Your Email Address',
-        message
-        });
+    await sendEmail({
+      email: user.email,
+      subject: 'Verify Your Email Address',
+      message,
+    });
 
-        return token;
-    } catch(err) {
-        console.log(err)
-    }
-}
+    return token;
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 
 //////////////////////////////////////////////
@@ -87,12 +88,12 @@ exports.signup = catchAsync(async (req, res) => {
         role: req.body.role,
     });
 
-    
-    // sendSignUpEmailToken(newUser)
+    const token = await sendSignUpEmailToken(newUser);
 
     res.status(201).json({
         status: "success",
         message: "Successfully signed up, Confirm Email",
+        token,
         data: {
             user: newUser
         }
@@ -114,7 +115,7 @@ exports.verifyEmail = async (req, res) => {
             await user.save();
     
             // Redirect the user to a success page
-            res.redirect('/email-verified');
+            res.redirect('/email-confirmation');
         } else {
             // Handle user not found error
             res.status(404).json({ error: 'User not found' });
@@ -125,8 +126,6 @@ exports.verifyEmail = async (req, res) => {
     }
 };
   
-
-
 
 // Login
 exports.login = catchAsync(async (req, res, next) => {
@@ -200,17 +199,18 @@ exports.loginAdmin = catchAsync(async (req, res, next) => {
 
 // logout
 exports.logout = catchAsync(async (req, res) => {
-    const token = req.cookies.jwt;
+  const token = req.cookies.jwt;
 
-    if (!token) {
-        return res.status(401).json({ error: 'You are not logged in' });
-    }
+  if (!token) {
+      return res.status(401).json({ error: 'You are not logged in' });
+  }
 
-    // Clear the token cookie
-    res.clearCookie('jwt').redirect('/login')
+  // Invalidate the token by adding it to a token blacklist
+  await TokenBlacklist.create({ token });
 
-})
-  
+  // Clear the token cookie
+  res.clearCookie('jwt').redirect('/login');
+});
 
 
 // protect 

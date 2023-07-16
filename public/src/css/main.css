@@ -591,7 +591,9 @@
     background-image: linear-gradient(to right bottom, #2e3192 60%, #f15a29);
     color: #eeee;
 }
-
+.logo--box .footer__logo {
+    height: 2rem;
+}
 .footer__grid {
     display: grid;
     grid-template-columns: 3fr 2fr 1.5fr 3.5fr;
@@ -603,11 +605,6 @@
     flex-direction: column;
     gap: 2.4rem;
 }
-
-.footer__logo {
-    font-size: 3.6rem;
-}
-
 .footer__description {
     font-size: 1.4rem;
     line-height: 1.5;
@@ -731,7 +728,7 @@
     align-items: center;
 }
 
-.footer__icon--grid a:link, .footer__icon--grid a:visited {
+.footer__icon--grid a:link .icon, .footer__icon--grid a:visited .icon{
     width: 2.8rem;
     height: 2.8rem;
     border-radius: 50%;
@@ -746,10 +743,4 @@
 .footer__icon--grid .icon {
     color: #333;
     font-weight: 600;
-}
-
-.navigation-icons {
-    font-size: 2.4rem;
-    display: none;
-    opacity: 0;
 }

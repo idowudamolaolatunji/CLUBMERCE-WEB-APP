@@ -64,13 +64,12 @@ block content
                         input.agree(type='checkbox' required id='check')
                         label.form__help(for='check')
                             | I Agree to the 
-                            a.form__extra(href='/terms') terms and conditions
+                            a.form__extra(href='#') terms and conditions
                             |  for membership.
                     .form__submit
                         button.form__button(type='submit') Submit and Signup
                         p.form__text
-                            span &VerticalLine;
-                            | &nbsp; Already have an account? 
+                            span  Already have an account? 
                             a.form__extra(href='/login') Login here.
 
 
@@ -88,7 +87,7 @@ block content
                         | Please click the link in your email and verify your email...
 
 
-        .email__drop-down.drop-down__shadow.hidden
+        //- .email__drop-down.drop-down__shadow.hidden
             .email-confirmed__modal.modal
                 i.fasolid.fa-close.close__icon.email-confirm__close--icon 
                 .modal__container

@@ -31,14 +31,34 @@ block content
                         p.approved.status.status--success Approved
                     span.table-row-content.table-row-btn
                         //- button.btn-edit.table-btn Edit
-                        button.btn-delete.table-btn(data-product-id=`${product._id}`) Delete
+                        //- button.btn-edit.table-btn.admin-product-edit(data-id=`${product._id}`) Edit
+                        button.btn-delete.table-btn.admin-product-delete(data-id=`${product._id}`) Delete
+                .table-row-mp
+                    span.table-row-content.table-row-product
+                        img.table-product__image(src='asset/img/product.jpg' alt='')
+                        //- span
+                            p.table-product__niche= product.category
+                        p.table-product__name= product.name
+                    span.table-row-content
+                        //- p.brand= product.vendor.businessName || 'Brand or Business Name'
+                        p.brand= 'Business Name'
+                    span.table-row-content
+                        p.category= product.category
+                    span.table-row-content
+                        p.price= product.price
+                    span.table-row-content
+                        p.approved.status.status--success Approved
+                    span.table-row-content.table-row-btn
+                        //- button.btn-edit.table-btn Edit
+                        //- button.btn-edit.table-btn.admin-product-edit(data-id=`${product._id}`) Edit
+                        button.btn-delete.table-btn.admin-product-delete(data-id=`${product._id}`) Delete
 
 
     .generic__overlay.product-update__overlay.hidden
         .generic__modal.product-update__modal
             i.fa-solid.fa-close.icon.form-update__close-icon
-            h3.dashboard__heading Add new product
-            form.product__form
+            h3.dashboard__heading Update product
+            form.product__form-admin-update
                 .form__body-generic
                     label.form__label(for='product__name') Product Name
                     input#product-update__name.form__input(type='text' name='product__name' required='' placeholder='Product name')

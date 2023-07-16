@@ -70,6 +70,14 @@ const productSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    demography: [ {
+        primaryLocation: [String],
+        secondaryLoaction: [String],
+        primaryAgeRange: [String],
+        secondaryAgeRange: [String],
+        // secondaryAgeRange: String,
+        socialMeadialPlaces: [String]
+    } ],
     createdAt: {
         type: Date,
         default: Date.now(),

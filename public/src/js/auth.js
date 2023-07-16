@@ -1,193 +1,303 @@
-const loginFrom = document.querySelector('.login');
+const loginForm = document.querySelector('.login');
 const signupForm = document.querySelector('.signup');
 const adminAuthForm = document.querySelector('#admin-login');
 const spinOverlay = document.querySelector('#spinOverlay');
 
+const navMenuBtn = document.querySelector(".navigation-controls");
+const navList = document.querySelector(".nav__list");
+const icon = document.querySelector('.navigation-icon');
+
+if (navMenuBtn) {
+  navMenuBtn.addEventListener("click", function() {
+    if (icon.classList.contains('fa-close')) {
+      navList.style.transform = 'translateX(100%)';
+      setTimeout(() => {
+        navList.style.visibility = 'hidden';
+      }, 500);
+    } else {
+      navList.style.visibility = 'visible';
+      navList.style.transform = 'translateX(0)';
+    }
+    icon.classList.toggle('fa-close');
+  });
+}
+
 
 // ALERTS
 const hideAlert = () => {
-    const el = document.querySelector('.alert');
-    if (el) el.parentElement.removeChild(el);
+     const el = document.querySelector('.alert');
+     if (el) el.parentElement.removeChild(el);
 };
 
-// type is 'success' or 'error'
 const showAlert = (type, msg) => {
-    hideAlert();
-    const markup = `<div class="alert alert--${type}">${msg}</div>`;
-    document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
-    window.setTimeout(hideAlert, 5000);
+     hideAlert();
+     const markup = `<div class="alert alert--${type}">${msg}</div>`;
+     document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
+     setTimeout(hideAlert, 5000);
 };
 
-// Function to display the email verification modal
-// const showEmailVerificationModal = (email) => {
-//     // const modalContainer = document.querySelector('.email-verify__modal');
-//     const modalContainer = document.querySelector('.email__drop-down');
-//     const emailSpan = modalContainer.querySelector('.user__email');
-//     emailSpan.textContent = email;
-//     modalContainer.classList.remove('hidden');
-// };
+const showLoadingOverlay = () => {
+     spinOverlay.style.visibility = 'visible';
+};
 
-// // Function to close the email verification modal
-// const closeEmailVerificationModal = () => {
-//     const modalContainer = document.querySelector('.email__drop-down');
-//     modalContainer.classList.add('hidden');
-// };
+const hideLoadingOverlay = () => {
+     spinOverlay.style.visibility = 'hidden';
+};
 
-// // Event listener for close button in the email verification modal
-// const closeButton = document.querySelector('.verify__close--icon');
-// if(closeButton) {
-//     closeButton.addEventListener('click', closeEmailVerificationModal);
-// }
-
-
-// FORMS functions
 const login = async (email, password, role) => {
-    try {
-        const res = await fetch('/api/users/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password, role }),
-        });
-        spinOverlay.style.visibility = 'visible';
+     try {
+          showLoadingOverlay();
 
-        if (!res.ok) {
-            throw new Error('Login request failed');
-        }
-    
-        const data = await res.json();
-        console.log(res, data)
-    
-        if (data.data.role === 'admin') {
-            showAlert('error', 'Admins cannot log in through this form.');
-            spinOverlay.style.visibility = 'hidden';
-            return;
-        }
-    
-        if (data.status === 'success') {
-            window.setTimeout(() => {
-                // Redirect immediately after displaying success message
-                location.assign('/dashboard');
-                spinOverlay.style.visibility = 'hidden'
-            }, 3000);
-            showAlert('success', 'Auth Successful!');
-            
-        } else if(data.status === 'fail') {
-            spinOverlay.style.visibility = 'hidden';
-            console.log(res)
-            throw new Error(data.message || 'Login failed');
-        }
-    } catch (err) {
-        spinOverlay.style.visibility = 'hidden';
-        showAlert('error', err.message || 'Something went wrong, please try again!');
-    }
+          const res = await fetch('/api/users/login', {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify({ email, password, role }),
+          });
+
+          if (!res.ok) {
+               throw new Error('Login request failed');
+          }
+
+          const data = await res.json();
+
+          if (data.data.role === 'admin') {
+               hideLoadingOverlay();
+               showAlert('error', 'Admins cannot log in through this form.');
+               return;
+          }
+
+          if (data.status === 'success') {
+               showAlert('success', 'Auth Successful!');
+               setTimeout(() => {
+               location.assign('/dashboard');
+               }, 3000);
+          } else if (data.status === 'fail') {
+               throw new Error(data.message || 'Login failed');
+          }
+     } catch (err) {
+          hideLoadingOverlay();
+          showAlert('error', err.message || 'Something went wrong, please try again!');
+     }
 };
-
 
 const adminAuthLogin = async (email, password) => {
-    try {
-        console.log(email, password);
-        
-        const res = await fetch('/api/users/login-admin', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password }),
-        });
-        
-        spinOverlay.style.visibility = 'visible'
-        // we await the response
-        const data = await res.json();
-        console.log(data)
-        if (data.status === 'success') {
-            if(data.data.role === 'vendor' || data.data.role === 'affiliate') {
-                showAlert('error', 'Only admins can log in through this form.');
-                spinOverlay.style.visibility = 'hidden';
-                return;
-            }
-        
-            window.setTimeout(() => {
-                showAlert('success', 'Auth Successful');
-                location.assign('/dashboard');
-                spinOverlay.style.visibility = 'hidden'
-            }, 2000);
-        } else {
-            window.setTimeout(() => {
-                spinOverlay.style.visibility = 'hidden';
-                window.location.reload(true)
-            }, 500)
-        }
-    } catch (err) {
-        showAlert('error', err.message || 'Something went wrong, Please try again!')
-    }
+     try {
+          showLoadingOverlay();
+
+          const res = await fetch('/api/users/login-admin', {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify({ email, password }),
+          });
+
+          if (!res.ok) {
+               throw new Error('Login request failed');
+          }
+
+          const data = await res.json();
+
+          if (data.status === 'success') {
+               if (data.data.role === 'vendor' || data.data.role === 'affiliate') {
+                    hideLoadingOverlay();
+                    showAlert('error', 'Only admins can log in through this form.');
+                    return;
+               }
+
+               showAlert('success', 'Auth Successful');
+               setTimeout(() => {
+                    location.assign('/dashboard');
+               }, 2000);
+          } else {
+               setTimeout(() => {
+                    hideLoadingOverlay();
+                    window.location.reload(true);
+               }, 500);
+          }
+     } catch (err) {
+          hideLoadingOverlay();
+          showAlert('error', err.message || 'Something went wrong. Please try again!');
+     }
+};
+
+
+const showEmailVerificationModal = (email) => {
+    const modalContainer = document.querySelector('.email__drop-down');
+    const emailSpan = modalContainer.querySelector('.user__email');
+    emailSpan.textContent = email;
+    modalContainer.classList.remove('hidden');
+};
+  
+const closeEmailVerificationModal = () => {
+    const modalContainer = document.querySelector('.email__drop-down');
+    modalContainer.classList.add('hidden');
+    location.reload();
+};
+  
+const closeButton = document.querySelector('.verify__close--icon');
+if (closeButton) {
+    closeButton.addEventListener('click', closeEmailVerificationModal);
+}
+  
+
+// signup
+const signup = async (fullName, email, password, passwordConfirm, username, country, phone, role) => {
+     try {
+          showLoadingOverlay();
+     
+          const res = await fetch('/api/users/signup', {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify({ fullName, email, password, passwordConfirm, username, country, phone, role }),
+          });
+     
+          if (!res.ok) {
+               throw new Error('Error signing up');
+          }
+     
+          const data = await res.json();
+     
+          if (data.status === 'success') {
+               showAlert('success', data.data.message || 'Successful');
+               showEmailVerificationModal(email);
+          } else if (data.status === 'fail') {
+               location.reload(true)
+               throw new Error(data.message || 'Error signing up');
+          }
+     } catch (err) {
+          showAlert('error', err.message || 'Something went wrong. Please try again!');
+     } finally {
+          hideLoadingOverlay();
+     }
+};
+
+
+// email confirmation
+const showEmailConfirmationModal = () => {
+     const modalContainer = document.querySelector('.email-confirmed__modal');
+     modalContainer.classList.remove('hidden');
+};
+const closeEmailConfirmationModal = () => {
+     const modalContainer = document.querySelector('.email-confirmed__modal');
+     modalContainer.classList.add('hidden');
+};
+
+// Event listener for close icon in the email confirmation modal
+const closeIcons = document.querySelectorAll('.email-confirm__close--icon');
+   closeIcons.forEach((icon) => {
+     icon.addEventListener('click', closeEmailConfirmationModal);
+});
+   
+// verify email
+const verifyEmail = async function (verificationToken) {
+     try {
+       // Retrieve the verification token from the URL
+     //   const urlParams = new URLSearchParams(window.location.search);
+     //   const verificationToken = urlParams.get('token');
+   
+       // Make a GET request to the backend verification route
+       const response = await fetch(`/api/auth/verify-email/${verificationToken}`);
+   
+       if (response.ok) {
+         // Verification successful
+         const confirmationMessage = `
+           <div class="email__drop-down drop-down__shadow">
+             <div class="email-confirmed__modal modal">
+               <i class="fa-solid fa-close close__icon email-confirm__close--icon"></i>
+               <div class="modal__container">
+                 <h3 class="extra__heading">Success!</h3>
+                 <p class="modal__text">Your email address has been verified successfully!</p>
+                 <a class="form__button proceed__button" href="/login">Proceed to login</a>
+               </div>
+             </div>
+           </div>
+         `;
+   
+         // Add the confirmation message to the document body
+         document.body.insertAdjacentHTML('beforeend', confirmationMessage);
+       } else {
+         // Verification failed
+         const errorMessage = `
+           <div class="email__drop-down drop-down__shadow">
+             <div class="email-confirmed__modal modal">
+               <i class="fa-solid fa-close close__icon email-confirm__close--icon"></i>
+               <div class="modal__container">
+                 <h3 class="extra__heading">Failed!</h3>
+                 <p class="modal__text">Email verification failed. Please try again.</p>
+               </div>
+             </div>
+           </div>
+         `;
+   
+         // Add the error message to the document body
+         document.body.insertAdjacentHTML('beforeend', errorMessage);
+       }
+     } catch (error) {
+       // Handle network or other errors
+       console.log(error);
+       const errorMessage = `
+         <div class="email__drop-down drop-down__shadow">
+           <div class="email-confirmed__modal modal">
+             <i class="fa-solid fa-close close__icon email-confirm__close--icon"></i>
+             <div class="modal__container">
+               <h3 class="extra__heading">Error!</h3>
+               <p class="modal__text">An error occurred. Please try again later.</p>
+             </div>
+           </div>
+         </div>
+       `;
+   
+       // Add the error message to the document body
+       document.body.insertAdjacentHTML('beforeend', errorMessage);
+     }
 }
 
 
-const signup = async (...body) => {
-    try {
-        const [fullName, email, password, passwordConfirm, username, country, phone, role] = body
-        // console.log({fullName, email, password, passwordConfirm, username, country, phone, role});
-
-        const res = await fetch('/api/users/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({fullName, email, password, passwordConfirm, username, country, phone, role}),
-        });
-        spinOverlay.style.visibility = 'visible'
-
-        if(!res.ok) {
-            showAlert('error', 'Either user already exist or wrong credentials');
-            spinOverlay.style.visibility = 'hidden';
-            // return location.reload(true);
-        }
-
-        const data = await res.json();
-
-        if (data.status === 'success') {
-            showAlert('success', data.data.message);
-            spinOverlay.style.visibility = 'hidden';
-            // Add code here to display the email verification modal
-            showEmailVerificationModal(email);
-        } else if (data.status === 'fail') {
-            throw new Error(data.message || 'Error signing up');
-        }
-    } catch (err) {
-        console.log(err)
-        showAlert('error', err)
-
-    }
+function getVerificationTokenFromURL() {
+     const urlParams = new URLSearchParams(window.location.search);
+     return urlParams.get('token');
+}
+// Check if a verification token exists in the URL
+const verificationToken = getVerificationTokenFromURL();
+if (verificationToken) {
+     verifyEmail(verificationToken);
 }
 
-// FORMS controllers
-if(loginFrom) {
-    loginFrom.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const email = document.querySelector('.login__email').value;
-        const password = document.querySelector('.login__password').value;
-        const role = document.querySelector('.login__role').value;
-        login(email, password, role);
-    });
+   
+
+/////////////////////////////////////////////
+/////////////////////////////////////////////
+/////////////////////////////////////////////
+
+if (loginForm) {
+  loginForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const email = document.querySelector('.login__email').value;
+    const password = document.querySelector('.login__password').value;
+    const role = document.querySelector('.login__role').value;
+    login(email, password, role);
+  });
 }
 
-if(adminAuthForm) {
-    adminAuthForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const email = document.querySelector('#admin-email').value;
-        const password = document.querySelector('#admin-password').value;
-        adminAuthLogin(email, password);
-    });
+if (adminAuthForm) {
+  adminAuthForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const email = document.querySelector('#admin-email').value;
+    const password = document.querySelector('#admin-password').value;
+    adminAuthLogin(email, password);
+  });
 }
 
-
-if(signupForm) {
-    signupForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const fullName = document.querySelector('.signup__fullname').value;
-        const email = document.querySelector('.signup__email').value;
-        const password = document.querySelector('.signup__passwordMain').value;
-        const passwordConfirm = document.querySelector('.signup__passwordconfirm').value;
-        const usernname = document.querySelector('.signup__username').value;
-        const country = document.querySelector('.signup__country').value;
-        const phone = document.querySelector('.signup__phone').value;
-        const role = document.querySelector('.signup__role').value;
-        signup(fullName, email, password, passwordConfirm, usernname, country, phone, role);
-    })
+if (signupForm) {
+  signupForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const fullName = document.querySelector('.signup__fullname').value;
+    const email = document.querySelector('.signup__email').value;
+    const password = document.querySelector('.signup__passwordMain').value;
+    const passwordConfirm = document.querySelector('.signup__passwordconfirm').value;
+    const username = document.querySelector('.signup__username').value;
+    const country = document.querySelector('.signup__country').value;
+    const phone = document.querySelector('.signup__phone').value;
+    const role = document.querySelector('.signup__role').value;
+    signup(fullName, email, password, passwordConfirm, username, country, phone, role);
+  });
 }

@@ -45,14 +45,14 @@ block content
                 h4 Delete My Account 
                 span Every info about this account, transactions, affiliate links, sold product histories, personal details and other sensitive informations would be removed as you click 
                     strong(style="color:#f15a29;") Delete My Account!
-                button.btn Delete My Account
+                button.btn.delete-account Delete My Account
 
         -if(user.role === 'vendor')
             .delete-data
                 h4 Delete Vendor Account 
                 span Every info about this vendor account, transactions, products, purchases, orders and order histories, personal details and other sensitive informations would be removed as you click 
                     strong(style="color:#f15a29;") Delete My Account!
-                button.btn Delete My Account
+                button.btn.delete-account Delete My Account
 
     -if(user.role === 'admin')
         h3.dashboard__heading Admin Settings 

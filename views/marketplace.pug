@@ -16,8 +16,8 @@ head
     link(rel="stylesheet" href="../src/css/dashboard.css")
     link(rel="stylesheet" href="../src/css/query_dashboard.css")
 
+    //- script(defer src="/src/js/hoplink.js")
     script(defer src="/src/js/dashboard.js")
-    script(defer src="/src/js/hoplink.js")
 
     title=title
 body
@@ -153,7 +153,8 @@ body
                                         span.product__commission
                                             p.commision avg commission 
                                             span.commission__amount= `₦ ${product.price}`
-                                        a.btn.product__button.promote(data-product=product.slug) Promote
+                                        a.btn.product__button.promote(data-productSlug=product.slug) Promote
+                                        -console.log(product.slug)
                                         a.product__button.page(target="_blank" href=`/marketplace/${product.slug}`) affiliate page
 
 
@@ -168,7 +169,7 @@ body
                                                     
                                                 .product__content
                                                     h4.product__description #{product.summary}...
-                                                    a.product__button.page(target="_blank" href=`/marketplace/${product.slug}`) affiliate page
+                                                    a.product__button.page.margin__bottom--xsm(target="_blank" href=`/marketplace/${product.slug}`) affiliate page
                                         .front--bottom
                                             ul.product__info
                                                 //- each icon in product.others
@@ -193,12 +194,12 @@ body
                                         .link--box
                                             h2.dashboard__heading Generate HopLink
                                             p.hoplink__text  Earn commission for every customer you refer to this product using your personalized affiliate hoplink.
-                                            form.hoplink-form
+                                            form.hoplink-form.hoplink-mobile(data-productSlug-mobile=product.slug)
                                                 .hoplink__body
-                                                    input.hoplink__input.hoplink-username(type='text' placeholder='Username' required)
+                                                    input.hoplink__input.hoplink-username-mobile(type='text' placeholder='Username' required)
                                                     p.hoplink__body--text Required
                                                 .hoplink__body
-                                                    input.hoplink__input.hoplink-trackingid(type='text' placeholder='Tracing Id')
+                                                    input.hoplink__input.hoplink-trackingid-mobile(type='text' placeholder='Tracing Id')
                                                     p.hoplink__body--text Optional
                                                 button.btn.hoplink__submit(type='submit') Generate Hoplink
 
@@ -218,14 +219,14 @@ body
                             button.btn.hoplink__submit.submit(type='submit') Generate Hoplink
 
 
-                //- .hoplink__overlay.copy__overlay
-                    .hoplink__modal.copy__modal
+                .hoplink__overlay.copy__overlay.hidden
+                    .hoplink__modal.copy__modal.hidden
                         h2.dashboard__heading Copy HopLink
-                        .flexible
-                            p.hoplink__text Paste this URL into your promotional materials.
-                            button.hoplink__copy-button(type="button")
-                        p.hoplink__copy https://clubmerce.com/product/85vfhbhfcbvhjfbvhjbchvbfvhjfvhf94rfjnvvfnfv/fbdfhjnbire84
+                        p.hoplink__text Paste this URL into your promotional materials.
+                        p.hoplink__copy https://clubmerce.com
                         
-                        button.btn.hoplink__submit.btnOk Ok
+                        .flexible
+                            button.btn.hoplink__submit.btnModalOk Ok
+                            button.hoplink__copy-button.outline Copy
             
             include _auth_footer
