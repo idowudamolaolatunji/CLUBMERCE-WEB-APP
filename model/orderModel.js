@@ -3,10 +3,17 @@ const validator = require('validator')
 
 const orderSchema = new mongoose.Schema({
 	productId: {
-		type: mongoose.Schema.Types.ObjectId,
+		type: mongoose.Schema.ObjectId,
 		ref: "Product",
 	},
-	vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+	vendor: {
+		type: mongoose.Schema.ObjectId,
+		ref: 'User'
+	},
+	buyer: {
+		type: mongoose.Schema.ObjectId,
+		ref: 'User'
+	},
 	orderStaus: {
         type: String,
 		enum: ['pending', 'delivered'],

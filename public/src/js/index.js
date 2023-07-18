@@ -61,6 +61,66 @@ if (navMenuBtn) {
 }
 
 
+// LEC 16) A Better Way: The Intersection Observer API
+if (window.innerWidth >= 750) {
+
+  const obsCallback = function (entries, observer) {
+    entries.forEach((entry) => {
+      console.log(entry);
+    });
+  };
+
+  const obsOptions = {
+    root: null,
+    threshold: [0, 0.2],
+  };
+
+  const nav = document.querySelector('.header')
+  const observer = new IntersectionObserver(obsCallback, obsOptions);
+  const navHeight = nav.getBoundingClientRect().height;
+  console.log(navHeight);
+
+  const stickNav = function (entries) {
+    const [entry] = entries; // Destructuring
+
+    if (!entry.isIntersecting) nav.classList.add("sticky");
+    else nav.classList.remove("sticky");
+  };
+
+  const headerObserver = new IntersectionObserver(stickNav, {
+    root: null,
+    threshold: .5,
+
+    rootMargin: `-${navHeight}px`,
+  });
+
+  headerObserver.observe(document.querySelector(".hero__section"));
+} else if (window.innerWidth <= 750) {
+  const nav = document.querySelector('.header');
+  const navHeight = nav.getBoundingClientRect().height;
+
+  const stickNav = function (entries, observer) {
+    const [entry] = entries;
+
+    if (!entry.isIntersecting) {
+      nav.classList.add("sticky");
+    } else {
+      nav.classList.remove("sticky");
+    }
+  };
+
+  const headerObserver = new IntersectionObserver(stickNav, {
+    root: null,
+    threshold: 0,
+    rootMargin: `-${navHeight}px`,
+  });
+
+  headerObserver.observe(nav);
+
+}
+
+
+
 const allSections = document.querySelectorAll(".section");
 const revealSection = (entries, observer) => {
   entries.forEach((entry) => {

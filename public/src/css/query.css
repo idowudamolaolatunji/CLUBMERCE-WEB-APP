@@ -209,6 +209,9 @@
     .header {
         height: 6.4rem;
     }
+    .hero__section {
+        padding: 12rem 0;
+    }
     .accordion__heading {
         font-size: 1.8rem;
     }
@@ -263,7 +266,6 @@
     .navigation-icon {
         color: #666;
     }
-    
     .nav__list-m { 
         display: flex;
         opacity: 1;
@@ -305,6 +307,10 @@
     .section {
         padding: 5rem 0;
     }
+    .hero__section {
+        padding: 12rem 0;
+    }
+    
     .center { text-align: left; }
     .section__container {
         padding: 0 2rem ;

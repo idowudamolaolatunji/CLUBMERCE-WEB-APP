@@ -75,7 +75,8 @@ const productSchema = new mongoose.Schema({
         secondaryLoaction: [String],
         primaryAgeRange: [String],
         secondaryAgeRange: [String],
-        // secondaryAgeRange: String,
+        primaryGender: [String],
+        secondaryGender: [String],
         socialMeadialPlaces: [String]
     } ],
     createdAt: {

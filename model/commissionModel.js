@@ -5,7 +5,7 @@ const commissionSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
     },
-    user: {
+    affiliate: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },

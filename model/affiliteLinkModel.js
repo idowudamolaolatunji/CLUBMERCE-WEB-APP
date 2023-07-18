@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const affiliateLinkSchema = new mongoose.Schema({
-  user: { type: String, ref: 'User' },
-  product: { type: String, ref: 'Product' },
+  affiliate: { type: mongoose.Schema.ObjectId, ref: 'User' },
+  product: { type: mongoose.Schema.ObjectId, ref: 'Product' },
   link: String,
   clicks: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now() },

@@ -56,7 +56,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['affiliate', 'vendor', 'admin'],
+        enum: ['user', 'affiliate', 'vendor', 'admin'],
         default: "affiliate",
     },
     zipCode: String,
@@ -87,7 +87,6 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    // recievedTransaction: mongoose.Schema.Types.ObjectId, ref: 'Transaction',
     transactions:  mongoose.Schema.Types.Mixed,
     promotionLinksCounts: { type: Number, default: 0 },
     commissions: Number,

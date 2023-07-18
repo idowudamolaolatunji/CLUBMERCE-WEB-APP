@@ -23,7 +23,7 @@
 /* 1100px === 110rem === 68.75em */
 @media screen and (max-width: 68.75em) {
     .main__dashboard {
-        padding: 2.4rem;
+        padding: 2rem;
     }
     .dashboard__insights {
         gap: 1.8rem;
@@ -69,6 +69,13 @@
         grid-template-columns: 7rem 1fr;
         transition: 0ms;
     }
+    .dashboard__insights  {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1.8rem;
+    }
+    .insight__title {
+        font-size: 1.2rem;
+    }
     .menu__link:link, .menu__link:visited {
         gap: 2.8rem;
         transition: none 0ms;
@@ -88,10 +95,22 @@
         z-index: 100;
         backface-visibility: hidden;
     }
-    .open .main__dashboard {
-        /* right: 0; */
-        left: 7rem;
+    .open .main__dashboard::after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+        height: 100vh;
+        overflow-y: hidden;
         background-color: rgba(0, 0, 0, .1);
+        position: fixed;
+        top: 7rem;
+        left: 0;
+        right: 0;
+        z-index: 50;
+    }
+    .open .main__dashboard {
+        right: 0;
+        left: 7rem;
     }
     .copy__modal {
         width: 50rem;
@@ -178,10 +197,11 @@
         gap: 1.4rem;
         margin-right: 3.6rem;
     }
-    .dashboard__insights  {
-        grid-template-columns: 1fr 1fr;
-        row-gap: 2.8rem;
+    .icon__box {
+        width: 4.8rem;
+        height: 4.8rem;
     }
+    
     /* table */
     .dashboard__table {
         overflow: scroll;
@@ -203,6 +223,9 @@
     }
     .main__dashboard {
         padding: 2.4rem 1.2rem;
+    }
+    .dashboard__insights  {
+        grid-template-columns: 1fr 1fr;
     }
     .nav__input {
         width: 15rem;
@@ -282,6 +305,7 @@
         left: 0;
         overflow: hidden;
         box-shadow: .2rem .2rem .6rem rgba(0, 0, 0, .1);
+        background-color: #fff;
     }
     .product__card-mobile:hover .front {
         transform: rotateY(-180deg);
@@ -290,12 +314,10 @@
     .product__card-mobile:hover .back {
         transform: rotateY(0);
     }
-      
     .back {
         padding: 1.6rem;
         transform: rotateY(180deg);
     }
-
     .product__image--container {
         height: 20rem;
         width: 100%;
@@ -323,6 +345,9 @@
         gap: 1.8rem;
         align-items: center;
     }
+    .notification__hovered {
+        right: 6rem;
+    }
 }
 
 /* 450px === 45rem === 28.125em */
@@ -336,18 +361,26 @@
         grid-template-columns: 1fr;
         gap: 4.8rem;
     }
+    .dashboard__insights {
+        gap: 1.4rem;
+    }
+    .insight {
+        padding: 1.4rem 1rem;
+    }
 }
 
 /* 415px === 41.5rem === 26em */
 @media screen and (max-width: 26em) {
-
-    .dashboard__insights {
-        display: flex;
-        flex-direction: column;
-        gap: 2.4rem;
-        align-items: stretch;
+    .dashboard__insights  {
+        grid-template-columns: 1fr;
+        gap: 1.8rem;
+        max-width: 85%;
     }
 
+    .insight {
+        gap: 2.4rem;
+        padding: 1.8rem;
+    }
     .products__cards--box  {
         margin: 0;
     }
@@ -356,10 +389,7 @@
 /* 400px === 40rem === 23.125em */
 @media screen and (max-width: 25.125em) {
     .products__cards--box  {
-    width: 90%;
-    }
-    .insight {
-       width: 100%;
+        width: 90%;
     }
     .section__top {
         gap: 2rem;
@@ -378,5 +408,18 @@
 
         background-color: #fff;
         box-shadow: .2rem .2rem 4rem rgba(0, 0, 0, .1);
+    }
+    .dashboard__insights  {
+        max-width: 85%;
+    }
+}
+
+/* 390px === 39rem === 22.5em */
+@media screen and (max-width: 23.5em) {
+    .dashboard__insights  {
+        max-width: 90%;
+    }
+    .insight {
+        gap: 2.4rem;
     }
 }

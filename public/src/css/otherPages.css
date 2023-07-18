@@ -1,6 +1,9 @@
+.header {
+    background-color: #fff;
+}
 .page__hero {
-    max-height: 75vh;
-    padding: 8rem 0;
+    max-height: 80vh;
+    padding: 12rem 0;
 
     background-position: top;
     background-size: cover;

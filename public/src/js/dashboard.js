@@ -143,9 +143,9 @@ const logout = async function() {
     }
 }
 
-if(menuLogout) menuLogout.addEventListener('click', logout);
-if(navLogout) navLogout.addEventListener('click', logout);
-if(adminLogout) adminLogout.addEventListener('click', logout);
+// if(menuLogout) menuLogout.addEventListener('click', logout);
+// if(navLogout) navLogout.addEventListener('click', logout);
+// if(adminLogout) adminLogout.addEventListener('click', logout);
 
 
 // Function to retrieve the value of a specific cookie
@@ -462,7 +462,7 @@ if(vendorProductDelete) {
         })
         document.querySelector('.delete__icon').addEventListener('click', () => {
             closeAdjacentModal();
-        } )
+        })
     }));
 }
 

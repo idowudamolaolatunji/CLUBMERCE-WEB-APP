@@ -2,25 +2,25 @@ extends base
 
 block content 
     main
-        <div id="spinOverlay">
-            <div class="spin">
-                <div></div>   
-                <div></div>    
-                <div></div>    
-                <div></div>    
-                <div></div>    
-                <div></div>    
-                <div></div>    
-                <div></div>    
-                <div></div>    
-                <div></div>    
-            </div>
-        </div>
+        #spinOverlay
+            .spin
+                div
+                div
+                div
+                div
+                div
+                div
+                div
+                div
+                div
+                div
+        .animation.animation-box--1
+        .animation.animation-box--2
+        .animation.animation-box--3
+        .animation.animation-box--4
+        .animation.animation-box--5
+        .animation.animation-box--6
 
-        <div class="animation animation-box--1"></div>
-        <div class="animation animation-box--2"></div>
-        <div class="animation animation-box--3"></div>
-        <div class="animation animation-box--4"></div>
         section.section.hero__section
             img.hero__svg.svg1(src='asset/svg/svg1.svg')
             img.hero__svg.svg2(src='asset/svg/svg2.svg')
@@ -29,13 +29,13 @@ block content
                     h1.section__heading--primary
                         | Unleash Your Earning Potentials.
                     h3.section__heading--tetrary.lsp
-                        | With our innovative platform, you can supercharge your sales strategy and watch your revenue soar!
+                        | With our cutting-edge platform, one established affiliate marketing ecosystem, to achieve intelligent, scalable, and sustainable growth, and watch your revenue soar to new heights!
                     .hero__button--container
                         a.section__button.btn.hero__button.main__button(href='/get-started') Get started
                         a.section__button.hero__button.outline__button(href='#how') Learn more
-                        //- a.section__button.hero__button.outline__button(href='#learn') Learn more
                 .hero__image--box
-                        img.hero__image.bbbb(src="asset/img/hero_reduced.jpg" alt="")
+                        //- img.hero__image.bbbb(src="asset/img/hero_reduced.jpg" alt="")
+                        img.hero__image.bbbb(src="asset/img/clubmerce.png" alt="")
                         img.hero__image.mmmm(src="asset/img/test-2.png" alt="")
                         
 
@@ -84,7 +84,7 @@ block content
                     img.how__steps--line(src='asset/svg/line.svg' alt='')
                     .grid.how.grid__two.grid__align--center
                         .section__image.how__section--image.how__one
-                            img.how__image(src='asset/svg/Work in progress-cuate.svg' alt='')
+                            img.how__image(src='asset/svg/Authentication-cuate.svg' alt='')
                         .section__content
                             h2.section__heading--secondary.how__heading.margin__bottom--md
                                 | how it works
@@ -98,10 +98,10 @@ block content
                                 | Visit The Affiliate MarketPlace
                             p.section__content--text  As an affiliate, you'll gain access to our vibrant marketplace, where countless products and services await your promotional prowess.
                         .section__image.how__section--image.how__two
-                            img.how__image(src='asset/svg/People sightseeing outdoors-cuate.svg' alt='')
+                            img.how__image(src='asset/svg/Buffer-cuate.svg' alt='')
                     .grid.how.grid__two.grid__align--center
                         .section__image.how__section--image.how__three
-                            img.how__image(src='asset/svg/Marketing-cuate.svg' alt='')
+                            img.how__image(src='asset/svg/Emails-cuate.svg' alt='')
                         .section__content
                             // <h3 class="section__content--title"><span class="number">03</span>Promote and earn</h3>
                             h3.section__content--title Promote and earn
@@ -144,49 +144,52 @@ block content
         section.section.faq__section
             .section__container
                 h3.section__heading--secondary.center.capitalize frequenty asked questions
-                .faq__accordion
-                    .faq__accordion--item
-                        .accordion__content--title
-                            h3.accordion__heading What is clubmerce?
-                            span &minus;
-                        .faq__accordion--content
-                            p.accordion__content--text Clubmerce is an innovative affiliate marketing platform that connects brands, vendors, and affiliate marketers in a seamless ecosystem. With Clubmerce, affiliates can promote a wide range of products and services while earning commissions on successful product purchase.
-                    .faq__accordion--item
-                        .accordion__content--title
-                            h3.accordion__heading What types of products can I promote as an affiliate?
-                            span &minus;
-                        .faq__accordion--content
-                            p.accordion__content--text As an affiliate, you can promote a diverse range of products or services including physical products, digital products, services, travel and hospitality, beauty and personal care, financial products, home and garden items, food and beverage products, fashion and accessories, and lifestyle and wellness products.
-                    .faq__accordion--item
-                        .accordion__content--title
-                            h3.accordion__heading Is there a minimum payout threshold for affiliate earnings?
-                            span &minus;
-                        .faq__accordion--content
-                            p.accordion__content--text The minimum payout threshold for affiliate earnings on Clubmerce is $50. Once your earnings reach this threshold, you become eligible for withdrawal. This ensures that you receive a substantial amount before initiating the payout process. Clubmerce values your efforts as an affiliate and aims to provide a fair and transparent system for earning commissions.
-                    .faq__accordion--item
-                        .accordion__content--title
-                            h3.accordion__heading Can I promote multiple products from different vendors on this platform?
-                            span &minus;
-                        .faq__accordion--content
-                            p.accordion__content--text Yes, on Clubmerce, you have the flexibility to promote multiple products or services from different vendors within the platform. As an affiliate, you can explore a diverse marketplace and choose from a wide range of offerings. This allows you to diversify your promotional efforts, target various niches, and cater to the interests of your audience. Clubmerce provides a centralized platform where you can easily manage and track your promotions across different vendors, making it convenient to engage with multiple products or services simultaneously.
-                    .faq__accordion--item
-                        .accordion__content--title
-                            h3.accordion__heading How can I maximize my affiliate marketing success on this platform?
-                            span &minus;
-                        .faq__accordion--content
-                            p.accordion__content--text To maximize your affiliate marketing success on Clubmerce, consider implementing the following strategies:
+                .faq
+                    .faq__accordion
+                        .faq__accordion--item
+                            .accordion__content--title
+                                h3.accordion__heading What is clubmerce?
+                                span &minus;
+                            .faq__accordion--content
+                                p.accordion__content--text Clubmerce is an innovative affiliate marketing platform that connects brands, vendors, and affiliate marketers in a seamless ecosystem. With Clubmerce, affiliates can promote a wide range of products and services while earning commissions on successful product purchase.
+                        .faq__accordion--item
+                            .accordion__content--title
+                                h3.accordion__heading What types of products can I promote as an affiliate?
+                                span &minus;
+                            .faq__accordion--content
+                                p.accordion__content--text As an affiliate, you can promote a diverse range of products or services including physical products, digital products, services, travel and hospitality, beauty and personal care, financial products, home and garden items, food and beverage products, fashion and accessories, and lifestyle and wellness products.
+                        .faq__accordion--item
+                            .accordion__content--title
+                                h3.accordion__heading Is there a minimum payout threshold for affiliate earnings?
+                                span &minus;
+                            .faq__accordion--content
+                                p.accordion__content--text The minimum payout threshold for affiliate earnings on Clubmerce is $50. Once your earnings reach this threshold, you become eligible for withdrawal. This ensures that you receive a substantial amount before initiating the payout process. Clubmerce values your efforts as an affiliate and aims to provide a fair and transparent system for earning commissions.
 
-                            p.accordion__content--text 1. Choose the Right Products: Select products or services that align with your target audience's interests and needs.
+                    .faq__accordion
+                        .faq__accordion--item
+                            .accordion__content--title
+                                h3.accordion__heading Can I promote multiple products from different vendors on this platform?
+                                span &minus;
+                            .faq__accordion--content
+                                p.accordion__content--text Yes, on Clubmerce, you have the flexibility to promote multiple products or services from different vendors within the platform. As an affiliate, you can explore a diverse marketplace and choose from a wide range of offerings. This allows you to diversify your promotional efforts, target various niches, and cater to the interests of your audience. Clubmerce provides a centralized platform where you can easily manage and track your promotions across different vendors, making it convenient to engage with multiple products or services simultaneously.
+                        .faq__accordion--item
+                            .accordion__content--title
+                                h3.accordion__heading How can I maximize my affiliate marketing success on this platform?
+                                span &minus;
+                            .faq__accordion--content
+                                p.accordion__content--text To maximize your affiliate marketing success on Clubmerce, consider implementing the following strategies:
 
-                            p.accordion__content--text 2. Build a Strong Online Presence: Establish a compelling online presence through a website, blog, or social media channels.
+                                p.accordion__content--text 1. Choose the Right Products: Select products or services that align with your target audience's interests and needs.
 
-                            p.accordion__content--text 3. Leverage Promotional Tools: Utilize the marketing tools and resources provided by Clubmerce, such as banners, text links, and product widgets.
+                                p.accordion__content--text 2. Build a Strong Online Presence: Establish a compelling online presence through a website, blog, or social media channels.
 
-                            p.accordion__content--text 4. Engage Your Audience: Interact with your audience through engaging content, comments, and social media engagement.
+                                p.accordion__content--text 3. Leverage Promotional Tools: Utilize the marketing tools and resources provided by Clubmerce, such as banners, text links, and product widgets.
 
-                            p.accordion__content--text 5. Track and Analyze Performance: Regularly monitor your affiliate performance using Clubmerce's tracking and analytics tools.
+                                p.accordion__content--text 4. Engage Your Audience: Interact with your audience through engaging content, comments, and social media engagement.
+
+                                p.accordion__content--text 5. Track and Analyze Performance: Regularly monitor your affiliate performance using Clubmerce's tracking and analytics tools.
         section.section.testimonial__section.center
-            h2.section__heading--secondary.test Testimonials
+            h2.section__heading--secondary Testimonials
             //- p.get-started__heading--text.color-white Life-Changing Experiences: Hear What Our Customers Have to Say
             .container__skew
                 .testimonial__slide
@@ -217,22 +220,16 @@ block content
                     .testimonial__slide--item
                         .testimonial__slide--item-text
                             p.testimonial__content I never thought making money online could be so rewarding. With Clubmerce, I've been able to harness the power of affiliate marketing and earn a substantial income.
-                            p.testimonial__author Ahmed .
+                            p.testimonial__author Ahmed.
                         .testimonial__slide--item-img
                             img.testimonial__image(src='asset/img/face.png' alt='')
 
             .controls
                 button.prev-btn.controls-btn
-                    i.fa-solid.fa-arrow-left.controls-icons
+                    //- i.fa-solid.fa-arrow-left.controls-icons
                 button.next-btn.controls-btn
-                    i.fa-solid.fa-arrow-right.controls-icons
+                    //- i.fa-solid.fa-arrow-right.controls-icons
 
-            //- .dots
-                span.dot.dot1 &nbsp;
-                span.dot.dot1 &nbsp;
-                span.dot.dot2 &nbsp;
-                span.dot.dot3 &nbsp;
-                span.dot.dot3 &nbsp;
 
 
         section.section.cta1__section

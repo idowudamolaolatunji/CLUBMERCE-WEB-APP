@@ -112,7 +112,7 @@ button {
 }
 
 .hero__section {
-    padding: 14rem 0 10rem;
+    padding: 15rem 0 10rem;
 }
 
 .stats__section {
@@ -123,15 +123,19 @@ button {
 .cta1__section {
     text-align: center;
 }
+.faq__section {
+    background-color: #eee;
+}
 
 .section__container {
-    max-width: 115rem;
+    max-width: 125rem;
     margin: 0 auto;
     padding: 0 5.2rem ;
 }
 
 .section__heading--primary {
     color: #2e3192;
+    /* font-size: 6rem; */
     font-size: 4.8rem;
     margin-bottom: 1.6rem;
     letter-spacing: -1.2px;
@@ -145,10 +149,11 @@ button {
 }
 
 .section__heading--tetrary {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     margin-bottom: 3.2rem;
     font-weight: 500;;
     color: #333;
+    line-height: 1.5;
 }
 
 .relative { position: relative; }
@@ -611,4 +616,8 @@ section {
     opacity: 0;
     border: none;
     background-color: transparent;
+}
+
+.fa-close {
+    cursor: pointer;
 }

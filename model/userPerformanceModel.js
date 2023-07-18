@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 
 const userPerformanceSchema = new mongoose.Schema({
-    user: {
+    affiliate: {
         type: mongoose.Schema.Types.ObjectID,
         ref: 'User'
     },

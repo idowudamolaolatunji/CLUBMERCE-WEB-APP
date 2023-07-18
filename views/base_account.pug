@@ -48,6 +48,7 @@ body
                                 | you have no notification
 
                     span
+                        //- img.nav__image(src='asset/img/idowu.png')
                         img.nav__image(src=`asset/img/${user.image}.png` alt=`customer's (${user.username}) photo`)
                         //- profile...
                         .Profile__hovered.hidden
@@ -115,7 +116,7 @@ body
                         ul.menu__list
                             li.menu__item
                                 a.menu__link(href="/profile")
-                                    //- img.menu__profile-image(src='asset/img/face.png')
+                                    //- img.menu__profile-image(src='asset/img/idowu.png')
                                     img.menu__profile-image(src=`asset/img/${user.image}.png` alt=`customer's (${user.username}) photo`)
                                     p profile
                             li.menu__item
@@ -130,29 +131,35 @@ body
                                 h3.dashboard__heading=`Welcome back, ${user.fullName.split(' ')[0]}`
                                 .dashboard__insights 
                                     .insight.insight__one
-                                        span 
-                                            p.insignt__text=`₦ ${user.wallet}`
+                                        .icon__box 
                                             i.fa-solid.fa-coins.insight__icon
-                                        p.insignt__title Total enarned
+                                        span 
+                                            p.insight__title Total enarned
+                                            p.insight__text=`₦ ${user.wallet}`
+                                            //- p.insight__text ₦400,948
 
                                     .insight.insight__two
-                                        span 
-                                            p.insignt__text= user.productSold
+                                        .icon__box 
                                             i.fa-solid.fa-comments-dollar.insight__icon
-                                        p.insignt__title Product Sold
+                                        span 
+                                            p.insight__title Product Sold
+                                            p.insight__text= user.productSold
+                                            //- p.insight__text 50
 
                                     .insight.insight__three
-                                        span
-                                            p.insignt__text= user.clicks
+                                        .icon__box 
                                             i.fa-solid.fa-up-right-from-square.insight__icon
-                                        p.insignt__title Links clicks
+                                        span
+                                            p.insight__title Link clicks
+                                            p.insight__text= user.clicks
 
                                     .insight.insight__four
-                                        span
-                                            //- p.insignt__text= user.affiliateUrl.length
-                                            p.insignt__text= user.affiliateLinks.length
+                                        .icon__box 
                                             i.fa-solid.fa-bullhorn.insight__icon
-                                        p.insignt__title Promotion url
+                                        span
+                                            //- p.insight__text= user.affiliateUrl.length
+                                            p.insight__title Promotion url
+                                            p.insight__text= user.affiliateLinks.length
 
                                 .dashboard__table
                                     .table
@@ -164,6 +171,45 @@ body
                                             span.table-head-content Commission amount
                                             span.table-head-content Status
                                             span.table-head-content date
+
+                                        //- .table-row
+                                        //-     span.table-row-content.table-row-product
+                                        //-         img.table-product__image(src='asset/tests/two.jpg' alt='')
+                                        //-         span
+                                        //-             p.table-product__name Apilean Weight Loss
+                                        //-             p.table-product__niche health &amp; fitness
+                                        //-     span.table-row-content
+                                        //-         p.order ₦290,000
+                                        //-     span.table-row-content
+                                        //-         .status.status--success success
+                                        //-     span.table-row-content
+                                        //-         .date 10/3/2023
+
+                                        //- .table-row
+                                        //-     span.table-row-content.table-row-product
+                                        //-         img.table-product__image(src='asset/tests/three.avif' alt='')
+                                        //-         span
+                                        //-             p.table-product__name Benxynm Heart Burn
+                                        //-             p.table-product__niche health &amp; fitness
+                                        //-     span.table-row-content
+                                        //-         p.order ₦20,000
+                                        //-     span.table-row-content
+                                        //-         .status.status--success success
+                                        //-     span.table-row-content
+                                        //-         .date 20/11/2022
+
+                                        //- .table-row
+                                        //-     span.table-row-content.table-row-product
+                                        //-         img.table-product__image(src='asset/tests/one.jpg' alt='')
+                                        //-         span
+                                        //-             p.table-product__name The Giant Forex Trading System
+                                        //-             p.table-product__niche E-business
+                                        //-     span.table-row-content
+                                        //-         p.order ₦120,000
+                                        //-     span.table-row-content
+                                        //-         .status.status--success success
+                                        //-     span.table-row-content
+                                        //-         .date 4/11/2022
 
                                         -if(commission > 0)
                                             .table-row
@@ -190,32 +236,35 @@ body
                                 h3.dashboard__heading=`Welcome back, ${!user.business ? user.fullName.split(' ')[0] : user.businessName}`
                                 .dashboard__insights 
                                     .insight.insight__one
-                                        span 
-                                            p.insignt__text=`₦ ${user.wallet}`
+                                        .icon__box 
                                             i.fa-solid.fa-comments-dollar.insight__icon
-                                        p.insignt__title My profit
+                                        span 
+                                            p.insight__title My profit
+                                            p.insight__text=`₦ ${user.wallet}`
 
                                     .insight.insight__two
-                                        span 
-                                            //- p.insignt__text= user.product
-                                            p.insignt__text 0
-                                            //- i.fa-solid.fa-bag.insight__icon
+                                        .icon__box 
                                             i.fa-solid.fa-list-check.insight__icon
-                                        p.insignt__title My Products
+                                        span 
+                                            p.insight__title My Products
+                                            p.insight__text 0
+                                            //- p.insight__text= user.product
+                                            //- i.fa-solid.fa-bag.insight__icon
 
                                     .insight.insight__three
-                                        span
-                                            p.insignt__text 0
+                                        .icon__box 
                                             i.fa-solid.fa-shopping-cart.insight__icon
-                                        p.insignt__title Orders
+                                        span
+                                            p.insight__title Orders
+                                            p.insight__text 0
 
                                     .insight.insight__four
-                                        span
-                                            //- p.insignt__text= product.productGravity
-                                            p.insignt__text 0
-                                            - console.log(products)
+                                        .icon__box 
                                             i.fa-solid.fa-bullhorn.insight__icon
-                                        p.insignt__title Affiliate Gravity
+                                        span
+                                            p.insight__title Affiliate Gravity
+                                            p.insight__text 0
+                                            //- p.insight__text= product.productGravity
                                         
 
                                 .dashboard__table
@@ -252,28 +301,32 @@ body
                                 h3.dashboard__heading=`Welcome to Admin Dashboard`
                                 .dashboard__insights 
                                     .insight.insight__one
-                                        span 
-                                            p.insignt__text 0
+                                        .icon__box 
                                             i.fa-solid.fa-coins.insight__icon
-                                        p.insignt__title Total Users
+                                        span 
+                                            p.insight__text 0
+                                            p.insight__title Total Users
 
                                     .insight.insight__two
-                                        span 
-                                            p.insignt__text 0
+                                        .icon__box 
                                             i.fa-solid.fa-comments-dollar.insight__icon
-                                        p.insignt__title Total Products
+                                        span 
+                                            p.insight__text 0
+                                            p.insight__title Total Products
 
                                     .insight.insight__three
-                                        span
-                                            p.insignt__text 0
+                                        .icon__box 
                                             i.fa-solid.fa-up-right-from-square.insight__icon
-                                        p.insignt__title conversion Rate
+                                        span
+                                            p.insight__text 0
+                                            p.insight__title conversion Rate
 
                                     .insight.insight__four
-                                        span
-                                            p.insignt__text 0
+                                        .icon__box 
                                             i.fa-solid.fa-bullhorn.insight__icon
-                                        p.insignt__title CTR
+                                        span
+                                            p.insight__text 0
+                                            p.insight__title CTR
                            
 
 

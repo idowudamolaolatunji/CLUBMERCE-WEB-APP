@@ -6,6 +6,10 @@ const productPerformanceSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectID,
         ref: 'Product'
     },
+    vendor: {
+        type: mongoose.Schema.Types.ObjectID,
+        ref: 'User'
+    },
     orders: {
         type: Number,
         default: 0
@@ -22,7 +26,7 @@ const productPerformanceSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    affiliates: {
+    affiliateGravity: {
         type: Number,
         default: 0
     },

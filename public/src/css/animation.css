@@ -1,7 +1,7 @@
 .animation {
-    z-index: -100;
+    z-index: 100;
     opacity: .3;
-    background-color: hsla(238, 52%, 38%, 0.5);
+    background-color: #2e319275;
     margin: 2rem;
     padding: 2rem;
     animation-name: bodyAnimation;
@@ -16,14 +16,14 @@
     animation-duration: 80s;
     animation-timing-function: linear;
     animation-fill-mode: forwards;
-    top: 100vh;
+    top: 70vh;
     left: 10rem;
   }
   
   .animation-box--2 {
     animation-duration: 130s;
     animation-fill-mode: backwards;
-    top: 250vh;
+    top: 160vh;
     left: 30rem;
   }
   
@@ -31,12 +31,27 @@
     animation-duration: 40s;
     animation-direction: alternate-reverse;
     animation-fill-mode: forwards;
-    top: 400vh;
+    top: 280vh;
     left: 45rem;
   }
   
   .animation-box--4 {
     animation-duration: 180s;
+    animation-timing-function: linear;
+    animation-fill-mode: backwards;
+    top: 350vh;
+    left: 0;
+  }
+
+  .animation-box--5 {
+    animation-duration: 200s;
+    animation-timing-function: linear;
+    animation-fill-mode: backwards;
+    top: 420vh;
+    left: 0;
+  }
+  .animation-box--6 {
+    animation-duration: 200s;
     animation-timing-function: linear;
     animation-fill-mode: backwards;
     top: 550vh;
