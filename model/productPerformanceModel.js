@@ -1,13 +1,12 @@
 const mongoose = require('mongoose');
 
-
 const productPerformanceSchema = new mongoose.Schema({
     product: {
-        type: mongoose.Schema.Types.ObjectID,
+        type: mongoose.Schema.ObjectId,
         ref: 'Product'
     },
     vendor: {
-        type: mongoose.Schema.Types.ObjectID,
+        type: mongoose.Schema.ObjectId,
         ref: 'User'
     },
     orders: {
@@ -31,7 +30,6 @@ const productPerformanceSchema = new mongoose.Schema({
         default: 0
     },
 });
-
 
 const ProductPerformance = mongoose.model('ProductPerformance', productPerformanceSchema);
 module.exports = ProductPerformance;

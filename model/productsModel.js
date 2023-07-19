@@ -62,7 +62,6 @@ const productSchema = new mongoose.Schema({
     purchasesCount: { type: Number, default: 0 },
     ordersCount: { type: Number, default: 0 },
     productGravity: {
-        // type: mongoose.Schema.Types.ObjectId, ref: 'AffiliateLink',
         type: Number,
         default: 0
     },
@@ -70,15 +69,13 @@ const productSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    demography: [ {
-        primaryLocation: [String],
-        secondaryLoaction: [String],
-        primaryAgeRange: [String],
-        secondaryAgeRange: [String],
-        primaryGender: [String],
-        secondaryGender: [String],
-        socialMeadialPlaces: [String]
-    } ],
+    primaryLocation: [String],
+    secondaryLoaction: [String],
+    primaryAgeRange: [String],
+    secondaryAgeRange: [String],
+    primaryGender: [String],
+    secondaryGender: [String],
+    socialMeadialPlaces: [String],
     createdAt: {
         type: Date,
         default: Date.now(),
@@ -92,6 +89,14 @@ productSchema.pre('save', function(next) {
     this.slug = `${slug}-${this._id}`;
     next();
 });
+
+productSchema.pre(/^find/, function(next) {
+    this.populate({
+        path: 'vendor',
+        select: 'slug _id'
+    });
+    next();
+})
 
 const Product = mongoose.model('Product', productSchema);
 module.exports = Product;

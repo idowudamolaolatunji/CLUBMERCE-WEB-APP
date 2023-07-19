@@ -42,10 +42,22 @@ body
                         //- notification...
                         .notification__hovered.hidden 
                             h3.dashboard__heading Notification
-                            p.notification__amount New (0)
-                                .notification__content 
-                                    span.notice 
-                                | you have no notification
+                            //- .notification__content you have no notification
+                            .notification
+                                .notify__details
+                                    .notify__status &nbsp;
+                                    span
+                                        h4.notify__head Lorem ipsum dolor sit amet.
+                                        span.notify__body-box
+                                            p.notify__body Lorem, ipsum.
+                                            span &dash;
+                                            p.notify__date 10 mins ago
+                                .notify__image--box
+                                    img.notify__image(src='asset/img/product.jpg' alt='')
+                                //- .notify__icon--box
+                                    i.fa-solid.fa-lock.icon.notify__icon
+
+
 
                     span
                         //- img.nav__image(src='asset/img/idowu.png')
@@ -357,7 +369,42 @@ body
                                     .table-row-message
                                         p.note-no You've no order at the moment...
 
-                               
+
+
+                .chat__box
+                    .chat-top
+                        p.chat-name Idowu Olatunji
+                        .chat-top__icons
+                            i.fa-solid.fa-gear.chat-icon
+                            i.fa-solid.fa-close.chat-icon
+                    .chat-mid
+                        .chat-mid__from.main
+                            .img-box
+                                img.chat-img.from-img(src='asset/img/face.png' alt='')
+                            .chat
+                                p.chat-from__point
+                                    span ~&nbsp;
+                                    | Idowu Olatunji
+                                p.chat-date 8:30
+                                p.chat-from__message Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, illo?
+                        .chat-mid__me.main
+                            .img-box
+                                img.chat-img.from-img(src='asset/img/avatar.png' alt='')
+                            .chat
+                                p.chat-me__point
+                                    span ~&nbsp;
+                                    | Me
+                                p.chat-date 17:10
+                                p.chat-me__message Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, illo?
+                    .chat-end
+                        .chat-end__chat
+                            input.chat-end__input(type='text' placeholder='Type your message')
+                            button.chat__button(type='submit')
+                                i.fa-solid.fa-arrow-right.chat-icon
+                        .chat-end__controls
+                            i.fa-solid.fa-paperclip.chat-icon
+                            i.fa-regular.fa-face-smile.chat-icon
+ 
                                         
 
                 include _auth_footer

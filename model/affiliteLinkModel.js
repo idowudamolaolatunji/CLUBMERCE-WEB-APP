@@ -8,6 +8,17 @@ const affiliateLinkSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now() },
 });
 
+// affiliateLinkSchema.pre(/^find/, function(next) {
+//   this.polute({
+//     path: 'affiliate',
+//     select: ''
+//   }).polute({
+//     path: 'product',
+//     select: ''
+//   })
+//   next();
+// })
+
 const AffiliateLink = mongoose.model('AffiliateLink', affiliateLinkSchema);
 module.exports = AffiliateLink;
 

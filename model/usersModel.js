@@ -92,7 +92,7 @@ const userSchema = new mongoose.Schema({
     commissions: Number,
     affiliateLinks: {
         type: [mongoose.Schema.Types.Mixed],
-        // default: this.length
+        // default: this.affiliateLinks.length
     },
     productSold: {
         type: Number,
@@ -144,7 +144,6 @@ userSchema.pre(/^find/, function(next) {
 userSchema.methods.comparePassword = async function(cnadidatePassword, hashedPassword) {
     return await bcrypt.compare(cnadidatePassword, hashedPassword);
 }
-
 
 userSchema.methods.changedPasswordAfter = function (jwtTimeStamp) {
     if(this.passwordChangedAt) {

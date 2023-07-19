@@ -150,7 +150,7 @@ const processPayment = async (amount, paymentData, orderInfo, product, user, res
                     purchases,
                     clicks,
                     links,
-                })
+                });
                 
                 await Transaction.create({
                     user: user._id,
@@ -218,3 +218,4 @@ exports.getOrder = async (req, res) => {
         })
     }
 };
+

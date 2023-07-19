@@ -20,6 +20,8 @@ const affiliateLinkRouter = require('./routes/affiliateLinkRoutes');
 const affiliateLinkController = require('./controller/affiliateLinkController')
 
 const app = express();
+const io = require('socket.io')(require('http').createServer(app));
+
 // body parser and cookie parser
 app.use(express.json());
 app.use(cookieParser())
@@ -71,5 +73,3 @@ app.use('/api/orders', ordersRouter);
 module.exports = app;
 
 // const randomId = crypto.randomInt(100000, 999999).toString();
-
-

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const validator = require('validator')
 
 const orderSchema = new mongoose.Schema({
-	productId: {
+	product: {
 		type: mongoose.Schema.ObjectId,
 		ref: "Product",
 	},
@@ -45,6 +45,20 @@ const orderSchema = new mongoose.Schema({
 		default: Date.now()
 	}
 });
+
+orderSchema.pre(/^find/, function(next) {
+	this.populate({
+		path: 'vendor',
+		select: '-__v',
+	}).populate({
+		path: 'buyer',
+		select: ''
+	}).populate({
+		path: 'product',
+		select: ''
+	})
+	next();
+})
 
 const Order = mongoose.model("Order", orderSchema);
 module.exports = Order;
