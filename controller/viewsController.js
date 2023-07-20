@@ -44,8 +44,8 @@ exports.signUp = (req, res) => {
 exports.paymentForm = (req, res) => {
     res.status(200).render('payment');
 }
-exports.getOrderProductPage = (req, res) => {
-    res.status(200).render('order_product');
+exports.getOrderProductPage = async(req, res) => {
+    res.status(200).render('order_product', token);
 }
 
 // Affiliates

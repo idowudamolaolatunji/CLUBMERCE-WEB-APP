@@ -205,9 +205,6 @@ exports.logout = catchAsync(async (req, res) => {
       return res.status(401).json({ error: 'You are not logged in' });
   }
 
-  // Invalidate the token by adding it to a token blacklist
-  await TokenBlacklist.create({ token });
-
   // Clear the token cookie
   res.clearCookie('jwt').redirect('/login');
 });

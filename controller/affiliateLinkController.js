@@ -68,13 +68,14 @@ exports.countClicksRedirects = async (req, res) => {
     user.clicks++;
     await Promise.all([product.save({ validateBeforeSave: false }), user.save({ validateBeforeSave: false })]);
     
-    res.redirect(`https://clubmerce.com/order-product/${user.username}/${productSlug}`);
+    // res.redirect(`https://clubmerce.com/order-product/${user.username}/${productSlug}`);
+    res.redirect(`http://127.0.0.1:3000/order-product/${user.username}/${productSlug}`);
     // create a route that renders a product order page on /order/username:productSlug, as the product order page
 
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 }
 
 exports.getAllLinks = async (req, res) => {
@@ -95,22 +96,3 @@ exports.getAllLinks = async (req, res) => {
     })
   }
 }
-
-/*
-// client-side javascript implemetation
-const functionName = async function() {
-   try {
-        const res = await fetch(`/unique_/${user.slug}/${product.slug}`, { method: 'GET' })
-        
-        if(res.status === 'success')
-            // Redirect to a confirmation page
-            window.location.href = `/order/:${productSlug}`;
-        else {
-            return;
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-
-*/

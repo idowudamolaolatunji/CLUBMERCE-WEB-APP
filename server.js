@@ -1,8 +1,20 @@
+const http = require('http')
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const socket = require('socket.io')
 
 dotenv.config({path: './config.env'}); // always run before the app
 const app = require('./app');
+const server = http.createServer(app);
+const io = socket(server)
+
+io.on('connection', socket => {
+    console.log('connected' + socket.id);
+
+    socket.emit('chatMessage', message => {
+        io.emit('message', message)
+    })
+})
 
 const DB = process.env.CLUBMERCE_DB.replace('<PASSWORD>', process.env.CLUBMERCE_DB_PASSWORD);
 
@@ -15,6 +27,6 @@ mongoose.connect(DB)
 
 const port = process.env.PORT || 8000;
 
-app.listen(port, process.env.HOST, () => {
+server.listen(port, process.env.HOST, () => {
     console.log(`App running on port ${port}...`);
 });

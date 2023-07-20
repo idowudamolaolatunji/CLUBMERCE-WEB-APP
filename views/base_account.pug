@@ -15,6 +15,9 @@ head
     link(rel="stylesheet" href="src/css/dashboard.css")
     link(rel="stylesheet" href="src/css/query_dashboard.css")
 
+    script(src="/socket.io/socket.io.js")
+    script(defer src="src/js/chat.js")
+
     script(defer src="src/js/dashboard.js")
     script(defer src="src/js/updateSettings.js")
 
@@ -387,7 +390,7 @@ body
                                     | Idowu Olatunji
                                 p.chat-date 8:30
                                 p.chat-from__message Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, illo?
-                        .chat-mid__me.main
+                        //- .chat-mid__me.main
                             .img-box
                                 img.chat-img.from-img(src='asset/img/avatar.png' alt='')
                             .chat
@@ -398,9 +401,10 @@ body
                                 p.chat-me__message Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, illo?
                     .chat-end
                         .chat-end__chat
-                            input.chat-end__input(type='text' placeholder='Type your message')
-                            button.chat__button(type='submit')
-                                i.fa-solid.fa-arrow-right.chat-icon
+                            form.chat__form
+                                input.chat-end__input(type='text' placeholder='Type your message')
+                                button.chat__button(type='submit')
+                                    i.fa-solid.fa-arrow-right.chat-icon
                         .chat-end__controls
                             i.fa-solid.fa-paperclip.chat-icon
                             i.fa-regular.fa-face-smile.chat-icon
