@@ -1,19 +1,24 @@
 const http = require('http')
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const socket = require('socket.io')
+const socket = require('socket.io');
 
 dotenv.config({path: './config.env'}); // always run before the app
 const app = require('./app');
 const server = http.createServer(app);
-const io = socket(server)
+const io = socket(server);
+
+const formatMessage = require('./utils/formatMessage');
 
 io.on('connection', socket => {
-    console.log('connected' + socket.id);
+    // console.log(`connected  ${socket.id}`);
+    // const user = socket.hand
 
-    socket.emit('chatMessage', message => {
-        io.emit('message', message)
-    })
+    socket.on('chatMessage', msg => {
+        io.emit('message', formatMessage('User', msg))
+        console.log(formatMessage('User', msg), socket.id)
+    });
+    
 })
 
 const DB = process.env.CLUBMERCE_DB.replace('<PASSWORD>', process.env.CLUBMERCE_DB_PASSWORD);

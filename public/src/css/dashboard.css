@@ -1302,7 +1302,7 @@ input:focus, input:hover, select:focus, textarea:hover,
 /* chat */
 
 .chat__box {
-    max-width: 45rem;
+    width: 45rem;
     height: 40rem;
     background-color: #fff;
 
@@ -1414,7 +1414,7 @@ input:focus, input:hover, select:focus, textarea:hover,
     background-color: #eee;
     padding: 0 1.2rem;
 }
-.chat-end__chat {
+.chat__form {
     display: flex;
     padding: 1rem 0;
     margin-bottom: .2rem;

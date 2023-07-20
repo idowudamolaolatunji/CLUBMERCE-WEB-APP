@@ -1,31 +1,45 @@
+const chatForm = document.querySelector('.chat__form');
+const chatBox = document.querySelector('.chat-mid');
 const socket = io();
 
-socket.on('ChatMessage', message => {
-    console.log(message)
-});
+socket.on('message', message => {
+    displayMessage(message);
 
-const chatForm = document.querySelector('.chat__form');
+    // scroll down
+    chatBox.scrollTop = chatBox.scrollHeight;
+});
 
 chatForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const msg = document.querySelector('.chat-end__input').value;
-    console.log(msg)
-    sendMessage(msg)
-});
+    const msgInput = document.querySelector('.chat-end__input');
+    const msg = msgInput.value.trim();
 
-function sendMessage(msg) {
+    if (msg !== '') {
+        // Emit the chat message to the server
+        socket.emit('chatMessage', msg);
+
+        // Clear the input field after sending the message
+        msgInput.value = '';
+    }
+    
+});
+  
+
+function displayMessage(message) {
     const div = document.createElement('div');
     div.classList.add('chat-mid__me');
-    div.classList.add('main')
-    div.innerHtml = `
-        <div class="img-box"><img class="chat-img from-img" src="asset/img/avatar.png" alt=""/></div>
+    div.classList.add('main');
+    div.innerHTML = `
+        <div class="img-box">
+            <img class="chat-img" src="asset/img/avatar.png" alt="" />
+        </div>
         <div class="chat">
-            <p class="chat-me__point"><span>~&nbsp;</span>Me</p>
-            <p class="chat-date">17:10</p>
-            <p class="chat-me__message">${msg}</p>
+            <p class="chat-me__point"><span>~&nbsp;</span>${message.username}</p>
+            <p class="chat-date">${message.time}</p>
+            <p class="chat-me__message">${message.text}</p>
         </div>
     `;
 
-    document.querySelector('.chat-mid').appendChild(div)
+    document.querySelector('.chat-mid').appendChild(div);
 }
