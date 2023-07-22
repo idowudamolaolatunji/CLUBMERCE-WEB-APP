@@ -17,65 +17,30 @@ block content
                     span.table-head-content approved
                     span.table-head-content actions
 
-                //- -if(products.lenght > 0)
-                    each product of product
-                .table-row-vp
-                    //- span.table-row-content.table-row-product
-                    //-     img.table-product__image(src=`asset/img/product.jpg` alt='')
-                    //-     span
-                    //-         p.table-product__name= product.name || 'name'
-                    //-         p.table-product__category= product.category || "category"
-                    //- span.table-row-content
-                    //-     p.price= `₦ ${product.price}` || 'N 7000'
-                    //- span.table-row-content
-                    //-     //- -if(product.type)
-                    //-     p.product-type= `${product.type} product` || 'Physical'
-                    //- span.table-row-content
-                    //-     p.aff-comm= `${product.commissionPercentage}%` || '30%'
-                    //- span.table-row-content
-                    //-     p.approved.status.status--success Approved
-                    //- span.table-row-content.table-row-btn
-                    span.table-row-content.table-row-product
-                        img.table-product__image(src=`asset/img/product.jpg` alt='')
-                        span
-                            p.table-product__name product name
-                            p.table-product__category category
-                    span.table-row-content
-                        p.price N 7000
-                    span.table-row-content
-                        //- -if(product.type)
-                        p.product-type Physical
-                    span.table-row-content
-                        p.aff-comm 30%
-                    span.table-row-content
-                        p.approved.status.status--success Approved
-                    span.table-row-content.table-row-btn
-                        button.btn-edit.table-btn.product-edit Edit
-                        button.btn-delete.table-btn.product-delete Delete
-                .table-row-vp
-                    span.table-row-content.table-row-product
-                        img.table-product__image(src=`asset/img/product.jpg` alt='')
-                        span
-                            p.table-product__name product name
-                            p.table-product__category category
-                    span.table-row-content
-                        p.price N 7000
-                    span.table-row-content
-                        //- -if(product.type)
-                        p.product-type Physical
-                    span.table-row-content
-                        p.aff-comm 30%
-                    span.table-row-content
-                        p.approved.status.status--success Approved
-                    span.table-row-content.table-row-btn
-                        button.btn-edit.table-btn.product-edit Edit
-                        button.btn-delete.table-btn.product-delete Delete
-                        //- button.btn-edit.table-btn.product-edit(data-id=`${product._id}`) Edit
-                        //- button.btn-delete.table-btn.product-delete(data-id=`${product._id}`) Delete
-                //- -else 
+                - if(products.lenght < 1)
                     .table-row-message
                         //- p.note-no Upload your product today, Let out affiliate make you money.
                         p.note-no You have no existing product.
+                each product of products
+                    .table-row-vp
+                        span.table-row-content.table-row-product
+                            img.table-product__image(src=`asset/img/product.jpg` alt='')
+                            span
+                                p.table-product__name= product.name 
+                                p.table-product__category= product.category 
+                        span.table-row-content
+                            p.price= `₦ ${product.price}` 
+                        span.table-row-content
+                            //- -if(product.type)
+                            p.product-type= `${product.type} product` 
+                        span.table-row-content
+                            p.aff-comm= `${product.commissionPercentage}%` 
+                        span.table-row-content
+                            p.approved.status.status--success Approved
+                        span.table-row-content.table-row-btn
+                            button.btn-edit.table-btn.product-edit(data-id=`${product._id}`) Edit
+                            button.btn-delete.table-btn.product-delete(data-id=`${product._id}`) Delete
+               
 
 
 

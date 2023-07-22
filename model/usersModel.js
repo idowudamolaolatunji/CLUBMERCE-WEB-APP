@@ -141,6 +141,7 @@ userSchema.pre(/^find/, function(next) {
     next();
 });
 
+
 userSchema.methods.comparePassword = async function(cnadidatePassword, hashedPassword) {
     return await bcrypt.compare(cnadidatePassword, hashedPassword);
 }

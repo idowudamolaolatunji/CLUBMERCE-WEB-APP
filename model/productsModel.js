@@ -5,7 +5,15 @@ const slugify = require('slugify');
 
 
 const productSchema = new mongoose.Schema({
-    vendor: { type: mongoose.Schema.ObjectId, ref: 'User' },
+    vendor: { 
+        type: mongoose.Schema.ObjectId, 
+        ref: 'User',
+        // required: [true, 'A product must have a vendor']
+    },
+    // creator: {
+    //     type: mongoose.Schema.ObjectId, 
+    //     ref: 'User',
+    // },
     name: {
         type: String,
         required: [true, 'A product must have a name'],
@@ -90,13 +98,14 @@ productSchema.pre('save', function(next) {
     next();
 });
 
-// productSchema.pre(/^find/, function(next) {
-//     this.populate({
-//         path: 'vendor',
-//         select: '-__v '
-//     });
-//     next();
-// })
+
+productSchema.pre(/^find/, function(next) {
+    this.populate({
+        path: 'vendor',
+        select: 'fullName slug photo _id businessName email'
+    });
+    next();
+})
 
 const Product = mongoose.model('Product', productSchema);
 module.exports = Product;

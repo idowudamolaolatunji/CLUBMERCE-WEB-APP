@@ -19,7 +19,7 @@ block content
                         span.table-head-content promotion link
                     .table-row-app
                         span.table-row-content.table-row-product
-                            img.table-product__image(src='../product.jpg' alt='')
+                            img.table-product__image(src='asset/img/product.jpg' alt='')
                             span
                                 p.table-product__name Test product 1
                                 p.table-product__category health &amp; fitness
@@ -47,19 +47,25 @@ block content
                         span.table-head-content profit
                         span.table-head-content Aff gravity
                         span.table-head-content Clicks
-                    .table-row-vpp
-                        span.table-row-content.table-row-product
-                            img.table-product__image(src='../product.jpg' alt='')
-                            span
-                                p.table-product__name Test product 1
-                                p.table-product__category health &amp; fitness
-                        span.table-row-content
-                            p.purchase 12
-                        span.table-row-content
-                            p.order 27
-                        span.table-row-content
-                            p.profit $&nbsp;460
-                        span.table-row-content
-                            p.aff-gravity 20
-                        span.table-row-content
-                            p.click 230
+
+                    - if(products.lenght < 1 || !products)
+                        .table-row-message
+                            //- p.note-no Upload your product today, Let out affiliate make you money.
+                            p.note-no You have no existing product.
+                    each product of products
+                        .table-row-vpp
+                            span.table-row-content.table-row-product
+                                img.table-product__image(src='asset/img/product.jpg' alt='')
+                                span
+                                    p.table-product__name= product.name
+                                    p.table-product__category= product.product__category
+                            span.table-row-content
+                                p.purchase= product.purchasesCount
+                            span.table-row-content
+                                p.order= product.ordersCount
+                            span.table-row-content
+                                p.profit= ₦`${product.profits}`
+                            span.table-row-content
+                                p.aff-gravity= product.productGravity
+                            span.table-row-content
+                                p.click= product.clicks

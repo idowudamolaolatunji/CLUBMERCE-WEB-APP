@@ -17,9 +17,9 @@ router.route('/top-20-best',)
     
 router.route("/")
 .get(authController.protect, productsController.getAllProduct)
-// .post(authController.restrictedTo('vendor', 'admin'), productsController.createProduct);
 .post(authController.protect, productsController.createProduct)
-
+router.route('/vendor-product')
+  .get(authController.protect, productsController.getProductsByVendor)
 
 router.route("/:id")
 .get(authController.protect, productsController.getProduct)
@@ -30,13 +30,11 @@ router.route("/:id")
 .patch(productsController.updateProduct)
 .delete(productsController.deleteProduct);
 
-router.route('/vendor-product')
-  .get(productByVendorController.getAllProductsByVendor)
-  .post(productByVendorController.createProductByVendor)
-router.route('/vendor-product/:productId')
-  .get(productByVendorController.getProductByVendor)
-  .patch(productByVendorController.updateProductByVendor)
-  .delete(productByVendorController.deleteProductByVendor)
+
+// router.route('/vendor-product/:productId')
+//   .get(productByVendorController.getProductByVendor)
+//   .patch(productByVendorController.updateProductByVendor)
+//   .delete(productByVendorController.deleteProductByVendor)
 
 
 module.exports = router;

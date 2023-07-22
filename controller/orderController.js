@@ -10,7 +10,7 @@ const Product = require('../model/productsModel');
 const Order = require('../model/orderModel');
 const Commissions = require('../model/commissionModel');
 const UserPerformance = require('../model/userPerformanceModel');
-const ProductPerformance = require('../model/productPerformanceModel');
+// const ProductPerformance = require('../model/productPerformanceModel');
 
 const { initializePayment, verifyPayment } = require("../utils/paystack")(request);
 

@@ -235,6 +235,9 @@ exports.protect = catchAsync(async (req, res, next) => {
 
     // 2) Verification token
     const decoded = await promisify(jwt.verify)(token, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
+    req.user = {
+      id: decoded.id,
+    };
 
     // 3) Check if user still exists
     const currentUser = await User.findById(decoded.id);

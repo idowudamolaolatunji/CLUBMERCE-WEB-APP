@@ -4,6 +4,7 @@ const sharp = require('sharp');
 const app = require('../app');
 const catchAsync = require('../utils/catchAsync')
 const Product = require('../model/productsModel');
+const User = require('../model/usersModel');
 const APIFeatures = require('../utils/apiFeatures');
 
 // const User = require("./../model/usersModel");
@@ -109,6 +110,8 @@ exports.getAllProduct = async(req, res) => {
         .paginate();
         const products = await features.query;
 
+       
+
         res.status(200).json({
             status: "success",
             data: {
@@ -126,7 +129,18 @@ exports.getAllProduct = async(req, res) => {
 
 exports.createProduct = async(req, res) => {
     try {
-        const newProduct = await Product.create(req.body);
+        // const vendorId = req.user.slug.split('-').at(-1);
+        const vendorId = req.user._id;
+
+        // Find the vendor document from the database based on the vendor ID
+        const vendor = await User.findById(vendorId);
+
+        // If the vendor is not found, handle the error
+        if (!vendor) {
+            return res.status(404).json({ error: 'Vendor not found' });
+        }
+
+        const newProduct = await Product.create({...req.body, vendor: vendor._id});
 
         res.status(201).json({
             status: "success",
@@ -139,6 +153,29 @@ exports.createProduct = async(req, res) => {
             status: 'fail',
             message: err.message
         })
+    }
+};
+
+exports.getProductsByVendor = async (req, res) => {
+    try {
+        // Assuming you have authenticated the vendor and stored their ID in the req.user.id
+        const vendorId = req.user._id; 
+    
+        // Retrieve all products for the current vendor
+        const products = await Product.find({ vendor: vendorId });
+        // await products.forEach(product => {
+        //     product.vendor = vendorId;
+        // })
+    
+        res.status(200).json({
+            status: 'success',
+            count: products.length,
+            data: {
+                products,
+            },
+        });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
     }
 };
 

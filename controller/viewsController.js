@@ -84,7 +84,7 @@ exports.getProduct = async (req, res) => {
 exports.dashboard = async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
-        const products = await Product.find({ vendor: user._id });
+        const products = await Product.find({ vendor: req.user._id });
         const commission = await Commissions.find({ user: req.user.id})
 
         res.status(200).render('base_account', {
@@ -103,8 +103,19 @@ exports.profile = (req, res) => {
 exports.settings = (req, res) => {
     res.status(200).render('setting');
 }
-exports.performance = (req, res) => {
-    res.status(200).render('performance');
+exports.performance = async (req, res) => {
+    try {
+        // const user = await User.findById(req.locals.user.id);
+        // const products = await Product.find({ vendor: req.locals.user._id });
+        console.log('perfomace request:', req)
+        res.status(200).render('performance', {
+            title: 'Your perfomance',
+            // user,
+            // products,
+        });
+    } catch(err) {
+        console.log(err)
+    }
 }
 exports.transaction = (req, res) => {
     res.status(200).render('transaction');
@@ -113,7 +124,8 @@ exports.transaction = (req, res) => {
 // Vendors
 exports.productCatalog = async(req, res) => {
     try {
-        const products = await Product.find({ vendor: req.user.id });
+        const products = await Product.find({ vendor: req.user._id });
+        console.log(products)
         
         res.status(200).render('product_catalog', {
             title: 'Your Product',
