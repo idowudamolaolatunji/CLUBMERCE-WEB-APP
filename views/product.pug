@@ -157,9 +157,14 @@ body
     section#contact.product__section.section__contact-seller
         .product__section--container
             h2.product__heading--sec Contact Seller
-            p.description__text If you need anything else, email our product manager at 
-                //- a.email(href=`mailto:${product.contactEmail}`) aff@brand-example.com 
+            p.description__text If you need anything else, Chat with us:&nbsp;
+                i.fa-solid.fa-comment.product-footer-icon(data-chat=`${product.vendor}`)
+                - console.log(product);
+                br
+                | Or Email our product manager at &nbsp;
+                i.fa-solid.fa-envelope.product-footer-icon &nbsp;
                 span.email aff@brand-example.com 
+                //- a.email(href=`mailto:${product.contactEmail}`) aff@brand-example.com 
                 |  and they will assist you as soon as possible. We look forward to working with you.
 
 

@@ -7,16 +7,17 @@ const Product = require('../model/productsModel');
 exports.getAllProductsByVendor = async (req, res) => {
     try {
         const vendorId = req.user.id;
+        console.log(vendorId)
   
-    // Find all products where the vendor field matches the current vendor ID
-    const vendorProduct = await Product.find({ vendor: vendorId });
-    res.status(200).json({
-        status: 'success',
-        count: vendorProduct.length,
-        data: {
-            products: vendorProduct
-        }
-    })
+        // Find all products where the vendor field matches the current vendor ID
+        const vendorProduct = await Product.find({ vendor: vendorId });
+        res.status(200).json({
+            status: 'success',
+            count: vendorProduct.length,
+            data: {
+                products: vendorProduct
+            }
+        })
     
     } catch(err) {
         res.status(500).json({ error: 'Internal server error' });

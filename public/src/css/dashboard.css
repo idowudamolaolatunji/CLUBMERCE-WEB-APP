@@ -1363,6 +1363,7 @@ input:focus, input:hover, select:focus, textarea:hover,
 .chat-mid__me .chat {
     grid-column: 1 / 2;
     grid-row: 1;
+    border-radius: 20rem 20rem 20rem 20rem;
 }
 .main {
     width: 30rem;
