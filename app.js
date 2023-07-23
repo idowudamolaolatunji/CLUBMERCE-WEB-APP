@@ -17,6 +17,7 @@ const usersRouter = require('./routes/usersRoute');
 const viewsRouter = require('./routes/viewsRoutes');
 const ordersRouter = require('./routes/ordersRoutes');
 const affiliateLinkRouter = require('./routes/affiliateLinkRoutes');
+const transactionRouter = require('./routes/transactionRoutes');
 const affiliateLinkController = require('./controller/affiliateLinkController')
 
 const app = express();
@@ -68,6 +69,7 @@ app.get('/unique_/:userSlug/:productSlug', affiliateLinkController.countClicksRe
 app.use('/api/products', productsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/promotion', affiliateLinkRouter);
+app.use('/api/transactions', transactionRouter);
 app.use('/api/orders', ordersRouter);
 
 module.exports = app;

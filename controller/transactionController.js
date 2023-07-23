@@ -5,17 +5,13 @@ const User = require('../model/usersModel');
 const Transaction = require('../model/transactionModel');
 
 
-// Get all transactions for a specific user
+// get one transaction by admin
 exports.getTransaction = async (req, res) => {
     try {
-        const { userId } = req.params;
-        if(!userId) return res.status(400).json({ message: 'No user with that ID' })
+        const transaction = await Transaction.findById(req.params.id);
+        if(transaction < 1) return res.json({message: 'No transactions found'})
     
-        // Retrieve the transaction for the user
-        const transaction = await Transaction.findById({ userId });
-        if(transaction < 1) return res.json({message: 'You do not have any transactions'})
-    
-        res.status(400).json({
+        res.status(200).json({
             status: 'success',
             data: {
                 transaction
@@ -32,9 +28,9 @@ exports.getAllTransactions = async (req, res) => {
     try {
         // Retrieve all transactions
         const transactions = await Transaction.find();
-        if(!transactions) return res.json({ message: 'No transactions has been made by your users' })
+        if(!transactions) return res.json({ message: 'No transactions has been made by any user' })
     
-        res.status(400).json({
+        res.status(200).json({
             status: 'success',
             data: {
                 transactions 
@@ -45,22 +41,20 @@ exports.getAllTransactions = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
-  
 
 // Create a new transaction for transferring to a bank account
 exports.makeTransferCreateTransaction = async (req, res) => {
     try {
-        const { userId, bankAccount, amount, description } = req.body;
+        const { bankAccount, amount } = req.body;
         
         // Perform necessary validations and checks
-        const user = await User.findById(userId);
-        if (!userId || !bankAccount || !amount) {
+        const user = await User.findById(req.user._id);
+        if (!bankAccount || !amount) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
-        
         // Check if the user exists
         if (!user) {
-            return res.status(404).json({ messaghe: 'User not found' });
+            return res.status(404).json({ message: 'User not found' });
         }
 
         // Check if the user has enough
@@ -69,24 +63,23 @@ exports.makeTransferCreateTransaction = async (req, res) => {
 
         // Make a transfer request to the company payment API
         const transferResponse = await axios.post('/transfer', {
-            userId,
             bankAccount,
-            amount,
+            amount
         });
     
         // Handle the transfer API response
         if (transferResponse.status === 200) {
-            const transactionId = transferResponse.data.transactionId;
+            const { transactionId } = transferResponse.data;
     
             // Create a new transaction for the transfer
             const transaction = await Transaction.create({
-            transactionId,
-            user: userId,
-            description,
-            amount,
+                transactionId,
+                user: user._id,
+                amount,
+                createdAt: this.formattedCreatedAt
             });
     
-            res.status(200).json({
+            res.status(201).json({
                 status: 'success',
                 data: {
                     transaction
@@ -101,3 +94,24 @@ exports.makeTransferCreateTransaction = async (req, res) => {
     }
 };
   
+// Get all transactions for and by a specific user
+exports.getAllTransactionByUser = async (req, res) => {
+    try {
+        const { userId } = req.user._id;
+        if(!userId) return res.status(400).json({ message: 'No user with that ID' })
+    
+        // Retrieve the transaction for the user
+        const transactions = await Transaction.find({ _id: userId });
+        if(transactions < 1) return res.json({message: 'You do not have any transactions'})
+    
+        res.status(400).json({
+            status: 'success',
+            data: {
+                transactions
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}

@@ -19,11 +19,16 @@ const orderSchema = new mongoose.Schema({
 		enum: ['pending', 'delivered'],
         default: 'pending',
     },
+	isDelevered: {
+		type: Boolean,
+		default: false
+	},
 	quantity: {
 		type: Number,
 		default: 1,
 	},
-	price: Number,
+	amount: Number,
+	commissionedAmount: Number,
 	email: {
 		type: String,
 		required: [true, `Please provide us a reciever email address`],
@@ -49,16 +54,21 @@ const orderSchema = new mongoose.Schema({
 orderSchema.pre(/^find/, function(next) {
 	this.populate({
 		path: 'vendor',
-		select: '-__v',
+		select: '_id businessName',
 	}).populate({
 		path: 'buyer',
-		select: ''
+		select: '_id email'
 	}).populate({
 		path: 'product',
-		select: ''
+		select: '_id name image slug'
 	})
 	next();
 })
+
+orderSchema.virtual('formattedCreatedAt').get(function () {
+    // return moment(this.createdAt).format('YYYY-MM-DD HH:mm:ss');
+    return moment(this.createdAt).format('YYYY-MM-DD');
+});
 
 const Order = mongoose.model("Order", orderSchema);
 module.exports = Order;

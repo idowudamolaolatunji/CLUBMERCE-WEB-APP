@@ -101,6 +101,20 @@ exports.aliasTopProduct = (req, res, next) => {
 };
 
 
+exports.searchProduct = async (req, res) => {
+    try {
+        let payload = req.body.payload.trim();
+        let search = await Product.find({ name: {$regex: new RegExp('^'+payload+'.*','i')}}).exec();
+
+        // limit search result to 10
+        search = search.slice(0, 10);
+        res.status(200).json({
+            payload: search
+        })
+
+    } catch(err) {}
+}
+
 exports.getAllProduct = async(req, res) => {
     try {
         const features = new APIFeatures(Product.find(), req.query)
@@ -163,9 +177,6 @@ exports.getProductsByVendor = async (req, res) => {
     
         // Retrieve all products for the current vendor
         const products = await Product.find({ vendor: vendorId });
-        // await products.forEach(product => {
-        //     product.vendor = vendorId;
-        // })
     
         res.status(200).json({
             status: 'success',

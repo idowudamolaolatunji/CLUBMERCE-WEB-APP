@@ -56,7 +56,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['user', 'affiliate', 'vendor', 'admin'],
+        enum: ['buyer', 'affiliate', 'vendor', 'admin'],
         default: "affiliate",
     },
     zipCode: String,
@@ -87,16 +87,23 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    transactions:  mongoose.Schema.Types.Mixed,
+    transactions: {
+        type: Number,
+        default: 0
+    },
     promotionLinksCounts: { type: Number, default: 0 },
     commissions: Number,
     affiliateLinks: {
         type: [mongoose.Schema.Types.Mixed],
-        // default: this.affiliateLinks.length
+        default: 0
     },
     productSold: {
         type: Number,
         default: 0
+    },
+    active: {
+        type: Boolean,
+        default: true,
     },
     createdAt: {
         type: Date,

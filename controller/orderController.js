@@ -19,19 +19,15 @@ const { initializePayment, verifyPayment } = require("../utils/paystack")(reques
 exports.OrdersAndPayment = async (req, res) => {
     try {
         // Fetch the product information from the database
-        const user = await User.findOne({ slug: req.params.userSlug });
-        const product = await Product.findOne({ slug: req.params.productSlug }).populate('vendor')
+        const affiliate = await User.findOne({ slug: req.params.userSlug });
+        const product = await Product.findOne({ slug: req.params.productSlug })
+
+        // come back to remodify the buyers
+        const buyer = await User.findById(req.user._id);
     
         if(!product) return res.status(404).json({ message: 'Product Not Found!' })
         const orderInfo = {
             quantity: req.body.quantity,
-            product: product.name,
-            email: req.body.email,
-            fullname: req.body.fullname,
-            country: req.body.country,
-            state: req.body.state,
-            city: req.body.city,
-            postalCode: req.body.postalCode,
             address: req.body.address,
         };
         
@@ -39,13 +35,16 @@ exports.OrdersAndPayment = async (req, res) => {
         const totalAmount = product.price * orderInfo.quantity;
 
         // Call the payment processing function
-        processPayment(totalAmount, req.body, orderInfo, product, user, res);
+        processPayment(totalAmount, req.body, orderInfo, product, buyer, res, affiliate);
          
         const order = await Order.create({
-            orderId: transactionId,
+            product: product._id,
             vendor: product.vendor,
-            amount: paidAmount - product.commissionAmount,
-            orderInfo,
+            buyer: buyer._id,
+            commissionedAmount: paidAmount - product.commissionAmount,
+            amount: paidAmount,
+            ...orderInfo,
+            createdAt: this.formattedCreatedAt
         });
     
         res.status(200).json({
@@ -89,7 +88,7 @@ exports.successPage = async(req, res, next) => {
 }
 
 
-const processPayment = async (amount, paymentData, orderInfo, product, user, res) => {
+const processPayment = async (amount, paymentData, orderInfo, product, buyer, res, affiliate) => {
     const form = _.pick(paymentData, ["amount", "email", "fullname"]);
     form.metadata = {
         full_name: form.full_name,
@@ -122,29 +121,29 @@ const processPayment = async (amount, paymentData, orderInfo, product, user, res
 
                 response = JSON.parse(body);
 
-                user.wallet += product.commissionAmount;
-                user.productSold += 1;
-                product.ordersCount += 1
-                product.vendor.wallet += paidAmount - product.commissionAmount;
+                affiliate.wallet += product.commissionAmount;
+                affiliate.productSold += 1;
+                product.ordersCount += 1;
                 product.profits += paidAmount - product.commissionAmount;
+                // product.vendor.wallet += paidAmount - product.commissionAmount;
+                product.vendor.wallet = product.profits;
                 product.purchasesCount += 1;
 
                 await product.save();
-                await user.save({ validateBeforeSave: false });
+                await affiliate.save({ validateBeforeSave: false });
+                
 
                 const commission = await Commissions.create({
-                    // product: '64aa2367cd868dcbb0eebf13',
-                    // user: '64a5de9235821d01a124ee96',
-                    // commissions: 5000,
                     product: product._id,
-                    user: user._id,
+                    affiliate: affiliate._id,
                     commissions: product.commissionAmount,
-                    status: 'pending'
+                    status: 'pending',
+                    createdAt: this.formattedCreatedAt
                 });
 
 
-                const userPerformed = await UserPerformance.create({
-                    user: user._id,
+                const affiliatePerofmance = await userPerformance.create({
+                    affiliate: affiliate._id,
                     product: product._id,
                     commission: product.commissionAmount,
                     purchases,
@@ -152,14 +151,22 @@ const processPayment = async (amount, paymentData, orderInfo, product, user, res
                     links,
                 });
                 
-                await Transaction.create({
-                    user: user._id,
+                const orderTransaction = await Transaction.create({
+                    affiliate: affiliate._id,
                     trnxType: "CR",
                     purpose: "order",
                     amount: amount,
-                    }, { session });
+                    }, { session }
+                );
 
-                return res.redirect("/success");
+                return res.status(200).json({
+                    status: 'success',
+                    data: {
+                        commission,
+                        affiliatePerofmance,
+                        orderTransaction
+                    }
+                }).redirect("/success");
             });
             session.commitTransaction();
         } catch (error) {

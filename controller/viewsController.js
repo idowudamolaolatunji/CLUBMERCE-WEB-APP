@@ -1,7 +1,9 @@
-const User = require('../model/usersModel')
-const Product = require('../model/productsModel')
-const Commissions = require('../model/commissionModel') 
-const Transaction = require('../model/transactionModel') 
+const app = require('../app')
+const User = require('../model/usersModel');
+const Product = require('../model/productsModel');
+const Commissions = require('../model/commissionModel');
+const Transaction = require('../model/transactionModel');
+const Order = require('../model/orderModel');
 
 // Global
 exports.home = (req, res) => {
@@ -83,14 +85,29 @@ exports.getProduct = async (req, res) => {
 // common routes
 exports.dashboard = async (req, res) => {
     try {
-        const user = await User.findById(req.user.id);
+        const user = await User.findById(req.user._id);
         const products = await Product.find({ vendor: req.user._id });
-        const commission = await Commissions.find({ user: req.user.id})
+        const commission = await Commissions.find({ user: req.user._id});
+        const orders = await Order.find({ vendor: req.user._id });
 
+        const allUsers = await User.find();
+        const allProducts = await Product.find();
+        const allOrders = await Order.find();
+
+        const totalClicks = allUsers.reduce((total, user) => total + user.clicks, 0);
+        const totalPurchases = allProducts.reduce((total, product) => total + product.purchasesCount, 0);
+        
         res.status(200).render('base_account', {
             user,
             products,
             commission,
+            orders,
+            allProducts,
+            allUsers,
+            allOrders,
+            totalClicks,
+            totalPurchases,
+
             title: `${user.role}'s dashboard`,
         });
     } catch (err) {
@@ -105,20 +122,29 @@ exports.settings = (req, res) => {
 }
 exports.performance = async (req, res) => {
     try {
-        // const user = await User.findById(req.locals.user.id);
-        // const products = await Product.find({ vendor: req.locals.user._id });
-        console.log('perfomace request:', req)
+        const user = await User.findById(req.user._id);
+        const products = await Product.find({ vendor: req.user._id });
+        console.log('perfomace request:', req.user._id)
         res.status(200).render('performance', {
             title: 'Your perfomance',
-            // user,
-            // products,
+            user,
+            products,
         });
     } catch(err) {
         console.log(err)
     }
 }
-exports.transaction = (req, res) => {
-    res.status(200).render('transaction');
+exports.transaction = async (req, res) => {
+    try {
+        const transaction = await Transaction.find({ user: req.user._id })
+
+        res.status(200).render('transaction', {
+            title: 'Your Transactions',
+            transaction
+        });
+    } catch(err) {
+        console.log(err)
+    }
 }
 
 // Vendors
@@ -141,9 +167,19 @@ exports.adminAuth = (req, res) => {
     res.status(200).render('admin_auth');
 }
 
-exports.productMarketplace = (req, res) => {
-    res.status(200).render('product_marketplace-admin');
-}
+// exports.productMarketplace = async (req, res) => {
+//     try {
+//         const products = await Product.find();
+
+//         res.status(200).render('marketplace', {
+//             title: 'Affiliate marketPlace',
+//             products,
+//         });
+//     } catch(err) {
+//         res.status(400).json({message: err});
+//     }
+// }
+
 exports.manageUsers = async (req, res) => {
     try {
         const users = await User.find();
@@ -166,12 +202,23 @@ exports.manageProducts = async (req, res) => {
         res.json({message: 'There is no user yet!'});
     }
 }
-exports.managePayment = async (req, res) => {
+exports.managePayments = async (req, res) => {
     try {
         const transactions = await Transaction.find();
         res.status(200).render('manage_payments', {
             title: 'All Transactions',
             transactions
+        });
+    } catch(err) {
+        res.json({message: 'There is no user yet!'});
+    }
+}
+exports.manageOrders = async (req, res) => {
+    try {
+        const orders = await Order.find();
+        res.status(200).render('manage_orders', {
+            title: 'All Orders',
+            orders
         });
     } catch(err) {
         res.json({message: 'There is no user yet!'});

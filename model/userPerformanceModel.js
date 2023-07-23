@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 
 const userPerformanceSchema = new mongoose.Schema({
     affiliate: {
-        type: mongoose.Schema.Types.ObjectID,
+        type: mongoose.Schema.ObjectId,
         ref: 'User'
     },
     product: {
-        type: mongoose.Schema.Types.ObjectID,
+        type: mongoose.Schema.ObjectId,
         ref: 'Product'
     },
     commission: {

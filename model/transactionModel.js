@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const moment = require('moment');
 
 const transactionSchema = new mongoose.Schema({
     transactionId: String,
@@ -6,18 +7,26 @@ const transactionSchema = new mongoose.Schema({
     amount: { type: Number, required: true },
     purpose: {
         type: String,
-        enum: ['order', 'withdrawal'],
-        default: 'order'
+        default: 'withdrawal'
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
     }
 });
 
 transactionSchema.pre(/^find/, function(next) {
     this.populate({
         path: 'user',
-        select: ''
+        select: '_id fullName'
     })
     next();
-})
+});
+
+transactionSchema.virtual('formattedCreatedAt').get(function () {
+    // return moment(this.createdAt).format('YYYY-MM-DD HH:mm:ss');
+    return moment(this.createdAt).format('YYYY-MM-DD');
+});
 
 const Transaction = mongoose.model('Transaction', transactionSchema);
 module.exports = Transaction;

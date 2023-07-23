@@ -15,19 +15,23 @@ exports.createAffiliateLink = async (req, res) => {
 
     // Generate the affiliate promotion link
     let promotionLink;
-    if(process.env.NODE_ENV === 'development') {
-      promotionLink = `${req.protocol}://${req.get('host')}/unique_/${user.slug}/${product.slug}`
+    if(!process.env.NODE_ENV === 'development') {
+      promotionLink = `https://www.clubmerce.com/unique_/${user.slug}/${product.slug}`
     }
-    promotionLink = `www.clubmerce.com/unique_/${user.slug}/${product.slug}`
+    promotionLink = `${req.protocol}://${req.get('host')}/unique_/${user.slug}/${product.slug}`
+    // console.log(await AffiliateLink.find({ product: product._id }), 'length:', (await AffiliateLink.find({ product: product._id })).length)
 
-
+    const gravity = await AffiliateLink.find({ product: product._id });
+    console.log(gravity.length)
+    product.productGravity = gravity.length
+    product.save();
 
     // Check if link already exist and then create link and update links array
     if(!user.affiliateLinks.includes(promotionLink)) {
       // create link
         const newLinkDetails = await AffiliateLink.create({
-            user: user.username,
-            product: product.slug,
+            user: user._id,
+            product: product._id,
             link: promotionLink,
             trackingId: trackingId || null
         });
@@ -35,11 +39,11 @@ exports.createAffiliateLink = async (req, res) => {
         // add links to link arrays
         user.affiliateLinks.push(newLinkDetails.link);
         user.promotionLinksCounts = user.affiliateLinks.length;
-        product.productGravity = await AffiliateLink.find({ product: product.slug }).length;
-        await user.save({ validateBeforeSave: false });
+        await user.save({ validateBeforeSave: false })
         res.json({ status: 'success', link: promotionLink });
-    } else
+    } else {
         return res.json({message: 'Url already exist', link: promotionLink})
+    }
 
   } catch (error) {
     console.error(error);

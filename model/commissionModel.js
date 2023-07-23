@@ -20,6 +20,10 @@ const commissionSchema = new mongoose.Schema({
     }
 });
 
+commissionSchema.virtual('formattedCreatedAt').get(function () {
+    return moment(this.createdAt).format('YYYY-MM-DD');
+});
+
 const Commissions = mongoose.model('Commissions', commissionSchema);
 module.exports = Commissions;
 

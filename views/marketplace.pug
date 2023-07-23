@@ -33,14 +33,24 @@ body
                         i.fa-solid.fa-magnifying-glass.icon.nav__icon
 
                 span.nav__icons
-                    //- span.notification__icon
-                        i.fa-regular.fa-bell.icon.nav__icon
-                        .notification__hovered.hidden 
-                            h3.dashboard__heading Notification
-                            p.notification__amount New (0)
-                                .notification__content 
-                                    span.notice 
-                                | you have no notification
+                    -if(user.role === 'admin')
+                        span.notification__icon
+                            i.fa-regular.fa-bell.icon.nav__icon
+                            //- notification...
+                            .notification__hovered.hidden 
+                                h3.dashboard__heading Notification
+                                //- .notification__content you have no notification
+                                .notification
+                                    .notify__details
+                                        .notify__status &nbsp;
+                                        span
+                                            h4.notify__head Lorem ipsum dolor sit amet.
+                                            span.notify__body-box
+                                                p.notify__body Lorem, ipsum.
+                                                span &dash;
+                                                p.notify__date 10 mins ago
+                                    .notify__image--box
+                                        img.notify__image(src='asset/img/product.jpg' alt='')
 
                     span
                         img.nav__image(src=`asset/img/${user.image}.png` alt=`customer's (${user.username}) photo`)
@@ -52,6 +62,92 @@ body
                                 a.profile__link.nav__link(href="/profile") My profile
                                 button.profile__button.nav__link#logout signout&nbsp;
                                     i.fa-solid.fa-arrow-right-to-bracket.profile__icon
+
+
+        //- -if(user.role === 'admin')
+            mixin menuItem(link, text, icon, active)                    
+                li(class=`${active ? 'menu__item menu__active' : 'menu__item'}`)
+                    a.menu__link(href=`/${link}`)
+                        i.icon.menu__icon(class=`${icon}`)
+                        p #{text}
+
+            .section__bottom
+                menu.menubar
+                    .menu__body
+                        ul.menu__list
+                            
+                            +menuItem('dashboard', 'All perfomance', 'fa-solid fa-chart-simple', false)
+                            +menuItem('product-marketplace', 'Product Marketplace', 'fa-solid fa-clipboard-list', false)
+                            +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
+
+                    .menu__bottom 
+                        ul.menu__list 
+                            li.menu__item 
+                                a.menu__link(href="/manage-users") 
+                                    i.fa-solid.fa-users.icon.menu__icon
+                                    p Manage Users
+                            li.menu__item
+                                a.menu__link(href="/manage-products") 
+                                    i.fa-solid.fa-gift.icon.menu__icon
+                                    p Manage Products
+                            li.menu__item
+                                a.menu__link(href="/manage-payment")
+                                    //- i.fa-solid.fa-shopping-cart
+                                    i.fa-solid.fa-credit-card.icon.menu__icon
+                                    p Manage Payments
+                            li.menu__item
+                                a.menu__link.admin__menu--logout
+                                    i.fa-solid.fa-arrow-right-to-bracket.icon.menu__icon
+                                    | signout&nbsp;
+
+
+        //- -if(user.role === 'admin')
+            main.main__dashboard
+                .dashboard__content
+                    h3.dashboard__heading All Product Marketplace
+
+                    span
+                        .products__cards--box 
+                            each product in products
+
+                                .product__card
+                                    .product__side--left    
+                                        .side--top
+                                            .product__image--container
+                                                img.product__image(src='../../asset/img/product.jpg' alt=product.name)
+                                            .product__heading 
+                                                h2.product__title= product.name
+                                                p.product__niche=product.category
+                                                .product__content
+                                                    h4.product__description #{product.summary}...
+                                        .side--bottom
+                                            ul.product__info
+                                                //- each icon in product.others
+                                                li.product__info--item 
+                                                    i.fa-solid.fa-truck-fast.product__icon.icon
+                                                    | Digital Product
+                                                li.product__info--item 
+                                                    i.fa-solid.fa-tools.product__icon.icon
+                                                    | Affiliate tools
+                                                li.product__info--item 
+                                                    i.fa-solid.fa-link.product__icon.icon
+                                                    | Unique Link
+                                                li.product__info--item 
+                                                    i.fa-regular.fa-square-check.product__icon.icon
+                                                    | Approved
+                                                li.product__info--item 
+                                                    i.fa-solid.fa-rotate.product__icon.icon
+                                                    | Recurring
+                                                
+
+                                    .product__side--right
+                                        span.product__commission
+                                            p.commision avg commission 
+                                            span.commission__amount= `₦ ${product.price}`
+                                        a.btn.product__button.promote(data-productSlug=product.slug) Buyer/Order page
+                                        -console.log(product.slug)
+                                        a.product__button.page(target="_blank" href=`/marketplace/${product.slug}`) affiliate page
+
 
         main.main__dashboard
             .dashboard__content
@@ -228,5 +324,7 @@ body
                         .flexible
                             button.btn.hoplink__submit.btnModalOk Ok
                             button.hoplink__copy-button.outline Copy
+        
+        
             
             include _auth_footer

@@ -1,7 +1,7 @@
 const express = require("express");
-const authController = require('../controller/authcontroller')
+const authController = require('../controller/authcontroller');
 const productsController = require("../controller/productsController");
-const productByVendorController = require('../controller/productByVendorController');
+// const productByVendorController = require('../controller/productByVendorController');
 
 const router = express.Router();
 
@@ -18,6 +18,8 @@ router.route('/top-20-best',)
 router.route("/")
 .get(authController.protect, productsController.getAllProduct)
 .post(authController.protect, productsController.createProduct)
+
+
 router.route('/vendor-product')
   .get(authController.protect, productsController.getProductsByVendor)
 
@@ -30,6 +32,7 @@ router.route("/:id")
 .patch(productsController.updateProduct)
 .delete(productsController.deleteProduct);
 
+router.post('/search-product', productsController.searchProduct)
 
 // router.route('/vendor-product/:productId')
 //   .get(productByVendorController.getProductByVendor)

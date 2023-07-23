@@ -5,19 +5,19 @@ const affiliateLinkSchema = new mongoose.Schema({
   product: { type: mongoose.Schema.ObjectId, ref: 'Product' },
   link: String,
   clicks: { type: Number, default: 0 },
-  createdAt: { type: Date, default: Date.now() },
+  createdAt: { type: Date, default: Date.now },
 });
 
-// affiliateLinkSchema.pre(/^find/, function(next) {
-//   this.polute({
-//     path: 'affiliate',
-//     select: ''
-//   }).polute({
-//     path: 'product',
-//     select: ''
-//   })
-//   next();
-// })
+affiliateLinkSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'affiliate',
+    select: '_id fullName'
+  }).populate({
+    path: 'product',
+    select: '_id name'
+  })
+  next();
+})
 
 const AffiliateLink = mongoose.model('AffiliateLink', affiliateLinkSchema);
 module.exports = AffiliateLink;

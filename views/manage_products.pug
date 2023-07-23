@@ -4,11 +4,11 @@ block content
     .dashboard__table
         .table.table-mp
             .table-title
-                h4.table-heading Manage Products
+                h4.table-heading Manage All Products
             .table-head-mp
                 span.table-head-content Product
                 span.table-head-content brand name
-                span.table-head-content category
+                span.table-head-content commission
                 span.table-head-content price
                 span.table-head-content approved
                 span.table-head-content actions
@@ -24,34 +24,16 @@ block content
                         //- p.brand= product.vendor.businessName || 'Brand or Business Name'
                         p.brand= 'Business Name'
                     span.table-row-content
-                        p.category= product.category
+                        p.category= `${product.commissionPercentage || 10}%`
                     span.table-row-content
                         p.price= product.price
                     span.table-row-content
                         p.approved.status.status--success Approved
                     span.table-row-content.table-row-btn
                         //- button.btn-edit.table-btn Edit
-                        //- button.btn-edit.table-btn.admin-product-edit(data-id=`${product._id}`) Edit
+                        button.btn-edit.table-btn.admin-product-edit(data-id=`${product._id}`) Edit
                         button.btn-delete.table-btn.admin-product-delete(data-id=`${product._id}`) Delete
-                .table-row-mp
-                    span.table-row-content.table-row-product
-                        img.table-product__image(src='asset/img/product.jpg' alt='')
-                        //- span
-                            p.table-product__niche= product.category
-                        p.table-product__name= product.name
-                    span.table-row-content
-                        //- p.brand= product.vendor.businessName || 'Brand or Business Name'
-                        p.brand= 'Business Name'
-                    span.table-row-content
-                        p.category= product.category
-                    span.table-row-content
-                        p.price= product.price
-                    span.table-row-content
-                        p.approved.status.status--success Approved
-                    span.table-row-content.table-row-btn
-                        //- button.btn-edit.table-btn Edit
-                        //- button.btn-edit.table-btn.admin-product-edit(data-id=`${product._id}`) Edit
-                        button.btn-delete.table-btn.admin-product-delete(data-id=`${product._id}`) Delete
+                
 
 
     .generic__overlay.product-update__overlay.hidden

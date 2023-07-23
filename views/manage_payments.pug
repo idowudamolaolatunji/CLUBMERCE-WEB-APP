@@ -5,27 +5,33 @@ block content
         .table-title
             h4.table-heading Manage Transactions
         .table-head-mp
-            span.table-head-content Product
-            span.table-head-content brand name
-            span.table-head-content category
-            span.table-head-content price
-            span.table-head-content approved
+            span.table-head-content transaction ID
+            span.table-head-content user
+            span.table-head-content amount
+            span.table-head-content purpose
+            span.table-head-content status
             span.table-head-content actions
-        .table-row-mp
-            span.table-row-content.table-row-product
-                img.table-product__image(src='../product.jpg' alt='')
-                span
-                    p.table-product__name Test product 1
-                    p.table-product__niche health &amp; fitness
-            span.table-row-content
-                p.brand My drug kit
-            span.table-row-content
-                p.category Health
-            span.table-row-content
-                p.price $&nbsp;90
-            span.table-row-content
-                p.approved.status.status--success Approved
-            span.table-row-content.table-row-btn
-                //- button.btn-edit.table-btn Edit
-                button.btn-delete.table-btn Delete
-        
+
+        -if(transactions.length > 0)
+            each transaction of transactions
+                .table-row-mp
+                    span.table-row-content
+                        p.transaction= transaction.transactionId
+                    span.table-row-content
+                        p.user= transaction.user.username
+                    span.table-row-content
+                        p.price= `₦${transaction.amount}`
+                    span.table-row-content
+                        p.purpose= transaction.purpose
+                    span.table-row-content
+                        //- p(class=`.approved.status.status--${}`) Approved
+                        p.approved.status.status--success success
+                    span.table-row-content
+                        p.date= transaction.createdAt
+                    //- span.table-row-content.table-row-btn
+                        button.btn-edit.table-btn Approved
+                        button.btn-delete.table-btn Unapproved
+        - else 
+             .table-row-message
+                p.note-no No availiable transaction
+

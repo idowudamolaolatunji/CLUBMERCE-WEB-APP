@@ -659,7 +659,7 @@ input:focus, input:hover, select:focus, textarea:hover,
     grid-template-columns: 3fr 1.5fr 1.5fr 1.5fr 1.5fr 1.5fr;
 }
 .table-row-mu, .table-head-mu {
-    grid-template-columns: 2.4fr 3.2fr 1.2fr 1.2fr 1.2fr 1fr;
+    grid-template-columns: 2.6fr 3.2fr 1.2fr 1.2fr 1.2fr 1fr;
 }
 .table-row-app, .table-head-app  {
     grid-template-columns: 3fr 1.5fr 1.5fr 1.5fr 1.5fr;

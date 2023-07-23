@@ -102,8 +102,9 @@ body
 
                         -if(user.role === 'admin')
                             +menuItem('dashboard', 'All perfomance', 'fa-solid fa-chart-simple', false)
-                            +menuItem('product-marketplace', 'Product Marketplace', 'fa-solid fa-clipboard-list', false)
+                            //- +menuItem('product-marketplace', 'Product Marketplace', 'fa-solid fa-clipboard-list', false)
                             +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
+
 
                 -if(user.role === 'admin')
                     .menu__bottom 
@@ -114,8 +115,13 @@ body
                                     p Manage Users
                             li.menu__item
                                 a.menu__link(href="/manage-products") 
-                                    i.fa-solid.fa-gift.icon.menu__icon
+                                    i.fa-solid.fa-shopping-bag.icon.menu__icon
                                     p Manage Products
+                            li.menu__item
+                                a.menu__link(href="/manage-order")
+                                    i.fa-solid.fa-shopping-cart
+                                    //- i.fa-solid.fa-credit-card.icon.menu__icon
+                                    p Manage Orders
                             li.menu__item
                                 a.menu__link(href="/manage-payment")
                                     //- i.fa-solid.fa-shopping-cart
@@ -150,7 +156,7 @@ body
                                             i.fa-solid.fa-coins.insight__icon
                                         span 
                                             p.insight__title Total enarned
-                                            p.insight__text=`₦ ${user.wallet}`
+                                            p.insight__text=`₦${user.wallet}`
                                             //- p.insight__text ₦400,948
 
                                     .insight.insight__two
@@ -200,31 +206,6 @@ body
                                         //-     span.table-row-content
                                         //-         .date 10/3/2023
 
-                                        //- .table-row
-                                        //-     span.table-row-content.table-row-product
-                                        //-         img.table-product__image(src='asset/tests/three.avif' alt='')
-                                        //-         span
-                                        //-             p.table-product__name Benxynm Heart Burn
-                                        //-             p.table-product__niche health &amp; fitness
-                                        //-     span.table-row-content
-                                        //-         p.order ₦20,000
-                                        //-     span.table-row-content
-                                        //-         .status.status--success success
-                                        //-     span.table-row-content
-                                        //-         .date 20/11/2022
-
-                                        //- .table-row
-                                        //-     span.table-row-content.table-row-product
-                                        //-         img.table-product__image(src='asset/tests/one.jpg' alt='')
-                                        //-         span
-                                        //-             p.table-product__name The Giant Forex Trading System
-                                        //-             p.table-product__niche E-business
-                                        //-     span.table-row-content
-                                        //-         p.order ₦120,000
-                                        //-     span.table-row-content
-                                        //-         .status.status--success success
-                                        //-     span.table-row-content
-                                        //-         .date 4/11/2022
 
                                         -if(commission > 0)
                                             .table-row
@@ -234,11 +215,11 @@ body
                                                         p.table-product__name= commission.product
                                                         p.table-product__niche= commission.product.category
                                                 span.table-row-content
-                                                    .price `₦ ${commission.amount}`
+                                                    p.price= `₦${commission.amount}`
                                                 span.table-row-content
-                                                    .status.status--pending= commission.status
+                                                    p.status.status--pending= commission.status
                                                 span.table-row-content
-                                                    .date= commission.createdAt
+                                                    p.date= commission.createdAt
                                         - else
                                             .table-row-message
                                                 p.note-no You've have not made any sale commission...
@@ -255,14 +236,14 @@ body
                                             i.fa-solid.fa-comments-dollar.insight__icon
                                         span 
                                             p.insight__title My profit
-                                            p.insight__text=`₦ ${user.wallet}`
+                                            p.insight__text=`₦ ${products.reduce((acc, product) => acc + product.profits, 0)}`
 
                                     .insight.insight__two
                                         .icon__box 
                                             i.fa-solid.fa-list-check.insight__icon
                                         span 
                                             p.insight__title My Products
-                                            p.insight__text 0
+                                            p.insight__text= products.length
                                             //- p.insight__text= user.product
                                             //- i.fa-solid.fa-bag.insight__icon
 
@@ -271,14 +252,14 @@ body
                                             i.fa-solid.fa-shopping-cart.insight__icon
                                         span
                                             p.insight__title Orders
-                                            p.insight__text 0
+                                            p.insight__text= products.reduce((acc, product) => acc + product.ordersCount, 0)
 
                                     .insight.insight__four
                                         .icon__box 
                                             i.fa-solid.fa-bullhorn.insight__icon
                                         span
                                             p.insight__title Affiliate Gravity
-                                            p.insight__text 0
+                                            p.insight__text= products.reduce((acc, product) => acc + product.productGravity, 0)
                                             //- p.insight__text= product.productGravity
                                         
 
@@ -292,22 +273,28 @@ body
                                             span.table-head-content Total price
                                             span.table-head-content location
                                             span.table-head-content status
-                                        //- .table-row-po
-                                            span.table-row-content.table-row-product
-                                            img.table-product__image(src='../product.jpg' alt='')
-                                            span
-                                                p.table-product__name Test product 1
-                                                p.table-product__niche health &amp; fitness
-                                            span.table-row-content
-                                            p.order 5
-                                            span.table-row-content
-                                            p.price $&nbsp;120
-                                            span.table-row-content
-                                            p.brand Nigeria
-                                            span.table-row-content
-                                            p.status.status--success success
-                                        .table-row-message
-                                            p.note-no You've no order at the moment...
+
+                                        -if(orders < 1)
+                                            .table-row-message
+                                                p.note-no You've no order at the moment...
+
+                                        -else
+                                            each order of orders
+                                                .table-row-po
+                                                    span.table-row-content.table-row-product
+                                                    img.table-product__image(src='asset/img/product.jpg' alt='')
+                                                    span
+                                                        p.table-product__name= order.product.name
+                                                        p.table-product__niche= order.product.category
+                                                    span.table-row-content
+                                                    p.order= order.quantity
+                                                    span.table-row-content
+                                                    p.price= `₦${order.amount}`
+                                                    span.table-row-content
+                                                    p.brand= order.vendor.businessName
+                                                    span.table-row-content
+                                                    p.status.status--success= order.orderStatus
+                                        
 
                    
 
@@ -317,30 +304,53 @@ body
                                 .dashboard__insights 
                                     .insight.insight__one
                                         .icon__box 
-                                            i.fa-solid.fa-coins.insight__icon
+                                            i.fa-solid.fa-users.insight__icon
                                         span 
-                                            p.insight__text 0
+                                            p.insight__text= allUsers.length
                                             p.insight__title Total Users
 
                                     .insight.insight__two
                                         .icon__box 
-                                            i.fa-solid.fa-comments-dollar.insight__icon
+                                            i.fa-solid.fa-shopping-bag.insight__icon
                                         span 
-                                            p.insight__text 0
+                                            p.insight__text= allProducts.length
                                             p.insight__title Total Products
 
                                     .insight.insight__three
                                         .icon__box 
-                                            i.fa-solid.fa-up-right-from-square.insight__icon
-                                        span
-                                            p.insight__text 0
-                                            p.insight__title conversion Rate
+                                            i.fa-solid.fa-shopping-cart.insight__icon
+                                        span 
+                                            p.insight__text= allOrders.length
+                                            p.insight__title Total Orders
 
                                     .insight.insight__four
                                         .icon__box 
-                                            i.fa-solid.fa-bullhorn.insight__icon
+                                            i.fa-solid.fa-gift.insight__icon
                                         span
-                                            p.insight__text 0
+                                            p.insight__text= totalPurchases
+                                            p.insight__title Total Purchases
+
+                                    .insight.insight__four
+                                        .icon__box 
+                                            i.fa-solid.fa-up-right-from-square.insight__icon
+                                        span
+                                            p.insight__text= totalClicks
+                                            p.insight__title Total Clicks
+
+                                    .insight.insight__three
+                                        .icon__box 
+                                            i.fa-solid.fa-money-bill-transfer.insight__icon
+                                        span
+                                            - const conversionRate = (totalPurchases / totalClicks) * 100;
+                                            p.insight__text= conversionRate.toFixed(2) + '%'
+                                            p.insight__title conversion Rate
+
+                                    .insight.insight__two
+                                        .icon__box 
+                                            i.fa-solid.fa-percent.insight__icon
+                                        span
+                                            - const ctr = (totalClicks / allUsers.length) * 100;
+                                            p.insight__text= ctr.toFixed(2) + '%'
                                             p.insight__title CTR
                            
 
@@ -351,26 +361,32 @@ body
                                             h4.table-heading Product orders
                                         .table-head-po
                                             span.table-head-content Product
-                                            span.table-head-content orders
+                                            span.table-head-content quantity
                                             span.table-head-content Total price
                                             span.table-head-content location
                                             span.table-head-content status
-                                        //- .table-row-po
-                                            span.table-row-content.table-row-product
-                                                img.table-product__image(src='../product.jpg' alt='')
-                                                span
-                                                    p.table-product__name Test product 1
-                                                    p.table-product__niche health &amp; fitness
-                                            span.table-row-content
-                                                p.order 5
-                                            span.table-row-content
-                                                p.price $&nbsp;120
-                                            span.table-row-content
-                                                p.brand Nigeria
-                                            span.table-row-content
-                                                p.status.status--success success
-                                    .table-row-message
-                                        p.note-no You've no order at the moment...
+                                        
+                                        -if(allOrders < 1) 
+                                            .table-row-message
+                                                p.note-no No order at the moment...
+
+                                        -else
+                                            each order of allOrders
+                                                .table-row-po
+                                                    span.table-row-content.table-row-product
+                                                        img.table-product__image(src='asset/img/product.jpg' alt='')
+                                                        span
+                                                            p.table-product__name= order.product.name
+                                                            p.table-product__niche= order.product.category
+                                                    span.table-row-content
+                                                        p.order= order.quantity
+                                                    span.table-row-content
+                                                        p.price= order.commissionedAmount
+                                                    span.table-row-content
+                                                        p.brand= order.vendor.businessName
+                                                    span.table-row-content
+                                                        p(class=`.status .status--${order.orderStatus}`)= order.orderStatus
+                                    
 
 
 

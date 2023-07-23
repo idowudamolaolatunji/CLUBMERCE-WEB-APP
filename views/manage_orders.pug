@@ -1,0 +1,39 @@
+extends base_account 
+
+block content 
+    .table.table-mp
+        .table-title
+            h4.table-heading Manage All Orders
+        .table-head-mp
+            span.table-head-content Product
+            span.table-head-content brand name
+            span.table-head-content price
+            span.table-head-content quantity
+            span.table-head-content Type
+            span.table-head-content approved
+
+        -if(orders > 0)
+            each order of orders
+                .table-row-mp
+                    span.table-row-content.table-row-product
+                        img.table-product__image(src='../product.jpg' alt='')
+                        span
+                            p.table-product__name= order.product.name
+                            p.table-product__niche order.product.category
+                    span.table-row-content
+                        p.brand= order.vendor.bussinessName
+                    span.table-row-content
+                        p.category= order.quantity
+                    span.table-row-content
+                        p.price= `₦ ${order.amount}`
+                    span.table-row-content
+                        p.type= order.product.type
+                    span.table-row-content
+                        p.approved.status.status--success Approved
+                    //- span.table-row-content.table-row-btn
+                        button.btn-decline.table-btn Decline
+                        button.btn-approve.table-btn Approve
+
+        -else
+            .table-row-message
+                p.note-no No order has been made...        

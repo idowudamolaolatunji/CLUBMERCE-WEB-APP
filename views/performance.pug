@@ -17,20 +17,26 @@ block content
                         span.table-head-content Link purchase
                         span.table-head-content link clicks
                         span.table-head-content promotion link
-                    .table-row-app
-                        span.table-row-content.table-row-product
-                            img.table-product__image(src='asset/img/product.jpg' alt='')
-                            span
-                                p.table-product__name Test product 1
-                                p.table-product__category health &amp; fitness
-                        span.table-row-content
-                            mmission $&nbsp;230
-                        span.table-row-content
-                            p.purchase 4
-                        span.table-row-content
-                            p.click 20
-                        span.table-row-content
-                            p.promotion 1
+                    -if(performances < 1 || !performances)
+                        .table-row-message
+                            //- p.note-no Upload your product today, Let out affiliate make you money.
+                            p.note-no You have no existing product.
+                    -else
+                        each performance of performances
+                            .table-row-app
+                                span.table-row-content.table-row-product
+                                    img.table-product__image(src='asset/img/product.jpg' alt='')
+                                    span
+                                        p.table-product__name Test product 1
+                                        p.table-product__category health &amp; fitness
+                                span.table-row-content
+                                    mmission $&nbsp;230
+                                span.table-row-content
+                                    p.purchase 4
+                                span.table-row-content
+                                    p.click 20
+                                span.table-row-content
+                                    p.promotion 1
 
     
     -if(user.role === 'vendor')
@@ -52,20 +58,21 @@ block content
                         .table-row-message
                             //- p.note-no Upload your product today, Let out affiliate make you money.
                             p.note-no You have no existing product.
-                    each product of products
-                        .table-row-vpp
-                            span.table-row-content.table-row-product
-                                img.table-product__image(src='asset/img/product.jpg' alt='')
-                                span
-                                    p.table-product__name= product.name
-                                    p.table-product__category= product.product__category
-                            span.table-row-content
-                                p.purchase= product.purchasesCount
-                            span.table-row-content
-                                p.order= product.ordersCount
-                            span.table-row-content
-                                p.profit= ₦`${product.profits}`
-                            span.table-row-content
-                                p.aff-gravity= product.productGravity
-                            span.table-row-content
-                                p.click= product.clicks
+                    -else
+                        each product of products
+                            .table-row-vpp
+                                span.table-row-content.table-row-product
+                                    img.table-product__image(src='asset/img/product.jpg' alt='')
+                                    span
+                                        p.table-product__name= product.name
+                                        p.table-product__category= product.product__category
+                                span.table-row-content
+                                    p.purchase= product.purchasesCount
+                                span.table-row-content
+                                    p.order= product.ordersCount
+                                span.table-row-content
+                                    p.profit= `₦${product.profits}`
+                                span.table-row-content
+                                    p.aff-gravity= product.productGravity
+                                span.table-row-content
+                                    p.click= product.clicks

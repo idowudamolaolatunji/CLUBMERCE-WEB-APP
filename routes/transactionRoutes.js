@@ -1,11 +1,13 @@
 const express = require('express');
 
+const authController = require('../controller/authcontroller');
 const transactionController = require('../controller/transactionController');
 
 const router = express.Router();
 
-router.post('/transaction/transfer', transactionController.makeTransferCreateTransaction);
-router.get('/transaction/:userId', transactionController.getTransaction);
-router.get('/transactions', transactionController.getAllTransactions);
+router.post('/', authController.protect, transactionController.makeTransferCreateTransaction);
+router.get('/', authController.protect, transactionController.getAllTransactions);
+router.get('/:id',authController.protect, transactionController.getTransaction);
+router.get('/:userId', authController.protect, transactionController.getAllTransactionByUser);
 
 module.exports = router;

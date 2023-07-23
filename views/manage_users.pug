@@ -10,29 +10,31 @@ block content
             .table-head-mu
                 span.table-head-content User
                 span.table-head-content Email
-                span.table-head-content row
+                span.table-head-content role
                 span.table-head-content nationality
                 span.table-head-content status
                 span.table-head-content actions
 
-        each user of users
-            .table-row-mu
-                span.table-row-content.table-row-product
-                    img.table-user__image(src='asset/img/avatar.jpg' alt='')
-                    span
-                        p.table-user__name= user.fullName
-                        p.table-user__username= user.username
-                span.table-row-content
-                    p.email= user.email
-                span.table-row-content
-                    p.role= user.role
-                span.table-row-content
-                    p.country= user.country
-                span.table-row-content
-                    p.status.status--active= user.active
-                span.table-row-content.table-row-btn
-                    button.btn-delete.table-btn Delete
-                    //- button.btn-edit.table-btn Edit
+            - if(users.length > 0)
+                each user of users 
+                    .table-row-mu
+                        span.table-row-content.table-row-product
+                            img.table-user__image(src=`asset/img/${user.image}.jpg` alt='')
+                            span
+                                p.table-user__name= user.fullName
+                                p.table-user__username= user.username
+                        span.table-row-content
+                            p.email= user.email
+                        span.table-row-content
+                            p.role= user.role
+                        span.table-row-content
+                            p.country= user.country
+                        span.table-row-content
+                            p(class=`status status--${user.active ? 'active' : 'inactive'}`)= user.active ? 'active' : 'inactive'
+                        span.table-row-content.table-row-btn
+                            button.btn-delete.table-btn Delete
+                            button.btn-edit.table-btn Edit
+        
 
             //- .delete__overlay
                 .delete__modal

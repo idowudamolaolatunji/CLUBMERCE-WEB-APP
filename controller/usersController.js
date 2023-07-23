@@ -65,7 +65,7 @@ exports.createUser = (req, res) => {
 
 exports.getAllUser = async(req, res) => {
     try {
-        const users = await User.find().populate('products');
+        const users = await User.find();
 
         res.status(200).json({
             status: "success",
