@@ -98,6 +98,10 @@ productSchema.pre('save', function(next) {
     next();
 });
 
+productSchema.pre('save', function(next) {
+    this.category = (this.category, { lower: true });
+    next();
+});
 
 productSchema.pre(/^find/, function(next) {
     this.populate({

@@ -16,7 +16,7 @@ head
     link(rel="stylesheet" href="../src/css/dashboard.css")
     link(rel="stylesheet" href="../src/css/query_dashboard.css")
 
-    //- script(defer src="/src/js/hoplink.js")
+    script(defer src="/src/js/productSearch.js")
     script(defer src="/src/js/dashboard.js")
 
     title=title
@@ -31,9 +31,12 @@ body
                     input.nav__input(type='search' placeholder='search...')
                     button.search__button(type='submit')
                         i.fa-solid.fa-magnifying-glass.icon.nav__icon
+                    #search-result
+
+
 
                 span.nav__icons
-                    -if(user.role === 'admin')
+                    //- -if(user.role === 'admin')
                         span.notification__icon
                             i.fa-regular.fa-bell.icon.nav__icon
                             //- notification...
@@ -184,29 +187,29 @@ body
                             p catergories
                                 ul.catergory__list
                                     //- each category of categories
-                                    li.category__item Arts (0)
-                                    li.category__item Betting (0)
-                                    li.category__item Books (0)
-                                    li.category__item Business (0)
-                                    li.category__item Computers (0)
-                                    li.category__item Cooking (0)
-                                    li.category__item Food and Wine (0)
-                                    li.category__item E-Business and E-Marketing (0)
-                                    li.category__item Education (0)
-                                    li.category__item Entertainment (0)
-                                    li.category__item Jobs (0)
-                                    li.category__item Games (0)
-                                    li.category__item Green Products (0)
-                                    li.category__item Health and Fitness (0)
-                                    li.category__item Home and Garden (0)
-                                    li.category__item Internet (0)
-                                    li.category__item Investing (0)
-                                    li.category__item Languages (0)
-                                    li.category__item Reciepe (0)
-                                    li.category__item Parenting and Families (0)
-                                    li.category__item Self-Help (0)
-                                    li.category__item Spirituality (0)
-                                    li.category__item Sports (0)
+                                    li.category__item(data-item='arts') Arts
+                                    li.category__item(data-item='betting') Betting
+                                    li.category__item(data-item='books') Books
+                                    li.category__item(data-item='business') Business
+                                    li.category__item(data-item='computers') Computers
+                                    li.category__item(data-item='cooking') Cooking
+                                    li.category__item(data-item='e-Business-and-e-Marketing') E-Business and E-Marketing
+                                    li.category__item(data-item='education') Education
+                                    li.category__item(data-item='entertainment') Entertainment
+                                    li.category__item(data-item='food-and-Wine') Food and Wine
+                                    li.category__item(data-item='games') Games
+                                    li.category__item(data-item='green-products') Green Products
+                                    li.category__item(data-item='health-and-fitness') Health and Fitness
+                                    li.category__item(data-item='home-and-garden') Home and Garden
+                                    li.category__item(data-item='internet') Internet
+                                    li.category__item(data-item='investing') Investing
+                                    li.category__item(data-item='jobs') Jobs
+                                    li.category__item(data-item='languages') Languages
+                                    li.category__item(data-item='reciepe') Reciepe
+                                    li.category__item(data-item='parenting-and-Families') Parenting and Families
+                                    li.category__item(data-item='self-Help') Self-Help
+                                    li.category__item(data-item='spirituality') Spirituality
+                                    li.category__item(data-item='sports') Sports
 
                     span
                         h6.dashboard__subheading Top offers
@@ -224,7 +227,7 @@ body
                                                 h2.product__title= product.name
                                                 p.product__niche=product.category
                                                 .product__content
-                                                    h4.product__description #{product.summary}...
+                                                    h4.product__description=  `${product.summary}...`
                                         .side--bottom
                                             ul.product__info
                                                 //- each icon in product.others

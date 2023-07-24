@@ -63,10 +63,38 @@
     align-items: center;
     gap: 1.4rem;
     justify-content: center;
+    position: relative;
 }
 
 .nav__input {
     width: 50rem;
+}
+
+
+#search-result {
+    max-width: 50rem;
+    width: 60%;
+    padding: 1.6rem;
+    position: fixed;
+
+    top: 7rem;
+    left: 23%;
+    right: 0;
+
+    overflow-y: auto;
+    max-height: 35rem;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+}
+
+.result:link, .result:visited {
+    color: #333;
+    font-size: 1.4rem;
+    /* padding: 0 0 1rem;
+    border-bottom: 1px solid #aaa; */
 }
 
 input, select, textarea,
@@ -892,6 +920,7 @@ input:focus, input:hover, select:focus, textarea:hover,
     color: #666;
     font-size: 1.4rem;
     line-height: 1.4;
+    cursor: pointer;
 }
 
 .dashboard__content .select__input {

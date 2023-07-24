@@ -25,15 +25,14 @@ router.route('/vendor-product')
 
 router.route("/:id")
 .get(authController.protect, productsController.getProduct)
-// .get(authController.protect, productsController.getProduct)
-// .get(authController.protect, productsController.getProduct)
+
 // .patch(authController.restrictedTo('vendor', 'admin'), productsController.updateProduct)
 // .delete(authController.restrictedTo('vendor', 'admin'), productsController.deleteProduct)
 .patch(productsController.updateProduct)
 .delete(productsController.deleteProduct);
 
-router.post('/search-product', productsController.searchProduct)
-
+router.post('/search-product', authController.protect, productsController.searchProduct)
+router.get('/:category', authController.protect, productsController.searchProduct)
 // router.route('/vendor-product/:productId')
 //   .get(productByVendorController.getProductByVendor)
 //   .patch(productByVendorController.updateProductByVendor)
