@@ -14,7 +14,7 @@ block content
                 span.table-head-content actions
 
             each product of products
-                .table-row-mp
+                .table-row-mp(class=`${product.isPromoted ? 'prmoted-small' : ''}`)
                     span.table-row-content.table-row-product
                         img.table-product__image(src='asset/img/product.jpg' alt='')
                         //- span

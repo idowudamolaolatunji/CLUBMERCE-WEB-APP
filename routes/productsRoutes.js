@@ -31,8 +31,9 @@ router.route("/:id")
 .patch(productsController.updateProduct)
 .delete(productsController.deleteProduct);
 
-router.post('/search-product', authController.protect, productsController.searchProduct)
-router.get('/:category', authController.protect, productsController.searchProduct)
+router.route('/search-product').post(authController.protect, productsController.searchProduct);
+router.route('/niche/:category').get(productsController.getProductByCategory);
+router.route('/category/:option').get(authController.protect, productsController.getProductsByOption);
 // router.route('/vendor-product/:productId')
 //   .get(productByVendorController.getProductByVendor)
 //   .patch(productByVendorController.updateProductByVendor)

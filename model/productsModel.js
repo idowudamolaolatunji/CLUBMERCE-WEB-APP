@@ -42,9 +42,9 @@ const productSchema = new mongoose.Schema({
         maxLength: [130, "Summary must not be more than 200 characters"],
         minLength: [80, "Summary must not be more than 60 characters"],
     },
-    category: {
+    niche: {
         type: String,
-        required: [true, 'A product must have a Category'],
+        required: [true, 'A product must have a niche'],
     },
     commissionPercentage: {
         type: Number,
@@ -61,6 +61,7 @@ const productSchema = new mongoose.Schema({
     },
     affiliateTools: Boolean,
     slug: String,
+    category: String,
     subImages: [String],
     banners: [String],
     clicks: {
@@ -76,6 +77,15 @@ const productSchema = new mongoose.Schema({
     profits: {
         type: Number,
         default: 0
+    },
+    isPromoted: {
+        type: Boolean,
+        default: false,
+    },
+    // isBoosted
+    recurringCommission: {
+        type: Boolean,
+        default: false,
     },
     primaryLocation: [String],
     secondaryLoaction: [String],
@@ -99,7 +109,7 @@ productSchema.pre('save', function(next) {
 });
 
 productSchema.pre('save', function(next) {
-    this.category = (this.category, { lower: true });
+    this.category = slugify(this.niche, { lower: true });
     next();
 });
 
@@ -110,6 +120,10 @@ productSchema.pre(/^find/, function(next) {
     });
     next();
 })
+productSchema.pre(/^find/, function (next) {
+    this.sort({ isPromoted: -1 }); // Sort by isPromoted field in descending order
+    next();
+});
 
 const Product = mongoose.model('Product', productSchema);
 module.exports = Product;

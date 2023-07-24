@@ -213,6 +213,7 @@ exports.getProduct = async(req, res) => {
 exports.getProductByCategory = async (req, res) => {
   try {
     const { category } = req.params;
+    console.log(category)
 
     // Fetch products from the database based on the selected category
     const products = await Product.find({ category: category });
@@ -230,57 +231,17 @@ exports.getProductByCategory = async (req, res) => {
 };
 
 
-// Controller function to get products based on the selected option
-exports.getProductsByOption = async (req, res) => {
-  try {
-    const selectedOption = req.query.option; // Get the selected option from the query string
-
-    // Based on the selected option, build the query to filter products
-    let query;
-    if (selectedOption === 'most-promoted') {
-      query = Product.find().sort({ clicks: -1 }).limit(10); // Get the 10 most-promoted products
-    } else if (selectedOption === 'gravity-high-low') {
-      query = Product.find().sort({ productGravity: -1 }); // Get products sorted by gravity high to low
-    } else if (selectedOption === 'gravity-low-high') {
-      query = Product.find().sort({ productGravity: 1 }); // Get products sorted by gravity low to high
-    } else if (selectedOption === 'physical-product') {
-      query = Product.find({ type: 'Physical' }); // Get only physical products
-    } else if (selectedOption === 'recurring-commission') {
-      query = Product.find({ commissionType: 'Recurring' }); // Get products with recurring commission
-    } else if (selectedOption === 'digital-product') {
-      query = Product.find({ type: 'Digital' }); // Get only digital products
-    } else if (selectedOption === 'least-promoted') {
-      query = Product.find().sort({ clicks: 1 }).limit(10); // Get the 10 least-promoted products
-    } else {
-      query = Product.find(); // Default: Get all products
-    }
-
-    // Execute the query and fetch the products
-    const products = await query;
-
-    res.status(200).json({
-      status: 'success',
-      data: {
-        products,
-      },
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: 'error',
-      message: 'Internal server error',
-    });
-  }
-};
-
-
 // Controller to get products based on the selected option
 exports.getProductsByOption = async (req, res) => {
     try {
-      const option = req.query.option;
+      const option = req.params;
+      console.log(option)
   
       // Logic to get products based on the selected option
       let products;
-      if (option === 'most-promoted') {
+      if (option === 'all') {
+        products = await Product.find().sort({ createdAt: -1 });
+      } else if (option === 'most-promoted') {
         products = await Product.find().sort({ clicks: -1 }).limit(20);
       } else if (option === 'gravity-high-low') {
         products = await Product.find().sort({ productGravity: -1 }).limit(20);
@@ -289,7 +250,11 @@ exports.getProductsByOption = async (req, res) => {
       } else if (option === 'physical-product') {
         products = await Product.find({ type: 'Physical' }).limit(20);
       } else if (option === 'recurring-commission') {
-        products = await Product.find({ commissionPercentage: { $gt: 0 } }).limit(20);
+        products = await Product.find({ recurringCommission: true }).limit(20);
+      } else if (option === 'commission-high-low') {
+        products = await Product.find().sort({ commissionPercentage: { $gt: 20 } }).limit(20);
+      } else if (option === 'commission-low-high') {
+        products = await Product.find().sort({ commissionPercentage: { $lt: 20 } }).limit(20);
       } else if (option === 'digital-product') {
         products = await Product.find({ type: 'Digital' }).limit(20);
       } else if (option === 'least-promoted') {
@@ -298,10 +263,19 @@ exports.getProductsByOption = async (req, res) => {
         products = await Product.find().limit(20);
       }
   
-      res.render('products', { products }); // Replace 'products' with your actual view name
+        //   res.render('products', { products }); // Replace 'products' with your actual view name
+        res.status(200).json({
+            status: 'success',
+            data: {
+            products,
+            },
+        });
     } catch (error) {
       console.error('Error fetching products:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({
+        status: 'error',
+        message: 'Internal server error',
+      })
     }
 };
   

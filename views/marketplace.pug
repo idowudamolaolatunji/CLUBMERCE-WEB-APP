@@ -151,7 +151,7 @@ body
                                         -console.log(product.slug)
                                         a.product__button.page(target="_blank" href=`/marketplace/${product.slug}`) affiliate page
 
-
+    
         main.main__dashboard
             .dashboard__content
                 h3.dashboard__heading
@@ -161,11 +161,14 @@ body
 
                 span.product__filtering-btn
                     select.select__input(id="select")
+                        option(value="all") All
                         option(value="most-promoted") Most promoted
                         option(value="gravity-high-low") Gravity : High-low
+                        option(value="commission-high-low") High commission 
                         option(value="gravity-low-high") Gravity : Low-high
                         option(value="physical-product") Physical products
                         option(value="recurring-commission") Recurring commission
+                        option(value="commission-low-high") Low commission
                         option(value="digital-product") Digital products
                         option(value="least-promoted") Less promoted
                 
@@ -175,11 +178,14 @@ body
                         form.product__filter.form__item  
                             label.form__label(for="select") Sort results by
                             select.select__input(id="select")
+                                option(value="all") All
                                 option(value="most-promoted") Most promoted
                                 option(value="gravity-high-low") Gravity : High-low
+                                option(value="commission-high-low") High commission 
                                 option(value="gravity-low-high") Gravity : Low-high
                                 option(value="physical-product") Physical products
                                 option(value="recurring-commission") Recurring commission
+                                option(value="commission-low-high") Low commission
                                 option(value="digital-product") Digital products
                                 option(value="least-promoted") Less promoted
                         
@@ -218,7 +224,7 @@ body
                         .products__cards--box 
                             each product in products
 
-                                .product__card
+                                .product__card(class=`${product.isPromoted ? 'promoted' : ''}`)
                                     .product__side--left    
                                         .side--top
                                             .product__image--container
@@ -230,22 +236,22 @@ body
                                                     h4.product__description=  `${product.summary}...`
                                         .side--bottom
                                             ul.product__info
-                                                //- each icon in product.others
                                                 li.product__info--item 
-                                                    i.fa-solid.fa-truck-fast.product__icon.icon
-                                                    | Digital Product
+                                                    i.fa-solid.product__icon.icon(class=`${product.type !== 'Digital' ? 'fa-truck-fast' : 'fa-file'}`)
+                                                    p= `${product.type} Product`
                                                 li.product__info--item 
                                                     i.fa-solid.fa-tools.product__icon.icon
-                                                    | Affiliate tools
+                                                    p Affiliate tools
                                                 li.product__info--item 
                                                     i.fa-solid.fa-link.product__icon.icon
-                                                    | Unique Link
+                                                    p Unique Link
                                                 li.product__info--item 
                                                     i.fa-regular.fa-square-check.product__icon.icon
-                                                    | Approved
-                                                li.product__info--item 
-                                                    i.fa-solid.fa-rotate.product__icon.icon
-                                                    | Recurring
+                                                    p Approved
+                                                -if(product.recurringCommission)
+                                                    li.product__info--item 
+                                                        i.fa-solid.fa-rotate.product__icon.icon
+                                                        p Recurring
                                                 
 
                                     .product__side--right
@@ -259,7 +265,7 @@ body
 
 
                                 figure.product__card-mobile
-                                    .product__side.front    
+                                    .product__side.front(class=`${product.isPromoted ? 'promoted-m' : ''}`)    
                                         .front--top
                                             .product__image--container
                                                 img.product__image(src='../../asset/img/product.jpg' alt=product.name)
@@ -272,9 +278,10 @@ body
                                         .front--bottom
                                             ul.product__info
                                                 //- each icon in product.others
+                                                
                                                 li.product__info--item 
-                                                    i.fa-solid.fa-truck-fast.product__icon.icon
-                                                    p Digital Product
+                                                    i.fa-solid.product__icon.icon(class=`${product.type !== 'Digital' ? 'fa-truck-fast' : 'fa-file'}`)
+                                                    p= `${product.type} Product`
                                                 li.product__info--item 
                                                     i.fa-solid.fa-tools.product__icon.icon
                                                     p Affiliate tools
@@ -284,9 +291,12 @@ body
                                                 li.product__info--item 
                                                     i.fa-regular.fa-square-check.product__icon.icon
                                                     p Approved
-                                                li.product__info--item 
-                                                    i.fa-solid.fa-rotate.product__icon.icon
-                                                    p Recurring
+                                                -if(product.recurringCommission)
+                                                    li.product__info--item 
+                                                        i.fa-solid.fa-rotate.product__icon.icon
+                                                        p Recurring
+                                                
+                                                        
                                                 
 
                                     .product__side.back

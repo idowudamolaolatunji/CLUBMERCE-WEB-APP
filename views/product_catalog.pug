@@ -22,7 +22,7 @@ block content
                         //- p.note-no Upload your product today, Let out affiliate make you money.
                         p.note-no You have no existing product.
                 each product of products
-                    .table-row-vp
+                    .table-row-vp(class=`${product.isPromoted ? 'prmoted-small' : ''}`)
                         span.table-row-content.table-row-product
                             img.table-product__image(src=`asset/img/product.jpg` alt='')
                             span
