@@ -1,61 +1,14 @@
-i/*
-const searchForm = document.querySelector('.nav__search');
-const searchResults = document.getElementById('search-result')
-console.log('i am connected')
+const spinOverlay = document.querySelector('#spinOverlay');
 
+const showLoadingOverlay = () => {
+    spinOverlay.style.visibility = 'visible';
+};
 
-searchForm.addEventListener('keyup', function(e) {
-    e.preventDefault();
-    const searchInput = document.querySelector('.nav__input');
+const hideLoadingOverlay = () => {
+    spinOverlay.style.visibility = 'hidden';
+};
 
-    
-    if(matchNotAccepted[0] === searchInput.value) {
-        searchResults.innerHTML = '';
-        return;
-    }
-
-    if(searchInput.value !== '') {
-        fetch('/api/products/search-product', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({payload: searchInput.value}),
-        }).then(res => res.json()).then(data => {
-            const {payload} = data;
-            console.log(payload);
-            searchResults.innerHTML = '';
-            let markup;
-
-            
-            if(searchInput.value === '' || searchInput.value === ' ') {
-                searchResults.innerHTML = '';
-                searchResults.style.backgroundColor = 'transparent';
-                searchResults.style.boxShadow = 'none'
-                return;
-            }
-            if(payload.length < 1) {
-                searchResults.innerHTML = '<p>No result found</p>';
-                searchResults.style.boxShadow = '0 1rem 4rem rgba(0, 0, 0, 0.15)'
-                return;
-            }
-            payload.forEach((el, i) => {
-                console.log(el)
-                searchResults.innerHTML = '';
-                markup += `<a href="/">${el.name}</a>`;
-              
-                searchResults.style.backgroundColor = '#fff'
-                searchResults.style.boxShadow = '0 1rem 4rem rgba(0, 0, 0, 0.15)'
-            })
-            if(this.blur()) {
-                searchResults.style.backgroundColor = 'transparent';
-                searchResults.style.boxShadow = 'none'
-            } 
-              // Insert the markup into the searchResults div parent container
-              searchResults.insertAdjacentHTML('beforeend', markup);
-
-        }).catch(err => console.log(err));
-    }
-})
-*/
+const dashboardSection = document.querySelector('.section__dashboard')
 const searchForm = document.querySelector('.nav__search');
 const searchResults = document.getElementById('search-result');
 console.log('I am connected');
@@ -72,6 +25,7 @@ searchForm.addEventListener('keyup', function (e) {
     return;
   }
 
+  showLoadingOverlay()
   fetch('/api/products/search-product', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -79,14 +33,16 @@ searchForm.addEventListener('keyup', function (e) {
   })
     .then((res) => {
       if (!res.ok) {
+        hideLoadingOverlay()
         throw new Error('Network response was not ok');
       }
       return res.json();
     })
     .then((data) => {
-      const { payload } = data;
-      console.log(payload);
-      let markup = '';
+        hideLoadingOverlay()
+        const { payload } = data;
+        console.log(payload);
+        let markup = '';
 
       if (payload.length === 0) {
         searchResults.innerHTML = '<p>No result found</p>';
@@ -100,7 +56,6 @@ searchForm.addEventListener('keyup', function (e) {
       });
 
       // Clear previous results and insert the markup into the searchResults div parent container
-      searchResults.classList.remove('hidden')
       searchResults.innerHTML = '';
       searchResults.insertAdjacentHTML('beforeend', markup);
 
@@ -108,9 +63,9 @@ searchForm.addEventListener('keyup', function (e) {
       searchResults.style.boxShadow = '0 1rem 4rem rgba(0, 0, 0, 0.15)';
       
 
-      document.querySelector('.section__dashboard').addEventListener('click', function() {
-        searchResults.classList.add('hidden')
-      })
+      dashboardSection.addEventListener('click', function () {
+        // searchResults.style.transform = 'translateY(-1000rem)'; // Use remove() to avoid potential errors
+      });
     })
     .catch((err) => console.error(err));
 });
@@ -118,13 +73,12 @@ searchForm.addEventListener('keyup', function (e) {
 
 const categoryList = document.querySelector('.catergory__list');
 const productBox = document.querySelector('.products__cards--box');
-const spinOverlay = document.querySelector('#spinOverlay');
 
 // Function to fetch products based on the selected category
 const fetchProductsByCategory = async (category) => {
     try {
-        // Show the spinner overlay
-        // spinOverlay.style.visibility = "visible";
+        // Show the spinner during the fetch request
+        showLoadingOverlay();
     
         const res = await fetch(`/api/products/niche/${category}`);
         if(!res.ok) return;
@@ -133,6 +87,7 @@ const fetchProductsByCategory = async (category) => {
         console.log(data)
         const {products} = data.data;
         if(products.length === 0) {
+            hideLoadingOverlay();
             productBox.innerHTML = '<p>No product found..</p>';
             document.querySelector('.dashboard__subheading').textContent = category.split('-').join(' ');
             document.querySelector('.figures').textContent = `Total 0`;
@@ -146,7 +101,10 @@ const fetchProductsByCategory = async (category) => {
         // spinOverlay.style.visibility = 'hidden';
         document.querySelector('.dashboard__subheading').textContent = category.split('-').join(' ');
         document.querySelector('.figures').textContent = `Total ${products.length || 0}`;
-        
+        hideLoadingOverlay()
+        // Scroll to the top
+        dashboardSection.scrollTop = 0;
+
         // Display the products for the selected category
         products.forEach(product => {
             console.log(product)
@@ -159,8 +117,9 @@ const fetchProductsByCategory = async (category) => {
                             <div class="product__heading"> 
                                 <h2 class="product__title">${product.name}</h2>
                                 <p class="product__niche">${product.niche}</p>
-                                <button class="produt__message person" data-vendorId=${product}>
-                                    <i class="fa-solid fa-envelope icon product__icon></i>
+                                <button class="product__message person" data-vendorId=${product}>
+                                    <i class="fa-solid fa-envelope icon"></i>
+                                    Chat vendor
                                 </button>
                                 <div class="product__content">
                                     <h4 class="product__description">${product.summary}...</h4>
@@ -196,6 +155,7 @@ const fetchProductsByCategory = async (category) => {
         console.error('Error fetching products:', error);
         // Display an error message to the user
         productBox.innerHTML = '<p>Something went wrong, Try again</p>';
+        hideLoadingOverlay()
     }
 };
   
@@ -214,29 +174,38 @@ const selectElement = document.querySelectorAll('.select__input');
 // Function to fetch products based on the selected option
 const fetchProducts = async (option) => {
   try {
+    // Show the spinner during the fetch request
+    showLoadingOverlay();
+
     const res = await fetch(`/api/products/category/${option}`);
     if(!res.ok) return;
     const data = await res.json();
     
     const {products} = data.data;
-    if(!products.length === 0) return;
+    if(!products.length === 0) {
+        hideLoadingOverlay()
+        return;
+    }
+    
     return products;
   } catch (error) {
     console.error('Error fetching products:', error);
+    hideLoadingOverlay()
   }
 };
 
 let selectedOption;
 // Function to display products in the product__container
 const displayProducts = (products) => {
-    console.log(products)
     // Clear previous products
     productBox.innerHTML = '';
+    hideLoadingOverlay()
+    dashboardSection.scrollTop = 0;
     
     // Display each product in the product__container
     document.querySelector('.figures').textContent = `Total ${products.length || 0}`
     document.querySelector('.dashboard__subheading').textContent = selectedOption.split('-').join(' ')
-
+    
     products.forEach((product) => {
         const markup = `
             <div class="product__card ${product.isPromoted ? 'promoted' : ''}">
@@ -247,8 +216,9 @@ const displayProducts = (products) => {
                         <div class="product__heading"> 
                             <h2 class="product__title">${product.name}</h2>
                             <p class="product__niche">${product.niche}</p>
-                            <button class="produt__message person" data-vendorId=${product}>
-                                <i class="fa-solid fa-envelope icon product__icon></i>
+                            <button class="product__message person" data-vendorId=${product}>
+                                <i class="fa-solid fa-envelope icon"></i>
+                                Chat vendor
                             </button>
                             <div class="product__content">
                                 <h4 class="product__description">${product.summary}</h4>

@@ -40,8 +40,10 @@ body
             .nav__logo
                 i.fa-solid.fa-close.icon.nav__icon.menubar-control.menu-closed
                 i.fa-solid.fa-bars.icon.nav__icon.menubar-control.menu-opened.hidden
-                img.logo(src='asset/img/logo-removebg.png' alt='clubmerce logo')
-                img.logo-small(src='asset/img/favicon.png' alt='clubmerce logo')
+                a(href='/dashboard')
+                    img.logo(src='asset/img/logo-removebg.png' alt='clubmerce logo')
+                a(href='/dashboard')
+                    img.logo-small(src='asset/img/favicon.png' alt='clubmerce logo')
             nav.navbar
             
                 - if(section === 'marketplace')
@@ -400,7 +402,7 @@ body
 
 
 
-                .chat__box.hidden
+                //- .chat__box.hidden
                     .chat-top
                         p.chat-name Idowu Olatunji
                         .chat-top__icons

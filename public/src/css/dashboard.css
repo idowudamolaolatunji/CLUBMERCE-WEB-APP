@@ -597,7 +597,6 @@ input:focus, input:hover, select:focus, textarea:hover,
     border-bottom: 1px solid #eee;
     background-color: #fdfdfd;
     position: relative;
-    overflow: hidden;
 }
 .table-row-message .note-no { font-size: 1.4rem; text-align: center; }
 
@@ -703,9 +702,9 @@ input:focus, input:hover, select:focus, textarea:hover,
 /* ================products================== */
 /* .main__centered { padding-left: 1rem; } */
 .products__container {
-    max-width: 120rem;
+    max-width: 115rem;
     display: grid;
-    grid-template-columns: 25fr 90fr 5fr;
+    grid-template-columns: 25fr 90fr;
     gap: 3.6rem;
     position: relative;
 }
@@ -746,7 +745,6 @@ input:focus, input:hover, select:focus, textarea:hover,
     grid-template-columns: 1fr 18.5rem;
     border-radius: 1rem;
     height: 28rem;
-    overflow: hidden;
     position: relative;
 }
 
@@ -826,6 +824,7 @@ input:focus, input:hover, select:focus, textarea:hover,
     background-color: rgba(97, 99, 179, 0.1);
     border-top-right-radius: 1rem;
     border-bottom-right-radius: 1rem;
+    overflow: hidden;
 }
 /* *************** */
 
@@ -855,23 +854,24 @@ input:focus, input:hover, select:focus, textarea:hover,
     border-radius: .8rem;
 }
 
-.produt__message, .produt__message-m {
+.product__message, .produt__message-m {
     color: #666;
     display: flex;
     gap: .8rem;
     justify-content: center;
     align-items: center;
     position: absolute;
-    cursor: pointer;
 }
 
-.produt__message {
+.product__message {
     top: 2rem;
     right: 20rem;
+    cursor: pointer;
 }
 .produt__message-m {
     top: 22.5rem;
     right: 2rem;
+    cursor: pointer;
 }
 
 
@@ -1410,6 +1410,7 @@ input:focus, input:hover, select:focus, textarea:hover,
     bottom: 1.6rem;
     right: 3.6rem;
     z-index: 1000;
+    transform: translateY(1000rem);
 }
 
 .chat-top {

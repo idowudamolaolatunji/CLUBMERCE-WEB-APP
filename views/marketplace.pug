@@ -16,17 +16,31 @@ head
     link(rel="stylesheet" href="../src/css/dashboard.css")
     link(rel="stylesheet" href="../src/css/query_dashboard.css")
 
+    script(src="/socket.io/socket.io.js")
     script(defer src="/src/js/productSearch.js")
+    script(defer src="/src/js/link.js")
     script(defer src="/src/js/chat.js")
-    script(defer src="/src/js/dashboard.js")
 
     title=title
 body
-
+    #spinOverlay
+        .spin
+            div
+            div
+            div
+            div
+            div
+            div
+            div
+            div
+            div
+            div
     section.section__dashboard
         .section__top.margin__left--sm
-            img.logo(src='../asset/img/logo-removebg.png' alt='clubmerce logo')
-            img.logo-small(src='../asset/img/favicon.png' alt='clubmerce logo')
+            //- a(href='/dashboard')
+            img.logo(src='asset/img/logo-removebg.png' alt='clubmerce logo')
+            //- a(href='/dashboard')
+            img.logo-small(src='asset/img/favicon.png' alt='clubmerce logo')
             nav.navbar
                 form.nav__search
                     input.nav__input(type='search' placeholder='search...')
@@ -193,6 +207,7 @@ body
                             p catergories
                                 ul.catergory__list
                                     //- each category of categories
+                                    li.category__item(data-item='all') All
                                     li.category__item(data-item='arts') Arts
                                     li.category__item(data-item='betting') Betting
                                     li.category__item(data-item='books') Books
@@ -232,9 +247,9 @@ body
                                             .product__heading 
                                                 h2.product__title= product.name
                                                 p.product__niche=product.niche
-                                                button.produt__message.person(data-vendorId=`${product}`)
+                                                button.product__message.person(data-vendorId=`${product}`)
                                                     i.fa-solid.fa-envelope.icon
-                                                    p Chat vendor
+                                                    | Chat vendor
                                                 .product__content
                                                     h4.product__description=  `${product.summary}...`
                                             

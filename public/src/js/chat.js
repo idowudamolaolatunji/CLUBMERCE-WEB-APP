@@ -2,8 +2,8 @@ const chatForm = document.querySelector('.chat__form');
 const chatBox = document.querySelector('.chat-mid');
 const socket = io();
 
-const personId = document.querySelector('')
-let recipientUser;
+// const personId = document.querySelector('')
+// let recipientUser;
 
 // if(personId) {
 //   personId.addEventListener('click', function(e) {
@@ -44,7 +44,6 @@ chatForm.addEventListener('submit', (e) => {
         msgInput.value = '';
         console.log(msg)
     }
-    
 });
   
 

@@ -1,4 +1,3 @@
-// const spinOverlay = document.querySelector('#spinOverlay');
 
 const uploadBtn = document.querySelector('.add-btn');
 const productOverlay = document.querySelector('.product__overlay');
@@ -23,7 +22,16 @@ const dashboradWidth = mainDashboard.getBoundingClientRect();
 const menuLogout = document.querySelectorAll('.menu__logout');
 const navLogout = document.querySelectorAll('.nav__logout');
 const adminLogout = document.querySelectorAll('.admin__menu--logout');
+const spinOverlay = document.querySelector('#spinOverlay');
 
+
+const showLoadingOverlay = () => {
+    spinOverlay.style.visibility = 'visible';
+};
+
+const hideLoadingOverlay = () => {
+    spinOverlay.style.visibility = 'hidden';
+};
 
 // MODALS
 const openModal = function(overlay, modal) {
@@ -183,6 +191,7 @@ const openCopyModal = function (link) {
 // dashboard Hoplink
 const getHoplink = async function (username, trackingId, productSlug) {
     try {
+        showLoadingOverlay()
       const res = await fetch(`/api/promotion/generate-affiliate-link/${productSlug}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -190,12 +199,14 @@ const getHoplink = async function (username, trackingId, productSlug) {
       });
   
       if (!res.ok) {
+        hideLoadingOverlay()
         throw new Error('Failed to generate affiliate link');
       }
   
       const data = await res.json();
   
       if (data.status === 'success' || data.message === 'Url already exist') {
+        hideLoadingOverlay()
         showAlert('success', 'Link created');
         closeModal(hoplinkGetOverlay, hoplinkGetModal);
         openCopyModal(data.link);
@@ -213,13 +224,16 @@ const getHoplink = async function (username, trackingId, productSlug) {
             });
         })
       } else if (data.message === 'Enter a valid user...' || data.message === 'Please provide your username') {
-        showAlert('error', data.message);
-      } else {
-        hoplinkCopyOverlay.classList.add('hidden');
-        throw new Error('Invalid response from server');
-      }
-
+          hideLoadingOverlay()
+          showAlert('error', data.message);
+        } else {
+          hideLoadingOverlay()
+          hoplinkCopyOverlay.classList.add('hidden');
+          throw new Error('Invalid response from server');
+        }
+        
     } catch (err) {
+        hideLoadingOverlay()
       showAlert('error', 'Something went wrong');
       console.error(err);
     }
@@ -291,6 +305,7 @@ if(uploadBtn) {
 
 const uploadProduct = async function(name, summary, description, price, commission, type, category, tools, link, recurring) {
     try {
+        showLoadingOverlay()
         const res = await fetch('/api/products', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -298,13 +313,16 @@ const uploadProduct = async function(name, summary, description, price, commissi
         });
 
         if (!res.ok) {
+            hideLoadingOverlay()
             throw new Error('Product upload failed');
         }
 
         const data = await res.json();
         console.log(res, data);
+        hideLoadingOverlay()
     } catch (err) {
         console.log(err);
+        hideLoadingOverlay()
     }
 };
 
@@ -362,38 +380,46 @@ const closeAdjacentModal = () => {
 const deleteProduct = async function(productId) {
     // Perform the delete request using the product ID
     try {
+        showLoadingOverlay();
         const res = await fetch(`/api/products/${productId}`, {
             method: 'DELETE',
         });
 
         const data = await res.json();
         console.log(data);
+        hideLoadingOverlay()
 
         if (data.status === 'success') {
             location.reload(true);
+            hideLoadingOverlay()
         }
     } catch (error) {
         console.error(error);
+        hideLoadingOverlay()
     }
 }
 // Function to delete the product
 const userDelete = async function(userId) {
     // Perform the delete request using the product ID
     try {
+        showLoadingOverlay();
         const res = await fetch(`/api/users/${userId}`, {
             method: 'DELETE',
         });
 
         const data = await res.json();
         console.log(data);
+        hideLoadingOverlay();
 
         if (data.status === 'success') {
             window.setTimeout(() => {
+                hideLoadingOverlay()
                 showAlert('success', data.message);
                 location.reload(true)
             }, 1500);
         }
     } catch (error) {
+        hideLoadingOverlay();
         console.error(error);
     }
 }
@@ -502,22 +528,26 @@ if(productUpdateClose) {
 
 const updateProduct = async function(name, summary, description, price, commission, type, category, tools, link, recurring) {
     try {
+        showLoadingOverlay();
         const res = await fetch(`/api/products/${productId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({name, summary, description, price, commission, type, category, tools, link, recurring}),
         });
         const data = await res.json();
+        hideLoadingOverlay()
         console.log(res, data);
         
         if(data.status === 'success') {
             window.setTimeout(() => {
+                hideLoadingOverlay()
                 showAlert('success', data.message);
                 location.reload(true)
             }, 1500);
         }
     } catch(err) {
         showAlert('error', data.message);
+        hideLoadingOverlay()
     }
 }
 
@@ -562,6 +592,7 @@ if(productUpdateForm) {
 
 const updateUser = async function(name, email, phone, country, state, cityRegion, zipPostal) {
     try {
+        showLoadingOverlay();
         const res = await fetch('/api/users/updateMe', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
@@ -571,10 +602,12 @@ const updateUser = async function(name, email, phone, country, state, cityRegion
         });
 
         const data = await res.json();
+        hideLoadingOverlay()
         console.log(res, data);
 
         if (data.status === 'success') {
             window.setTimeout(() => {
+                hideLoadingOverlay()
                 showAlert('success', data.message);
                 location.reload(true);
             }, 1500);
@@ -582,6 +615,7 @@ const updateUser = async function(name, email, phone, country, state, cityRegion
 
     } catch(err) {
         showAlert('error', data.message)
+        hideLoadingOverlay()
     }
 }
 

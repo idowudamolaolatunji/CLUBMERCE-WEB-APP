@@ -216,7 +216,13 @@ exports.getProductByCategory = async (req, res) => {
     console.log(category)
 
     // Fetch products from the database based on the selected category
-    const products = await Product.find({ category: category });
+    let products
+    if(category === 'all') {
+      products = await Product.find();
+    } else {
+      products = await Product.find({ category: category });
+    }
+    
     if(!products) res.status(404).json({message: 'No product in this category'})
 
     res.status(200).json({

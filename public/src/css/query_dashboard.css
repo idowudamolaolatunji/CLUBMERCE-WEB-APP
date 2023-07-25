@@ -381,9 +381,9 @@
         gap: 2.4rem;
         padding: 1.8rem;
     }
-    .products__cards--box  {
+    /* .products__cards--box  {
         margin: 0;
-    }
+    } */
 }
 
 /* 400px === 40rem === 23.125em */
@@ -399,7 +399,6 @@
         transition: all .35s;
     }
     .nav__input:focus {
-        width: 65%;
         position: absolute;
         top: 7%;
         left: 50%;
