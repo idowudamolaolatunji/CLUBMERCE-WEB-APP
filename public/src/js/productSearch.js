@@ -1,4 +1,4 @@
-/*
+i/*
 const searchForm = document.querySelector('.nav__search');
 const searchResults = document.getElementById('search-result')
 console.log('i am connected')
@@ -134,6 +134,7 @@ const fetchProductsByCategory = async (category) => {
         const {products} = data.data;
         if(products.length === 0) {
             productBox.innerHTML = '<p>No product found..</p>';
+            document.querySelector('.dashboard__subheading').textContent = category.split('-').join(' ');
             document.querySelector('.figures').textContent = `Total 0`;
             return;
         }
@@ -143,14 +144,14 @@ const fetchProductsByCategory = async (category) => {
     
         // Hide the spinner overlay
         // spinOverlay.style.visibility = 'hidden';
-        document.querySelector('.dashboard__subheading').textContent = category.split('-').join(' ')
+        document.querySelector('.dashboard__subheading').textContent = category.split('-').join(' ');
         document.querySelector('.figures').textContent = `Total ${products.length || 0}`;
         
         // Display the products for the selected category
         products.forEach(product => {
             console.log(product)
             const markup = `
-                <div class="product__card">
+                <div class="product__card ${product.isPromoted ? 'promoted' : ''}">
                     <div class="product__side--left">   
                         <div class="side--top">
                             <div class="product__image--container">
@@ -158,6 +159,9 @@ const fetchProductsByCategory = async (category) => {
                             <div class="product__heading"> 
                                 <h2 class="product__title">${product.name}</h2>
                                 <p class="product__niche">${product.niche}</p>
+                                <button class="produt__message person" data-vendorId=${product}>
+                                    <i class="fa-solid fa-envelope icon product__icon></i>
+                                </button>
                                 <div class="product__content">
                                     <h4 class="product__description">${product.summary}...</h4>
                                 </div>
@@ -235,7 +239,7 @@ const displayProducts = (products) => {
 
     products.forEach((product) => {
         const markup = `
-            <div class="product__card">
+            <div class="product__card ${product.isPromoted ? 'promoted' : ''}">
                 <div class="product__side--left">   
                     <div class="side--top">
                         <div class="product__image--container">
@@ -243,6 +247,9 @@ const displayProducts = (products) => {
                         <div class="product__heading"> 
                             <h2 class="product__title">${product.name}</h2>
                             <p class="product__niche">${product.niche}</p>
+                            <button class="produt__message person" data-vendorId=${product}>
+                                <i class="fa-solid fa-envelope icon product__icon></i>
+                            </button>
                             <div class="product__content">
                                 <h4 class="product__description">${product.summary}</h4>
                             </div>

@@ -2,12 +2,15 @@ const chatForm = document.querySelector('.chat__form');
 const chatBox = document.querySelector('.chat-mid');
 const socket = io();
 
-// socket.on('message', message => {
-//     displayMessage(message);
+const personId = document.querySelector('')
+let recipientUser;
 
-//     // scroll down
-//     chatBox.scrollTop = chatBox.scrollHeight;
-// });
+if(personId) {
+  personId.addEventListener('click', function(e) {
+    const id = 
+  })
+}
+
 
 socket.on('privateMessage', message => {
     console.log('ON')
@@ -26,8 +29,8 @@ chatForm.addEventListener('submit', (e) => {
 
     if (msg !== '') {
         // Emit the chat message to the server
-        // socket.emit('chatMessage', msg);
-         const recipientUserId = document.querySelector('.recipient-user-select').value;
+        socket.emit('chatMessage', msg);
+        // const recipientUserId = document.querySelector('.recipient-user-select').value;
 
     // Emit the chat message to the server
         socket.emit('chatMessage', {

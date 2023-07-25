@@ -105,6 +105,7 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: true,
     },
+    socketId: String,
     createdAt: {
         type: Date,
         default: Date.now(),

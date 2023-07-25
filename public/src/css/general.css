@@ -84,6 +84,7 @@ a:link, a:visited {
 }
 button {
     border: none;
+    background-color: transparent;
 }
 .btn, button {
     cursor: pointer;

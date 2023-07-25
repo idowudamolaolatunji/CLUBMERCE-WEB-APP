@@ -60,7 +60,7 @@ block content
                             p.note-no You have no existing product.
                     -else
                         each product of products
-                            .table-row-vpp
+                            .table-row-vpp(class=`${product.isPromoted ? 'prmoted-small' : ''}`)
                                 span.table-row-content.table-row-product
                                     img.table-product__image(src='asset/img/product.jpg' alt='')
                                     span

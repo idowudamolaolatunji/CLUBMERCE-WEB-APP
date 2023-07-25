@@ -238,7 +238,6 @@ body
                             
 
                         -if(user.role === "vendor")
-                            -console.log(products, user)
                             .main__dashboard--container
                                 h3.dashboard__heading=`Welcome back, ${!user.business ? user.fullName.split(' ')[0] : user.businessName}`
                                 .dashboard__insights 
@@ -401,7 +400,7 @@ body
 
 
 
-                //- .chat__box
+                .chat__box
                     .chat-top
                         p.chat-name Idowu Olatunji
                         .chat-top__icons

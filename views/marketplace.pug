@@ -17,6 +17,7 @@ head
     link(rel="stylesheet" href="../src/css/query_dashboard.css")
 
     script(defer src="/src/js/productSearch.js")
+    script(defer src="/src/js/chat.js")
     script(defer src="/src/js/dashboard.js")
 
     title=title
@@ -148,7 +149,6 @@ body
                                             p.commision avg commission 
                                             span.commission__amount= `₦ ${product.price}`
                                         a.btn.product__button.promote(data-productSlug=product.slug) Buyer/Order page
-                                        -console.log(product.slug)
                                         a.product__button.page(target="_blank" href=`/marketplace/${product.slug}`) affiliate page
 
     
@@ -231,9 +231,13 @@ body
                                                 img.product__image(src='../../asset/img/product.jpg' alt=product.name)
                                             .product__heading 
                                                 h2.product__title= product.name
-                                                p.product__niche=product.category
+                                                p.product__niche=product.niche
+                                                button.produt__message.person(data-vendorId=`${product}`)
+                                                    i.fa-solid.fa-envelope.icon
+                                                    p Chat vendor
                                                 .product__content
                                                     h4.product__description=  `${product.summary}...`
+                                            
                                         .side--bottom
                                             ul.product__info
                                                 li.product__info--item 
@@ -259,7 +263,7 @@ body
                                             p.commision avg commission 
                                             span.commission__amount= `₦ ${product.price}`
                                         a.btn.product__button.promote(data-productSlug=product.slug) Promote
-                                        -console.log(product.slug)
+                                        //- -console.log(product.slug)
                                         a.product__button.page(target="_blank" href=`/marketplace/${product.slug}`) affiliate page
 
 
@@ -271,6 +275,8 @@ body
                                                 img.product__image(src='../../asset/img/product.jpg' alt=product.name)
                                             .product__heading 
                                                 h2.product__title= product.name
+                                                button.produt__message-m.person(data-vendorId=`${product}`)
+                                                    i.fa-solid.fa-envelope.icon.product__icon
                                                     
                                                 .product__content
                                                     h4.product__description #{product.summary}...
@@ -338,6 +344,41 @@ body
                             button.btn.hoplink__submit.btnModalOk Ok
                             button.hoplink__copy-button.outline Copy
         
+
+            //- .chat__box
+                .chat-top
+                    p.chat-name Idowu Olatunji
+                    .chat-top__icons
+                        i.fa-solid.fa-gear.chat-icon
+                        i.fa-solid.fa-close.chat-icon
+                .chat-mid
+                    //- .chat-mid__from.main
+                        .img-box
+                            img.chat-img.from-img(src='asset/img/face.png' alt='')
+                        .chat
+                            p.chat-from__point
+                                span ~&nbsp;
+                                | Idowu Olatunji
+                            p.chat-date 8:30
+                            p.chat-from__message Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, illo?
+                    //- .chat-mid__me.main
+                        .img-box
+                            img.chat-img.from-img(src='asset/img/avatar.png' alt='')
+                        .chat
+                            p.chat-me__point
+                                span ~&nbsp;
+                                | Me
+                            p.chat-date 17:10
+                            p.chat-me__message Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, illo?
+                .chat-end
+                    .chat-end__chat
+                        form.chat__form
+                            input.chat-end__input(type='text' placeholder='Type your message')
+                            button.chat__button(type='submit')
+                                i.fa-solid.fa-arrow-right.chat-icon
+                    .chat-end__controls
+                        i.fa-solid.fa-paperclip.chat-icon
+                        i.fa-regular.fa-face-smile.chat-icon
         
             
             include _auth_footer

@@ -24,7 +24,7 @@ exports.createAffiliateLink = async (req, res) => {
     const gravity = await AffiliateLink.find({ product: product._id });
     console.log(gravity.length)
     product.productGravity = gravity.length
-    product.save();
+    await product.save({});
 
     // Check if link already exist and then create link and update links array
     if(!user.affiliateLinks.includes(promotionLink)) {

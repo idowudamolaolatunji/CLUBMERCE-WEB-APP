@@ -44,7 +44,8 @@ const productSchema = new mongoose.Schema({
     },
     niche: {
         type: String,
-        required: [true, 'A product must have a niche'],
+        trim: true,
+        // required: [true, 'A product must have a niche'],
     },
     commissionPercentage: {
         type: Number,

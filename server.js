@@ -52,24 +52,24 @@ io.on('connection', async (socket) => {
 
         // Listen for chatMessage event
         socket.on('chatMessage', async (data) => {
-        try {
-            // Fetch the recipient user from the database
-            const recipientUser = await User.findById(data.recipientUserId);
+            try {
+                // Fetch the recipient user from the database
+                const recipientUser = await User.findById(data.recipientUserId);
 
-            // If the recipient user is not found, handle the error
-            if (!recipientUser) {
-            console.log('Recipient user not found.');
-            return;
+                // If the recipient user is not found, handle the error
+                if (!recipientUser) {
+                console.log('Recipient user not found.');
+                return;
+                }
+
+                // Emit the private message to both sender and recipient
+                socket.emit('message', formatMessage('You', data.text)); // To the sender
+                io.to(recipientUser.socketId).emit('message', formatMessage(user.fullName, data.text)); // To the recipient
+                console.log('receipiant id: '+data.recipientUserId, user.fullName, 'my id: '+userId, data.text)
+            
+            } catch (error) {
+                console.error('Error sending message:', error);
             }
-
-            // Emit the private message to both sender and recipient
-            socket.emit('message', formatMessage('You', data.text)); // To the sender
-            io.to(recipientUser.socketId).emit('message', formatMessage(user.fullName, data.text)); // To the recipient
-            console.log('receipiant id: '+data.recipientUserId, user.fullName, 'my id: '+userId, data.text)
-           
-        } catch (error) {
-            console.error('Error sending message:', error);
-        }
         });
 
         // // Save the socket ID in the user model
