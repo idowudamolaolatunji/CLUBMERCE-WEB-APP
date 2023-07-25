@@ -56,6 +56,7 @@ searchForm.addEventListener('keyup', function (e) {
       });
 
       // Clear previous results and insert the markup into the searchResults div parent container
+      searchResults.style.transform = 'translateY(0)'; // Use remove() to avoid potential errors
       searchResults.innerHTML = '';
       searchResults.insertAdjacentHTML('beforeend', markup);
 
@@ -64,7 +65,7 @@ searchForm.addEventListener('keyup', function (e) {
       
 
       dashboardSection.addEventListener('click', function () {
-        // searchResults.style.transform = 'translateY(-1000rem)'; // Use remove() to avoid potential errors
+        searchResults.style.transform = 'translateY(-1000rem)'; // Use remove() to avoid potential errors
       });
     })
     .catch((err) => console.error(err));
