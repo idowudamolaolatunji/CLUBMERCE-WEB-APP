@@ -204,7 +204,7 @@
     
     /* table */
     .dashboard__table {
-        overflow: scroll;
+        overflow-x: scroll;
     }
     .table, .table-vp, .table-mu, .table-mp {
         width: 75rem;

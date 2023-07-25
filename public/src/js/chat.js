@@ -5,11 +5,11 @@ const socket = io();
 const personId = document.querySelector('')
 let recipientUser;
 
-if(personId) {
-  personId.addEventListener('click', function(e) {
-    const id = 
-  })
-}
+// if(personId) {
+//   personId.addEventListener('click', function(e) {
+//     const id = 
+//   })
+// }
 
 
 socket.on('privateMessage', message => {

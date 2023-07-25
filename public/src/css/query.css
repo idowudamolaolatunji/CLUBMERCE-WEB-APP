@@ -137,11 +137,12 @@
     }
     .hero__image--box {
         overflow: hidden;
+        margin-top: 1.8rem;
     }
-    .hero__image--box, .bbbb {
+    /* .hero__image--box, .bbbb {
         display: block;
         opacity: 1;
-    }    
+    }     */
     .hero__image {
         width: 100%;
     }
@@ -383,7 +384,7 @@
         font-weight: 400;
     }
     .hero__section {
-        padding-bottom: 0;
+        padding-bottom: 3.6rem;
     }
     .hero__heading {
         margin-top: 1.8rem;
@@ -396,15 +397,15 @@
     .get-started__card {
         width: 85%;
     }
-    .bbbb { 
+    /* .bbbb { 
         display: none;
         opacity: 0;
-    }
-    .mmmm {
+    } */
+    /* .mmmm {
         display: block;
         opacity: 1;
         margin-top: -8.4rem;
-    }
+    } */
     .hero__image--box { position: relative; }
     .hero__image--box::after, .hero__image--box::before {
         content: "";
@@ -542,6 +543,11 @@
     .content__cards  {
         grid-template-columns: 1fr 1fr;
         gap: 5.2rem;
+    }
+    .faq {
+        grid-template-columns: 1fr;
+        width: 100%;
+        gap: .4rem;
     }
 
 }

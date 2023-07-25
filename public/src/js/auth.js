@@ -56,7 +56,7 @@ const login = async (email, password, role) => {
           });
 
           if (!res.ok) {
-               throw new Error('Login request failed');
+               throw new Error('Login failed, Try again.');
           }
 
           const data = await res.json();
@@ -73,11 +73,11 @@ const login = async (email, password, role) => {
                location.assign('/dashboard');
                }, 3000);
           } else if (data.status === 'fail') {
-               throw new Error(data.message || 'Login failed');
+               throw new Error(data.message || 'email or password or role incorrect');
           }
      } catch (err) {
           hideLoadingOverlay();
-          showAlert('error', err.message || 'Something went wrong, please try again!');
+          showAlert('error', err.message || 'Something went Wrong');
      }
 };
 

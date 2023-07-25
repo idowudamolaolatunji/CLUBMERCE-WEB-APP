@@ -104,7 +104,7 @@
     display: grid;
     /* grid-template-columns: 58fr 68fr; */
     /* grid-template-columns: 70fr 68fr; */
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.5fr 1.9fr;
     justify-content: center;
     /* gap: 5rem; */
     gap: 8rem;
@@ -155,14 +155,14 @@
     box-shadow: 1rem 1rem 4rem rgba(0, 0, 0, .15);
 }
 .bbbb {
-    height: 30rem;
+    /* height: 30rem; */
+    width: 100%;
 }
 
-/* .hero__image--box, .bbbb, .mmmm { */
-.mmmm {
+/* .mmmm {
     display: none;
     opacity: 0;
-}
+} */
 
 .features {
     display: grid;
