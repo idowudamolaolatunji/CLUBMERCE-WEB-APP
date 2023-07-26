@@ -1,5 +1,6 @@
-const multer = require('multer');
-const sharp = require('sharp');
+// const multer = require('multer');
+// const sharp = require('sharp');
+const cloudinary = require('cloudinary').v2;
 
 const app = require('../app');
 const catchAsync = require('../utils/catchAsync')
@@ -7,91 +8,15 @@ const Product = require('../model/productsModel');
 const User = require('../model/usersModel');
 const APIFeatures = require('../utils/apiFeatures');
 
-// const User = require("./../model/usersModel");
 // const generateLink = require('./../utils/generateLink')
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
 
-const multerStorage = multer.memoryStorage();
-
-const multerFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image')) {
-    cb(null, true);
-  } else {
-    cb(new AppError('Not an image! Please upload only images.', 400), false);
-  }
-};
-
-const upload = multer({
-  storage: multerStorage,
-  fileFilter: multerFilter
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINAR_API_KEY,
+    api_secret: process.env.CLOUDINAR_API_SECRET,
 });
-
-exports.uploadProductImages = upload.fields([
-    { name: 'image', maxCount: 1 },
-    { name: 'brandLogo', maxCount: 1 },
-    { name: 'subImages', maxCount: 6 },
-    { name: 'banners', maxCount: 4 },
-]);
-
-// upload.single('image') req.file
-// upload.array('images', 5) req.files
-
-exports.resizeProductImages = catchAsync(async (req, res, next) => {
-  if (!req.files.image || !req.files.subImages || !req.files.banners) return next();
-
-  // 1) Main image
-  req.body.image = `product-${req.params.id}-${Date.now()}-main.jpeg`;
-  await sharp(req.files.image[0].buffer)
-    .resize(700, 503)
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(`public/asset/img/product${req.body.image}`);
-
-  // 2) Brand logo
-  req.body.brandLogo = `product-${req.params.id}-${Date.now()}-brand-logo.jpeg`;
-  await sharp(req.files.brandLogo[0].buffer)
-    .resize(40, 25)
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(`public/asset/product/img/${req.body.brandLogo}`);
-
-  // 2) Images
-  req.body.subImages = [];
-
-  await Promise.all(
-    req.files.subImages.map(async (file, i) => {
-      const filename = `product-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
-
-      await sharp(file.buffer)
-        .resize(2000, 1333)
-        .toFormat('jpeg')
-        .jpeg({ quality: 90 })
-        .toFile(`public/asset/img/product${filename}`);
-
-      req.body.subImages.push(filename);
-    })
-  );
-  // 4) banners
-  req.body.banner = [];
-
-  await Promise.all(
-    req.files.banner.map(async (file, i) => {
-      const filename = `banner-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
-
-      await sharp(file.buffer)
-        .resize(2000, 1333)
-        .toFormat('jpeg')
-        .jpeg({ quality: 90 })
-        .toFile(`public/asset/img/banner${filename}`);
-
-      req.body.banner.push(filename);
-    })
-  );
-
-  next();
-});
-
 
 exports.aliasTopProduct = (req, res, next) => {
     req.query.limit = '20';
@@ -100,17 +25,16 @@ exports.aliasTopProduct = (req, res, next) => {
     next();
 };
 
-
 exports.searchProduct = async (req, res) => {
     try {
-        let payload = req.body.payload.trim();
-        let search = await Product.find({ name: {$regex: new RegExp('^'+payload+'.*','i')}}).exec();
+      let payload = req.body.payload.trim();
+      let search = await Product.find({ name: {$regex: new RegExp('^'+payload+'.*','i')}}).exec();
 
-        // limit search result to 10
-        search = search.slice(0, 10);
-        res.status(200).json({
-            payload: search
-        })
+      // limit search result to 10
+      search = search.slice(0, 10);
+      res.status(200).json({
+          payload: search
+      })
 
     } catch(err) {}
 }
@@ -143,18 +67,76 @@ exports.getAllProduct = async(req, res) => {
 
 exports.createProduct = async(req, res) => {
     try {
-        // const vendorId = req.user.slug.split('-').at(-1);
         const vendorId = req.user._id;
-
         // Find the vendor document from the database based on the vendor ID
         const vendor = await User.findById(vendorId);
-
-        // If the vendor is not found, handle the error
         if (!vendor) {
             return res.status(404).json({ error: 'Vendor not found' });
         }
+        
+        // Validate and upload the image to Cloudinary
+        if (!req.file || req.file.size > 10 * 1024 * 1024) {
+          // Limit image size to 10MB
+          return res.status(400).json({ error: 'Invalid image file or size exceeds 10MB' });
+        }
+        const mainImageResult = await cloudinary.uploader.upload(req.file.path, {
+          folder: 'product_main_images',
+        });
+    
+        // Validate and upload sub-images to Cloudinary
+        const subImages = [];
+        if (req.files && req.files.subImages && Array.isArray(req.files.subImages)) {
+          if (req.files.subImages.length > 6) {
+            return res.status(400).json({ error: 'Exceeded maximum of 6 sub-images' });
+          }
+    
+          for (const subImage of req.files.subImages) {
+            if (subImage.size > 10 * 1024 * 1024) {
+              // Limit sub-image size to 10MB
+              return res.status(400).json({ error: 'Sub-image size exceeds 10MB' });
+            }
+    
+            const result = await cloudinary.uploader.upload(subImage.path, {
+              folder: 'product_sub_images',
+            });
+    
+            subImages.push(result.secure_url);
+          }
+        } else {
+          return res.status(400).json({ error: 'Invalid sub-image files' });
+        }
+    
+        // Validate and upload banners to Cloudinary
+        const banners = [];
+        if (req.files && req.files.banners && Array.isArray(req.files.banners)) {
+          if (req.files.banners.length > 4) {
+            return res.status(400).json({ error: 'Exceeded maximum of 4 banners' });
+          }
+    
+          for (const banner of req.files.banners) {
+            if (banner.size > 10 * 1024 * 1024) {
+              // Limit banner size to 10MB
+              return res.status(400).json({ error: 'Banner size exceeds 10MB' });
+            }
+    
+            const result = await cloudinary.uploader.upload(banner.path, {
+              folder: 'product_banners',
+            });
+    
+            banners.push(result.secure_url);
+          }
+        } else {
+          return res.status(400).json({ error: 'Invalid banner files' });
+        }
 
-        const newProduct = await Product.create({...req.body, vendor: vendor._id});
+
+        const newProduct = await Product.create({
+          ...req.body,
+          vendor: vendor._id,
+          image: mainImageResult.secure_url,
+          subImages: subImages,
+          banners: banners,
+        });
 
         res.status(201).json({
             status: "success",
@@ -311,9 +293,9 @@ exports.updateProduct = async(req, res) => {
 
 exports.deleteProduct = async(req, res) => {
     try {
-        await Product.findByIdAndDelete(req.param.id);
+        await Product.findByIdAndRemove(req.params.id);
 
-        res.status(500).json({
+        res.status(200).json({
             status: "success",
             data: null
         })

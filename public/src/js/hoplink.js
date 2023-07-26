@@ -171,6 +171,14 @@
 //         location.reload(true);
 //     })
 
+const spinOverlay = document.querySelector('#spinOverlay');
+
+const showLoadingOverlay = () => {
+    spinOverlay.style.visibility = 'visible';
+};
+const hideLoadingOverlay = () => {
+    spinOverlay.style.visibility = 'hidden';
+};
 
 // ALERTS
 const hideAlert = () => {
@@ -198,10 +206,10 @@ const closeModal = (overlay, modal) => {
     modal.classList.add('hidden');
 };
   
-const hoplinkOpen = document.querySelectorAll('.promote');
-const hoplinkGetOverlay = document.querySelector('.get__overlay');
-const hoplinkGetModal = document.querySelector('.get__modal');
-const hoplinkClose = document.querySelector('.hoplink__icon');
+// const hoplinkOpen = document.querySelectorAll('.promote');
+// const hoplinkGetOverlay = document.querySelector('.get__overlay');
+// const hoplinkGetModal = document.querySelector('.get__modal');
+// const hoplinkClose = document.querySelector('.hoplink__icon');
 const hoplinkModalCopyOk = document.querySelector('.btnModalOk');
 const modalCopyButton = document.querySelector('.hoplink__modal-copy-button');
 const hoplinkCopyOverlay = document.querySelector('.copy__overlay');
@@ -219,6 +227,8 @@ const openCopyModal = function (link) {
 
 const getHoplink = async function (username, trackingId, productSlug) {
     try {
+      showLoadingOverlay();
+
       const res = await fetch(`/api/promotion/generate-affiliate-link/${productSlug}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -226,6 +236,7 @@ const getHoplink = async function (username, trackingId, productSlug) {
       });
   
       if (!res.ok) {
+        hideLoadingOverlay();
         throw new Error('Failed to generate affiliate link');
       }
   
@@ -235,6 +246,7 @@ const getHoplink = async function (username, trackingId, productSlug) {
         showAlert('success', 'Link created');
         hoplinkCopyOverlay.classList.toggle('hidden');
         openCopyModal(data.link);
+        hideLoadingOverlay();
 
         copyButton.addEventListener('click', function() {
             let text = hoplinkText.textContent;
@@ -250,24 +262,24 @@ const getHoplink = async function (username, trackingId, productSlug) {
         })
       } else if (data.message === 'Enter a valid user...' || data.message === 'Please provide your username') {
         showAlert('error', data.message);
+        hideLoadingOverlay();
       } else {
         hoplinkCopyOverlay.classList.add('hidden');
+        hideLoadingOverlay();
         throw new Error('Invalid response from server');
       }
 
     } catch (err) {
       showAlert('error', 'Something went wrong');
-      console.error(err);
-    }
+      hideLoadingOverlay();
+    } 
   };
-  
 
 if (hoplinkModalCopyOk) {
     hoplinkModalCopyOk.addEventListener('click', () => {
       closeModal(hoplinkCopyOverlay, hoplinkCopyModal);
     });
 }
-  
   
 
 // this is for the Product page hoplink form

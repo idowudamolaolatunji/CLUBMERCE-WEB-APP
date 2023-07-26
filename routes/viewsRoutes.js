@@ -30,14 +30,14 @@ router.get('/transaction', authController.isLoggedIn, viewController.transaction
 // admin
 router.get('/admin-auth-login', viewController.adminAuth);
 // router.get('/product-marketplace', authController.isLoggedIn, viewController.productMarketplace);
+// router.get('/manage-order', authController.isLoggedIn, viewController.manageOrders);
 router.get('/manage-users', authController.isLoggedIn, viewController.manageUsers);
 router.get('/manage-products', authController.isLoggedIn, viewController.manageProducts);
 router.get('/manage-payment', authController.isLoggedIn, viewController.managePayments);
-router.get('/manage-order', authController.isLoggedIn, viewController.manageOrders);
 
 // visitors
 router.get('/pay', viewController.paymentForm);
-router.get('/order-product/:username/:productSlug', viewController.getOrderProductPage);
+router.get('/order-product/:username/:productSlug', viewController.getOrderPage);
 
 
 module.exports = router;

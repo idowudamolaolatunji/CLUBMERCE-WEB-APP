@@ -1,9 +1,4 @@
 
-const uploadBtn = document.querySelector('.add-btn');
-const productOverlay = document.querySelector('.product__overlay');
-const productModal = document.querySelector('.product__modal');
-const productClose = document.querySelector('.form__close-icon');
-const productForm = document.querySelector('.product__form');
 
 // DROPDOWNS
 const notifyIcon = document.querySelector('.notification__icon');
@@ -169,183 +164,6 @@ function getCookie(name) {
 }
 
 
-// dashboard hoplink
-const hoplinkOpen = document.querySelectorAll('.promote');
-const hoplinkGetOverlay = document.querySelector('.get__overlay');
-const hoplinkGetModal = document.querySelector('.get__modal');
-const hoplinkClose = document.querySelector('.hoplink__icon');
-const hoplinkModalCopyOk = document.querySelector('.btnModalOk');
-const modalCopyButton = document.querySelector('.hoplink__modal-copy-button');
-const hoplinkCopyOverlay = document.querySelector('.copy__overlay');
-const hoplinkCopyModal = document.querySelector('.copy__modal');
-const hoplinkCopyOk = document.querySelector('.btnOk');
-const hoplinkText = document.querySelector('.hoplink__copy');
-const copyButton = document.querySelector('.hoplink__copy-button');
-
-
-const openCopyModal = function (link) {
-    hoplinkText.textContent = link;
-    openModal(hoplinkCopyOverlay, hoplinkCopyModal);
-};
-
-// dashboard Hoplink
-const getHoplink = async function (username, trackingId, productSlug) {
-    try {
-        showLoadingOverlay()
-      const res = await fetch(`/api/promotion/generate-affiliate-link/${productSlug}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, trackingId }),
-      });
-  
-      if (!res.ok) {
-        hideLoadingOverlay()
-        throw new Error('Failed to generate affiliate link');
-      }
-  
-      const data = await res.json();
-  
-      if (data.status === 'success' || data.message === 'Url already exist') {
-        hideLoadingOverlay()
-        showAlert('success', 'Link created');
-        closeModal(hoplinkGetOverlay, hoplinkGetModal);
-        openCopyModal(data.link);
-
-        copyButton.addEventListener('click', function() {
-            let text = hoplinkText.textContent;
-            
-            navigator.clipboard.writeText(text)
-            .then(() => {
-            // Optional: Update the button text to indicate successful copying
-            copyButton.innerText = "Copied!";
-            })
-            .catch((error) => {
-            console.error("Failed to copy text:", error);
-            });
-        })
-      } else if (data.message === 'Enter a valid user...' || data.message === 'Please provide your username') {
-          hideLoadingOverlay()
-          showAlert('error', data.message);
-        } else {
-          hideLoadingOverlay()
-          hoplinkCopyOverlay.classList.add('hidden');
-          throw new Error('Invalid response from server');
-        }
-        
-    } catch (err) {
-        hideLoadingOverlay()
-      showAlert('error', 'Something went wrong');
-      console.error(err);
-    }
-};
-
-  
-if (hoplinkClose) {
-    hoplinkClose.addEventListener('click', function () {
-      closeModal(hoplinkGetOverlay, hoplinkGetModal);
-    });
-}
-  
-if (hoplinkModalCopyOk) {
-    hoplinkModalCopyOk.addEventListener('click', () => {
-      closeModal(hoplinkCopyOverlay, hoplinkCopyModal);
-    });
-}
-
-let productSlug
-if(hoplinkOpen) {
-    hoplinkOpen.forEach(function(el) {
-        el.addEventListener('click', function() {
-            openModal(hoplinkGetOverlay, hoplinkGetModal);
-            productSlug = el.dataset.productslug;
-        });
-    });
-}
-
-
-// modal hoplink
-const modalHoplinkForm = document.querySelector('#hoplink');
-if (modalHoplinkForm) {
-    modalHoplinkForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const hoplinkUsername = document.querySelector('#hoplink-username').value;
-      const hoplinkTrackId = document.querySelector('#hoplink-trackingid').value;
-      
-      getHoplink(hoplinkUsername, hoplinkTrackId, productSlug);
-    });
-}
-
-// mobile hoplink
-const mobileHoplinkForm = document.querySelector('.hoplink-mobile');
-if (mobileHoplinkForm) {
-    mobileHoplinkForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const hoplinkUsername = document.querySelector('.hoplink-username-mobile').value;
-      const hoplinkTrackId = document.querySelector('.hoplink-trackingid-mobile').value;
-      const productSlug = this.dataset.productslugMobile;
-      getHoplink(hoplinkUsername, hoplinkTrackId, productSlug);
-    });
-}
-
-
-// Create product
-// close product form
-if(productClose) {
-    productClose.addEventListener('click', function() {
-        closeModal(productOverlay, productModal)
-    });
-}
-
-// open product form
-if(uploadBtn) {
-    uploadBtn.addEventListener('click', function() {
-        openModal(productOverlay, productModal);
-    });
-}
-
-const uploadProduct = async function(name, summary, description, price, commission, type, category, tools, link, recurring) {
-    try {
-        showLoadingOverlay()
-        const res = await fetch('/api/products', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, summary, description, price, commission, type, category, tools, link, recurring }),
-        });
-
-        if (!res.ok) {
-            hideLoadingOverlay()
-            throw new Error('Product upload failed');
-        }
-
-        const data = await res.json();
-        console.log(res, data);
-        hideLoadingOverlay()
-    } catch (err) {
-        console.log(err);
-        hideLoadingOverlay()
-    }
-};
-
-if (productForm) {
-    productForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const name = document.querySelector('#product__name').value;
-        const summary = document.querySelector('#product__summary').value;
-        const description = document.querySelector('#product__description').value;
-        const price = document.querySelector('#product__price').value;
-        const commission = document.querySelector('#product__commission').value;
-        const type = document.querySelector('#product__type').value;
-        const category = document.querySelector('#product__category').value;
-        const tools = document.querySelector('#product__tools').value;
-        const link = document.querySelector('#product__link').value;
-        const recurring = document.querySelector('#product__recurring').value;
-
-        uploadProduct(name, summary, description, price, commission, type, category, tools, link, recurring);
-    });
-}
-
-
-
 // Delete functionality
 const showDeleteModal = function(item) {
     const html = `
@@ -385,13 +203,20 @@ const deleteProduct = async function(productId) {
             method: 'DELETE',
         });
 
+        if(!res.ok) {
+            hideLoadingOverlay()
+            return;
+        }
+
         const data = await res.json();
         console.log(data);
-        hideLoadingOverlay()
 
         if (data.status === 'success') {
-            location.reload(true);
-            hideLoadingOverlay()
+            window.setTimeout(() => {
+                showAlert('success', 'Product Deleted Successfully..');
+                location.reload(true)
+                hideLoadingOverlay()
+            }, 1500);
         }
     } catch (error) {
         console.error(error);
@@ -407,15 +232,19 @@ const userDelete = async function(userId) {
             method: 'DELETE',
         });
 
+        if(!res.ok) {
+            hideLoadingOverlay()
+            return;
+        }
+
         const data = await res.json();
         console.log(data);
-        hideLoadingOverlay();
 
         if (data.status === 'success') {
             window.setTimeout(() => {
-                hideLoadingOverlay()
-                showAlert('success', data.message);
+                showAlert('success', 'User Deleted Successfully..');
                 location.reload(true)
+                hideLoadingOverlay()
             }, 1500);
         }
     } catch (error) {
@@ -427,8 +256,8 @@ const userDelete = async function(userId) {
 
 if(adminProductDelete) {
     adminProductDelete.forEach(el => el.addEventListener('click', function(e) {
-        const productId = el.dataset.id;
         const existingModal = document.querySelector('.delete__overlay');
+        const productId = el.dataset.id;
         if (existingModal) {
             return; 
         }
@@ -448,7 +277,7 @@ if(adminProductDelete) {
 }
 
 if(adminUserDelete) {
-    adminProductDelete.forEach(el => el.addEventListener('click', function(e) {
+    adminUserDelete.forEach(el => el.addEventListener('click', function(e) {
         const userId = el.dataset.id;
         const existingModal = document.querySelector('.delete__overlay');
         if (existingModal) {
@@ -458,7 +287,7 @@ if(adminUserDelete) {
         console.log(userId)
 
         document.querySelector('.btn-yes').addEventListener('click', function() {
-            deleteProduct(userId);
+            userDelete(userId);
         })
         document.querySelector('.btn-no').addEventListener('click', () => {
             closeAdjacentModal();
@@ -497,32 +326,95 @@ if(vendorProductDelete) {
 // update functionality
 
 const productUpdateAdminForm = document.querySelector('.product__form-admin-update');
-const productUpdateForm = document.querySelector('.product__form-update')
+const productUpdateForm = document.querySelector('.product__form-update');
+const productCreate = document.querySelector('.product-create')
 const productEdit = document.querySelectorAll('.product-edit');
 const productAdminEdit = document.querySelectorAll('.admin-product-edit');
 
 const productUploadOverlay = document.querySelector('.product-update__overlay');
 const productUploadModal = document.querySelector('.product-update__modal');
-const productUpdateClose = document.querySelector('.form-update__close-icon');
 
+const productOverlay = document.querySelector('.product__overlay');
+const productModal = document.querySelector('.product__modal');
+const productOverlayClose = document.querySelector('.form__close-icon');
+const productForm = document.querySelector('.product__form');
+
+
+
+// Create product
+if(productOverlayClose) {
+    productOverlayClose.addEventListener('click', function() {
+        closeModal(productOverlay, productModal)
+    });
+}
+
+if(productCreate) {
+    productCreate.addEventListener('click', function(e) {
+        console.log('i want to create a product')
+        openModal(productOverlay, productModal)
+    })
+}
+const uploadProduct = async function(name, summary, description, price, commission, type, category, tools, link, recurring) {
+    try {
+        showLoadingOverlay()
+        const res = await fetch('/api/products', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, summary, description, price, commission, type, category, tools, link, recurring }),
+        });
+
+        if (!res.ok) {
+            hideLoadingOverlay()
+            throw new Error('Product upload failed');
+        }
+
+        const data = await res.json();
+        console.log(res, data);
+        
+        if(data) hideLoadingOverlay()
+
+    } catch (err) {
+        console.log(err);
+        hideLoadingOverlay()
+    }
+};
+
+if (productForm) {
+    productForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.querySelector('#product__name').value;
+        const summary = document.querySelector('#product__summary').value;
+        const description = document.querySelector('#product__description').value;
+        const price = document.querySelector('#product__price').value;
+        const commission = document.querySelector('#product__commission').value;
+        const type = document.querySelector('#product__type').value;
+        const category = document.querySelector('#product__category').value;
+        const tools = document.querySelector('#product__tools').value;
+        const link = document.querySelector('#product__link').value;
+        const recurring = document.querySelector('#product__recurring').value;
+
+        uploadProduct(name, summary, description, price, commission, type, category, tools, link, recurring);
+    });
+}
 
 
 if(productAdminEdit) {
     productAdminEdit.forEach(el => el.addEventListener('click', function() {
-        openModal(productOverlay, productModal);
-        console.log('clicked')
+        openModal(productUploadOverlay, productUploadModal);
+        console.log('I was clicked by an admin')
     }));
 }
 if(productEdit) {
     productEdit.forEach(el => el.addEventListener('click', function() {
-        openModal(productOverlay, productModal);
-        console.log('clicked')
+        openModal(productUploadOverlay, productUploadModal);
+        console.log('I was clicked by this vendor')
     }));
 }
 
-if(productUpdateClose) {
-    productClose.addEventListener('click', function() {
-        closeModal(productOverlay, productModal)
+if(productOverlayClose) {
+    productOverlayClose.addEventListener('click', function() {
+        closeModal(productOverlay, productModal);
+        closeModal(productUploadOverlay, productUploadModal)
     });
 }
 

@@ -1,0 +1,82 @@
+DOCTYPE
+html(lang="en")
+
+head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer")
+    //- link(rel="icon" href='../asset/img/favicon.png')
+
+
+    //- STYLES 
+    link(rel="stylesheet" href="/src/css/general.css")
+    link(rel="stylesheet" href="/src/css/dashboard.css")
+    link(rel="stylesheet" href="/src/css/productPage.css")
+
+
+
+    title=title
+body
+
+    .checkout-container
+        // Billing Section
+        .first-row
+            .sub-section-one
+                h3 Billing Address
+                label(for='fname')
+                    i.fa.fa-user
+                    |  Full Name
+                input#fname(type='text' name='First name' placeholder='John M. Doe')
+                label(for='email')
+                    i.fa.fa-envelope
+                    |  Email
+                input#email(type='email' name='Email' placeholder='john@example.com')
+                label(for='Address')
+                    i.fa.fa-address-card
+                    |  Address
+                input#address(type='text' name='Address' placeholder='542 W. 15th Street')
+                label(for='city')
+                    i.fa.fa-institution
+                    |  City
+                input#city(type='text' name='City' placeholder='New York')
+                .sub-section-two
+                    .state
+                        label(for='state') State
+                        input#state(type='text' name='state' placeholder='   NY')
+                    .zip
+                        label(for='state') Zip
+                        input#zip(type='number' name='zip' placeholder='   1001')
+            // Billing Section end
+            // Payment section
+            .second-row
+                .second-section
+                h3 Payment
+                p Accepted Payments
+                .icon-containers
+                    i.fa-brands.fa-cc-visa(style='color: navy;')
+                    i.fa-brands.fa-cc-amex(style='color: blue;')
+                    i.fa-brands.fa-cc-mastercard(style='color: red;')
+                    i.fa-brands.fa-cc-discover(style='color: orange;')
+                .third-section
+                label(for='card-name')
+                    i.fa-solid.fa-id-card
+                    |  Name on Card
+                input#card-name(type='text' name='card-name' placeholder='   John More Doe')
+                label(for='card-number')
+                    i.fa-solid.fa-credit-card
+                    |  Credit Card Number
+                input#card-number(type='number' name='Card-Number' placeholder='   1111-2222-3333-4444')
+                label(for='expiry')
+                    i.fa-regular.fa-calendar
+                    |  Exp Month
+                input#expiry(type='text' name='Expiry' placeholder='   Month')
+                .fourth-section
+                    .year
+                        label(for='year') Exp Year
+                        input#year(type='number' name='year' placeholder='   2025')
+                    .cvv
+                        label(for='cvv') Cvv
+                        input#cvv(type='number' name='cvv' placeholder='   352')
+                // Payment section

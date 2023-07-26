@@ -54,12 +54,17 @@ const login = async (email, password, role) => {
                headers: { 'Content-Type': 'application/json' },
                body: JSON.stringify({ email, password, role }),
           });
-
+          console.log(res)
           if (!res.ok) {
                throw new Error('Login failed, Try again.');
           }
 
           const data = await res.json();
+          if(data.message === 'Email address not verified, Check your mail') {{
+               hideLoadingOverlay();
+               showAlert('error', 'Email address not verified, Check your mail');
+               return;
+          }}
 
           if (data.data.role === 'admin') {
                hideLoadingOverlay();

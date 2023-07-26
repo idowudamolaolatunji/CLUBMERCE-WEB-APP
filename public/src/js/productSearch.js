@@ -245,6 +245,67 @@ const displayProducts = (products) => {
                     <a class="product__button page" target="_blank" href="/marketplace/${product.slug}">affiliate page</a>
                 </div>
             </div>
+
+
+
+            <figure class="product__card-mobile">
+                <div class="product__side front ${product.isPromoted ? 'promoted-m' : ''}">
+                    <div class="front--top">
+                        <div class="product__image--container">
+                            <img class="product__image" src="../../asset/img/product.jpg" alt="${product.name}">
+                        </div>
+                        <div class="product__heading">
+                            <h2 class="product__title">${product.name}</h2>
+                            <button class="produt__message-m person" data-vendorId="${product}">
+                                <i class="fa-solid fa-envelope icon product__icon"></i>
+                            </button>
+                            <div class="product__content">
+                                <h4 class="product__description">${product.summary}...</h4>
+                                <a class="product__button page margin__bottom--xsm" target="_blank" href="/marketplace/${product.slug}">affiliate page</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="front--bottom">
+                        <ul class="product__info">
+                            <li class="product__info--item">
+                                <i class="fa-solid product__icon icon ${product.type !== 'Digital' ? 'fa-truck-fast' : 'fa-file'}"></i>
+                                <p>${product.type} Product</p>
+                            </li>
+                            <li class="product__info--item">
+                                <i class="fa-solid fa-tools product__icon icon"></i>
+                                <p>Affiliate tools</p>
+                            </li>
+                            <li class="product__info--item">
+                                <i class="fa-solid fa-link product__icon icon"></i>
+                                <p>Unique Link</p>
+                            </li>
+                            <li class="product__info--item">
+                                <i class="fa-regular fa-square-check product__icon icon"></i>
+                                <p>Approved</p>
+                            </li>
+                                ${product.recurringCommission ? '<li class="product__info--item"> <i class="fa-solid fa-rotate product__icon icon"></i>Recurring</li>' : ''}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="product__side back">
+                    <div class="link--box">
+                        <h2 class="dashboard__heading">Generate HopLink</h2>
+                        <p class="hoplink__text">Earn commission for every customer you refer to this product using your personalized affiliate hoplink.</p>
+                        <form class="hoplink-form hoplink-mobile" data-productSlug-mobile="${product.slug}">
+                            <div class="hoplink__body">
+                                <input class="hoplink__input hoplink-username-mobile" type="text" placeholder="Username" required>
+                                <p class="hoplink__body--text">Required</p>
+                            </div>
+                            <div class="hoplink__body">
+                                <input class="hoplink__input hoplink-trackingid-mobile" type="text" placeholder="Tracing Id">
+                                <p class="hoplink__body--text">Optional</p>
+                            </div>
+                            <button class="btn hoplink__submit" type="submit">Generate Hoplink</button>
+                        </form>
+                    </div>
+                </div>
+            </figure>
         `;
         productBox.insertAdjacentHTML('beforeend', markup);
     });
@@ -258,4 +319,149 @@ if(selectElement) {
         const products = await fetchProducts(selectedOption);
         displayProducts(products);
     }));
+}
+
+
+
+// MODALS
+const openModal = function(overlay, modal) {
+    overlay.classList.remove('hidden');
+    modal.classList.remove('hidden');
+}
+const closeModal = function(overlay, modal) {
+    overlay.classList.add('hidden');
+    modal.classList.add('hidden');
+}
+
+// ALERTS
+const hideAlert = () => {
+    const el = document.querySelector('.alert');
+    if (el) el.parentElement.removeChild(el);
+};
+
+// type is 'success' or 'error'
+const showAlert = (type, msg) => {
+    hideAlert();
+    const markup = `<div class="alert alert--${type}">${msg}</div>`;
+    document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
+    window.setTimeout(hideAlert, 5000);
+};
+
+
+// dashboard hoplink
+const hoplinkOpen = document.querySelectorAll('.promote');
+const hoplinkGetOverlay = document.querySelector('.get__overlay');
+const hoplinkGetModal = document.querySelector('.get__modal');
+const hoplinkClose = document.querySelector('.hoplink__icon');
+const hoplinkModalCopyOk = document.querySelector('.btnModalOk');
+const modalCopyButton = document.querySelector('.hoplink__modal-copy-button');
+const hoplinkCopyOverlay = document.querySelector('.copy__overlay');
+const hoplinkCopyModal = document.querySelector('.copy__modal');
+const hoplinkCopyOk = document.querySelector('.btnOk');
+const hoplinkText = document.querySelector('.hoplink__copy');
+const copyButton = document.querySelector('.hoplink__copy-button');
+
+
+const openCopyModal = function (link) {
+    hoplinkText.textContent = link;
+    openModal(hoplinkCopyOverlay, hoplinkCopyModal);
+};
+
+// dashboard Hoplink
+const getHoplink = async function (username, trackingId, productSlug) {
+    try {
+        showLoadingOverlay()
+      const res = await fetch(`/api/promotion/generate-affiliate-link/${productSlug}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, trackingId }),
+      });
+  
+      if (!res.ok) {
+        hideLoadingOverlay()
+        throw new Error('Failed to generate affiliate link');
+      }
+  
+      const data = await res.json();
+  
+      if (data.status === 'success' || data.message === 'Url already exist') {
+        hideLoadingOverlay()
+        showAlert('success', 'Link created');
+        closeModal(hoplinkGetOverlay, hoplinkGetModal);
+        openCopyModal(data.link);
+
+        copyButton.addEventListener('click', function() {
+            let text = hoplinkText.textContent;
+            
+            navigator.clipboard.writeText(text)
+            .then(() => {
+            // Optional: Update the button text to indicate successful copying
+            copyButton.innerText = "Copied!";
+            })
+            .catch((error) => {
+            console.error("Failed to copy text:", error);
+            });
+        })
+      } else if (data.message === 'Enter a valid user...' || data.message === 'Please provide your username') {
+          hideLoadingOverlay()
+          showAlert('error', data.message);
+        } else {
+          hideLoadingOverlay()
+          hoplinkCopyOverlay.classList.add('hidden');
+          throw new Error('Invalid response from server');
+        }
+        
+    } catch (err) {
+        hideLoadingOverlay()
+      showAlert('error', 'Something went wrong');
+      console.error(err);
+    }
+};
+
+  
+if (hoplinkClose) {
+    hoplinkClose.addEventListener('click', function () {
+      closeModal(hoplinkGetOverlay, hoplinkGetModal);
+    });
+}
+  
+if (hoplinkModalCopyOk) {
+    hoplinkModalCopyOk.addEventListener('click', () => {
+      closeModal(hoplinkCopyOverlay, hoplinkCopyModal);
+    });
+}
+
+let productSlug
+if(hoplinkOpen) {
+    hoplinkOpen.forEach(function(el) {
+        el.addEventListener('click', function() {
+            openModal(hoplinkGetOverlay, hoplinkGetModal);
+            productSlug = el.dataset.productslug;
+        });
+    });
+}
+
+
+// modal hoplink
+const modalHoplinkForm = document.querySelector('#hoplink');
+if (modalHoplinkForm) {
+    modalHoplinkForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const hoplinkUsername = document.querySelector('#hoplink-username').value;
+      const hoplinkTrackId = document.querySelector('#hoplink-trackingid').value;
+      
+      getHoplink(hoplinkUsername, hoplinkTrackId, productSlug);
+    });
+}
+
+// mobile hoplink
+const mobileHoplinkForm = document.querySelector('.hoplink-mobile');
+if (mobileHoplinkForm) {
+    mobileHoplinkForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const hoplinkUsername = document.querySelector('.hoplink-username-mobile').value;
+      const hoplinkTrackId = document.querySelector('.hoplink-trackingid-mobile').value;
+      const productSlug = this.dataset.productslugMobile;
+      getHoplink(hoplinkUsername, hoplinkTrackId, productSlug);
+    });
 }

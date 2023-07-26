@@ -4,7 +4,7 @@
 /* 1135px === 113.5rem === 70.94em */
 @media screen and (max-width: 70.94em) {
     /* popup modal */
-    .product__modal {
+    .product__modal, .product-update__modal {
         width: 65rem;
         height: 40rem;
     }
@@ -120,7 +120,7 @@
     .delete__modal { 
         width: 40rem;
     }
-    .product__modal {
+    .product__modal, .product-update__modal {
         width: 55rem;
         height: 38rem;
     }
@@ -253,10 +253,9 @@
     .copy__modal { width: 40rem; }
 
     /* popup modal */
-    .generic__modal {
+    .generic__modal, .product__modal, .product-update__modal {
         width: 90%;
-    }
-    .product__modal {
+    
         padding: 1.4rem 0 1.4rem 1.4rem;
         height: 80vh;
     }

@@ -748,7 +748,7 @@ input:focus, input:hover, select:focus, textarea:hover,
     position: relative;
 }
 
-.promoted, .promoted-m {
+.promoted, .promoted-m, .prmoted-small {
     position: relative;
     overflow: hidden;
 }
@@ -1181,31 +1181,7 @@ input:focus, input:hover, select:focus, textarea:hover,
 .vendor__dashboard {
     max-width: 95rem;
 }
-
-
-
 /* ====================== */
-.generic__overlay {
-    position: fixed;
-    width: 100%;
-    height: 100vh;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, .15);
-}
-.generic__modal {
-    border: 1px solid #f3f4f6;
-    background-color: #fff;
-    box-shadow: 0 0 1rem rgba(0, 0, 0, .25);
-    border-radius: 1rem;
-    z-index: 350;
-    transition: all .35s;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
 .delete__modal { 
     width: 50rem;
     padding: 2.4rem;
@@ -1216,7 +1192,8 @@ input:focus, input:hover, select:focus, textarea:hover,
     flex-direction: column;
     gap: 2rem;
 }
-.product__overlay {
+
+.product__overlay, .product-update__overlay {
     height: 100vh;
     width: 100%;
     background-color: rgba(0, 0, 0, .15);
@@ -1224,10 +1201,18 @@ input:focus, input:hover, select:focus, textarea:hover,
     position: fixed;
     z-index: 3000;
 }
-.product__modal {
+.product__modal, .product-update__modal {
     padding: 2.4rem 0 2.4rem 2.4rem;
     height: 45rem;
     width: 80rem;
+    /* position: absolute; */
+
+    /* box-shadow: 0 0 1rem rgba(0, 0, 0, .25); */
+    border-radius: 1rem;
+    /* top: 50%;
+    left: 50%; */
+    /* transform: translate(-50%, -50%); */
+    z-index: 1000;
 }
 .product__form {
     overflow-y: scroll;

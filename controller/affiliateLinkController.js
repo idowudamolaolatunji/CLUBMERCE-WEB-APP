@@ -14,12 +14,9 @@ exports.createAffiliateLink = async (req, res) => {
     if(!user) return res.status(400).json({ message: 'Enter a valid user...' });
 
     // Generate the affiliate promotion link
-    let promotionLink;
-    if(!process.env.NODE_ENV === 'development') {
-      promotionLink = `https://www.clubmerce.com/unique_/${user.slug}/${product.slug}`
-    }
-    promotionLink = `${req.protocol}://${req.get('host')}/unique_/${user.slug}/${product.slug}`
-    // console.log(await AffiliateLink.find({ product: product._id }), 'length:', (await AffiliateLink.find({ product: product._id })).length)
+    
+      // const promotionLink = `https://www.clubmerce.com/unique_/${user.slug}/${product.slug}`
+    const promotionLink = `${req.protocol}://${req.get('host')}/unique_/${user.slug}/${product.slug}`
 
     const gravity = await AffiliateLink.find({ product: product._id });
     console.log(gravity.length)
@@ -62,7 +59,7 @@ exports.countClicksRedirects = async (req, res) => {
     if(!user || !product) return res.status(400).json({ message: 'User or product not found..' });
 
     // Find the affiliate link and update the click count and also both user, product
-    const updated = await AffiliateLink.findOneAndUpdate(
+    await AffiliateLink.findOneAndUpdate(
         { user: user.username, product: product.slug },
         { $inc: { clicks: 1 } },
         { new: true }

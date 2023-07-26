@@ -49,15 +49,14 @@ const createCookie = function(statusCode, user, res, message) {
 
 
 
-const sendSignUpEmailToken = async (user) => {
+const sendSignUpEmailToken = async (req, user, token) => {
   try {
-    const token = signToken(user._id);
-
-    // Create a verification URL for the user
+    
     const verificationUrl = `${req.protocol}://${req.get('host')}/api/users/verify-email/${token}`;
     const message = `
       Please verify your email address\n
-      Click <a href="${verificationUrl}">${verificationUrl}</a> to verify your email...`;
+      Click ${verificationUrl} 
+      \n to verify your email...`;
 
     await sendEmail({
       email: user.email,
@@ -65,7 +64,6 @@ const sendSignUpEmailToken = async (user) => {
       message,
     });
 
-    return token;
   } catch (err) {
     console.log(err);
   }
@@ -88,15 +86,16 @@ exports.signup = catchAsync(async (req, res) => {
         role: req.body.role,
     });
 
-    const token = await sendSignUpEmailToken(newUser);
+    const token = signToken(newUser._id);
+    await sendSignUpEmailToken(req, newUser, token);
 
     res.status(201).json({
         status: "success",
         message: "Successfully signed up, Confirm Email",
         token,
-        data: {
-            user: newUser
-        }
+        // data: {
+        //     user: newUser
+        // }
     });
 })
 
@@ -107,7 +106,8 @@ exports.verifyEmail = async (req, res) => {
         const decoded = jwt.verify(req.params.token, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
     
         // Find the user based on the decoded token
-        const user = await User.findById(decoded.userId);
+        const user = await User.findById( decoded.id);
+        console.log(user)
     
         if (user) {
             // Update the user's email verification status
@@ -115,14 +115,21 @@ exports.verifyEmail = async (req, res) => {
             await user.save();
     
             // Redirect the user to a success page
-            res.redirect('/email-confirmation');
+            // res.redirect('/email-confirmation');
+            // res.redirect('/login');
+
         } else {
             // Handle user not found error
-            res.status(404).json({ error: 'User not found' });
+            res.status(404).json({ message: 'User not found' });
         }
+        res.status(200).json({
+          message: 'Verification Successful..',
+          user,
+          token,
+        })
     } catch (error) {
       // Handle invalid token or other errors
-      res.status(400).json({ error: 'Invalid token' });
+      res.status(400).json({status: 'fail', message: 'Invalid token' });
     }
 };
   
@@ -139,6 +146,12 @@ exports.login = catchAsync(async (req, res, next) => {
 
     if (!user || !(await user.comparePassword(password, user.password)) || role !== user.role) {
         return next(new AppError('Incorrect email or password or role', 401));
+    }
+    if(!user.isEmailVerified) {
+      const token = signToken(user._id);
+      res.json({message: 'Email address not verified, Check your mail'})
+      await sendSignUpEmailToken(req, user, token);
+      // return next(new AppError('Email address not verified, Check your mail', 401));
     }
     //=//=//=//=//=//=//=//=//=//
     const token = signToken(user._id);
@@ -316,7 +329,6 @@ exports.restrictedTo = catchAsync(async function(...role) {
   }
 });
 
-/* 
 // forgot password
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 1) Get user based on POSTed email
@@ -332,7 +344,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 3) Send it to user's email
   const resetURL = `${req.protocol}://${req.get(
     'host'
-  )}/api/v1/users/resetPassword/${resetToken}`;
+  )}/api/users/resetPassword/${resetToken}`;
 
   const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
 
@@ -394,9 +406,8 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     }
   })
 })
-*/
 
-
+/*
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 1) Get user based on POSTed email
   const user = await User.findOne({ email: req.body.email });
@@ -411,6 +422,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 3) Send it to user's email
   try {
     const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+    // const resetURL = `$https://clubmerce.com/api/v1/users/resetPassword/${resetToken}`;
     await new Email(user, resetURL).sendPasswordReset();
 
     res.status(200).json({
@@ -468,7 +480,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     }
   })
 });
-
+*/
 
 // Updating current logged in user password
 exports.updatePassword = catchAsync(async (req, res, next) => {

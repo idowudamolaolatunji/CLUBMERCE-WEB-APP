@@ -17,36 +17,6 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_SECRET,
 });
 
-// const multerStorage = multer.memoryStorage();
-
-// const multerFilter = (req, file, cb) => {
-//   if (file.mimetype.startsWith('image')) {
-//     cb(null, true);
-//   } else {
-//     cb(new AppError('Not an image! Please upload only images.', 400), false);
-//   }
-// };
-
-// const upload = multer({
-//   storage: multerStorage,
-//   fileFilter: multerFilter
-// });
-
-// exports.uploadUserPhoto = upload.single('photo');
-
-// exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
-//   if (!req.file) return next();
-
-//   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
-
-//   await sharp(req.file.buffer)
-//     .resize(500, 500)
-//     .toFormat('jpeg')
-//     .jpeg({ quality: 90 })
-//     .toFile(`public/asset/img/user/${req.file.filename}`);
-
-//   next();
-// });
 
 
 exports.getMe = (req, res, next) => {
@@ -70,8 +40,9 @@ exports.getAllUser = async(req, res) => {
         res.status(200).json({
             status: "success",
             data: {
+                count: users.length,
                 users,
-                count: await User.find().countDocuments()
+                // count: await User.find().countDocuments()
             }
         })
     } catch(err) {
@@ -104,9 +75,16 @@ exports.getUser = async(req, res) => {
 
 exports.updateUser = async(req, res) => {
     try {
+        const user = await User.findByIdAndUpdate(req.params.id, {
+            new: true,
+            runValidators: true
+        });
+
         res.status(200).json({
             status: "success",
-            
+            data: {
+                user,
+            }
         })
     } catch(err) {
         res.status(400).json({
@@ -120,12 +98,12 @@ exports.deleteUser = async(req, res) => {
     try {
         await User.findByIdAndRemove(req.params.id);
 
-        res.status(204).json({
+        res.status(200).json({
             status: "success",
             data: null
         })
     } catch(err) {
-        res.status(400).json({
+        res.status(404).json({
             status: 'fail',
             message: err.message,
         })
@@ -155,10 +133,20 @@ exports.updateMe = catchAsync(async (req, res, next) => {
             )
         );
     }
+    // Validate and upload the image to Cloudinary
+    if (!req.file || req.file.size > 10 * 1024 * 1024) {
+        // Limit image size to 10MB
+        return res.status(400).json({ error: 'Invalid image file or size exceeds 10MB' });
+      }
+      const mainImageResult = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'product_main_images',
+      });
+      
     // update user documents
     // 1. filter
-    const allowedFileds = [fullName, email, country, phone, state, cityRegion, zipPostal];
-    const filterBody = filterObj(req.body, allowedFileds);
+    const allowedFileds = [fullName, email, country, phone, state, cityRegion, zipPostal, image];
+    const body = { ...req.body, image: mainImageResult.secure_url }
+    const filterBody = filterObj(body, allowedFileds);
     // 2. update
     const updatedUser = await User.findByIdAndUpdate(req.user.id, filterBody, {
         new: true,

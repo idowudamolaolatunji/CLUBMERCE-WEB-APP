@@ -6,14 +6,16 @@ const sendEmail = async function(options) {
         // email service options
         host: process.env.EMAIL_HOST,
         port: process.env.EMAIL_PORT,
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD,
+        auth: {
+            user: process.env.EMAIL_USERNAME,
+            pass: process.env.EMAIL_PASSWORD,
+        }
     })
 
     // define the email options 
     const mailOptions = {
         // sender mail options 
-        from: '<hello@clubmerce.io>',
+        from: '<admin@clubmerce.io>',
         to: options.email,
         subject: options.subject,
         text: options.message,
