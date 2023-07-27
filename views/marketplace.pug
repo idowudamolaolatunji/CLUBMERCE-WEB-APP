@@ -207,30 +207,30 @@ body
                             p catergories
                                 ul.catergory__list
                                     //- each category of categories
-                                    li.category__item(data-item='all') All
-                                    li.category__item(data-item='arts') Arts
-                                    li.category__item(data-item='betting') Betting
-                                    li.category__item(data-item='books') Books
-                                    li.category__item(data-item='business') Business
-                                    li.category__item(data-item='computers') Computers
-                                    li.category__item(data-item='cooking') Cooking
-                                    li.category__item(data-item='e-Business-and-e-Marketing') E-Business and E-Marketing
-                                    li.category__item(data-item='education') Education
-                                    li.category__item(data-item='entertainment') Entertainment
-                                    li.category__item(data-item='food-and-Wine') Food and Wine
-                                    li.category__item(data-item='games') Games
-                                    li.category__item(data-item='green-products') Green Products
-                                    li.category__item(data-item='health-and-fitness') Health and Fitness
-                                    li.category__item(data-item='home-and-garden') Home and Garden
-                                    li.category__item(data-item='internet') Internet
-                                    li.category__item(data-item='investing') Investing
-                                    li.category__item(data-item='jobs') Jobs
-                                    li.category__item(data-item='languages') Languages
-                                    li.category__item(data-item='reciepe') Reciepe
-                                    li.category__item(data-item='parenting-and-Families') Parenting and Families
-                                    li.category__item(data-item='self-Help') Self-Help
-                                    li.category__item(data-item='spirituality') Spirituality
-                                    li.category__item(data-item='sports') Sports
+                                    li.category__item(data-item='all') All (#{products.length})
+                                    li.category__item(data-item='arts') Arts (#{products.filter(product => product.category === 'arts').length})
+                                    li.category__item(data-item='betting') Betting (#{products.filter(product => product.category === 'betting').length})
+                                    li.category__item(data-item='books') Books (#{products.filter(product => product.category === 'books').length})
+                                    li.category__item(data-item='business') Business (#{products.filter(product => product.category === 'business').length})
+                                    li.category__item(data-item='computers') Computers (#{products.filter(product => product.category === 'computers').length})
+                                    li.category__item(data-item='cooking') Cooking (#{products.filter(product => product.category === 'cooking').length})
+                                    li.category__item(data-item='e-Business-and-e-Marketing') E-Business and E-Marketing (#{products.filter(product => product.category === 'e-Business-and-e-Marketing').length})
+                                    li.category__item(data-item='education') Education (#{products.filter(product => product.category === 'education').length})
+                                    li.category__item(data-item='entertainment') Entertainment (#{products.filter(product => product.category === 'entertainment').length})
+                                    li.category__item(data-item='food-and-Wine') Food and Wine (#{products.filter(product => product.category === 'food-and-Wine').length})
+                                    li.category__item(data-item='games') Games (#{products.filter(product => product.category === 'games').length})
+                                    li.category__item(data-item='green-products') Green Products (#{products.filter(product => product.category === 'green-products').length})
+                                    li.category__item(data-item='health-and-fitness') Health and Fitness (#{products.filter(product => product.category === 'health-and-fitness').length})
+                                    li.category__item(data-item='home-and-garden') Home and Garden (#{products.filter(product => product.category === 'home-and-garden').length})
+                                    li.category__item(data-item='internet') Internet (#{products.filter(product => product.category === 'internet').length})
+                                    li.category__item(data-item='investing') Investing (#{products.filter(product => product.category === 'investing').length})
+                                    li.category__item(data-item='jobs') Jobs (#{products.filter(product => product.category === 'jobs').length})
+                                    li.category__item(data-item='languages') Languages (#{products.filter(product => product.category === '').length})
+                                    li.category__item(data-item='reciepe') Reciepe (#{products.filter(product => product.category === 'languages').length})
+                                    li.category__item(data-item='parenting-and-Families') Parenting and Families (#{products.filter(product => product.category === 'parenting-and-Families').length})
+                                    li.category__item(data-item='self-Help') Self-Help (#{products.filter(product => product.category === 'self-Help').length})
+                                    //- li.category__item(data-item='spirituality') Spirituality (#{products.filter(product => product.category === 'spirituality').length})
+                                    li.category__item(data-item='sports') Sports (#{products.filter(product => product.category === 'sports').length})
 
                     span
                         h6.dashboard__subheading Top offers
@@ -255,7 +255,7 @@ body
                                             
                                         .side--bottom
                                             ul.product__info
-                                                li.product__info--item 
+                                                li.product__info--item(style=`${product.recurringCommission === false ? 'grid-template-columns: repeat(4, 1fr);' : ''}`) 
                                                     i.fa-solid.product__icon.icon(class=`${product.type !== 'Digital' ? 'fa-truck-fast' : 'fa-file'}`)
                                                     p= `${product.type} Product`
                                                 li.product__info--item 
@@ -300,7 +300,7 @@ body
                                             ul.product__info
                                                 //- each icon in product.others
                                                 
-                                                li.product__info--item 
+                                                li.product__info--item(style=`${product.recurringCommission === false ? 'grid-template-columns: repeat(4, 1fr);' : ''}`)
                                                     i.fa-solid.product__icon.icon(class=`${product.type !== 'Digital' ? 'fa-truck-fast' : 'fa-file'}`)
                                                     p= `${product.type} Product`
                                                 li.product__info--item 
@@ -394,6 +394,10 @@ body
                     .chat-end__controls
                         i.fa-solid.fa-paperclip.chat-icon
                         i.fa-regular.fa-face-smile.chat-icon
+
+
+            .back-to-top
+                i.fa-solid.fa-top-arrow
         
             
             include _auth_footer

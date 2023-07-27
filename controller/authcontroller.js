@@ -25,7 +25,6 @@ const signToken = (id) => {
   });
 }
 
-
 const createCookie = function(statusCode, user, res, message) {
   // takes the user id(payload), secretkey, and an option(expiredin)
   const token = signToken(user._id);
@@ -139,20 +138,21 @@ exports.login = catchAsync(async (req, res, next) => {
     const { email, password, role} = req.body;
 
     if (!email || !password) {
-        return next(new AppError('Please provide email and password!', 400));
+      return next(new AppError('Please provide email and password!', 400));
     }
     // 2) Check if user exists rs&& password is correct
     const user = await User.findOne({ email }).select('+password');
 
     if (!user || !(await user.comparePassword(password, user.password)) || role !== user.role) {
-        return next(new AppError('Incorrect email or password or role', 401));
+        // return next(new AppError('Incorrect email or password or role', 401));
+        res.json({message: 'Incorrect email or password or role'})
     }
-    if(!user.isEmailVerified) {
-      const token = signToken(user._id);
-      res.json({message: 'Email address not verified, Check your mail'})
-      await sendSignUpEmailToken(req, user, token);
-      // return next(new AppError('Email address not verified, Check your mail', 401));
-    }
+    // if(!user.isEmailVerified) {
+    //   const token = signToken(user._id);
+    //   res.json({message: 'Email address not verified, Check your mail'})
+    //   await sendSignUpEmailToken(req, user, token);
+    //   // return next(new AppError('Email address not verified, Check your mail', 401));
+    // }
     //=//=//=//=//=//=//=//=//=//
     const token = signToken(user._id);
     const cookieOptions = {
@@ -166,6 +166,40 @@ exports.login = catchAsync(async (req, res, next) => {
     // Remove password from output
     user.password = undefined;
 
+    res.status(200).json({
+        status: "success",
+        message: "Successfully logged in",
+        token,
+        data: {
+            user,
+        }
+    })
+  });
+
+
+// Login buyers
+exports.loginBuyer = catchAsync(async (req, res, next) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return next(new AppError('Please provide email and password!', 400));
+    }
+    const user = await User.findOne({ email }).select('+password');
+
+    if (!user || !(await user.comparePassword(password, user.password)) || role !== user.role) {
+        res.json({message: 'Incorrect email or password'})
+    }
+    
+    const token = signToken(user._id);
+    const cookieOptions = {
+        expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
+        httpOnly: true
+    }
+    if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+    res.cookie('jwt', token, cookieOptions);
+
+    // Remove password from output
+    user.password = undefined;
     res.status(200).json({
         status: "success",
         message: "Successfully logged in",

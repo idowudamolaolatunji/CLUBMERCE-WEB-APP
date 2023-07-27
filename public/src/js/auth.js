@@ -56,15 +56,21 @@ const login = async (email, password, role) => {
           });
           console.log(res)
           if (!res.ok) {
-               throw new Error('Login failed, Try again.');
+               throw new Error('Login failed, Check internet connection');
           }
 
           const data = await res.json();
           if(data.message === 'Email address not verified, Check your mail') {{
                hideLoadingOverlay();
-               showAlert('error', 'Email address not verified, Check your mail');
+               showAlert('error', data.message);
                return;
           }}
+
+          if(data.message === 'Incorrect email or password or role') {
+               hideLoadingOverlay();
+               showAlert('error', data.message);
+               return;
+          }
 
           if (data.data.role === 'admin') {
                hideLoadingOverlay();
@@ -223,15 +229,15 @@ const verifyEmail = async function (verificationToken) {
        } else {
          // Verification failed
          const errorMessage = `
-           <div class="email__drop-down drop-down__shadow">
-             <div class="email-confirmed__modal modal">
-               <i class="fa-solid fa-close close__icon email-confirm__close--icon"></i>
-               <div class="modal__container">
-                 <h3 class="extra__heading">Failed!</h3>
-                 <p class="modal__text">Email verification failed. Please try again.</p>
+          <div class="email__drop-down drop-down__shadow">
+               <div class="email-confirmed__modal modal">
+                    <i class="fa-solid fa-close close__icon email-confirm__close--icon"></i>
+                    <div class="modal__container">
+                         <h3 class="extra__heading">Failed!</h3>
+                         <p class="modal__text">Email verification failed. Please try again.</p>
+                    </div>
                </div>
-             </div>
-           </div>
+          </div>
          `;
    
          // Add the error message to the document body

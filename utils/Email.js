@@ -15,7 +15,7 @@ const sendEmail = async function(options) {
     // define the email options 
     const mailOptions = {
         // sender mail options 
-        from: '<admin@clubmerce.io>',
+        from: 'info@clubmerce.com',
         to: options.email,
         subject: options.subject,
         text: options.message,
