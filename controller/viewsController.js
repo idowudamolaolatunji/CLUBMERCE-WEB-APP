@@ -9,31 +9,29 @@ const Order = require('../model/orderModel');
 exports.home = (req, res) => {
     res.status(200).render('home', {
         title: 'Official Website',
-        active: true
     });
 }
 exports.getStarted = (req, res) => {
     res.status(200).render('get-started', {
         title: 'Get Started',
-        active: true
     });
 }
 exports.vendor = (req, res) => {
     res.status(200).render('vendor', {
         title: 'Become a vendor',
-        active: true
     });
 }
 exports.affiliate = (req, res) => {
     res.status(200).render('affiliate', {
         title: 'Become an affiliate',
-        active: true
     });
 }
 exports.login = async (req, res) => {
+    if( req.cookies.jwt ) {
+        return res.redirect('/dashboard')
+    }
     res.status(200).render('login', {
         title: 'Login your account',
-        active: true
     })
 }
 exports.signUp = (req, res) => {
@@ -166,20 +164,6 @@ exports.productCatalog = async(req, res) => {
 exports.adminAuth = (req, res) => {
     res.status(200).render('admin_auth');
 }
-
-// exports.productMarketplace = async (req, res) => {
-//     try {
-//         const products = await Product.find();
-
-//         res.status(200).render('marketplace', {
-//             title: 'Affiliate marketPlace',
-//             products,
-//         });
-//     } catch(err) {
-//         res.status(400).json({message: err});
-//     }
-// }
-
 exports.manageUsers = async (req, res) => {
     try {
         const users = await User.find();

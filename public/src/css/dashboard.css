@@ -1204,14 +1204,15 @@ input:focus, input:hover, select:focus, textarea:hover,
     padding: 2.4rem 0 2.4rem 2.4rem;
     height: 45rem;
     width: 80rem;
-    /* position: absolute; */
+    position: absolute;
 
-    /* box-shadow: 0 0 1rem rgba(0, 0, 0, .25); */
+    box-shadow: 0 0 1rem rgba(0, 0, 0, .25);
     border-radius: 1rem;
-    /* top: 50%;
-    left: 50%; */
-    /* transform: translate(-50%, -50%); */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 1000;
+    background-color: #fff;
 }
 .product__form {
     overflow-y: scroll;

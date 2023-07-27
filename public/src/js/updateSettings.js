@@ -26,9 +26,9 @@ if (userDataForm)
   userDataForm.addEventListener('submit', e => {
     e.preventDefault();
     const form = new FormData();
-    form.append('fullName' ? ('fullName', document.getElementById('fullName').value) : ('businessName', document.getElementById('businessName').value));
-    // form.append('fullName', document.getElementById('fullName').value);
-    // form.append('businessName', document.getElementById('businessName').value);
+    // form.append('fullName' ? ('fullName', document.getElementById('fullName').value) : ('businessName', document.getElementById('businessName').value));
+    form.append('fullName', document.getElementById('fullName').value);
+    form.append('businessName', document.getElementById('businessName').value);
     form.append('email', document.getElementById('email').value);
     form.append('phone', document.getElementById('phone').value);
     form.append('country', document.getElementById('country').value);

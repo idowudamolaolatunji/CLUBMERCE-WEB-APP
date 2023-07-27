@@ -21,7 +21,19 @@ if (navMenuBtn) {
           icon.classList.toggle('fa-close');
      });
 }
-   
+
+const showLoadingOverlay = () => {
+     spinOverlay.style.visibility = 'visible';
+};
+const hideLoadingOverlay = () => {
+     spinOverlay.style.visibility = 'hidden';
+};
+document.addEventListener("DOMContentLoaded", function() {
+     showLoadingOverlay();
+});
+window.addEventListener("load", function() {
+     hideLoadingOverlay()
+});
 
 
 // ALERTS
@@ -37,13 +49,6 @@ const showAlert = (type, msg) => {
      setTimeout(hideAlert, 5000);
 };
 
-const showLoadingOverlay = () => {
-     spinOverlay.style.visibility = 'visible';
-};
-
-const hideLoadingOverlay = () => {
-     spinOverlay.style.visibility = 'hidden';
-};
 
 const login = async (email, password, role) => {
      try {

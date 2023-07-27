@@ -126,5 +126,12 @@ productSchema.pre(/^find/, function (next) {
     next();
 });
 
+productSchema.pre('save', function (next) {
+    if (typeof this.price !== 'number') return '';
+    const formattedPrice = this.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    this.price = formattedPrice ;
+    next();
+});
+
 const Product = mongoose.model('Product', productSchema);
 module.exports = Product;

@@ -19,7 +19,6 @@ const navLogout = document.querySelectorAll('.nav__logout');
 const adminLogout = document.querySelectorAll('.admin__menu--logout');
 const spinOverlay = document.querySelector('#spinOverlay');
 
-
 const showLoadingOverlay = () => {
     spinOverlay.style.visibility = 'visible';
 };
@@ -27,6 +26,13 @@ const showLoadingOverlay = () => {
 const hideLoadingOverlay = () => {
     spinOverlay.style.visibility = 'hidden';
 };
+document.addEventListener("DOMContentLoaded", function() {
+    showLoadingOverlay();
+});
+window.addEventListener("load", function() {
+    hideLoadingOverlay()
+});
+
 
 // MODALS
 const openModal = function(overlay, modal) {
@@ -114,53 +120,6 @@ if (profileImg) {
     document.body.addEventListener('click', () => {
         profileBox.classList.add('hidden');
     });
-}
-
-
-//  logout functionality
-const logout = async function() {
-    try {
-        const token = getCookie('jwt'); // Retrieve the token from the cookie
-        console.log(token)
-        if (!token) {
-            throw new Error('Token not found in the cookie');
-        }
-
-        const response = await fetch('/logout', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Include the token in the request headers
-            }
-        });
-
-        if (response.ok) {
-            window.location.href = '/login';
-        } else {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Logout failed');
-        }
-    } catch (err) {
-        console.error(err);
-        showAlert('error', err.message || 'Logout failed'); // Display an error message to the user
-    }
-}
-
-// if(menuLogout) menuLogout.addEventListener('click', logout);
-// if(navLogout) navLogout.addEventListener('click', logout);
-// if(adminLogout) adminLogout.addEventListener('click', logout);
-
-
-// Function to retrieve the value of a specific cookie
-function getCookie(name) {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.startsWith(`${name}=`)) {
-            return cookie.substring(name.length + 1); // Extract the value of the cookie
-        }
-    }
-    return null; // Cookie not found
 }
 
 
@@ -339,21 +298,191 @@ const productModal = document.querySelector('.product__modal');
 const productOverlayClose = document.querySelector('.form__close-icon');
 const productForm = document.querySelector('.product__form');
 
+const closeUploadModal = () => {
+    const productOverlay = document.querySelectorAll('.product__overlay');
+    if (productOverlay) {
+      productOverlay.remove();
+    }
+};
 
+// Delete functionality
+const showUploadModal = function() {
+    const html = `
+        <div class="product__overlay">
+            <div class="product__modal">
+                <i class="fa-solid fa-close icon form__close-icon"></i>
+                <h3 class="dashboard__heading">Add new product</h3>
+                <form class="product__form">
+                    <div class="form__body-generic">
+                        <label class="form__label" for="product__name">Product Name</label>
+                        <input class="form__input" id="product__name" type="text" name="product__name" required="" placeholder="Product name"/>
+                    </div>
+                    <div class="form__body-generic">
+                        <label class="form__label" for="product__summary">Product Summary</label>
+                        <textarea class="form__input" id="product__summary" style="height: 6rem;" type="text" name="product__summary" required="" placeholder="Product Summary (not more than 120 characters)"></textarea>
+                    </div>
+                    <div class="form__body-generic">
+                        <label class="form__label" for="product__description">Product Description</label>
+                        <textarea class="form__input" id="product__description" style="height: 15rem;" type="text" name="product__description" required="" placeholder="Product Description"></textarea>
+                    </div>
+                    <div class="form__grid-generic">
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__price">Product Price</label>
+                            <input class="form__input" id="product__price" type="text" name="product__price" required="" placeholder="Product price (NGN)"/>
+                        </div>
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__commission">Product Commission</label>
+                            <input class="form__input" id="product__commission" type="text" name="product__commission" required="" placeholder="Product Commission in (%)"/>
+                        </div>
+                    </div>
+                    <div class="form__grid-generic">
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__type">Product Type</label>
+                            <select class="form__select" id="product__type" name="product__type">
+                                <option value="physical">Physical Product</option>
+                                <option value="digital">Digital Product</option>
+                            </select>
+                        </div>
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__category">Product Category</label>
+                            <select class="form__select" id="product__category" name="product__category">
+                                <option value="physical">All categories</option>
+                                <option class="category__item" data-item="all">All </option>
+                                <option class="category__item" data-item="arts">Arts</option>
+                                <option class="category__item" data-item="betting">Betting</option>
+                                <option class="category__item" data-item="books">Books</option>
+                                <option class="category__item" data-item="business">Business</option>
+                                <option class="category__item" data-item="computers">Computers</option>
+                                <option class="category__item" data-item="cooking">Cooking</option>
+                                <option class="category__item" data-item="e-Business-and-e-Marketing">E-Business and E-Marketing</option>
+                                <option class="category__item" data-item="education">Education</option>
+                                <option class="category__item" data-item="entertainment">Entertainment</option>
+                                <option class="category__item" data-item="food-and-Wine">Food and Wine</option>
+                                <option class="category__item" data-item="games">Games</option>
+                                <option class="category__item" data-item="green-products">Green Products</option>
+                                <option class="category__item" data-item="health-and-fitness">Health and Fitness</option>
+                                <option class="category__item" data-item="home-and-garden">Home and Garden</option>
+                                <option class="category__item" data-item="internet">Internet</option>
+                                <option class="category__item" data-item="investing">Investing</option>
+                                <option class="category__item" data-item="jobs">Jobs</option>
+                                <option class="category__item" data-item="languages">Languages</option>
+                                <option class="category__item" data-item="reciepe">Reciepe</option>
+                                <option class="category__item" data-item="parenting-and-Families">Parenting and Families</option>
+                                <option class="category__item" data-item="self-Help">Self-Help</option>
+                                <option class="category__item" data-item="spirituality">Spirituality</option>
+                                <option class="category__item" data-item="sports">Sports</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form__grid3-generic">
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__tools">Affiliate Tools</label>
+                            <input class="form__input" id="product__tools" type="checkbox" name="product__tools"/>
+                        </div>
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__link">Product Unique Url</label>
+                            <input class="form__input" id="product__link" type="checkbox" name="product__link"/>
+                        </div>
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__recurring">Recurring Commissions</label>
+                            <input class="form__input" id="product__recurring" type="checkbox" name="product__recurring"/>
+                        </div>
+                    </div>
+                    <div class="product__sub-images">
+                        <p class="form__label photo-head">Product sub images (Max of 6) upload</p>
+                        <div class="sub-images">
+                            <img class="sub-image sub-image1" src="asset/img/product-default.png" alt="product sub image"/>
+                            <img class="sub-image sub-image2" src="asset/img/product-default.png" alt="product sub image"/>
+                            <img class="sub-image sub-image3" src="asset/img/product-default.png" alt="product sub image"/>
+                            <img class="sub-image sub-image4" src="asset/img/product-default.png" alt="product sub image"/>
+                            <img class="sub-image sub-image5" src="asset/img/product-default.png" alt="product sub image"/>
+                            <img class="sub-image sub-image6" src="asset/img/product-default.png" alt="product sub image"/>
+                        </div>
+                        <input class="btn-upload btn__image-upload" type="file" accept="image/*" id="image" name="image" multiple max="6" />
 
-// Create product
-if(productOverlayClose) {
-    productOverlayClose.addEventListener('click', function() {
-        closeModal(productOverlay, productModal)
+                    </div>
+
+                    <div class="product__banners">
+                        <p class="form__label photo-head">Product banner (Max of 4) upload</p>
+                        <div class="banners">
+                            <img class="banner banner1" src="asset/img/product-default.png" alt="product sub image"/>
+                            <img class="banner banner2" src="asset/img/product-default.png" alt="product sub image"/>
+                            <img class="banner banner3" src="asset/img/product-default.png" alt="product sub image"/>
+                            <img class="banner banner4" src="asset/img/product-default.png" alt="product sub image"/>
+                        </div>
+
+                        <input class="btn-upload btn__banner-upload" type="file" accept="image/*" id="banner" name="image" multiple max="4" />
+                        
+                    </div>
+                        <button class="btn form__submit form__submit-generic" type="submit">Add product
+                        </button>
+                </form>
+            </div>
+        </div>
+    `;
+  
+    document.body.insertAdjacentHTML('afterbegin', html);
+}
+// ${product.banners.forEach(img => `<img class="banner banner1" src="asset/img/${img}" alt="product sub image"/>`)}
+
+const fileInputImage = document.getElementById('image');
+const fileInputBanner = document.getElementById('banner');
+const banners = document.querySelectorAll('.banners');
+const images = document.querySelectorAll('.images');
+
+//  fileInput.addEventListener('change', handleFileUpload);
+if(fileInputImage)
+    fileInputImage.addEventListener('change', function(e) {
+        // handleFileUpload(e, 'img', images, 6);
+        handleFileUpload(e, images, 6);
+        
     });
+if(fileInputBanner)
+    fileInputBanner.addEventListener('change', function(e) {
+        handleFileUpload(e, banners, 4);
+    });
+
+function handleFileUpload(event, constant, amount) {
+    // Reset the src attributes of all images
+    constant.forEach((sub) => {
+        sub.src = '';
+    });
+
+    const files = event.target.files;
+    for (let i = 0; i < files.length; i++) {
+        if (i >= amount) break; // Ensure we only display up to amount images
+
+        const file = files[i];
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+        constant[i].src = e.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    }
 }
 
+// Create product
 if(productCreate) {
     productCreate.addEventListener('click', function(e) {
         console.log('i want to create a product')
-        openModal(productOverlay, productModal)
+        const existingModal = document.querySelector('.product__overlay');
+        if (existingModal) {
+            return; 
+        }
+        showUploadModal();
     })
 }
+
+if(productOverlayClose) {
+    productOverlayClose.forEach(el => el.addEventListener('click', function(e) {
+        console.log('You want to close me??')
+        closeUploadModal();
+    }))
+}
+
+
 const uploadProduct = async function(name, summary, description, price, commission, type, category, tools, link, recurring) {
     try {
         showLoadingOverlay()
@@ -365,13 +494,19 @@ const uploadProduct = async function(name, summary, description, price, commissi
 
         if (!res.ok) {
             hideLoadingOverlay()
-            throw new Error('Product upload failed');
+            showAlert('success', 'Product upload failed');
+            return;
         }
 
         const data = await res.json();
         console.log(res, data);
         
-        if(data) hideLoadingOverlay()
+        if(data.status === 'success') {
+            hideLoadingOverlay();
+            showAlert('success', 'Product Updated successfully..');
+            window.location.reload(true);
+            return;
+        } 
 
     } catch (err) {
         console.log(err);
@@ -381,18 +516,23 @@ const uploadProduct = async function(name, summary, description, price, commissi
 
 if (productForm) {
     productForm.addEventListener('submit', function(e) {
+        // e.preventDefault();
+        
         e.preventDefault();
-        const name = document.querySelector('#product__name').value;
-        const summary = document.querySelector('#product__summary').value;
-        const description = document.querySelector('#product__description').value;
-        const price = document.querySelector('#product__price').value;
-        const commission = document.querySelector('#product__commission').value;
-        const type = document.querySelector('#product__type').value;
-        const category = document.querySelector('#product__category').value;
-        const tools = document.querySelector('#product__tools').value;
-        const link = document.querySelector('#product__link').value;
-        const recurring = document.querySelector('#product__recurring').value;
+        const form = new FormData();
+        form.append('name', document.querySelector('#product__name').value);
+        form.append('summary', document.querySelector('#product__summary').value);
+        form.append('summary', document.querySelector('#product__description').value);
+        form.append('price', document.querySelector('#product__price').value);
+        form.append('commission', document.querySelector('#product__commission').value);
+        form.append('type', document.querySelector('#product__type').value);
+        form.append('category', document.querySelector('#product__category').value);
+        form.append('tools', document.querySelector('#product__tools').value);
+        form.append('recurring', document.querySelector('#product__recurring').value);
+        form.append('link', document.querySelector('#product__link').value);
 
+        // form.append('photo', document.querySelector('photo').files[0]);
+        console.log(form);
         uploadProduct(name, summary, description, price, commission, type, category, tools, link, recurring);
     });
 }
@@ -410,7 +550,6 @@ if(productEdit) {
         console.log('I was clicked by this vendor')
     }));
 }
-
 if(productOverlayClose) {
     productOverlayClose.addEventListener('click', function() {
         closeModal(productOverlay, productModal);
@@ -442,7 +581,6 @@ const updateProduct = async function(name, summary, description, price, commissi
         hideLoadingOverlay()
     }
 }
-
 
 if(productUpdateAdminForm) {
     productUpdateAdminForm.addEventListener('submit', function(e) {
@@ -477,9 +615,6 @@ if(productUpdateForm) {
         updateProduct(name, summary, description, price, commission, type, category, tools, link, recurring)
     });
 }
-
-
-
 
 
 const updateUser = async function(name, email, phone, country, state, cityRegion, zipPostal) {
