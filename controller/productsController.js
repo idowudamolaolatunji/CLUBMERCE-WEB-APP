@@ -66,12 +66,47 @@ exports.getAllProduct = async(req, res) => {
 };
 
 const upload = require('../utils/uploadConfig');
-exports.createProduct = upload.fields(
-  [
-    { name: 'image', maxCount: 1 }, // Single main image
-    { name: 'subImages', maxCount: 6 }, // Array of sub-images, up to 6
-    { name: 'banners', maxCount: 4 }, // Array of banners, up to 4
-  ]), async (req, res) => {
+// exports.createProduct = upload.fields(
+//   [
+//     { name: 'image', maxCount: 1 }, // Single main image
+//     { name: 'subImages', maxCount: 6 }, // Array of sub-images, up to 6
+//     { name: 'banners', maxCount: 4 }, // Array of banners, up to 4
+//   ]), async (req, res) => {
+//   try {
+//     const vendorId = req.user._id;
+//     // Find the vendor document from the database based on the vendor ID
+//     const vendor = await User.findById(vendorId);
+//     if (!vendor) {
+//       return res.status(404).json({ error: 'Vendor not found' });
+//     }
+
+//     // Validate and upload the main image to Cloudinary
+//     if (!req.files || !req.files['image'] || req.files['image'].length !== 1) {
+//       return res.status(400).json({ error: 'Invalid main image file' });
+//     }
+//     const mainImageResult = req.files['image'][0];
+
+//     // Validate and upload sub-images to Cloudinary
+//     const subImages = [];
+//     if (req.files && req.files['subImages'] && Array.isArray(req.files['subImages'])) {
+//       for (const subImage of req.files['subImages']) {
+//         subImages.push(subImage.path);
+//       }
+//     } else {
+//       return res.status(400).json({ error: 'Invalid sub-images files' });
+//     }
+
+//     // Validate and upload banners to Cloudinary
+//     const banners = [];
+//     if (req.files && req.files['banners'] && Array.isArray(req.files['banners'])) {
+//       for (const banner of req.files['banners']) {
+//         banners.push(banner.path);
+//       }
+//     } else {
+//       return res.status(400).json({ error: 'Invalid banner files' });
+//     }
+
+exports.createProduct = async (req, res) => {
   try {
     const vendorId = req.user._id;
     // Find the vendor document from the database based on the vendor ID
@@ -84,13 +119,14 @@ exports.createProduct = upload.fields(
     if (!req.files || !req.files['image'] || req.files['image'].length !== 1) {
       return res.status(400).json({ error: 'Invalid main image file' });
     }
-    const mainImageResult = req.files['image'][0];
+    const mainImageResult = await cloudinary.uploader.upload(req.files['image'][0].path);
 
     // Validate and upload sub-images to Cloudinary
     const subImages = [];
     if (req.files && req.files['subImages'] && Array.isArray(req.files['subImages'])) {
       for (const subImage of req.files['subImages']) {
-        subImages.push(subImage.path);
+        const result = await cloudinary.uploader.upload(subImage.path);
+        subImages.push(result.secure_url);
       }
     } else {
       return res.status(400).json({ error: 'Invalid sub-images files' });
@@ -100,7 +136,8 @@ exports.createProduct = upload.fields(
     const banners = [];
     if (req.files && req.files['banners'] && Array.isArray(req.files['banners'])) {
       for (const banner of req.files['banners']) {
-        banners.push(banner.path);
+        const result = await cloudinary.uploader.upload(banner.path);
+        banners.push(result.secure_url);
       }
     } else {
       return res.status(400).json({ error: 'Invalid banner files' });
@@ -123,7 +160,7 @@ exports.createProduct = upload.fields(
   } catch (err) {
     res.status(404).json({
       status: 'fail',
-      message: err.message,
+      message: err.message ||'An error occurred while processing the request',
     });
   }
 };

@@ -75,7 +75,7 @@ exports.getUser = async(req, res) => {
 
 exports.updateUser = async(req, res) => {
     try {
-        const user = await User.findByIdAndUpdate(req.params.id, {
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
             runValidators: true
         });

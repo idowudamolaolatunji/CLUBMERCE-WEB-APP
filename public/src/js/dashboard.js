@@ -282,7 +282,7 @@ if(vendorProductDelete) {
 
 
 
-// update functionality
+// upload functionality
 
 const productUpdateAdminForm = document.querySelector('.product__form-admin-update');
 const productUpdateForm = document.querySelector('.product__form-update');
@@ -475,12 +475,10 @@ if(productCreate) {
     })
 }
 
-if(productOverlayClose) {
-    productOverlayClose.forEach(el => el.addEventListener('click', function(e) {
+    productOverlayClose.addEventListener('click', function(e) {
         console.log('You want to close me??')
         closeUploadModal();
-    }))
-}
+    })
 
 
 const uploadProduct = async function(name, summary, description, price, commission, type, category, tools, link, recurring) {
@@ -527,13 +525,24 @@ if (productForm) {
         form.append('commission', document.querySelector('#product__commission').value);
         form.append('type', document.querySelector('#product__type').value);
         form.append('category', document.querySelector('#product__category').value);
-        form.append('tools', document.querySelector('#product__tools').value);
-        form.append('recurring', document.querySelector('#product__recurring').value);
-        form.append('link', document.querySelector('#product__link').value);
+        // form.append('tools', document.querySelector('#product__tools').value);
+        // form.append('recurring', document.querySelector('#product__recurring').value);
+        // form.append('link', document.querySelector('#product__link').value);
 
-        // form.append('photo', document.querySelector('photo').files[0]);
-        console.log(form);
-        uploadProduct(name, summary, description, price, commission, type, category, tools, link, recurring);
+        form.append('tools', document.querySelector('#product__tools').checked);
+        form.append('recurring', document.querySelector('#product__recurring').checked);
+        form.append('link', document.querySelector('#product__link').checked);
+
+        const imageFiles = document.getElementById('image').files;
+        const bannerFiles = document.getElementById('banner').files;
+
+        for (let i = 0; i < imageFiles.length; i++) {
+            form.append('subImages', imageFiles[i]);
+        }
+
+        for (let i = 0; i < bannerFiles.length; i++) {
+            form.append('banners', bannerFiles[i]);
+        }
     });
 }
 
