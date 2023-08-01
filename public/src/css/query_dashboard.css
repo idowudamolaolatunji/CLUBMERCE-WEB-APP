@@ -162,7 +162,6 @@
         gap: 2.4rem;
     }
     .menubar {
-        
         overflow-y: hidden;
     }
     .menubar .menu__button,  .menubar .admin__menu--logout {
@@ -179,6 +178,7 @@
     .menu__list {
         gap: .62rem;
     }
+    
     
 }
 
@@ -370,6 +370,17 @@
 
 /* 415px === 41.5rem === 26em */
 @media screen and (max-width: 26em) {
+    
+    .section__bottom {
+        grid-template-columns: 0 1fr;
+        transition: 0ms;
+    }
+    .dashboard__insights {
+        max-width: 100%;
+    }
+    .products__cards--box  {
+        width: 90%;
+    }
     .dashboard__insights  {
         grid-template-columns: 1fr;
         gap: 1.8rem;
@@ -380,24 +391,10 @@
         gap: 2.4rem;
         padding: 1.8rem;
     }
-    /* .products__cards--box  {
-        margin: 0;
-    } */
 }
 
 /* 400px === 40rem === 23.125em */
 @media screen and (max-width: 25.125em) {
-    .section__bottom {
-        grid-template-columns: 0 1fr;
-        transition: 0ms;
-    }
-    .dashboard__insights {
-        max-width: 100%;
-        padding: 0 2.8rem;
-    }
-    .products__cards--box  {
-        width: 90%;
-    }
     .section__top {
         gap: 2rem;
     }
@@ -415,16 +412,11 @@
         background-color: #fff;
         box-shadow: .2rem .2rem 4rem rgba(0, 0, 0, .1);
     }
-    /* .dashboard__insights {
-        max-width: 85%;
-    } */
 }
 
 /* 390px === 39rem === 22.5em */
 @media screen and (max-width: 23.5em) {
-    .dashboard__insights  {
-        max-width: 100%;
-    }
+    
     .insight {
         gap: 2.4rem;
     }

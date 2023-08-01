@@ -58,9 +58,9 @@ const sendSignUpEmailToken = async (req, user, token) => {
       \n to verify your email...`;
 
     await sendEmail({
-      email: user.email,
+      user: user.email,
       subject: 'Verify Your Email Address',
-      message,
+      message
     });
 
   } catch (err) {
@@ -74,6 +74,12 @@ const sendSignUpEmailToken = async (req, user, token) => {
 //////////////////////////////////////////////
 // signup
 exports.signup = catchAsync(async (req, res) => {
+    const emailExist = await User.findOne({email: req.body.email });
+    const usernameExist = await User.findOne({username: req.body.username });
+    if(emailExist) return res.json({ message: 'Email already Exist'});
+    if(usernameExist) return res.json({ message: 'Username already Exist'});
+
+
     const newUser = await User.create({
         fullName: req.body.fullName,
         email: req.body.email,
@@ -86,16 +92,16 @@ exports.signup = catchAsync(async (req, res) => {
     });
 
     const token = signToken(newUser._id);
-    await sendSignUpEmailToken(req, newUser, token);
-
+    
     res.status(201).json({
-        status: "success",
-        message: "Successfully signed up, Confirm Email",
-        token,
-        // data: {
-        //     user: newUser
-        // }
+      status: "success",
+      message: "Successfully signed up, Confirm Email",
+      token,
+      data: {
+        user: newUser
+      }
     });
+    await sendSignUpEmailToken(req, newUser, token);
 })
 
 // Verification route
@@ -112,10 +118,6 @@ exports.verifyEmail = async (req, res) => {
             // Update the user's email verification status
             user.isEmailVerified = true;
             await user.save();
-    
-            // Redirect the user to a success page
-            // res.redirect('/email-confirmation');
-            // res.redirect('/login');
 
         } else {
             // Handle user not found error
@@ -147,12 +149,12 @@ exports.login = catchAsync(async (req, res, next) => {
         // return next(new AppError('Incorrect email or password or role', 401));
         res.json({message: 'Incorrect email or password or role'})
     }
-    // if(!user.isEmailVerified) {
-    //   const token = signToken(user._id);
-    //   res.json({message: 'Email address not verified, Check your mail'})
-    //   await sendSignUpEmailToken(req, user, token);
-    //   // return next(new AppError('Email address not verified, Check your mail', 401));
-    // }
+    if(!user.isEmailVerified) {
+      const token = signToken(user._id);
+      res.json({message: 'Email address not verified, Check your mail'})
+      await sendSignUpEmailToken(req, user, token);
+      // return next(new AppError('Email address not verified, Check your mail', 401));
+    }
     //=//=//=//=//=//=//=//=//=//
     const token = signToken(user._id);
     const cookieOptions = {
@@ -166,7 +168,7 @@ exports.login = catchAsync(async (req, res, next) => {
     // Remove password from output
     user.password = undefined;
 
-    res.status(200).json({
+    return res.status(200).json({
         status: "success",
         message: "Successfully logged in",
         token,
@@ -245,17 +247,21 @@ exports.loginAdmin = catchAsync(async (req, res, next) => {
 
 
 // logout
+// exports.logout = catchAsync(async (req, res) => {
+//   const token = req.cookies.jwt;
+
+//   if (!token) {
+//       return res.status(401).json({ error: 'You are not logged in' });
+//   }
+
+//   // Clear the token cookie
+//   res.clearCookie('jwt').redirect('/login');
+// });
 exports.logout = catchAsync(async (req, res) => {
-  const token = req.cookies.jwt;
-
-  if (!token) {
-      return res.status(401).json({ error: 'You are not logged in' });
-  }
-
-  // Clear the token cookie
-  res.clearCookie('jwt').redirect('/login');
+  // Clear the token cookie by setting it to an empty string and setting the maxAge to 0
+  res.cookie('jwt', '', { maxAge: 0, httpOnly: true });
+  res.redirect('/login');
 });
-
 
 // protect 
 exports.protect = catchAsync(async (req, res, next) => {

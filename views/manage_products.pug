@@ -31,7 +31,7 @@ block content
                         p.approved.status.status--success Approved
                     span.table-row-content.table-row-btn
                         //- button.btn-edit.table-btn Edit
-                        button.btn-edit.table-btn.admin-product-edit(data-id=`${product._id}`) Edit
+                        button.btn-edit.table-btn.admin-product-edit(data-product=`${product.name}` data-id=`${product._id}`) Edit
                         button.btn-delete.table-btn.admin-product-delete(data-id=`${product._id}`) Delete
                 
 

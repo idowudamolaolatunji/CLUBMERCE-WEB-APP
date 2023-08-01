@@ -187,9 +187,9 @@ button {
 }
 
 .modal__container {
-    width: 38rem;
+    max-width: 36rem;
     height: auto;
-    padding: 2.4rem 3rem;
+    padding: 2rem 3rem;
 
     display: flex;
     flex-direction: column;

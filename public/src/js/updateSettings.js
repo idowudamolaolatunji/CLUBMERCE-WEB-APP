@@ -90,7 +90,7 @@ if(userImageBtn) {
 
 const userDataForm = document.querySelector('.form-profile-data')
 if (userDataForm)
-  userDataForm.addEventListener('submit', e => {
+  userDataForm.addEventListener('submit', function(e) {
     e.preventDefault();
     const form = new FormData();
     // form.append('fullName' ? ('fullName', document.getElementById('fullName').value) : ('businessName', document.getElementById('businessName').value));

@@ -6,10 +6,20 @@ block content
 
 
         form.form__data.form-image-data
-            .form__photo-upload
-                img.form__user-photo(src=`${user.image}` alt='User photo')
-                input.form__upload(type='file', accept='image/*', id='photo', name='photo' placeholder='')
-            button.img__upload--btn.btn(type="submit") Add image
+            //- .form__photo-upload
+                //- img.form__user-photo(src=`${user.image}` alt='User photo')
+                //- input.form__upload(type='file', accept='image/*', id='photo', name='photo')
+
+
+            #uploader__image--card
+                img#uploader__image(src='/asset/img/avatar.png' alt='')
+                #uploader__image--label-box
+                    input#uploader__image--input(name='photo' type='file' accept='image/png, image/jpeg')
+                    label#uploader__image--label(for='uploader__image--input')
+                        i.fa-solid.fa-camera
+                        |  Add photo
+            p#uploader__image--username= user.fullName
+            button.img__upload--btn.btn(type="submit") Upload image
 
         form.form__data.form-profile-data
             h3.dashboard__heading Update profile info
@@ -48,10 +58,20 @@ block content
         h3.dashboard__heading Your Profile
 
         form.form__data.form-image-data
-            .form__photo-upload
-                img.form__user-photo(src=`asset/img/${user.image}.png` alt='User photo')
-                input.form__upload(type='file', accept='image/*', id='photo', name='photo' placeholder='')
-            button.img__upload--btn.btn Add image
+            //- .form__photo-upload
+                //- img.form__user-photo(src=`${user.image}` alt='User photo')
+                //- input.form__upload(type='file', accept='image/*', id='photo', name='photo')
+
+            #uploader__image--card
+                img#uploader__image(src='/asset/img/avatar.png' alt='')
+                #uploader__image--label-box
+                    input#uploader__image--input(name='photo' type='file' accept='image/png, image/jpeg')
+                    label#uploader__image--label(for='uploader__image--input')
+                        i.fa-solid.fa-camera
+                        |  Add photo
+            p#uploader__image--username= user.businessName || user.fullName
+            button.img__upload--btn.btn(type="submit") Upload image
+
 
         form.form__data.form-profile-data
             h3.dashboard__heading Update profile info
@@ -79,12 +99,7 @@ block content
             .form__item
                 label.form__label(for='zip-postal') Zip code / Postal code
                 input#zip-postal.form__input(type='zip-postal' value=user.zipCode placeholder="Enter a country")
-            //- .form__item.form__photo-upload
-                //- img.form__user-photo(src='img/user.jpg' alt='User photo')
-                img.form__user-photo(src=`asset/img/${user.image}.png` alt='User photo')
-                input.form__upload(type='file', accept='image/*', id='image', name='image')
-                label.btn-text(for='image') Choose new photo
-                //- a.btn-text(href='') Choose new photo
+            
             .form__item
                 button.btn.form-btn(type="submit") Save settings
 

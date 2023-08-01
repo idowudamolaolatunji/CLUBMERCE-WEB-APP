@@ -28,9 +28,12 @@ const io = require('socket.io')(require('http').createServer(app));
 app.use(express.json());
 app.use(cookieParser());
 
-// Enable CORS for specific origins
-// const allowedOrigins = ['http://res.cloudinary.com/', 'https://res.cloudinary.com/'];
-// app.use(cors({ origin: allowedOrigins }));
+
+// Set Content Security Policy (CSP) header
+app.use((req, res, next) => {
+    res.setHeader("Content-Security-Policy", "img-src 'self' data: blob:;");
+    next();
+});
 
 // Use the 'cors' middleware to enable CORS for all routes
 app.use(cors());

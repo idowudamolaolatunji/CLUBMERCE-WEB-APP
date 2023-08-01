@@ -28,7 +28,7 @@ block content
                             img.table-product__image(src=`asset/img/product.jpg` alt='')
                             span
                                 p.table-product__name= product.name 
-                                p.table-product__category= product.category 
+                                p.table-product__category= product.niche 
                         span.table-row-content
                             p.price= `₦ ${product.price}` 
                         span.table-row-content
@@ -39,7 +39,7 @@ block content
                         span.table-row-content
                             p.approved.status.status--success Approved
                         span.table-row-content.table-row-btn
-                            button.btn-edit.table-btn.product-edit(data-id=`${product._id}`) Edit
+                            button.btn-edit.table-btn.product-edit(data-product=`${product.name}` data-id=`${product._id}`) Edit
                             button.btn-delete.table-btn.product-delete(data-id=`${product._id}`) Delete
                
 

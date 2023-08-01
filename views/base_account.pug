@@ -5,7 +5,8 @@ head
     meta(charset="UTF-8")
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    meta(http-equiv='Content-Security-Policy', content="img-src 'self' https://res.cloudinary.com/")
+    //- meta(http-equiv='Content-Security-Policy', content="img-src 'self' data: blob:http://127.0.0.1:3000;")
+    //- meta(http-equiv='Content-Security-Policy', content="img-src 'self' https://res.cloudinary.com/")
 
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer")
     link(rel="icon" href="../asset/img/favicon.png" type="image/png")
@@ -77,19 +78,30 @@ body
 
 
 
-                    span
-                        //- img.nav__image(src='asset/img/idowu.png')
-                        img.nav__image(src='asset/img/idowu.png' alt=`user's photo`)
-                        //- profile...
-                        .Profile__hovered.hidden
-                            .profile__content
-                                .profile__owner
-                                    img.profile__image(src='asset/img/idowu.png' alt=`user's photo`)
-                                    p.profile__name= user.fullName
-                                a.profile__link.nav__link(href="/profile") My profile
-                                button.profile__button.nav__link.nav__logout signout&nbsp;
-                                    i.fa-solid.fa-arrow-right-to-bracket.profile__icon
+                    -if(user.role === 'admin')
+                        span
+                            //- img.nav__image(src='asset/img/idowu.png')
+                            .nav__image--box
+                                img.nav__image(src='asset/img/idowu.png' alt=`user's photo`)
 
+                    -else
+                        span
+                            //- img.nav__image(src='asset/img/idowu.png')
+                            .nav__image--box
+                                img.nav__image(src='asset/img/idowu.png' alt=`user's photo`)
+                            //- profile...
+                            .Profile__hovered.hidden
+                                .profile__content
+                                    .profile__owner
+                                        .profile__image--box
+                                            img.profile__image(src='asset/img/idowu.png' alt=`user's photo`)
+                                        p.profile__name= user.fullName
+                                    a.profile__link.nav__link(href="/profile") My profile
+                                    button.profile__button.nav__link.nav__logout signout&nbsp;
+                                        i.fa-solid.fa-arrow-right-to-bracket.profile__icon
+
+
+            
 
         mixin menuItem(link, text, icon, active)                    
             li(class=`${active ? 'menu__item menu__active' : 'menu__item'}`)
@@ -156,7 +168,7 @@ body
                         ul.menu__list
                             li.menu__item
                                 a.menu__link(href="/profile")
-                                    img.menu__profile-image(src='asset/img/idowu.png' alt=`user's photo`)
+                                    img.menu__profile-image(src='asset/img/avatar.png' alt=`user's photo`)
                                     p profile
                             li.menu__item
                                 button.menu__button.menu__logout

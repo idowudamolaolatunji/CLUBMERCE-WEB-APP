@@ -140,14 +140,15 @@ const adminAuthLogin = async (email, password) => {
 const showEmailVerificationModal = (email) => {
     const modalContainer = document.querySelector('.email__drop-down');
     const emailSpan = modalContainer.querySelector('.user__email');
-    emailSpan.textContent = email;
+    emailSpan.textContent = `@${email.toLowerCase()}`;
     modalContainer.classList.remove('hidden');
 };
   
 const closeEmailVerificationModal = () => {
     const modalContainer = document.querySelector('.email__drop-down');
     modalContainer.classList.add('hidden');
-    location.reload();
+//     location.assign('/login');
+    location.reload(true);
 };
   
 const closeButton = document.querySelector('.verify__close--icon');
@@ -172,12 +173,18 @@ const signup = async (fullName, email, password, passwordConfirm, username, coun
           }
      
           const data = await res.json();
-     
+          if(data.message === 'Email already Exist') {
+               showAlert('error', data.message);
+               hideLoadingOverlay();
+          }
+          if(data.message === 'Username already Exist') {
+               showAlert('error', data.message);
+               hideLoadingOverlay();
+          }
           if (data.status === 'success') {
-               showAlert('success', data.data.message || 'Successful');
+               showAlert('success', data.message || 'Successful');
                showEmailVerificationModal(email);
           } else if (data.status === 'fail') {
-               location.reload(true)
                throw new Error(data.message || 'Error signing up');
           }
      } catch (err) {
@@ -212,7 +219,7 @@ const verifyEmail = async function (verificationToken) {
      //   const verificationToken = urlParams.get('token');
    
        // Make a GET request to the backend verification route
-       const response = await fetch(`/api/auth/verify-email/${verificationToken}`);
+       const response = await fetch(`/api/users/verify-email/${verificationToken}`);
    
        if (response.ok) {
          // Verification successful

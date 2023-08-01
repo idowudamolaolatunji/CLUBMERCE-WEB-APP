@@ -60,6 +60,25 @@ const showAlert = (type, msg) => {
     window.setTimeout(hideAlert, 5000);
 };
 
+const imageInput = document.getElementById('uploader__image--input');
+const imagePreview = document.getElementById('uploader__image');
+
+// Event listener for file input change
+if(imageInput) {
+    imageInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+    
+        // Check if a file was selected
+        if (file) {
+            // Create a temporary URL for the selected image
+            const imageUrl = URL.createObjectURL(file);
+            
+            // Update the image 'src' attribute with the temporary URL
+            imagePreview.src = imageUrl;
+        }
+    });
+}
+
 
 if (menu) {
     menu.addEventListener('click', function(event) {
@@ -262,7 +281,6 @@ if(adminUserDelete) {
 if(vendorProductDelete) {
     vendorProductDelete.forEach(el => el.addEventListener('click', function(e) {
         const productId = el.dataset.id;
-        console.log(el, el.dataset)
         const existingModal = document.querySelector('.delete__overlay');
         if (existingModal) {
             return; 
@@ -322,6 +340,17 @@ const showUploadModal = function() {
                 <i class="fa-solid fa-close icon form__close-icon"></i>
                 <h3 class="dashboard__heading">Add new product</h3>
                 <form class="product__form">
+
+                    <div class="form__body-generic">
+                        <div id="uploader__image--card">
+                            <img id="uploader__image" src="/asset/img/avatar.png" alt="" />
+                            <div id="uploader__image--label-box">
+                                <input name="photo" id="uploader__image--input" type="file" accept="image/png, image/jpeg">
+                                <label id="uploader__image--label" for="uploader__image--input"><i class="fa-solid fa-camera"></i> Add photo</label>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form__body-generic">
                         <label class="form__label" for="product__name">Product Name</label>
                         <input class="form__input" id="product__name" type="text" name="product__name" required="" placeholder="Product name"/>
@@ -344,7 +373,7 @@ const showUploadModal = function() {
                             <input class="form__input" id="product__commission" type="text" name="product__commission" required="" placeholder="Product Commission in (%)"/>
                         </div>
                     </div>
-                    <div class="form__grid-generic">
+                    <div class="form__grid3-generic">
                         <div class="form__body-generic">
                             <label class="form__label" for="product__type">Product Type</label>
                             <select class="form__select" id="product__type" name="product__type">
@@ -382,21 +411,16 @@ const showUploadModal = function() {
                                 <option class="category__item" data-item="sports">Sports</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="form__grid3-generic">
-                        <div class="form__body-generic">
-                            <label class="form__label" for="product__tools">Affiliate Tools</label>
-                            <input class="form__input" id="product__tools" type="checkbox" name="product__tools"/>
-                        </div>
-                        <div class="form__body-generic">
-                            <label class="form__label" for="product__link">Product Unique Url</label>
-                            <input class="form__input" id="product__link" type="checkbox" name="product__link"/>
-                        </div>
+
                         <div class="form__body-generic">
                             <label class="form__label" for="product__recurring">Recurring Commissions</label>
-                            <input class="form__input" id="product__recurring" type="checkbox" name="product__recurring"/>
+                            <select class="form__select" id="product-update__recurring" name="product__type">
+                                <option value="no">No</option>
+                                <option value="yes">Yes</option>
+                            </select>
                         </div>
                     </div>
+
                     <div class="product__sub-images">
                         <p class="form__label photo-head">Product sub images (Max of 6) upload</p>
                         <div class="sub-images">
@@ -436,46 +460,56 @@ const showUploadModal = function() {
 
 
 // update markup
-const showUpdateModal = () => {
+const showUpdateModal = (productName) => {
     const html = `
         <div class="product-update__overlay">
             <div class="product-update__modal">
                 <i class="fa-solid fa-close icon form__close-icon"></i>
-                <h3 class="dashboard__heading">Update product</h3>
+                <h3 class="dashboard__heading">Update ${productName}</h3>
                 <form class="product__form">
+
+                    <div class="form__body-generic">
+                        <div id="uploader__image--card">
+                            <img id="uploader__image" src="/asset/img/avatar.png" alt="" />
+                            <div id="uploader__image--label-box">
+                                <input name="photo" id="uploader__image--input" type="file" accept="image/png, image/jpeg">
+                                <label id="uploader__image--label" for="uploader__image--input"><i class="fa-solid fa-camera"></i> Add photo</label>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form__body-generic">
                         <label class="form__label" for="product__name">Product Name</label>
-                        <input class="form__input" id="product__name" type="text" name="product__name" required="" placeholder="Product name"/>
+                        <input class="form__input" id="product-update__name" value='${productName}' type="text" name="product__name" required="" placeholder="Product name"/>
                     </div>
                     <div class="form__body-generic">
                         <label class="form__label" for="product__summary">Product Summary</label>
-                        <textarea class="form__input" id="product__summary" style="height: 6rem;" type="text" name="product__summary" required="" placeholder="Product Summary (not more than 120 characters)"></textarea>
+                        <textarea class="form__input" id="product-update__summary" style="height: 6rem;" type="text" name="product__summary" required="" placeholder="Product Summary (not more than 120 characters)"></textarea>
                     </div>
                     <div class="form__body-generic">
                         <label class="form__label" for="product__description">Product Description</label>
-                        <textarea class="form__input" id="product__description" style="height: 15rem;" type="text" name="product__description" required="" placeholder="Product Description"></textarea>
+                        <textarea class="form__input" id="product-update__description" style="height: 15rem;" type="text" name="product__description" required="" placeholder="Product Description"></textarea>
                     </div>
                     <div class="form__grid-generic">
                         <div class="form__body-generic">
                             <label class="form__label" for="product__price">Product Price</label>
-                            <input class="form__input" id="product__price" type="text" name="product__price" required="" placeholder="Product price (NGN)"/>
+                            <input class="form__input" id="product-update__price" type="text" name="product__price" required="" placeholder="Product price (NGN)"/>
                         </div>
                         <div class="form__body-generic">
                             <label class="form__label" for="product__commission">Product Commission</label>
-                            <input class="form__input" id="product__commission" type="text" name="product__commission" required="" placeholder="Product Commission in (%)"/>
+                            <input class="form__input" id="product-update__commission" type="text" name="product__commission" required="" placeholder="Product Commission in (%)"/>
                         </div>
                     </div>
-                    <div class="form__grid-generic">
+                    <div class="form__grid3-generic">
                         <div class="form__body-generic">
                             <label class="form__label" for="product__type">Product Type</label>
-                            <select class="form__select" id="product__type" name="product__type">
+                            <select class="form__select" id="product-update__type" name="product__type">
                                 <option value="physical">Physical Product</option>
                                 <option value="digital">Digital Product</option>
                             </select>
                         </div>
                         <div class="form__body-generic">
                             <label class="form__label" for="product__category">Product Category</label>
-                            <select class="form__select" id="product__category" name="product__category">
+                            <select class="form__select" id="product-update__category" name="product__category">
                                 <option value="physical">All categories</option>
                                 <option class="category__item" data-item="all">All </option>
                                 <option class="category__item" data-item="arts">Arts</option>
@@ -503,21 +537,16 @@ const showUpdateModal = () => {
                                 <option class="category__item" data-item="sports">Sports</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="form__grid3-generic">
-                        <div class="form__body-generic">
-                            <label class="form__label" for="product__tools">Affiliate Tools</label>
-                            <input class="form__input" id="product__tools" type="checkbox" name="product__tools"/>
-                        </div>
-                        <div class="form__body-generic">
-                            <label class="form__label" for="product__link">Product Unique Url</label>
-                            <input class="form__input" id="product__link" type="checkbox" name="product__link"/>
-                        </div>
                         <div class="form__body-generic">
                             <label class="form__label" for="product__recurring">Recurring Commissions</label>
-                            <input class="form__input" id="product__recurring" type="checkbox" name="product__recurring"/>
+                            <input class="form__input" id="product-update__recurring" type="checkbox" name="product__recurring"/>
+                            <select class="form__select" id="product-update__recurring" name="product__type">
+                                <option value="no">No</option>
+                                <option value="yes">Yes</option>
+                            </select>
                         </div>
                     </div>
+                    
                     <div class="product__sub-images">
                         <p class="form__label photo-head">Product sub images (Max of 6) upload</p>
                         <div class="sub-images">
@@ -607,13 +636,16 @@ if(productCreate) {
     })
 }
 
+let editingProductId;
 if(productAdminEdit) {
     productAdminEdit.forEach(el => el.addEventListener('click', function() {
+        const productName = el.dataset.product;
+        const editingProductId = el.dataset.id;
         const existingModal = document.querySelector('.product-update__overlay');
         if (existingModal) {
             return; 
         }
-        showUpdateModal();
+        showUpdateModal(productName);
 
         document.querySelector('.form__close-icon').addEventListener('click', function(e) {
             closeUpdateModal();
@@ -622,30 +654,40 @@ if(productAdminEdit) {
 }
 if(productEdit) {
     productEdit.forEach(el => el.addEventListener('click', function() {
+        const productName = el.dataset.product;
+        const editingProductId = el.dataset.id;
+        console.log(productName, editingProductId);
         const existingModal = document.querySelector('.product-update__overlay');
         if (existingModal) {
             return; 
         }
-        showUpdateModal();
+        showUpdateModal(productName);
 
         document.querySelector('.form__close-icon').addEventListener('click', function(e) {
-            console.log('You want to close me??')
             closeUpdateModal();
         })
     }));
 }
 
 
-
 // const uploadProduct = async function(name, summary, description, price, commission, type, category, tools, link, recurring) {
-const uploadProduct = async function(data) {
+const postProduct = async function(formData, type) {
     try {
+        let url, method;
+        if(type === 'create') {
+            url = '/api/products';
+            method = 'POST'
+        }
+        if(type === 'update') {
+            url = `/api/products/${editingProductId}`;
+            method = 'PATCH'
+        }
         showLoadingOverlay()
         const res = await fetch('/api/products', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            // headers: { 'Content-Type': 'application/json' },
             // body: JSON.stringify({ name, summary, description, price, commission, type, category, tools, link, recurring }),
-            body: JSON.stringify(data),
+            body: JSON.stringify(formData)
         });
 
         if (!res.ok) {
@@ -670,9 +712,9 @@ const uploadProduct = async function(data) {
     }
 };
 
+/*
 if (productForm) {
     productForm.addEventListener('submit', function(e) {
-        // e.preventDefault();
         
         e.preventDefault();
         const form = new FormData();
@@ -683,13 +725,10 @@ if (productForm) {
         form.append('commission', document.querySelector('#product__commission').value);
         form.append('type', document.querySelector('#product__type').value);
         form.append('category', document.querySelector('#product__category').value);
-        // form.append('tools', document.querySelector('#product__tools').value);
-        // form.append('recurring', document.querySelector('#product__recurring').value);
-        // form.append('link', document.querySelector('#product__link').value);
-
         form.append('tools', document.querySelector('#product__tools').checked);
         form.append('recurring', document.querySelector('#product__recurring').checked);
         form.append('link', document.querySelector('#product__link').checked);
+        postProduct(form, 'create')
 
         const imageFiles = document.getElementById('image').files;
         const bannerFiles = document.getElementById('banner').files;
@@ -704,51 +743,26 @@ if (productForm) {
         uploadProduct(form)
     });
 }
+*/
 
 
-// if(productAdminEdit) {
-//     productAdminEdit.forEach(el => el.addEventListener('click', function() {
-//         openModal(productUploadOverlay, productUploadModal);
-//         console.log('I was clicked by an admin')
-//     }));
-// }
-// if(productEdit) {
-//     productEdit.forEach(el => el.addEventListener('click', function() {
-//         openModal(productUploadOverlay, productUploadModal);
-//         console.log('I was clicked by this vendor')
-//     }));
-// }
-// if(productOverlayClose) {
-//     productOverlayClose.addEventListener('click', function() {
-//         closeModal(productOverlay, productModal);
-//         closeModal(productUploadOverlay, productUploadModal)
-//     });
-// }
-
-const updateProduct = async function(form) {
-    try {
-        showLoadingOverlay();
-        const res = await fetch(`/api/products/${productId}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            // body: JSON.stringify({name, summary, description, price, commission, type, category, tools, link, recurring}),
-            body: JSON.stringify(form),
-        });
-        const data = await res.json();
-        hideLoadingOverlay()
-        console.log(res, data);
+if (productForm) {
+    productForm.addEventListener('submit', function(e) {
         
-        if(data.status === 'success') {
-            window.setTimeout(() => {
-                hideLoadingOverlay()
-                showAlert('success', data.message);
-                location.reload(true)
-            }, 1500);
-        }
-    } catch(err) {
-        showAlert('error', data.message);
-        hideLoadingOverlay()
-    }
+        e.preventDefault();
+        const form = new FormData();
+        const name = document.querySelector('#product__name').value;
+        const summary = document.querySelector('#product__summary').value;
+        const description = document.querySelector('#product__description').value;
+        const price = document.querySelector('#product__price').value;
+        const commission =  document.querySelector('#product__commission').value;
+        const type = document.querySelector('#product__type').value;
+        const category = document.querySelector('#product__category').value;
+        const recurring = document.querySelector('#product__link').checked;
+        const data = {name, summary, description, price, commission, type, category, recurring}
+        updateProduct(data, 'create')
+        console.log(data)
+    });
 }
 
 if(productUpdateAdminForm) {
@@ -761,10 +775,9 @@ if(productUpdateAdminForm) {
         const commission = document.querySelector('#product-update__commission').value
         const type = document.querySelector('#product-update__type').value
         const category = document.querySelector('#product-update__category').value
-        const tools = document.querySelector('#product-update__tools').value
-        const link = document.querySelector('#product-update__link').value
         const recurring = document.querySelector('#product-update__recurring').value
-        updateProduct(name, summary, description, price, commission, type, category, tools, link, recurring)
+        const data = {name, summary, description, price, commission, type, category, recurring}
+        updateProduct(data, 'update')
     });
 }
 
@@ -778,22 +791,14 @@ if(productUpdateForm) {
         const commission = document.querySelector('#product-update__commission').value
         const type = document.querySelector('#product-update__type').value
         const category = document.querySelector('#product-update__category').value
-        const tools = document.querySelector('#product-update__tools').value
-        const link = document.querySelector('#product-update__link').value
         const recurring = document.querySelector('#product-update__recurring').value
-        updateProduct(name, summary, description, price, commission, type, category, tools, link, recurring)
+        const data = {name, summary, description, price, commission, type, category, recurring}
+        updateProduct(data, 'update')
     });
 }
 
 
-
-
-
-
-
-
-
-// ////////////////////////////////////////////////////////
+// User Update
 const updateUser = async function(name, email, phone, country, state, cityRegion, zipPostal) {
     try {
         showLoadingOverlay();

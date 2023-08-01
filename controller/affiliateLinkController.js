@@ -70,7 +70,7 @@ exports.countClicksRedirects = async (req, res) => {
     await Promise.all([product.save({ validateBeforeSave: false }), user.save({ validateBeforeSave: false })]);
     
     // res.redirect(`https://clubmerce.com/order-product/${user.username}/${productSlug}`);
-    res.redirect(`http://127.0.0.1:3000/order-product/${user.username}/${productSlug}`);
+    res.redirect(`/order-product/${user.username}/${productSlug}`);
     // create a route that renders a product order page on /order/username:productSlug, as the product order page
 
   } catch (error) {

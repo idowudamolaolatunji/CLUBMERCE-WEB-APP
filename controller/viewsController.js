@@ -83,6 +83,7 @@ exports.getProduct = async (req, res) => {
 // common routes
 exports.dashboard = async (req, res) => {
     try {
+        console.log(req)
         const user = await User.findById(req.user._id);
         const products = await Product.find({ vendor: req.user._id });
         const commission = await Commissions.find({ user: req.user._id});
@@ -92,6 +93,7 @@ exports.dashboard = async (req, res) => {
         const allProducts = await Product.find();
         const allOrders = await Order.find();
 
+ 
         const totalClicks = allUsers.reduce((total, user) => total + user.clicks, 0);
         const totalPurchases = allProducts.reduce((total, product) => total + product.purchasesCount, 0);
         
@@ -148,11 +150,14 @@ exports.transaction = async (req, res) => {
 
 exports.leaderboard = async(req, res) => {
     try {
-        const users = await User.find({ role: 'affiliate' }).sort({ wallet: -1, clicks: -1 });
-        console.log(users);
+        const affiliateLeaderboard = await User.find({ role: 'affiliate'}).sort({ wallet: -1, promotionLinksCounts: -1, clicks: -1 });
+        console.log(affiliateLeaderboard);
+
+        // const users = await User.find().sort({ wallet: -1, clicks: -1 });
+        // console.log(users);
         res.status(200).render('leaderboard', {
             title: `Your Leaderboard`,
-            users
+            affiliateLeaderboard
         });
     } catch(err) {
         res.status(400).json({message: err});
@@ -162,12 +167,11 @@ exports.leaderboard = async(req, res) => {
 // Vendors
 exports.productCatalog = async(req, res) => {
     try {
-        const products = await Product.find({ vendor: req.user._id });
-        console.log(products)
+        const products = await Product.find({ vendor: req.user._id })
         
         res.status(200).render('product_catalog', {
             title: 'Your Product',
-            products
+            products,
         })
     } catch(err) {
         res.json({message: 'You dont have any product'});
@@ -234,6 +238,6 @@ exports.getOrderPage = async (req, res) => {
             user
         });
     } catch(err) {
-        res.json({message: ''});
+        res.json({message: err});
     }
 }

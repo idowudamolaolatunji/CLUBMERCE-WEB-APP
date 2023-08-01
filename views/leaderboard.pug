@@ -4,10 +4,10 @@ block content
     h3.dashboard__heading Leaderboard
 
     .dashboard__table
-        .table.table-mp
+        .table.table-ldb
             .table-title
                 h4.table-heading Affiliate Leaderboard
-            .table-head-mp
+            .table-head-ldb
                 span.table-head-content user
                 span.table-head-content email
                 span.table-head-content Earned
@@ -15,21 +15,21 @@ block content
                 span.table-head-content Promoting
                 span.table-head-content Sales
 
-            //- each user of users
-                .table-row-mp
+            each affiliate of affiliateLeaderboard
+                .table-row-ldb
                     span.table-row-content.table-row-product
                         img.table-product__image(src='asset/img/idowu.png' alt='')
                         span
-                            p.table-product__niche= user.fullName
-                            p.table-product__name= user.username
+                            p.table-user__name= affiliate.fullName
+                            p.table-user__namename= affiliate.username
                     span.table-row-content
-                        p.brand= user.email
+                        p.email= affiliate.email
                     span.table-row-content
-                        p.wallet= user.wallet
+                        p.wallet= affiliate.wallet
                     span.table-row-content
-                        p.category= user.clicks
+                        p.clicks= affiliate.clicks
                     span.table-row-content
-                        p.price= user.promotionLinksCounts
+                        p.links= affiliate.promotionLinksCounts
                     span.table-row-content
-                        p.price= user.productSold
+                        p.sold= affiliate.productSold
                     
