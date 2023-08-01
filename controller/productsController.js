@@ -28,7 +28,7 @@ exports.aliasTopProduct = (req, res, next) => {
 exports.searchProduct = async (req, res) => {
     try {
       let payload = req.body.payload.trim();
-      let search = await Product.find({ name: {$regex: new RegExp('^'+payload+'.*','i')}}).exec();
+      let search = await Product.find({ name: {$regex: new RegExp('^'+payload+'.*','i')}}).sort({ productGravity: -1, purchasesCount: -1 }).exec();
 
       // limit search result to 10
       search = search.slice(0, 10);
@@ -300,9 +300,9 @@ exports.getProductByCategory = async (req, res) => {
     // Fetch products from the database based on the selected category
     let products
     if(category === 'all') {
-      products = await Product.find();
+      products = await Product.find().sort({ createdAt: -1, productGravity: -1, purchasesCount: -1 })
     } else {
-      products = await Product.find({ category: category });
+      products = await Product.find({ category: category }).sort({ createdAt: -1, productGravity: -1, purchasesCount: -1 });
     }
     
     if(!products) res.status(404).json({message: 'No product in this category'})

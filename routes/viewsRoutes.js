@@ -14,8 +14,9 @@ router.get('/login', viewController.login);
 router.get('/signup', viewController.signUp);
 
 // affiliates
-router.get('/marketplace', authController.protect, viewController.marketPlace);
-router.get('/marketplace/:slug', authController.protect, viewController.getProduct);
+router.get('/marketplace', authController.isLoggedIn, viewController.marketPlace);
+router.get('/marketplace/:slug', authController.isLoggedIn, viewController.getProduct);
+router.get('/leaderboard', authController.isLoggedIn, viewController.leaderboard);
 
 // vendors
 router.get('/product-catalog', authController.protect, viewController.productCatalog);

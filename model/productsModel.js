@@ -10,10 +10,6 @@ const productSchema = new mongoose.Schema({
         ref: 'User',
         // required: [true, 'A product must have a vendor']
     },
-    // creator: {
-    //     type: mongoose.Schema.ObjectId, 
-    //     ref: 'User',
-    // },
     name: {
         type: String,
         required: [true, 'A product must have a name'],
@@ -120,7 +116,8 @@ productSchema.pre(/^find/, function(next) {
         select: 'fullName slug photo _id businessName email'
     });
     next();
-})
+});
+
 productSchema.pre(/^find/, function (next) {
     this.sort({ isPromoted: -1 }); // Sort by isPromoted field in descending order
     next();

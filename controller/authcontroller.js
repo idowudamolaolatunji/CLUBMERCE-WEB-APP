@@ -359,8 +359,8 @@ exports.restrictedTo = catchAsync(async function(...role) {
       return next(new AppError('You do not have permission to perform this action', 403));
     }
   // the check if what values are not included in the passed in argument (req.user)
-	next();
   }
+  next();
 });
 
 // forgot password

@@ -60,7 +60,7 @@ exports.countClicksRedirects = async (req, res) => {
 
     // Find the affiliate link and update the click count and also both user, product
     await AffiliateLink.findOneAndUpdate(
-        { user: user.username, product: product.slug },
+        { affiliate: user._id, product: product._id },
         { $inc: { clicks: 1 } },
         { new: true }
     )

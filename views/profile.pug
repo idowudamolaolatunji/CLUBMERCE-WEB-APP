@@ -4,6 +4,13 @@ block content
     -if(user.role === 'affiliate')
         h3.dashboard__heading Your Profile
 
+
+        form.form__data.form-image-data
+            .form__photo-upload
+                img.form__user-photo(src=`${user.image}` alt='User photo')
+                input.form__upload(type='file', accept='image/*', id='photo', name='photo' placeholder='')
+            button.img__upload--btn.btn(type="submit") Add image
+
         form.form__data.form-profile-data
             h3.dashboard__heading Update profile info
             .form__item
@@ -23,11 +30,11 @@ block content
                 input#state.form__input(type='state' value=user.state placeholder="Enter a state")
             .form__item
                 label.form__label(for='city-region') City / Province / Region
-                input#city-region.form__input(type='city-region' value=user. placeholder="Enter a country")
+                input#city-region.form__input(type='city-region' value=user.region placeholder="Enter a country")
             .form__item
                 label.form__label(for='zip-postal') Zip code / Postal code
                 input#zip-postal.form__input(type='zip-postal' value=user.zipCode placeholder="Enter a country")
-            .form__item.form__photo-upload
+            //- .form__item.form__photo-upload
                 //- img.form__user-photo(src='img/user.jpg' alt='User photo')
                 img.form__user-photo(src=`asset/img/${user.image}.png` alt='User photo')
                 input.form__upload(type='file', accept='image/*', id='photo', name='photo')
@@ -39,6 +46,12 @@ block content
 
     -if(user.role === 'vendor')
         h3.dashboard__heading Your Profile
+
+        form.form__data.form-image-data
+            .form__photo-upload
+                img.form__user-photo(src=`asset/img/${user.image}.png` alt='User photo')
+                input.form__upload(type='file', accept='image/*', id='photo', name='photo' placeholder='')
+            button.img__upload--btn.btn Add image
 
         form.form__data.form-profile-data
             h3.dashboard__heading Update profile info
@@ -62,11 +75,11 @@ block content
                 input#state.form__input(type='state' value=user.state placeholder="Enter a state")
             .form__item
                 label.form__label(for='city-region') City / Province / Region
-                input#city-region.form__input(type='city-region' value=user. placeholder="Enter a country")
+                input#city-region.form__input(type='city-region' value=user.region placeholder="Enter a country")
             .form__item
                 label.form__label(for='zip-postal') Zip code / Postal code
                 input#zip-postal.form__input(type='zip-postal' value=user.zipCode placeholder="Enter a country")
-            .form__item.form__photo-upload
+            //- .form__item.form__photo-upload
                 //- img.form__user-photo(src='img/user.jpg' alt='User photo')
                 img.form__user-photo(src=`asset/img/${user.image}.png` alt='User photo')
                 input.form__upload(type='file', accept='image/*', id='image', name='image')
@@ -74,3 +87,5 @@ block content
                 //- a.btn-text(href='') Choose new photo
             .form__item
                 button.btn.form-btn(type="submit") Save settings
+
+

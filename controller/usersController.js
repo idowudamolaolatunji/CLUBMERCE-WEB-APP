@@ -134,19 +134,17 @@ exports.updateMe = catchAsync(async (req, res, next) => {
         );
     }
     // Validate and upload the image to Cloudinary
-    if (!req.file || req.file.size > 10 * 1024 * 1024) {
-        // Limit image size to 10MB
-        return res.status(400).json({ error: 'Invalid image file or size exceeds 10MB' });
-      }
-      const mainImageResult = await cloudinary.uploader.upload(req.file.path, {
-        folder: 'product_main_images',
-      });
+    // const uploadedImage = await cloudinary.uploader.upload(req.body.image);
+    // if(!uploadedImage) return res.json({ message: 'Error uploading image '});
+
+    // const file = req.files.image;
+    // const uploadedImage = await cloudinary.uploader.upload(file.tempFilePath);
+    
       
     // update user documents
     // 1. filter
-    const allowedFileds = [fullName, email, country, phone, state, cityRegion, zipPostal, image];
-    const body = { ...req.body, image: mainImageResult.secure_url }
-    const filterBody = filterObj(body, allowedFileds);
+    const allowedFileds = [fullName, email, country, phone, state, cityRegion, zipPostal];
+    const filterBody = filterObj(req.body, allowedFileds);
     // 2. update
     const updatedUser = await User.findByIdAndUpdate(req.user.id, filterBody, {
         new: true,
@@ -191,3 +189,45 @@ exports.deleteAccount = catchAsync(async (req, res, next) => {
         data: null
     })
 });
+
+
+exports.uploadProfilePicture = async (req, res) => {
+    try {
+         // Check if a file was uploaded
+         console.log(req, req.body, req?.file, req?.file?.path, req.form)
+        if (!req.body.image) {
+            return res.status(400).json({ message: 'No image file provided.' });
+        }
+        
+        // Upload the image to Cloudinary
+        const uploadedImage = await cloudinary.uploader.upload(req.file.path);
+        
+        // Check if the image upload was successful
+        if (!uploadedImage || !uploadedImage.secure_url) {
+            return res.status(500).json({ message: 'Error uploading image to Cloudinary.' });
+        }
+
+        const profilePicture = await User.findByIdAndUpdate( req.user._id, { image: uploadedImage.secure_url }, {
+            new: true
+        })
+        return res.status(201).json({
+            message: 'Profile picture updated',
+            profilePicture,
+        });
+    } catch (err) {
+        // console.log(err);
+        return res.status(500).json({ message: 'Error occured' });
+    }
+}
+
+  
+// exports.getOneProfilePic = async (req, res) => {
+//     try {
+//         const { id } = req.params;
+//         const singlePicture = await userPicture.findById(id);
+//         return res.status(200).json({ singlePicture });
+//     } catch (err) {
+//         return res.status(500).json({ message: err });
+//     }
+// };
+  

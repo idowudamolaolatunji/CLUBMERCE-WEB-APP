@@ -5,6 +5,7 @@ head
     meta(charset="UTF-8")
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    meta(http-equiv='Content-Security-Policy', content="img-src 'self' https://res.cloudinary.com/")
 
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer")
     link(rel="icon" href="../asset/img/favicon.png" type="image/png")
@@ -15,7 +16,7 @@ head
     link(rel="stylesheet" href="src/css/dashboard.css")
     link(rel="stylesheet" href="src/css/query_dashboard.css")
 
-    script(src="/socket.io/socket.io.js")
+    //- script(src="/socket.io/socket.io.js")
     //- script(defer src="src/js/chat.js")
 
     script(defer src="src/js/dashboard.js")
@@ -35,6 +36,7 @@ body
             div
             div
             div
+    //- section.section__dashboard(data-user=user)
     section.section__dashboard
         .section__top
             .nav__logo
@@ -69,7 +71,7 @@ body
                                             span &dash;
                                             p.notify__date 10 mins ago
                                 .notify__image--box
-                                    img.notify__image(src='asset/img/product.jpg' alt='')
+                                    img.notify__image(src='asset/img/idowu.png' alt='')
                                 //- .notify__icon--box
                                     i.fa-solid.fa-lock.icon.notify__icon
 
@@ -77,12 +79,12 @@ body
 
                     span
                         //- img.nav__image(src='asset/img/idowu.png')
-                        img.nav__image(src=`asset/img/${user.image}.png` alt=`customer's (${user.username}) photo`)
+                        img.nav__image(src='asset/img/idowu.png' alt=`user's photo`)
                         //- profile...
                         .Profile__hovered.hidden
                             .profile__content
                                 .profile__owner
-                                    img.profile__image(src=`asset/img/${user.image}.png` alt=`customer's (${user.username}) photo`)
+                                    img.profile__image(src='asset/img/idowu.png' alt=`user's photo`)
                                     p.profile__name= user.fullName
                                 a.profile__link.nav__link(href="/profile") My profile
                                 button.profile__button.nav__link.nav__logout signout&nbsp;
@@ -99,9 +101,13 @@ body
             menu.menubar
                 .menu__body
                     ul.menu__list
+                        -if(user.role === 'buyer')
+                            +menuItem('dashboard', 'My Dashboard', 'fa-solid fa-shop', false)
+
                         -if(user.role === 'affiliate')
                             +menuItem('dashboard', 'Dashboard', 'fa-solid fa-gauge', false)
                             +menuItem('marketplace', 'Affiliate Marketplace', 'fa-solid fa-shop', false)
+                            +menuItem('leaderboard', 'Affiliate Leaderboard', 'fa-solid fa-trophy', false)
                             +menuItem('performance', 'My Performance', 'fa-solid fa-chart-simple', false)
                             +menuItem('transaction', 'Transactions', 'fa-solid fa-chart-line', false)
                             +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
@@ -150,8 +156,7 @@ body
                         ul.menu__list
                             li.menu__item
                                 a.menu__link(href="/profile")
-                                    //- img.menu__profile-image(src='asset/img/idowu.png')
-                                    img.menu__profile-image(src=`asset/img/${user.image}.png` alt=`customer's (${user.username}) photo`)
+                                    img.menu__profile-image(src='asset/img/idowu.png' alt=`user's photo`)
                                     p profile
                             li.menu__item
                                 button.menu__button.menu__logout
@@ -193,7 +198,8 @@ body
                                         span
                                             //- p.insight__text= user.affiliateUrl.length
                                             p.insight__title Promotion url
-                                            p.insight__text= user.affiliateLinks.length
+                                            //- p.insight__text= user.affiliateLinks.length - 1
+                                            p.insight__text= user.affiliateLinks[0] === 0 ? 0 : user.affiliateLinks.length 
 
                                 .dashboard__table
                                     .table

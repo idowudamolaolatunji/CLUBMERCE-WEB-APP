@@ -17,6 +17,7 @@ router.post("/forgotPassword", authController.forgotPassword)
 router.patch("/resetPassword/:token", authController.resetPassword)
 
 router.get("/getMe", authController.protect, userController.getMe);
+router.patch("/uploadImage", authController.protect, userController.uploadProfilePicture);
 router.patch("/updateMyPassword", authController.protect, authController.updatePassword);
 router.patch("/updateMyBank", authController.protect, userController.updateBankDetails);
 router.patch("/updateMe", authController.protect, userController.updateMe);
@@ -25,16 +26,18 @@ router.patch("/deleteAccount", authController.protect, userController.deleteAcco
 // router.patch('/updateMe', authController.protect, userController.uploadUserPhoto, userController.resizeUserPhoto, userController.updateMe);
 
  
-// router.use(authController.restrictedTo('admin'));
 router
-  .route('/')
+.route('/')
   .get(authController.protect, userController.getAllUser)
-  .post(authController.protect, userController.createUser);
+  .post(authController.protect, userController.createUser)
+;
 
+// router.use(authController.restrictedTo('admin'));
 router
   .route('/:id')
   .get(authController.protect, userController.getUser)
   .patch(authController.protect, userController.updateUser)
-  .delete(authController.protect, userController.deleteUser);
+  .delete(authController.protect, userController.deleteUser)
+;
 
 module.exports = router;

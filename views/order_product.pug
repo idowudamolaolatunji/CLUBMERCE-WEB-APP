@@ -12,8 +12,7 @@ head
 
     //- STYLES 
     link(rel="stylesheet" href="/src/css/general.css")
-    link(rel="stylesheet" href="/src/css/dashboard.css")
-    link(rel="stylesheet" href="/src/css/productPage.css")
+    link(rel="stylesheet" href="/src/css/order_and_payment.css")
 
     title=title
 body
@@ -35,7 +34,10 @@ body
             p.second-text Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa, iste nemo. Aliquam, eos architecto! Ducimus, rem illo praesentium voluptate quis consectetur alias tempora corrupti, magni mollitia voluptatibus pariatur ipsam, eveniet numquam fugit itaque asperiores et! Animi quas libero non. Laborum nulla omnis molestiae recusandae, in neque blanditiis, maiores provident possimus nobis dignissimos pariatur ipsam tenetur, culpa ad! Eaque itaque suscipit dignissimos doloremque consequatur, voluptas maiores minus expedita atque aspernatur nam deserunt. Temporibus corrupti quis quasi eos possimus necessitatibus velit iure!
 
     section.video
+
         iframe(width="914", height="514", src="https://www.youtube.com/embed/EvnQ4Va-4Cg", title="How To Use Your Apple Watch Series 7! (Complete Beginners Guide)", frameborder="0", allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share", allowfullscreen)
+
+        //- <iframe width="560" height="315" src="https://www.youtube.com/embed/LWB1s6P0wgE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
     section.about
         .about-container
@@ -43,7 +45,7 @@ body
             .about-image
                 img(src="watch.jpg", alt="")
 
-    section.product-card
+    //- section.product-card
         .product-card-container
             each image, index in ["png-watch3.png", "png-watch2.png", "png-watch.png"]
                 .product-card-one
@@ -70,4 +72,66 @@ body
                         |  +Shipping
                         br
                         |  180 days Guarantee
+
+    .checkout-container
+        // Billing Section
+        .first-row
+            .sub-section-one
+                h3 Billing Address
+                label(for='fname')
+                    i.fa.fa-user
+                    |  Full Name
+                input#fname(type='text' name='First name' placeholder='John M. Doe')
+                label(for='email')
+                    i.fa.fa-envelope
+                    |  Email
+                input#email(type='email' name='Email' placeholder='john@example.com')
+                label(for='Address')
+                    i.fa.fa-address-card
+                    |  Address
+                input#address(type='text' name='Address' placeholder='542 W. 15th Street')
+                label(for='city')
+                    i.fa.fa-institution
+                    |  City
+                input#city(type='text' name='City' placeholder='New York')
+                .sub-section-two
+                    .state
+                        label(for='state') State
+                        input#state(type='text' name='state' placeholder='   NY')
+                    .zip
+                        label(for='state') Zip
+                        input#zip(type='number' name='zip' placeholder='   1001')
+            // Billing Section end
+            // Payment section
+            .second-row
+                .second-section
+                h3 Payment
+                p Accepted Payments
+                .icon-containers
+                    i.fa-brands.fa-cc-visa(style='color: navy;')
+                    i.fa-brands.fa-cc-amex(style='color: blue;')
+                    i.fa-brands.fa-cc-mastercard(style='color: red;')
+                    i.fa-brands.fa-cc-discover(style='color: orange;')
+                .third-section
+                label(for='card-name')
+                    i.fa-solid.fa-id-card
+                    |  Name on Card
+                input#card-name(type='text' name='card-name' placeholder='   John More Doe')
+                label(for='card-number')
+                    i.fa-solid.fa-credit-card
+                    |  Credit Card Number
+                input#card-number(type='number' name='Card-Number' placeholder='   1111-2222-3333-4444')
+                label(for='expiry')
+                    i.fa-regular.fa-calendar
+                    |  Exp Month
+                input#expiry(type='text' name='Expiry' placeholder='   Month')
+                .fourth-section
+                    .year
+                        label(for='year') Exp Year
+                        input#year(type='number' name='year' placeholder='   2025')
+                    .cvv
+                        label(for='cvv') Cvv
+                        input#cvv(type='number' name='cvv' placeholder='   352')
+                // Payment section
+
 

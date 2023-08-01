@@ -45,13 +45,13 @@ exports.paymentForm = (req, res) => {
     res.status(200).render('payment');
 }
 exports.getOrderProductPage = async(req, res) => {
-    res.status(200).render('order_product', token);
+    res.status(200).render('order_product');
 }
 
 // Affiliates
 exports.marketPlace = async (req, res) => {
     try {
-        const products = await Product.find();
+        const products = await Product.find().sort({ createdAt: -1, productGravity: -1, purchasesCount: -1 });
 
         res.status(200).render('marketplace', {
             title: 'Affiliate marketPlace',
@@ -76,7 +76,7 @@ exports.getProduct = async (req, res) => {
             product
         });
     } catch(err) {
-        res.status(400).json({message: err})
+        res.status(400).json({message: err});
     }
 }
 
@@ -142,6 +142,20 @@ exports.transaction = async (req, res) => {
         });
     } catch(err) {
         console.log(err)
+    }
+}
+
+
+exports.leaderboard = async(req, res) => {
+    try {
+        const users = await User.find({ role: 'affiliate' }).sort({ wallet: -1, clicks: -1 });
+        console.log(users);
+        res.status(200).render('leaderboard', {
+            title: `Your Leaderboard`,
+            users
+        });
+    } catch(err) {
+        res.status(400).json({message: err});
     }
 }
 

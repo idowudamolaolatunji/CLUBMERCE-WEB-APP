@@ -8,6 +8,10 @@ const hideLoadingOverlay = () => {
     spinOverlay.style.visibility = 'hidden';
 };
 
+document.querySelector('.go-back').addEventListener('click', function(e) {
+    showLoadingOverlay();
+});
+
 const dashboardSection = document.querySelector('.section__dashboard')
 const searchForm = document.querySelector('.nav__search');
 const searchResults = document.getElementById('search-result');
@@ -75,6 +79,7 @@ searchForm.addEventListener('keyup', function (e) {
 const categoryList = document.querySelector('.catergory__list');
 const productBox = document.querySelector('.products__cards--box');
 
+
 // Function to fetch products based on the selected category
 const fetchProductsByCategory = async (category) => {
     try {
@@ -118,7 +123,7 @@ const fetchProductsByCategory = async (category) => {
                             <div class="product__heading"> 
                                 <h2 class="product__title">${product.name}</h2>
                                 <p class="product__niche">${product.niche}</p>
-                                <button class="product__message person" data-vendorId=${product}>
+                                <button class="product__message person" data-vendor-id=${product.vendor?._id}>
                                     <i class="fa-solid fa-envelope icon"></i>
                                     Chat vendor
                                 </button>
@@ -172,6 +177,7 @@ if(categoryList) {
 }
 
 const selectElement = document.querySelectorAll('.select__input');
+
 // Function to fetch products based on the selected option
 const fetchProducts = async (option) => {
   try {
@@ -197,7 +203,7 @@ const fetchProducts = async (option) => {
 
 let selectedOption;
 // Function to display products in the product__container
-const displayProducts = (products) => {
+const displayProducts = (products, username) => {
     // Clear previous products
     productBox.innerHTML = '';
     hideLoadingOverlay()
@@ -217,7 +223,7 @@ const displayProducts = (products) => {
                         <div class="product__heading"> 
                             <h2 class="product__title">${product.name}</h2>
                             <p class="product__niche">${product.niche}</p>
-                            <button class="product__message person" data-vendorId=${product}>
+                            <button class="product__message person" data-vendor-id=${product.vendor?._id}>
                                 <i class="fa-solid fa-envelope icon"></i>
                                 Chat vendor
                             </button>
@@ -256,7 +262,7 @@ const displayProducts = (products) => {
                         </div>
                         <div class="product__heading">
                             <h2 class="product__title">${product.name}</h2>
-                            <button class="produt__message-m person" data-vendorId="${product}">
+                            <button class="produt__message-m person" data-vendor-id="${product.vendor?._id}">
                                 <i class="fa-solid fa-envelope icon product__icon"></i>
                             </button>
                             <div class="product__content">
@@ -294,12 +300,8 @@ const displayProducts = (products) => {
                         <p class="hoplink__text">Earn commission for every customer you refer to this product using your personalized affiliate hoplink.</p>
                         <form class="hoplink-form hoplink-mobile" data-productSlug-mobile="${product.slug}">
                             <div class="hoplink__body">
-                                <input class="hoplink__input hoplink-username-mobile" type="text" placeholder="Username" required>
+                                <input class="hoplink__input hoplink-username-mobile" type="text" value='${username}' placeholder="Username" required>
                                 <p class="hoplink__body--text">Required</p>
-                            </div>
-                            <div class="hoplink__body">
-                                <input class="hoplink__input hoplink-trackingid-mobile" type="text" placeholder="Tracing Id">
-                                <p class="hoplink__body--text">Optional</p>
                             </div>
                             <button class="btn hoplink__submit" type="submit">Generate Hoplink</button>
                         </form>
@@ -315,12 +317,22 @@ const displayProducts = (products) => {
 if(selectElement) {
     selectElement.forEach(el => el.addEventListener('change', async(event) => {
         selectedOption = event.target.value;
+        const requestingUser = event.target.dataset.user;
         console.log(selectedOption, 'i was clicked..')
         const products = await fetchProducts(selectedOption);
-        displayProducts(products);
+        displayProducts(products, requestingUser);
     }));
 }
 
+
+const chatBtn = document.querySelectorAll('.product__message');
+chatBtn.forEach(el => el.addEventListener('click', function(e) {
+    const clicked = this.closest('.product__message')
+    if(clicked) {
+        console.log('i was clicked to chat with this vendor', e.target, e.target.dataset.vendorId);
+    }
+    // console.log(clicked)
+}))
 
 
 // MODALS
@@ -368,13 +380,13 @@ const openCopyModal = function (link) {
 };
 
 // dashboard Hoplink
-const getHoplink = async function (username, trackingId, productSlug) {
+const getHoplink = async function (username, productSlug) {
     try {
         showLoadingOverlay()
       const res = await fetch(`/api/promotion/generate-affiliate-link/${productSlug}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, trackingId }),
+        body: JSON.stringify({ username }),
       });
   
       if (!res.ok) {
@@ -448,9 +460,9 @@ if (modalHoplinkForm) {
     modalHoplinkForm.addEventListener('submit', function (e) {
       e.preventDefault();
       const hoplinkUsername = document.querySelector('#hoplink-username').value;
-      const hoplinkTrackId = document.querySelector('#hoplink-trackingid').value;
+    //   const hoplinkTrackId = document.querySelector('#hoplink-trackingid').value;
       
-      getHoplink(hoplinkUsername, hoplinkTrackId, productSlug);
+      getHoplink(hoplinkUsername, productSlug);
     });
 }
 
@@ -460,8 +472,9 @@ if (mobileHoplinkForm) {
     mobileHoplinkForm.addEventListener('submit', function (e) {
       e.preventDefault();
       const hoplinkUsername = document.querySelector('.hoplink-username-mobile').value;
-      const hoplinkTrackId = document.querySelector('.hoplink-trackingid-mobile').value;
+    //   const hoplinkTrackId = document.querySelector('#hoplink-trackingid').value;
+
       const productSlug = this.dataset.productslugMobile;
-      getHoplink(hoplinkUsername, hoplinkTrackId, productSlug);
+      getHoplink(hoplinkUsername, productSlug);
     });
 }

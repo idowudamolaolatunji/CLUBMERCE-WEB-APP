@@ -1,24 +1,91 @@
+const spinOverlay = document.querySelector('#spinOverlay');
 
-// type is either 'password' or 'data'
-const updateSettings = async (data, type) => {
+const showLoadingOverlay = () => {
+  spinOverlay.style.visibility = 'visible';
+};
+const hideLoadingOverlay = () => {
+  spinOverlay.style.visibility = 'hidden';
+};
+
+// ALERTS
+const hideAlert = () => {
+  const alert = document.querySelector('.alert');
+  if (alert) {
+    alert.parentElement.removeChild(alert);
+  }
+};
+
+const showAlert = (type, msg) => {
+  hideAlert();
+  const markup = `<div class="alert alert--${type}">${msg}</div>`;
+  document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
+  setTimeout(hideAlert, 5000);
+};
+
+
+
+// type is either 'password' or 'data or image or bank'
+const updateSettings = async (form, type) => {
     try {
+      showLoadingOverlay();
         let url;
-        if(type === 'password') url = 'http://127.0.0.1:3000/api/users/updateMyPassword'
-        if(type === 'data') url ='http://127.0.0.1:3000/api/users/updateMe';
-        if(type === 'bank info') url ='http://127.0.0.1:3000/api/users/updateMyBank';
+        if(type === 'password') url = '/api/users/updateMyPassword'
+        if(type === 'data') url ='/api/users/updateMe';
+        if(type === 'bank') url ='/api/users/updateMyBank';
+        if(type === 'image') url ='/api/users/uploadImage';
 
     
         const res = await fetch(url, {
           method: 'PATCH',
-          data
+          body: form,
         });
-    
-        if (res.data.status === 'success') {
+        console.log(res)
+        if(!res.ok) {
+          hideLoadingOverlay();
+          return; 
+        }
+
+        const data = res.json();
+        if (data.status === 'success') {
+          hideLoadingOverlay();
           showAlert('success', `${type.toUpperCase()} updated successfully!`);
         }
     } catch (err) {
-        showAlert('error', err.response.data.message);
+        hideLoadingOverlay();
+        showAlert('error', 'Something went wrong');
     }
+}
+
+const userImageBtn = document.querySelector('.img__upload--btn');
+if(userImageBtn) {
+  userImageBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+
+    // let image
+    // const chosenImage = document.getElementById('photo').files[0].name.includes(' ');
+    // if(chosenImage) {
+    //   image = document.getElementById('photo').files[0].name.split(' ').join('-');
+    // } else {
+    //   image = document.getElementById('photo').files[0].name;
+    // }
+    // console.log(image);
+
+    const fileInput = document.getElementById('photo');
+    const image = fileInput.files[0];
+
+    // Check if an image is selected
+    if (!image) {
+      showAlert('error', 'Please select an image file.');
+      return;
+    }
+
+    const form = new FormData();
+    form.append('image', image);
+
+    console.log(form)
+    updateSettings(form, 'image');
+    
+  })
 }
 
 const userDataForm = document.querySelector('.form-profile-data')
@@ -33,9 +100,9 @@ if (userDataForm)
     form.append('phone', document.getElementById('phone').value);
     form.append('country', document.getElementById('country').value);
     form.append('state', document.getElementById('state').value);
-    form.append('city-region', document.getElementById('city-region').value);
-    form.append('zip-postal', document.getElementById('zip-postal').value);
-    form.append('photo', document.getElementById('photo').files[0]);
+    form.append('cityRegion', document.getElementById('city-region').value);
+    form.append('zipPostal', document.getElementById('zip-postal').value);
+    // form.append('image', document.getElementById('photo').files[0]);
     console.log(form);
     updateSettings(form, 'data');
 });
@@ -73,7 +140,7 @@ if (userBankForm)
     const holdersName = document.getElementById('HoldersName').value;
     await updateSettings(
       { bankName, bankAccountNumber, holdersName },
-      'bank info'
+      'bank'
     );
 
     document.querySelector('.btn--save-bank').textContent = 'Add payment account';
@@ -128,19 +195,19 @@ const deleteMyAccount = async function() {
 } 
 
 
-const deleteMe = document.querySelector('.delete-account')
-deleteMe.addEventListener('click', function(e) {
+// const deleteMe = document.querySelector('.delete-account')
+// deleteMe.addEventListener('click', function(e) {
 
-  showDeleteModal('Account');
-  const userId = e.dataset.id;
+//   showDeleteModal('Account');
+//   const userId = e.dataset.id;
 
-  document.querySelector('.btn-yes').addEventListener('click', function() {
-    deleteMyAccount(userId);
-  })
-  document.querySelector('.btn-no').addEventListener('click', () => {
-      closeAdjacentModal();
-  })
-  document.querySelector('.delete__icon').addEventListener('click', () => {
-      closeAdjacentModal();
-  } )
-})
+//   document.querySelector('.btn-yes').addEventListener('click', function() {
+//     deleteMyAccount(userId);
+//   })
+//   document.querySelector('.btn-no').addEventListener('click', () => {
+//       closeAdjacentModal();
+//   })
+//   document.querySelector('.delete__icon').addEventListener('click', () => {
+//       closeAdjacentModal();
+//   } )
+// })

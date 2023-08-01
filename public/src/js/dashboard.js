@@ -1,10 +1,8 @@
-
-
 // DROPDOWNS
 const notifyIcon = document.querySelector('.notification__icon');
 const notifyBox = document.querySelector('.notification__hovered')
-const profileImg = document.querySelector('.nav__image')
 const profileBox = document.querySelector('.Profile__hovered')
+const profileImg = document.querySelector('.nav__image')
 
 
 // MENUS
@@ -22,16 +20,20 @@ const spinOverlay = document.querySelector('#spinOverlay');
 const showLoadingOverlay = () => {
     spinOverlay.style.visibility = 'visible';
 };
-
 const hideLoadingOverlay = () => {
     spinOverlay.style.visibility = 'hidden';
 };
-document.addEventListener("DOMContentLoaded", function() {
+
+// document.addEventListener("DOMContentLoaded", function() {
+//     showLoadingOverlay();
+// });
+// window.addEventListener("load", function() {
+//     hideLoadingOverlay()
+// });
+
+document.querySelectorAll('a').forEach(el => el.addEventListener('click', function(e) {
     showLoadingOverlay();
-});
-window.addEventListener("load", function() {
-    hideLoadingOverlay()
-});
+}));
 
 
 // MODALS
@@ -290,8 +292,8 @@ const productCreate = document.querySelector('.product-create')
 const productEdit = document.querySelectorAll('.product-edit');
 const productAdminEdit = document.querySelectorAll('.admin-product-edit');
 
-const productUploadOverlay = document.querySelector('.product-update__overlay');
-const productUploadModal = document.querySelector('.product-update__modal');
+const productUpdateOverlay = document.querySelector('.product-update__overlay');
+const productUpdateModal = document.querySelector('.product-update__modal');
 
 const productOverlay = document.querySelector('.product__overlay');
 const productModal = document.querySelector('.product__modal');
@@ -299,13 +301,20 @@ const productOverlayClose = document.querySelector('.form__close-icon');
 const productForm = document.querySelector('.product__form');
 
 const closeUploadModal = () => {
-    const productOverlay = document.querySelectorAll('.product__overlay');
+    const productOverlay = document.querySelector('.product__overlay');
     if (productOverlay) {
       productOverlay.remove();
     }
 };
+const closeUpdateModal = () => {
+    const productUpdateOverlay = document.querySelector('.product-update__overlay');
+    if (productUpdateOverlay) {
+      productUpdateOverlay.remove();
+    }
+};
 
-// Delete functionality
+
+// Upload functionality
 const showUploadModal = function() {
     const html = `
         <div class="product__overlay">
@@ -425,6 +434,126 @@ const showUploadModal = function() {
 }
 // ${product.banners.forEach(img => `<img class="banner banner1" src="asset/img/${img}" alt="product sub image"/>`)}
 
+
+// update markup
+const showUpdateModal = () => {
+    const html = `
+        <div class="product-update__overlay">
+            <div class="product-update__modal">
+                <i class="fa-solid fa-close icon form__close-icon"></i>
+                <h3 class="dashboard__heading">Update product</h3>
+                <form class="product__form">
+                    <div class="form__body-generic">
+                        <label class="form__label" for="product__name">Product Name</label>
+                        <input class="form__input" id="product__name" type="text" name="product__name" required="" placeholder="Product name"/>
+                    </div>
+                    <div class="form__body-generic">
+                        <label class="form__label" for="product__summary">Product Summary</label>
+                        <textarea class="form__input" id="product__summary" style="height: 6rem;" type="text" name="product__summary" required="" placeholder="Product Summary (not more than 120 characters)"></textarea>
+                    </div>
+                    <div class="form__body-generic">
+                        <label class="form__label" for="product__description">Product Description</label>
+                        <textarea class="form__input" id="product__description" style="height: 15rem;" type="text" name="product__description" required="" placeholder="Product Description"></textarea>
+                    </div>
+                    <div class="form__grid-generic">
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__price">Product Price</label>
+                            <input class="form__input" id="product__price" type="text" name="product__price" required="" placeholder="Product price (NGN)"/>
+                        </div>
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__commission">Product Commission</label>
+                            <input class="form__input" id="product__commission" type="text" name="product__commission" required="" placeholder="Product Commission in (%)"/>
+                        </div>
+                    </div>
+                    <div class="form__grid-generic">
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__type">Product Type</label>
+                            <select class="form__select" id="product__type" name="product__type">
+                                <option value="physical">Physical Product</option>
+                                <option value="digital">Digital Product</option>
+                            </select>
+                        </div>
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__category">Product Category</label>
+                            <select class="form__select" id="product__category" name="product__category">
+                                <option value="physical">All categories</option>
+                                <option class="category__item" data-item="all">All </option>
+                                <option class="category__item" data-item="arts">Arts</option>
+                                <option class="category__item" data-item="betting">Betting</option>
+                                <option class="category__item" data-item="books">Books</option>
+                                <option class="category__item" data-item="business">Business</option>
+                                <option class="category__item" data-item="computers">Computers</option>
+                                <option class="category__item" data-item="cooking">Cooking</option>
+                                <option class="category__item" data-item="e-Business-and-e-Marketing">E-Business and E-Marketing</option>
+                                <option class="category__item" data-item="education">Education</option>
+                                <option class="category__item" data-item="entertainment">Entertainment</option>
+                                <option class="category__item" data-item="food-and-Wine">Food and Wine</option>
+                                <option class="category__item" data-item="games">Games</option>
+                                <option class="category__item" data-item="green-products">Green Products</option>
+                                <option class="category__item" data-item="health-and-fitness">Health and Fitness</option>
+                                <option class="category__item" data-item="home-and-garden">Home and Garden</option>
+                                <option class="category__item" data-item="internet">Internet</option>
+                                <option class="category__item" data-item="investing">Investing</option>
+                                <option class="category__item" data-item="jobs">Jobs</option>
+                                <option class="category__item" data-item="languages">Languages</option>
+                                <option class="category__item" data-item="reciepe">Reciepe</option>
+                                <option class="category__item" data-item="parenting-and-Families">Parenting and Families</option>
+                                <option class="category__item" data-item="self-Help">Self-Help</option>
+                                <option class="category__item" data-item="spirituality">Spirituality</option>
+                                <option class="category__item" data-item="sports">Sports</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form__grid3-generic">
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__tools">Affiliate Tools</label>
+                            <input class="form__input" id="product__tools" type="checkbox" name="product__tools"/>
+                        </div>
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__link">Product Unique Url</label>
+                            <input class="form__input" id="product__link" type="checkbox" name="product__link"/>
+                        </div>
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__recurring">Recurring Commissions</label>
+                            <input class="form__input" id="product__recurring" type="checkbox" name="product__recurring"/>
+                        </div>
+                    </div>
+                    <div class="product__sub-images">
+                        <p class="form__label photo-head">Product sub images (Max of 6) upload</p>
+                        <div class="sub-images">
+                            <img class="sub-image sub-image1" src="asset/img/product-default.png" alt="product sub image"/>
+                            <img class="sub-image sub-image2" src="asset/img/product-default.png" alt="product sub image"/>
+                            <img class="sub-image sub-image3" src="asset/img/product-default.png" alt="product sub image"/>
+                            <img class="sub-image sub-image4" src="asset/img/product-default.png" alt="product sub image"/>
+                            <img class="sub-image sub-image5" src="asset/img/product-default.png" alt="product sub image"/>
+                            <img class="sub-image sub-image6" src="asset/img/product-default.png" alt="product sub image"/>
+                        </div>
+                        <input class="btn-upload btn__image-upload" type="file" accept="image/*" id="image" name="image" multiple max="6" />
+
+                    </div>
+
+                    <div class="product__banners">
+                        <p class="form__label photo-head">Product banner (Max of 4) upload</p>
+                        <div class="banners">
+                            <img class="banner banner1" src="asset/img/product-default.png" alt="product sub image"/>
+                            <img class="banner banner2" src="asset/img/product-default.png" alt="product sub image"/>
+                            <img class="banner banner3" src="asset/img/product-default.png" alt="product sub image"/>
+                            <img class="banner banner4" src="asset/img/product-default.png" alt="product sub image"/>
+                        </div>
+
+                        <input class="btn-upload btn__banner-upload" type="file" accept="image/*" id="banner" name="image" multiple max="4" />
+                        
+                    </div>
+                    <button class="btn form__submit form__submit-generic" type="submit">Add product
+                    </button>
+                </form>
+            </div>
+        </div>
+    
+    `;
+    document.body.insertAdjacentHTML('afterbegin', html);
+}
+
 const fileInputImage = document.getElementById('image');
 const fileInputBanner = document.getElementById('banner');
 const banners = document.querySelectorAll('.banners');
@@ -466,28 +595,57 @@ function handleFileUpload(event, constant, amount) {
 // Create product
 if(productCreate) {
     productCreate.addEventListener('click', function(e) {
-        console.log('i want to create a product')
         const existingModal = document.querySelector('.product__overlay');
         if (existingModal) {
             return; 
         }
         showUploadModal();
+
+        document.querySelector('.form__close-icon').addEventListener('click', function(e) {
+            closeUploadModal();
+        })
     })
 }
 
-    productOverlayClose.addEventListener('click', function(e) {
-        console.log('You want to close me??')
-        closeUploadModal();
-    })
+if(productAdminEdit) {
+    productAdminEdit.forEach(el => el.addEventListener('click', function() {
+        const existingModal = document.querySelector('.product-update__overlay');
+        if (existingModal) {
+            return; 
+        }
+        showUpdateModal();
+
+        document.querySelector('.form__close-icon').addEventListener('click', function(e) {
+            closeUpdateModal();
+        })
+    }));
+}
+if(productEdit) {
+    productEdit.forEach(el => el.addEventListener('click', function() {
+        const existingModal = document.querySelector('.product-update__overlay');
+        if (existingModal) {
+            return; 
+        }
+        showUpdateModal();
+
+        document.querySelector('.form__close-icon').addEventListener('click', function(e) {
+            console.log('You want to close me??')
+            closeUpdateModal();
+        })
+    }));
+}
 
 
-const uploadProduct = async function(name, summary, description, price, commission, type, category, tools, link, recurring) {
+
+// const uploadProduct = async function(name, summary, description, price, commission, type, category, tools, link, recurring) {
+const uploadProduct = async function(data) {
     try {
         showLoadingOverlay()
         const res = await fetch('/api/products', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, summary, description, price, commission, type, category, tools, link, recurring }),
+            // body: JSON.stringify({ name, summary, description, price, commission, type, category, tools, link, recurring }),
+            body: JSON.stringify(data),
         });
 
         if (!res.ok) {
@@ -543,36 +701,38 @@ if (productForm) {
         for (let i = 0; i < bannerFiles.length; i++) {
             form.append('banners', bannerFiles[i]);
         }
+        uploadProduct(form)
     });
 }
 
 
-if(productAdminEdit) {
-    productAdminEdit.forEach(el => el.addEventListener('click', function() {
-        openModal(productUploadOverlay, productUploadModal);
-        console.log('I was clicked by an admin')
-    }));
-}
-if(productEdit) {
-    productEdit.forEach(el => el.addEventListener('click', function() {
-        openModal(productUploadOverlay, productUploadModal);
-        console.log('I was clicked by this vendor')
-    }));
-}
-if(productOverlayClose) {
-    productOverlayClose.addEventListener('click', function() {
-        closeModal(productOverlay, productModal);
-        closeModal(productUploadOverlay, productUploadModal)
-    });
-}
+// if(productAdminEdit) {
+//     productAdminEdit.forEach(el => el.addEventListener('click', function() {
+//         openModal(productUploadOverlay, productUploadModal);
+//         console.log('I was clicked by an admin')
+//     }));
+// }
+// if(productEdit) {
+//     productEdit.forEach(el => el.addEventListener('click', function() {
+//         openModal(productUploadOverlay, productUploadModal);
+//         console.log('I was clicked by this vendor')
+//     }));
+// }
+// if(productOverlayClose) {
+//     productOverlayClose.addEventListener('click', function() {
+//         closeModal(productOverlay, productModal);
+//         closeModal(productUploadOverlay, productUploadModal)
+//     });
+// }
 
-const updateProduct = async function(name, summary, description, price, commission, type, category, tools, link, recurring) {
+const updateProduct = async function(form) {
     try {
         showLoadingOverlay();
         const res = await fetch(`/api/products/${productId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({name, summary, description, price, commission, type, category, tools, link, recurring}),
+            // body: JSON.stringify({name, summary, description, price, commission, type, category, tools, link, recurring}),
+            body: JSON.stringify(form),
         });
         const data = await res.json();
         hideLoadingOverlay()
@@ -626,6 +786,14 @@ if(productUpdateForm) {
 }
 
 
+
+
+
+
+
+
+
+// ////////////////////////////////////////////////////////
 const updateUser = async function(name, email, phone, country, state, cityRegion, zipPostal) {
     try {
         showLoadingOverlay();

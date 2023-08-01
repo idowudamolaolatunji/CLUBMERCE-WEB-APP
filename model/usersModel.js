@@ -64,7 +64,7 @@ const userSchema = new mongoose.Schema({
     region: String,
     image: {
         type: String,
-        default: 'avatar'
+        default: 'https://res.cloudinary.com/dy3bwvkeb/image/upload/v1690819113/kmy3osa7qie6uj7zx5yv.png'
     },
     isEmailVerified: {
         type: Boolean,

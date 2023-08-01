@@ -337,6 +337,7 @@ input:focus, input:hover, select:focus, textarea:hover,
     border-right: 1.5px solid #f3f4f6;
     height: 90vh;
     overflow: hidden;
+    overflow-y: auto;
     /* z-index: 2000; */
 }
 
@@ -691,7 +692,8 @@ input:focus, input:hover, select:focus, textarea:hover,
     grid-template-columns: 2.6fr 3.2fr 1.2fr 1.2fr 1.2fr 1fr;
 }
 .table-row-app, .table-head-app  {
-    grid-template-columns: 3fr 1.5fr 1.5fr 1.5fr 1.5fr;
+    /* grid-template-columns: 3fr 1.5fr 1.5fr 1.5fr 1.5fr; */
+    grid-template-columns: 3fr 1.5fr 1.6fr 1.5fr 1.8fr;
 }
 .add-btn  {
     margin-bottom: .6rem;
@@ -1010,7 +1012,7 @@ input:focus, input:hover, select:focus, textarea:hover,
 }
 
 .get__modal {
-    width: 70rem;
+    width: 60rem;
 }
 .copy__modal { width: 60rem; }
 .hoplink__modal {
@@ -1060,6 +1062,7 @@ input:focus, input:hover, select:focus, textarea:hover,
     padding: 1.2rem;
     border-radius: .4rem;
     transition: all .35s;
+    max-width: 70rem;
 }
 
 .hoplink__body--text {
@@ -1081,7 +1084,7 @@ input:focus, input:hover, select:focus, textarea:hover,
     padding: 2.4rem;
     background-color: #fff;
     max-width: 60rem;
-
+    
     border-radius: 1rem;
     border: 1px solid #f3f4f6;
     /* border-top-right-radius: 6rem;
@@ -1092,6 +1095,45 @@ input:focus, input:hover, select:focus, textarea:hover,
     gap: 2.8rem;
     margin-bottom: 8rem;
 }
+
+.form-image-data {
+    max-width: 40rem;
+    margin-bottom: 4.8rem;
+}
+.form-image-data input, .form-image-data input:focus {
+    border: none;
+    outline: none;
+}
+.form__photo-upload {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.6rem;
+}
+.form__user-photo {
+    width: 8.6rem !important;
+    height: 8rem !important;
+    border-radius: 50%;
+    overflow: hidden;
+}
+input[type=file]::file-selector-button {
+    border: none;
+    padding: 1.2rem;
+    cursor: pointer;
+    border-radius: .6rem;
+}
+input[type=file]::-webkit-file-upload-button{
+    border: none;
+    padding: 1.2rem;
+    cursor: pointer;
+    border-radius: .6rem;
+}
+button.img__upload--btn {
+    background-color: #2e3192;
+    padding: 1rem 2rem;
+}
+
+
 .form__data .dashboard__heading { margin-bottom: 1.8rem; }
 
 .form__item {
@@ -1110,18 +1152,6 @@ input:focus, input:hover, select:focus, textarea:hover,
     padding: 1.2rem;
     color: #444;
     background-color: #eee;
-}
-
-.form__photo-upload {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 1.6rem;
-}
-.form__user-photo {
-    width: 3.6rem;
-    height: 3.6rem;
-    border-radius: 50%;
 }
 
 .form-btn {
@@ -1354,7 +1384,7 @@ input:focus, input:hover, select:focus, textarea:hover,
     border-radius: .8rem;
 }
 .wallet__card { max-width: 28rem; }
-.withdrawal__card{ max-width: 50rem; }
+.withdrawal__card{ max-width: 50rem; width: 80%;}
 .wallet__amount {
     font-size: 1.8rem;
     font-weight: 500;
@@ -1377,9 +1407,7 @@ input:focus, input:hover, select:focus, textarea:hover,
 
 
 
-
 /* chat */
-
 .chat__box {
     width: 45rem;
     height: 40rem;

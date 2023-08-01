@@ -13,13 +13,13 @@ block content
             h3.dashboard__heading Add a payment account
             .form__item
                 label.form__label(for='paymentBankName') Payment Bank Name
-                input#paymentBankName.form__input(type='paymentBankName' value='Acom bank' required)
+                input#paymentBankName.form__input(type='paymentBankName' value=`${user.bankName || ''}` placeholder="Name Of Bank" required)
             .form__item
                 label.form__label(for='paymentAcctNum') Payment Account Number
-                input#paymentAcctNum.form__input(type='number' value='002567890' required)
+                input#paymentAcctNum.form__input(type='number' value=`${user.bankAccountNumber || ''}` required placeholder="Bank Number")
             .form__item
                 label.form__label(for='HoldersName') Holder's Name
-                input#HoldersName.form__input(type='HoldersName' value="ddvd freedw"  placeholder="Name as in bank document" required)
+                input#HoldersName.form__input(type='HoldersName' value=`${user.bankHolderName  || ''}`  placeholder="Name As On Bank Document" required)
             .form__item.right
                 button.btn.form-btn.btn--save-bank Add payment account
         

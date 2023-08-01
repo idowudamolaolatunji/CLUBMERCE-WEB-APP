@@ -387,6 +387,14 @@
 
 /* 400px === 40rem === 23.125em */
 @media screen and (max-width: 25.125em) {
+    .section__bottom {
+        grid-template-columns: 0 1fr;
+        transition: 0ms;
+    }
+    .dashboard__insights {
+        max-width: 100%;
+        padding: 0 2.8rem;
+    }
     .products__cards--box  {
         width: 90%;
     }
@@ -407,15 +415,15 @@
         background-color: #fff;
         box-shadow: .2rem .2rem 4rem rgba(0, 0, 0, .1);
     }
-    .dashboard__insights  {
+    /* .dashboard__insights {
         max-width: 85%;
-    }
+    } */
 }
 
 /* 390px === 39rem === 22.5em */
 @media screen and (max-width: 23.5em) {
     .dashboard__insights  {
-        max-width: 90%;
+        max-width: 100%;
     }
     .insight {
         gap: 2.4rem;

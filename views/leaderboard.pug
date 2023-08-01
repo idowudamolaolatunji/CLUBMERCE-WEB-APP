@@ -1,0 +1,35 @@
+extends base_account 
+
+block content 
+    h3.dashboard__heading Leaderboard
+
+    .dashboard__table
+        .table.table-mp
+            .table-title
+                h4.table-heading Affiliate Leaderboard
+            .table-head-mp
+                span.table-head-content user
+                span.table-head-content email
+                span.table-head-content Earned
+                span.table-head-content Clicks
+                span.table-head-content Promoting
+                span.table-head-content Sales
+
+            //- each user of users
+                .table-row-mp
+                    span.table-row-content.table-row-product
+                        img.table-product__image(src='asset/img/idowu.png' alt='')
+                        span
+                            p.table-product__niche= user.fullName
+                            p.table-product__name= user.username
+                    span.table-row-content
+                        p.brand= user.email
+                    span.table-row-content
+                        p.wallet= user.wallet
+                    span.table-row-content
+                        p.category= user.clicks
+                    span.table-row-content
+                        p.price= user.promotionLinksCounts
+                    span.table-row-content
+                        p.price= user.productSold
+                    

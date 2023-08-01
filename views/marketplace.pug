@@ -169,12 +169,12 @@ body
         main.main__dashboard
             .dashboard__content
                 h3.dashboard__heading
-                    a(href="/dashboard") 
+                    a.go-back(href="/dashboard") 
                         i.fa-solid.fa-arrow-left.font-size-sm-help.margin__r-help 
                     | Clubmerce marketplace
 
                 span.product__filtering-btn
-                    select.select__input(id="select")
+                    select.select__input(id="select" data-user=`${user.username}`)
                         option(value="all") All
                         option(value="most-promoted") Most promoted
                         option(value="gravity-high-low") Gravity : High-low
@@ -191,7 +191,7 @@ body
                     aside.product__filtering
                         form.product__filter.form__item  
                             label.form__label(for="select") Sort results by
-                            select.select__input(id="select")
+                            select.select__input(id="select" data-user=`${user}`)
                                 option(value="all") All
                                 option(value="most-promoted") Most promoted
                                 option(value="gravity-high-low") Gravity : High-low
@@ -238,6 +238,7 @@ body
 
                         .products__cards--box 
                             each product in products
+                                - const id = product.vendor?._id;
 
                                 .product__card(class=`${product.isPromoted ? 'promoted' : ''}`)
                                     .product__side--left    
@@ -247,7 +248,8 @@ body
                                             .product__heading 
                                                 h2.product__title= product.name
                                                 p.product__niche=product.niche
-                                                button.product__message.person(data-vendorId=`${product}`)
+                                                
+                                                button.product__message.person(data-vendor-id=`${id}`)
                                                     i.fa-solid.fa-envelope.icon
                                                     | Chat vendor
                                                 .product__content
@@ -290,7 +292,7 @@ body
                                                 img.product__image(src='../../asset/img/product.jpg' alt=product.name)
                                             .product__heading 
                                                 h2.product__title= product.name
-                                                button.produt__message-m.person(data-vendorId=`${product}`)
+                                                button.produt__message-m.person(data-vendor-id=`${id}`)
                                                     i.fa-solid.fa-envelope.icon.product__icon
                                                     
                                                 .product__content
@@ -326,9 +328,9 @@ body
                                             p.hoplink__text  Earn commission for every customer you refer to this product using your personalized affiliate hoplink.
                                             form.hoplink-form.hoplink-mobile(data-productSlug-mobile=product.slug)
                                                 .hoplink__body
-                                                    input.hoplink__input.hoplink-username-mobile(type='text' placeholder='Username' required)
+                                                    input.hoplink__input.hoplink-username-mobile(type='text' value=`${user.username}` placeholder='Username' required)
                                                     p.hoplink__body--text Required
-                                                .hoplink__body
+                                                //- .hoplink__body
                                                     input.hoplink__input.hoplink-trackingid-mobile(type='text' placeholder='Tracing Id')
                                                     p.hoplink__body--text Optional
                                                 button.btn.hoplink__submit(type='submit') Generate Hoplink
@@ -341,9 +343,9 @@ body
                         p.hoplink__text Earn commission for every customer you refer to this product using your personalized affiliate hoplink.
                         form.hoplink#hoplink
                             .hoplink__body
-                                input.hoplink__input#hoplink-username(type='text' required='' placeholder='Username')
+                                input.hoplink__input#hoplink-username(type='text' required='' value=`${user.username}` placeholder='Username')
                                 p.hoplink__body--text Required
-                            .hoplink__body
+                            //- .hoplink__body
                                 input.hoplink__input#hoplink-trackingid(type='text' placeholder='Tracing Id')
                                 p.hoplink__body--text Optional
                             button.btn.hoplink__submit.submit(type='submit') Generate Hoplink
@@ -360,7 +362,7 @@ body
                             button.hoplink__copy-button.outline Copy
         
 
-            .chat__box.hidden
+            .chat__box
                 .chat-top
                     p.chat-name Idowu Olatunji
                     .chat-top__icons

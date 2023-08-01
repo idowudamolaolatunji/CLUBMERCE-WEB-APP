@@ -10,6 +10,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
+const cors = require('cors');
 /////////////////////////////////////////////////////
 
 const productsRouter = require('./routes/productsRoutes');
@@ -25,7 +26,14 @@ const io = require('socket.io')(require('http').createServer(app));
 
 // body parser and cookie parser
 app.use(express.json());
-app.use(cookieParser())
+app.use(cookieParser());
+
+// Enable CORS for specific origins
+// const allowedOrigins = ['http://res.cloudinary.com/', 'https://res.cloudinary.com/'];
+// app.use(cors({ origin: allowedOrigins }));
+
+// Use the 'cors' middleware to enable CORS for all routes
+app.use(cors());
 
 
 // pug
