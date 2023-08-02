@@ -40,12 +40,18 @@ exports.signUp = (req, res) => {
     });
 }
 
-// visitors
+// visitors / buyers
 exports.paymentForm = (req, res) => {
     res.status(200).render('payment');
 }
 exports.getOrderProductPage = async(req, res) => {
     res.status(200).render('order_product');
+}
+exports.buyerLoginAuth = (req, res) => {
+    res.status(200).render('buyer_login_auth');
+}
+exports.buyerSignupAuth = (req, res) => {
+    res.status(200).render('buyer_signup_auth');
 }
 
 // Affiliates
@@ -215,17 +221,17 @@ exports.managePayments = async (req, res) => {
         res.json({message: 'There is no user yet!'});
     }
 }
-// exports.manageOrders = async (req, res) => {
-//     try {
-//         const orders = await Order.find();
-//         res.status(200).render('manage_orders', {
-//             title: 'All Orders',
-//             orders
-//         });
-//     } catch(err) {
-//         res.json({message: 'There is no user yet!'});
-//     }
-// }
+exports.manageOrders = async (req, res) => {
+    try {
+        const orders = await Order.find();
+        res.status(200).render('manage_orders', {
+            title: 'All Orders',
+            orders
+        });
+    } catch(err) {
+        res.json({message: 'There is no user yet!'});
+    }
+}
 
 exports.getOrderPage = async (req, res) => {
     try {

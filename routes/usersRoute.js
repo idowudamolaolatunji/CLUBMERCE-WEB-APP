@@ -13,6 +13,7 @@ router.get('/logout', authController.logout)
 ;
 router.post("/login", authController.login);
 router.post("/login-admin", authController.loginAdmin);
+router.post("/login-buyer", authController.loginBuyer);
 router.post("/forgotPassword", authController.forgotPassword)
 router.patch("/resetPassword/:token", authController.resetPassword)
 
@@ -21,7 +22,8 @@ router.patch("/uploadImage", authController.protect, userController.uploadProfil
 router.patch("/updateMyPassword", authController.protect, authController.updatePassword);
 router.patch("/updateMyBank", authController.protect, userController.updateBankDetails);
 router.patch("/updateMe", authController.protect, userController.updateMe);
-router.patch("/deleteAccount", authController.protect, userController.deleteAccount);
+
+router.delete("/deleteAccount", authController.protect, userController.deleteAccount);
 
 // router.patch('/updateMe', authController.protect, userController.uploadUserPhoto, userController.resizeUserPhoto, userController.updateMe);
 

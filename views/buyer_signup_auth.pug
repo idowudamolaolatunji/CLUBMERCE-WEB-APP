@@ -1,0 +1,69 @@
+DOCTYPE
+html(lang="en")
+
+head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer")
+    //- link(rel="favicon" href="")
+
+    //- STYLES 
+    link(rel="stylesheet" href="/src/css/general.css")
+    link(rel="stylesheet" href="/src/css/form.css")
+    link(rel="stylesheet" href="/src/css/main.css")
+
+    script(defer src="/src/js/auth.js")
+
+
+    title Login
+body
+
+    main
+        <div id="spinOverlay">
+            <div class="spin">
+                <div></div>   
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+            </div>
+        </div>
+        
+        .signup__form
+
+            form.signup#buyer-signup
+                h3.form__heading
+                    | Create a cummerce account with 
+                    span.form__extra Clubmerce
+                .signup__grid.signup__name
+                    .form__item
+                        label.form__item--label(for='fullName') Fullname
+                        input.form__item--input.signup__fullname(type='text' id="fullName" placeholder='Enter your Full Name' required='')
+                    .form__item
+                        label.form__item--label(for='username') Username
+                        input.form__item--input.signup__username(type='text' id="username" placeholder='Choose a Username' required='')
+                .form__item
+                    label.form__item--label(for='email') Email Address
+                    input.form__item--input.signup__email(type='email' id="email"  placeholder='max123@example.com' required='')
+                .signup__grid.signup__password
+                    .form__item
+                        label.form__item--label(for='password') Password
+                        input.form__item--input.signup__passwordMain(type='password' id="password" placeholder='••••••••••••', required, minlength='8')
+                    .form__item
+                        label.form__item--label(for='passwordConfirm') Confirm Password
+                        input.form__item--input.signup__passwordconfirm(type='password' id="passwordConfirm" placeholder='••••••••••••', required, minlength='8')
+                .form__submit
+                    button.form__button(type='submit') Submit and Signup
+                    p.form__text
+                        span  Already have an account? 
+                        a.form__extra(href='/login') Login here.
+
+    
+    include _auth_footer

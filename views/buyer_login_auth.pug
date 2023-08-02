@@ -1,0 +1,55 @@
+DOCTYPE
+html(lang="en")
+
+head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer")
+    //- link(rel="favicon" href="")
+
+    //- STYLES 
+    link(rel="stylesheet" href="/src/css/general.css")
+    link(rel="stylesheet" href="/src/css/form.css")
+    link(rel="stylesheet" href="/src/css/main.css")
+
+    script(defer src="/src/js/auth.js")
+
+
+    title Admin auth
+body
+
+    main
+        <div id="spinOverlay">
+            <div class="spin">
+                <div></div>   
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+            </div>
+        </div>
+        
+        .login__form
+
+            form.login#buyer-login
+                h3.form__heading Login into your 
+                    span.form__extra Clubmerce Commerce
+                    | account
+                div.form__item
+                    label.form__item--label(for="email") Email Address
+                    input.form__item--input#buyer-email(name="email" type="email"  required)
+
+                div.form__item
+                    label.form__item--label(for="password") Password
+                    input.form__item--input#buyer-password(name="password" type="password" placeholder='••••••••••••', required, minlength='8')
+
+                button.form__button(type="submit") Login
+
+    include _auth_footer

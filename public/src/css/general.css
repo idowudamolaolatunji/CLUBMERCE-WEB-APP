@@ -626,3 +626,13 @@ section {
 .fa-close {
     cursor: pointer;
 }
+
+#buyer-signup  {
+    max-width: 80rem;
+    margin: 0 auto;
+}
+
+#buyer-login {
+    max-width: 60rem;
+    margin: 0 auto;
+}

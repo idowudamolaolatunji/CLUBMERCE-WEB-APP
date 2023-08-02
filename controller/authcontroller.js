@@ -3,7 +3,6 @@ const crypto = require('crypto')
 
 const express = require('express')
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
 const cookieParser = require('cookie-parser')
 
 const app = require("./../app");
@@ -11,7 +10,6 @@ const User = require("./../model/usersModel");
 const sendEmail = require('../utils/Email');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
-const Product = require("./../model/productsModel");
 
 
 express().use(cookieParser())
@@ -257,11 +255,18 @@ exports.loginAdmin = catchAsync(async (req, res, next) => {
 //   // Clear the token cookie
 //   res.clearCookie('jwt').redirect('/login');
 // });
-exports.logout = catchAsync(async (req, res) => {
-  // Clear the token cookie by setting it to an empty string and setting the maxAge to 0
-  res.cookie('jwt', '', { maxAge: 0, httpOnly: true });
-  res.redirect('/login');
-});
+exports.logout = async (req, res) => {
+  try {
+    // Clear the token cookie by setting it to an empty string and setting the maxAge to 0
+    res.cookie('jwt', '', { maxAge: 0, httpOnly: true });
+    res.redirect('/login');
+  } catch(err) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Error Logging Out'
+    })
+  }
+};
 
 // protect 
 exports.protect = catchAsync(async (req, res, next) => {
@@ -523,37 +528,44 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 */
 
 // Updating current logged in user password
-exports.updatePassword = catchAsync(async (req, res, next) => {
-  // get user 
-  const user = await User.findById(req.user.id).select('+password');
-  
-  // check if POSTED current password is correct
-  if(!await user.comparePassword(req.body.passwordCurrent, user.password)) {
-    return next(new AppError('Your current password is wrong.', 401));
-  }
-
-  // if so, update user password
-  user.passsword = req.body.passsword;
-  user.passwordConfirm = req.body.passwordConfirm;
-  await user.save();
-  // User.findByIdAndUpdate, will not work here...
-
-  // log user in, send jwt
-  const token = signToken(user._id);
-
-  const cookieOptions = {
-    expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
-    httpOnly: true
-  }
-  if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-  res.cookies('jwt', token, cookieOptions);
-
-  res.status(201).json({
-    status: "success",
-    token,
-    data: {
-      user,
+exports.updatePassword = catchAsync(async (req, res) => {
+  try {
+      // get user 
+    const user = await User.findById(req.user.id).select('+password');
+    
+    // check if POSTED current password is correct
+    if(!await user.comparePassword(req.body.passwordCurrent, user.password)) {
+      return res.json({ message: 'Your current password is wrong.' });
     }
-  });
+
+    // if so, update user password
+    user.passsword = req.body.passsword;
+    user.passwordConfirm = req.body.passwordConfirm;
+    await user.save();
+    // User.findByIdAndUpdate, will not work here...
+
+    // log user in, send jwt
+    const token = signToken(user._id);
+
+    const cookieOptions = {
+      expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
+      httpOnly: true
+    }
+    if(process.env.NODE_ENV !== 'development') cookieOptions.secure = true;
+    res.cookies('jwt', token, cookieOptions);
+
+    return res.status(201).json({
+      status: "success",
+      token,
+      data: {
+        user,
+      }
+    });
+  } catch(err) {
+    return res.status(404).json({
+      status: 'fail',
+      message: err
+    })
+  }
 
 })

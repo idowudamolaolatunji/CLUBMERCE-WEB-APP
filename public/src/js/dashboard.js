@@ -12,9 +12,6 @@ const mainDashboard = document.querySelector('.main__dashboard')
 const sectionBottom = document.querySelector('.section__bottom');
 const dashboradWidth = mainDashboard.getBoundingClientRect();
 
-const menuLogout = document.querySelectorAll('.menu__logout');
-const navLogout = document.querySelectorAll('.nav__logout');
-const adminLogout = document.querySelectorAll('.admin__menu--logout');
 const spinOverlay = document.querySelector('#spinOverlay');
 
 const showLoadingOverlay = () => {
@@ -141,6 +138,53 @@ if (profileImg) {
     document.body.addEventListener('click', () => {
         profileBox.classList.add('hidden');
     });
+}
+
+
+const menuLogout = document.querySelector('.menu__logout');
+const navLogout = document.querySelector('.nav__logout');
+const adminLogout = document.querySelector('.admin__menu--logout');
+const buyerLogout = document.querySelector('.buyer__menu--logout');
+
+const logoutUser = async function() {
+    try {
+        showLoadingOverlay();
+
+        const res = await fetch('/apl/users/logout');
+        if(!res.ok) {
+            hideLoadingOverlay();
+            return;
+        }
+
+        const data = await res.json();
+        consle.log(data)
+
+
+    } catch(err) {
+        console.log(err)
+    }
+}
+
+if(adminLogout) {
+    adminLogout.addEventListener('click', function(e) {
+        logoutUser();
+    })
+}
+if(buyerLogout) {
+    buyerLogout.addEventListener('click', function(e) {
+        logoutUser();
+    })
+}
+
+if(menuLogout) {
+    menuLogout.addEventListener('click', function(e) {
+        logoutUser();
+    })
+}
+if(navLogout) {
+    navLogout.addEventListener('click', function(e) {
+        logoutUser();
+    })
 }
 
 

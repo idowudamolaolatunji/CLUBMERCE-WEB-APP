@@ -21,7 +21,7 @@ cloudinary.config({
 
 exports.getMe = (req, res, next) => {
     // this middleware gives us access to the current user
-    req.params.id = req.user.id;
+    req.params.id = req.user._id;
     next();
 };
 
@@ -123,41 +123,40 @@ const filterObj = function(obj, ...allowedFileds) {
     return NewObj;
 }
 
-exports.updateMe = catchAsync(async (req, res, next) => {
-    // create an error if user POST's password data.
-    if(req.body.password || req.body.passwordConfirm) {
-        return next(
-            new AppError(
-                'This route is not for password updates. Please use /updateMyPassword.',
-                400
-            )
-        );
-    }
-    // Validate and upload the image to Cloudinary
-    // const uploadedImage = await cloudinary.uploader.upload(req.body.image);
-    // if(!uploadedImage) return res.json({ message: 'Error uploading image '});
-
-    // const file = req.files.image;
-    // const uploadedImage = await cloudinary.uploader.upload(file.tempFilePath);
-    
-      
-    // update user documents
-    // 1. filter
-    const allowedFileds = [fullName, email, country, phone, state, cityRegion, zipPostal];
-    const filterBody = filterObj(req.body, allowedFileds);
-    // 2. update
-    const updatedUser = await User.findByIdAndUpdate(req.user.id, filterBody, {
-        new: true,
-        runValidators: true
-    });
-
-    res.status(200).json({
-        status: "success",
-        data: {
-            user: updatedUser
+exports.updateMe = async (req, res, next) => {
+    console.log(req.body)
+    try {
+        // create an error if user POST's password data.
+        if(req.body.password || req.body.passwordConfirm) {
+            return res.status(400).json({ 
+                message: 'This route is not for password updates. Please use /updateMyPassword.'
+            });
         }
-    })
-});
+        
+        // update user documents
+        // 1. filter
+        const allowedFileds = [fullName, email, country, phone, state, cityRegion, zipPostal];
+        const filterBody = filterObj(req.body, allowedFileds);
+        console.log(filterBody)
+        // 2. update
+        const updatedUser = await User.findByIdAndUpdate(req.user.id, filterBody, {
+            new: true,
+            runValidators: true
+        });
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                user: updatedUser
+            }
+        })
+    } catch(err) {
+        return res.status(400).json({
+            status: 'fail',
+            message: err
+        })
+    }
+};
 
 exports.updateBankDetails = catchAsync(async (req, res, next) => {
     
@@ -182,12 +181,13 @@ exports.updateBankDetails = catchAsync(async (req, res, next) => {
 // delete current user
 exports.deleteAccount = catchAsync(async (req, res, next) => {
         // get user
-    await User.findByIdAndUpdate(req.user.id, {active: false});
+    await User.findByIdAndUpdate(req.user._id, {active: false});
 
     res.status(204).json({
         status: "success",
         data: null
     })
+    return res.cookie('jwt', '', { maxAge: 0, httpOnly: true });
 });
 
 

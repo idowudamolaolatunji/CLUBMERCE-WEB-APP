@@ -13,6 +13,14 @@ router.get('/affiliate', viewController.affiliate);
 router.get('/login', viewController.login);
 router.get('/signup', viewController.signUp);
 
+
+// buyers
+router.get('/buyers/login', viewController.buyerLoginAuth)
+router.get('/buyers/signup', viewController.buyerSignupAuth)
+router.get('/buyers/order-product/pay', authController.isLoggedIn, viewController.paymentForm);
+router.get('/order-product/:username/:productSlug', authController.isLoggedIn, viewController.getOrderPage);
+
+
 // affiliates
 router.get('/marketplace', authController.isLoggedIn, viewController.marketPlace);
 router.get('/marketplace/:slug', authController.isLoggedIn, viewController.getProduct);
@@ -30,15 +38,11 @@ router.get('/transaction', authController.isLoggedIn, viewController.transaction
 
 // admin
 router.get('/admin-auth-login', viewController.adminAuth);
-// router.get('/product-marketplace', authController.isLoggedIn, viewController.productMarketplace);
-// router.get('/manage-order', authController.isLoggedIn, viewController.manageOrders);
+router.get('/manage-order', authController.isLoggedIn, viewController.manageOrders);
 router.get('/manage-users', authController.isLoggedIn, viewController.manageUsers);
 router.get('/manage-products', authController.isLoggedIn, viewController.manageProducts);
 router.get('/manage-payment', authController.isLoggedIn, viewController.managePayments);
 
-// visitors
-router.get('/pay', viewController.paymentForm);
-router.get('/order-product/:username/:productSlug', viewController.getOrderPage);
 
 
 module.exports = router;

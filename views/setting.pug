@@ -29,7 +29,7 @@ block content
             h3.dashboard__heading Update Account Password
             .form__item
                 label.form__label(for='password-current') Current Password
-                input.form__input.signup__password(id='password-current' name='password-current' type='passwor' placeholder='••••••••••••', required, minlength='8')
+                input.form__input.signup__password(id='password-current' name='password-current' type='password' placeholder='••••••••••••', required, minlength='8')
             .form__item
                 label.form__label(for='password') New Password
                 input.form__input.signup__password(id='password' name='password' type='password' placeholder='••••••••••••', required, minlength='8')
@@ -41,18 +41,18 @@ block content
 
 
         -if(user.role === 'affiliate')
-            .delete-data
+            form.delete-data(data-id= user._id)
                 h4 Delete My Account 
                 span Every info about this account, transactions, affiliate links, sold product histories, personal details and other sensitive informations would be removed as you click 
                     strong(style="color:#f15a29;") Delete My Account!
-                button.btn.delete-account Delete My Account
+                button.btn.delete-account(type="submit") Delete My Account
 
         -if(user.role === 'vendor')
-            .delete-data
+            form.delete-data(data-id= user._id)
                 h4 Delete Vendor Account 
                 span Every info about this vendor account, transactions, products, purchases, orders and order histories, personal details and other sensitive informations would be removed as you click 
                     strong(style="color:#f15a29;") Delete My Account!
-                button.btn.delete-account Delete My Account
+                button.btn.delete-account(type="submit") Delete My Account
 
     -if(user.role === 'admin')
         h3.dashboard__heading Admin Settings 

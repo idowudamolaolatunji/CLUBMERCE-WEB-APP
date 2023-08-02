@@ -21,7 +21,7 @@ block content
             p#uploader__image--username= user.fullName
             button.img__upload--btn.btn(type="submit") Upload image
 
-        form.form__data.form-profile-data
+        form.form__data.form-profile-data#form-data
             h3.dashboard__heading Update profile info
             .form__item
                 label.form__label(for='fullName') Full name
@@ -44,12 +44,6 @@ block content
             .form__item
                 label.form__label(for='zip-postal') Zip code / Postal code
                 input#zip-postal.form__input(type='zip-postal' value=user.zipCode placeholder="Enter a country")
-            //- .form__item.form__photo-upload
-                //- img.form__user-photo(src='img/user.jpg' alt='User photo')
-                img.form__user-photo(src=`asset/img/${user.image}.png` alt='User photo')
-                input.form__upload(type='file', accept='image/*', id='photo', name='photo')
-                label.btn-text(for='photo') Choose new photo
-                //- a.btn-text(href='') Choose new photo
             .form__item
                 button.btn.form-btn(type="submit") Save settings
 
@@ -73,7 +67,7 @@ block content
             button.img__upload--btn.btn(type="submit") Upload image
 
 
-        form.form__data.form-profile-data
+        form.form__data.form-profile-data#form-data-vendor
             h3.dashboard__heading Update profile info
             .form__item
                 label.form__label(for='fullName') Full name
@@ -102,5 +96,6 @@ block content
             
             .form__item
                 button.btn.form-btn(type="submit") Save settings
+
 
 
