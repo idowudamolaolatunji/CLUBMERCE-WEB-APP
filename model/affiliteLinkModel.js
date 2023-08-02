@@ -5,6 +5,14 @@ const affiliateLinkSchema = new mongoose.Schema({
   product: { type: mongoose.Schema.ObjectId, ref: 'Product' },
   link: String,
   clicks: { type: Number, default: 0 },
+  commission: {
+      type: Number,
+      default: 0
+  },
+  purchases: {
+      type: Number,
+      default: 0
+  },
   createdAt: { type: Date, default: Date.now },
 });
 
@@ -14,7 +22,7 @@ affiliateLinkSchema.pre(/^find/, function(next) {
     select: '_id fullName'
   }).populate({
     path: 'product',
-    select: '_id name'
+    select: '_id name image'
   })
   next();
 })

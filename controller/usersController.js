@@ -11,11 +11,76 @@ const User = require('./../model/usersModel');
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
 
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_SECRET,
+// cloudinary.config({
+//     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+//     api_key: process.env.CLOUDINARY_API_KEY,
+//     api_secret: process.env.CLOUDINARY_SECRET,
+// });
+
+// const multerStorage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         // define the destination
+//         cb(null, 'public/asset/img/users')
+//     },
+//     filename: (req, file, cb) => {
+//         // give file some unique file name (user-id(73sfr343e73)-timestamp(747448382).jpeg)
+//         const extention = file.mimetype.split('/')[1];
+//         cb(null, `user-${req.user.id}-${Date.now()}.${extention}`);
+//     }
+// });
+
+const multerStorage = multer.memoryStorage()
+
+// create a multer filter
+const multerFilter = (req, file, cb) => {
+    // the goal is to check that the uploaded file is an image, and if true, we would then pass true into the callback fn and if not we pass false with an error
+    if(file.mimetype.startsWith('image')) {
+        cb(null, true);
+    } else {
+        cb(new AppError('Not an image! Please upload only images', 400), false);
+    }
+}
+
+const upload = multer({
+    storage: multerStorage,
+    fileFilter: multerFilter
 });
+
+exports.userPhotoUpload = upload.single('image');
+
+// middleware that helps resize images
+exports.resizeUserImage = catchAsync(async (req, res, next) => {
+    if(!req.file) return next();
+
+    req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+
+    await sharp(req.file.buffer)
+        .resize(500, 500)
+        .toFormat('jpeg')
+        .jpeg({ quality: 90 })
+        .toFile(`public/asset/img/users/${req.file.filename}`);
+    next();
+});
+
+exports.uploadProfilePicture = async (req, res) => {
+    try {
+        console.log(req.body, req.file);
+
+        let image;
+        if(req.file) image = req.file.filename;
+        const updatedUser = await User.findByIdAndUpdate(req.user._id, {image: image}, {
+            new: true,
+            runValidators: true,
+        });
+
+        res.status(200).json({
+            status: 'success',
+            userImage: updatedUser.image
+        });
+    } catch(err) {
+        console.log(err)
+    }
+}
 
 
 
@@ -123,14 +188,10 @@ const filterObj = function(obj, ...allowedFileds) {
     return NewObj;
 }
 
-exports.updateMe = async (req, res, next) => {
-    console.log(req.body)
-    try {
+exports.updateMe = catchAsync(async (req, res, next) => {
         // create an error if user POST's password data.
         if(req.body.password || req.body.passwordConfirm) {
-            return res.status(400).json({ 
-                message: 'This route is not for password updates. Please use /updateMyPassword.'
-            });
+            return next( new AppError('This route is not for password updates. Please use /updateMyPassword.', 400));
         }
         
         // update user documents
@@ -138,6 +199,8 @@ exports.updateMe = async (req, res, next) => {
         const allowedFileds = [fullName, email, country, phone, state, cityRegion, zipPostal];
         const filterBody = filterObj(req.body, allowedFileds);
         console.log(filterBody)
+
+
         // 2. update
         const updatedUser = await User.findByIdAndUpdate(req.user.id, filterBody, {
             new: true,
@@ -150,13 +213,7 @@ exports.updateMe = async (req, res, next) => {
                 user: updatedUser
             }
         })
-    } catch(err) {
-        return res.status(400).json({
-            status: 'fail',
-            message: err
-        })
-    }
-};
+});
 
 exports.updateBankDetails = catchAsync(async (req, res, next) => {
     
@@ -191,34 +248,34 @@ exports.deleteAccount = catchAsync(async (req, res, next) => {
 });
 
 
-exports.uploadProfilePicture = async (req, res) => {
-    try {
-         // Check if a file was uploaded
-         console.log(req, req.body, req?.file, req?.file?.path, req.form)
-        if (!req.body.image) {
-            return res.status(400).json({ message: 'No image file provided.' });
-        }
+// exports.uploadProfilePicture = async (req, res) => {
+//     try {
+//          // Check if a file was uploaded
+//          console.log(req, req.body, req?.file, req?.file?.path, req.form)
+//         if (!req.body.image) {
+//             return res.status(400).json({ message: 'No image file provided.' });
+//         }
         
-        // Upload the image to Cloudinary
-        const uploadedImage = await cloudinary.uploader.upload(req.file.path);
+//         // Upload the image to Cloudinary
+//         const uploadedImage = await cloudinary.uploader.upload(req.file.path);
         
-        // Check if the image upload was successful
-        if (!uploadedImage || !uploadedImage.secure_url) {
-            return res.status(500).json({ message: 'Error uploading image to Cloudinary.' });
-        }
+//         // Check if the image upload was successful
+//         if (!uploadedImage || !uploadedImage.secure_url) {
+//             return res.status(500).json({ message: 'Error uploading image to Cloudinary.' });
+//         }
 
-        const profilePicture = await User.findByIdAndUpdate( req.user._id, { image: uploadedImage.secure_url }, {
-            new: true
-        })
-        return res.status(201).json({
-            message: 'Profile picture updated',
-            profilePicture,
-        });
-    } catch (err) {
-        // console.log(err);
-        return res.status(500).json({ message: 'Error occured' });
-    }
-}
+//         const profilePicture = await User.findByIdAndUpdate( req.user._id, { image: uploadedImage.secure_url }, {
+//             new: true
+//         })
+//         return res.status(201).json({
+//             message: 'Profile picture updated',
+//             profilePicture,
+//         });
+//     } catch (err) {
+//         // console.log(err);
+//         return res.status(500).json({ message: 'Error occured' });
+//     }
+// }
 
   
 // exports.getOneProfilePic = async (req, res) => {
@@ -231,3 +288,5 @@ exports.uploadProfilePicture = async (req, res) => {
 //     }
 // };
   
+
+

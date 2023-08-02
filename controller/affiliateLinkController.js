@@ -5,7 +5,7 @@ const AffiliateLink = require('../model/affiliteLinkModel');
 
 exports.createAffiliateLink = async (req, res) => {
   try {
-    const { username, trackingId } = req.body;
+    const { username } = req.body;
     if(username.length < 1) return res.status(400).json({ message: 'Please provide your username..' });
 
     // Find the user and product
@@ -27,10 +27,9 @@ exports.createAffiliateLink = async (req, res) => {
     if(!user.affiliateLinks.includes(promotionLink)) {
       // create link
         const newLinkDetails = await AffiliateLink.create({
-            user: user._id,
+            affiliate: user._id,
             product: product._id,
             link: promotionLink,
-            trackingId: trackingId || null
         });
 
         // add links to link arrays

@@ -2,6 +2,7 @@ const app = require('../app')
 const User = require('../model/usersModel');
 const Product = require('../model/productsModel');
 const Commissions = require('../model/commissionModel');
+const AffiliateLink = require('../model/affiliteLinkModel');
 const Transaction = require('../model/transactionModel');
 const Order = require('../model/orderModel');
 
@@ -89,7 +90,7 @@ exports.getProduct = async (req, res) => {
 // common routes
 exports.dashboard = async (req, res) => {
     try {
-        console.log(req)
+        // console.log(req)
         const user = await User.findById(req.user._id);
         const products = await Product.find({ vendor: req.user._id });
         const commission = await Commissions.find({ user: req.user._id});
@@ -129,12 +130,14 @@ exports.settings = (req, res) => {
 exports.performance = async (req, res) => {
     try {
         const user = await User.findById(req.user._id);
+        const affiliatePerformance = await AffiliateLink.find({ affiliate: req.user._id })
+        console.log(affiliatePerformance)
         const products = await Product.find({ vendor: req.user._id });
-        console.log('perfomace request:', req.user._id)
         res.status(200).render('performance', {
             title: 'Your perfomance',
-            user,
             products,
+            user,
+            affiliatePerformance
         });
     } catch(err) {
         console.log(err)
@@ -146,7 +149,7 @@ exports.transaction = async (req, res) => {
 
         res.status(200).render('transaction', {
             title: 'Your Transactions',
-            transaction
+            transaction,        
         });
     } catch(err) {
         console.log(err)
@@ -157,13 +160,12 @@ exports.transaction = async (req, res) => {
 exports.leaderboard = async(req, res) => {
     try {
         const affiliateLeaderboard = await User.find({ role: 'affiliate'}).sort({ wallet: -1, promotionLinksCounts: -1, clicks: -1 });
-        console.log(affiliateLeaderboard);
+        const currentUser = await User.findById(req.user._id);
 
-        // const users = await User.find().sort({ wallet: -1, clicks: -1 });
-        // console.log(users);
         res.status(200).render('leaderboard', {
             title: `Your Leaderboard`,
-            affiliateLeaderboard
+            affiliateLeaderboard,
+            currentUser
         });
     } catch(err) {
         res.status(400).json({message: err});

@@ -1,6 +1,6 @@
-// const multer = require('multer');
-// const sharp = require('sharp');
-const cloudinary = require('cloudinary').v2;
+const multer = require('multer');
+const sharp = require('sharp');
+// const cloudinary = require('cloudinary').v2;
 
 const app = require('../app');
 const catchAsync = require('../utils/catchAsync')
@@ -8,15 +8,88 @@ const Product = require('../model/productsModel');
 const User = require('../model/usersModel');
 const APIFeatures = require('../utils/apiFeatures');
 
-// const generateLink = require('./../utils/generateLink')
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
 
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINAR_API_KEY,
-    api_secret: process.env.CLOUDINAR_API_SECRET,
+// cloudinary.config({
+//     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+//     api_key: process.env.CLOUDINAR_API_KEY,
+//     api_secret: process.env.CLOUDINAR_API_SECRET,
+// });
+const multerStorage = multer.memoryStorage()
+
+// create a multer filter
+const multerFilter = (req, file, cb) => {
+    // the goal is to check that the uploaded file is an image, and if true, we would then pass true into the callback fn and if not we pass false with an error
+    if(file.mimetype.startsWith('image')) {
+        cb(null, true);
+    } else {
+        cb(new AppError('Not an image! Please upload only images', 400), false);
+    }
+}
+
+const upload = multer({
+    storage: multerStorage,
+    fileFilter: multerFilter
 });
+
+
+exports.uploadProductImage = upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'subImages', maxCount: 6  },
+  { name: 'banners', maxCount: 4 }
+]);
+
+exports.resizeProductImage = catchAsync(async (req, res, next) => {
+  if(!req.files.image || req.files.subImages) return next();
+
+  const imageMainFileName = `product-${req.params.id}-${Date.now()}-main.jpeg`;
+
+  await sharp(req.files.image[0].buffer)
+      .resize(750, 750)
+      .toFormat('jpeg')
+      .jpeg({ quality: 90 })
+      .toFile(`public/asset/img/products/${imageMainFileName}`);
+
+  req.body.image = imageMainFileName;
+
+  
+  // subImages
+  req.body.subImages = [];
+  await Promise.all(
+    req.files.subImages.map(async (file, i) => {
+    const filename = `product-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
+    await sharp(file.buffer)
+      .resize(750, 750)
+      .toFormat('jpeg')
+      .jpeg({ quality: 90 })
+      .toFile(`public/asset/img/products/${filename}`);
+
+    req.body.subImages.push(filename);
+   })
+  );
+
+  
+  // banners
+  req.body.banners = [];
+  await Promise.all(
+    req.files.banners.map(async (file, i) => {
+    const filename = `product-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
+    await sharp(file.buffer)
+      .resize(2000, 950)
+      .toFormat('jpeg')
+      .jpeg({ quality: 90 })
+      .toFile(`public/asset/img/products/${filename}`);
+
+    req.body.banners.push(filename);
+   })
+  );
+  
+  next();
+})
+
+
+
 
 exports.aliasTopProduct = (req, res, next) => {
     req.query.limit = '20';
@@ -36,7 +109,12 @@ exports.searchProduct = async (req, res) => {
           payload: search
       })
 
-    } catch(err) {}
+    } catch(err) {
+      res.status(404).json({
+        status: 'fail',
+        message: err.message
+      })
+    }
 }
 
 exports.getAllProduct = async(req, res) => {
@@ -65,46 +143,7 @@ exports.getAllProduct = async(req, res) => {
     }
 };
 
-const upload = require('../utils/uploadConfig');
-// exports.createProduct = upload.fields(
-//   [
-//     { name: 'image', maxCount: 1 }, // Single main image
-//     { name: 'subImages', maxCount: 6 }, // Array of sub-images, up to 6
-//     { name: 'banners', maxCount: 4 }, // Array of banners, up to 4
-//   ]), async (req, res) => {
-//   try {
-//     const vendorId = req.user._id;
-//     // Find the vendor document from the database based on the vendor ID
-//     const vendor = await User.findById(vendorId);
-//     if (!vendor) {
-//       return res.status(404).json({ error: 'Vendor not found' });
-//     }
 
-//     // Validate and upload the main image to Cloudinary
-//     if (!req.files || !req.files['image'] || req.files['image'].length !== 1) {
-//       return res.status(400).json({ error: 'Invalid main image file' });
-//     }
-//     const mainImageResult = req.files['image'][0];
-
-//     // Validate and upload sub-images to Cloudinary
-//     const subImages = [];
-//     if (req.files && req.files['subImages'] && Array.isArray(req.files['subImages'])) {
-//       for (const subImage of req.files['subImages']) {
-//         subImages.push(subImage.path);
-//       }
-//     } else {
-//       return res.status(400).json({ error: 'Invalid sub-images files' });
-//     }
-
-//     // Validate and upload banners to Cloudinary
-//     const banners = [];
-//     if (req.files && req.files['banners'] && Array.isArray(req.files['banners'])) {
-//       for (const banner of req.files['banners']) {
-//         banners.push(banner.path);
-//       }
-//     } else {
-//       return res.status(400).json({ error: 'Invalid banner files' });
-//     }
 
 exports.createProduct = async (req, res) => {
   try {
@@ -165,92 +204,6 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-// exports.createProduct = async(req, res) => {
-//     try {
-//         const vendorId = req.user._id;
-//         // Find the vendor document from the database based on the vendor ID
-//         const vendor = await User.findById(vendorId);
-//         if (!vendor) {
-//             return res.status(404).json({ error: 'Vendor not found' });
-//         }
-        
-//         // Validate and upload the image to Cloudinary
-//         if (!req.file || req.file.size > 10 * 1024 * 1024) {
-//           // Limit image size to 10MB
-//           return res.status(400).json({ error: 'Invalid image file or size exceeds 10MB' });
-//         }
-//         const mainImageResult = await cloudinary.uploader.upload(req.file.path, {
-//           folder: 'product_main_images',
-//         });
-    
-//         // Validate and upload sub-images to Cloudinary
-//         const subImages = [];
-//         if (req.files && req.files.subImages && Array.isArray(req.files.subImages)) {
-//           if (req.files.subImages.length > 6) {
-//             return res.status(400).json({ error: 'Exceeded maximum of 6 sub-images' });
-//           }
-    
-//           for (const subImage of req.files.subImages) {
-//             if (subImage.size > 10 * 1024 * 1024) {
-//               // Limit sub-image size to 10MB
-//               return res.status(400).json({ error: 'Sub-image size exceeds 10MB' });
-//             }
-    
-//             const result = await cloudinary.uploader.upload(subImage.path, {
-//               folder: 'product_sub_images',
-//             });
-    
-//             subImages.push(result.secure_url);
-//           }
-//         } else {
-//           return res.status(400).json({ error: 'Invalid sub-image files' });
-//         }
-    
-//         // Validate and upload banners to Cloudinary
-//         const banners = [];
-//         if (req.files && req.files.banners && Array.isArray(req.files.banners)) {
-//           if (req.files.banners.length > 4) {
-//             return res.status(400).json({ error: 'Exceeded maximum of 4 banners' });
-//           }
-    
-//           for (const banner of req.files.banners) {
-//             if (banner.size > 10 * 1024 * 1024) {
-//               // Limit banner size to 10MB
-//               return res.status(400).json({ error: 'Banner size exceeds 10MB' });
-//             }
-    
-//             const result = await cloudinary.uploader.upload(banner.path, {
-//               folder: 'product_banners',
-//             });
-    
-//             banners.push(result.secure_url);
-//           }
-//         } else {
-//           return res.status(400).json({ error: 'Invalid banner files' });
-//         }
-
-
-//         const newProduct = await Product.create({
-//           ...req.body,
-//           vendor: vendor._id,
-//           image: mainImageResult.secure_url,
-//           subImages: subImages,
-//           banners: banners,
-//         });
-
-//         res.status(201).json({
-//             status: "success",
-//             data: {
-//                 product: newProduct
-//             }
-//         })
-//     } catch(err) {
-//         res.status(404).json({
-//             status: 'fail',
-//             message: err.message
-//         })
-//     }
-// };
 
 exports.getProductsByVendor = async (req, res) => {
     try {

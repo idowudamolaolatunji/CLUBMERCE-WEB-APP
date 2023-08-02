@@ -9,8 +9,8 @@ const User = require('../model/usersModel');
 const Product = require('../model/productsModel');
 const Order = require('../model/orderModel');
 const Commissions = require('../model/commissionModel');
-const UserPerformance = require('../model/userPerformanceModel');
-// const ProductPerformance = require('../model/productPerformanceModel');
+const AffiliateLink = require('../model/affiliteLinkModel')
+// const UserPerformance = require('../model/userPerformanceModel');
 
 const { initializePayment, verifyPayment } = require("../utils/paystack")(request);
 
@@ -141,16 +141,12 @@ const processPayment = async (amount, paymentData, orderInfo, product, buyer, re
                     createdAt: this.formattedCreatedAt
                 });
 
+                const UpdateAffiliateLink = await AffiliateLink.findByIdAndUpdate(
+                    { affiliate: affiliate._id, product: product._id }, 
+                    {purchases: this.purchases += product.commissionAmount },
+                    { new: true }
+                )
 
-                const affiliatePerofmance = await userPerformance.create({
-                    affiliate: affiliate._id,
-                    product: product._id,
-                    commission: product.commissionAmount,
-                    purchases,
-                    clicks,
-                    links,
-                });
-                
                 const orderTransaction = await Transaction.create({
                     affiliate: affiliate._id,
                     trnxType: "CR",
@@ -164,7 +160,8 @@ const processPayment = async (amount, paymentData, orderInfo, product, buyer, re
                     data: {
                         commission,
                         affiliatePerofmance,
-                        orderTransaction
+                        orderTransaction,
+                        UpdateAffiliateLink
                     }
                 }).redirect("/success");
             });

@@ -18,7 +18,8 @@ const productSchema = new mongoose.Schema({
     brandLogo: String,
     image: {
         type: String,
-        required: [true, 'A product must have an image']
+        required: [true, 'A product must have an image'],
+        detault: 'product-default.png'
     },
     price: {
         type: Number,
@@ -75,7 +76,7 @@ const productSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    isPromoted: {
+    isBoosted: {
         type: Boolean,
         default: false,
     },
@@ -113,13 +114,13 @@ productSchema.pre('save', function(next) {
 productSchema.pre(/^find/, function(next) {
     this.populate({
         path: 'vendor',
-        select: 'fullName slug photo _id businessName email'
+        select: 'fullName slug _id businessName email'
     });
     next();
 });
 
 productSchema.pre(/^find/, function (next) {
-    this.sort({ isPromoted: -1 }); // Sort by isPromoted field in descending order
+    this.sort({ isBoosted: -1 }); // Sort by isBoosted field in descending order
     next();
 });
 

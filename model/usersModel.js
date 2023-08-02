@@ -60,11 +60,14 @@ const userSchema = new mongoose.Schema({
         default: "affiliate",
     },
     zipCode: String,
-    businessName: String,
+    businessName: {
+        type: String,
+        default: ''
+    },
     region: String,
     image: {
         type: String,
-        default: 'https://res.cloudinary.com/dy3bwvkeb/image/upload/v1690819113/kmy3osa7qie6uj7zx5yv.png'
+        default: 'avatar.png'
     },
     isEmailVerified: {
         type: Boolean,
@@ -93,10 +96,7 @@ const userSchema = new mongoose.Schema({
     },
     promotionLinksCounts: { type: Number, default: 0 },
     commissions: Number,
-    affiliateLinks: {
-        type: [mongoose.Schema.Types.Mixed],
-        default: 0
-    },
+    affiliateLinks: [mongoose.Schema.Types.Mixed],
     productSold: {
         type: Number,
         default: 0
