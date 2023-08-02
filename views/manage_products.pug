@@ -14,15 +14,22 @@ block content
                 span.table-head-content actions
 
             each product of products
-                .table-row-mp(class=`${product.isPromoted ? 'prmoted-small' : ''}`)
+                .table-row-mp(class=`${product.isBoosted ? 'prmoted-small' : ''}`)
                     span.table-row-content.table-row-product
-                        img.table-product__image(src='asset/img/product.jpg' alt='')
+                        img.table-product__image(src=`asset/img/products/${product.image}` alt='')
                         //- span
                             p.table-product__niche= product.category
                         p.table-product__name= product.name
                     span.table-row-content
-                        //- p.brand= product.vendor.businessName || 'Brand or Business Name'
-                        p.brand= 'Business Name'
+                        //- p.brand= `${product.vendor.businessName || product.vendor.fullName}`
+                        -console.log(product.vendor)
+                        -const productVendorBsName = product.vendor?.businessName;
+                        -const productVendorName = product.vendor?.fullName;
+                        -if(productVendorBsName === '')
+                            p.brand= productVendorName || '- - -'
+                        -else 
+                            p.brand= productVendorBsName || '- - -'
+
                     span.table-row-content
                         p.category= `${product.commissionPercentage || 10}%`
                     span.table-row-content
@@ -31,7 +38,7 @@ block content
                         p.approved.status.status--success Approved
                     span.table-row-content.table-row-btn
                         //- button.btn-edit.table-btn Edit
-                        button.btn-edit.table-btn.admin-product-edit(data-product=`${product.name}` data-id=`${product._id}`) Edit
+                        button.btn-edit.table-btn.admin-product-edit(data-productName=`${product.name}` data-id=`${product._id}` data-productImage=`${product.image}`) Edit
                         button.btn-delete.table-btn.admin-product-delete(data-id=`${product._id}`) Delete
                 
 

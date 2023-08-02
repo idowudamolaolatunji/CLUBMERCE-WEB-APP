@@ -17,7 +17,7 @@ function changeText() {
 
   const outputElement = document.querySelector('.section__heading.hero__heading h1.section__heading--primary');
 
-  let currentSetIndex = 0;
+  let currentSetIndex = 0;0
 
   function updateText() {
     outputElement.textContent = 'Unleash Your ' + textSets[currentSetIndex].extraText;

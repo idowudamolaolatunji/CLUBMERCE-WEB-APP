@@ -1,7 +1,7 @@
 const express = require('express');
-
 const viewController = require('../controller/viewsController')
 const authController = require('../controller/authcontroller')
+
 const router = express.Router();
 
 //////////////////////////////////////////////
@@ -24,7 +24,7 @@ router.get('/order-product/:username/:productSlug', authController.isLoggedIn, v
 // affiliates
 router.get('/marketplace', authController.isLoggedIn, viewController.marketPlace);
 router.get('/marketplace/:slug', authController.isLoggedIn, viewController.getProduct);
-router.get('/leaderboard', authController.isLoggedIn, viewController.leaderboard);
+router.get('/leaderboard', authController.protect, viewController.leaderboard);
 
 // vendors
 router.get('/product-catalog', authController.protect, viewController.productCatalog);

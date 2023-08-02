@@ -14,9 +14,7 @@ block content
                 span.table-head-content actions
 
 
-            - else 
-                .table-row-message
-                    p.note-no No availiable transaction
+           
 
             -if(transactions.length > 0)
                 each transaction of transactions
@@ -38,4 +36,7 @@ block content
                             button.btn-edit.table-btn Approved
                             button.btn-delete.table-btn Unapproved
         
+            - else 
+                .table-row-message
+                    p.note-no No availiable transaction
 

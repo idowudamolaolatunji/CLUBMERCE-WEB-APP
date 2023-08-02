@@ -12,7 +12,7 @@ block content
 
 
             #uploader__image--card
-                img#uploader__image(src='/asset/img/avatar.png' alt='')
+                img#uploader__image(src=`/asset/img/users/${user.image}` alt='')
                 #uploader__image--label-box
                     input#uploader__image--input(name='photo' type='file' accept='image/png, image/jpeg')
                     label#uploader__image--label(for='uploader__image--input')
@@ -57,7 +57,7 @@ block content
                 //- input.form__upload(type='file', accept='image/*', id='photo', name='photo')
 
             #uploader__image--card
-                img#uploader__image(src='/asset/img/avatar.png' alt='')
+                img#uploader__image(src=`/asset/img/users/${user.image}` alt='')
                 #uploader__image--label-box
                     input#uploader__image--input(name='photo' type='file' accept='image/png, image/jpeg')
                     label#uploader__image--label(for='uploader__image--input')

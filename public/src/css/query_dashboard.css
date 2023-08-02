@@ -161,9 +161,9 @@
     .close .bottom__products {
         gap: 2.4rem;
     }
-    /* .menubar {
+    .menubar {
         overflow-y: hidden;
-    } */
+    }
     .menubar .menu__button,  .menubar .admin__menu--logout {
         display: none;
         opacity: 0;
@@ -377,18 +377,20 @@
     }
     .dashboard__insights {
         max-width: 100%;
-        padding: 0 1rem;
-        gap: 1rem;
-        max-width: 100%;
+        padding: 0 1.8rem;
     }
     .products__cards--box  {
-        width: 100%;
+        width: 90%;
+    }
+    .dashboard__insights  {
+        grid-template-columns: 1fr;
+        gap: 1.8rem;
+        max-width: 100%;
     }
 
     .insight {
-        /* gap: 2.4rem; */
-        gap: 1.4rem;
-        padding: 1.6rem;
+        gap: 2.4rem;
+        padding: 1.8rem;
     }
 }
 
@@ -410,17 +412,6 @@
 
         background-color: #fff;
         box-shadow: .2rem .2rem 4rem rgba(0, 0, 0, .1);
-    }
-    .dashboard__insights  {
-        grid-template-columns: 1fr;
-        gap: 1.8rem;
-        max-width: 100%;
-        padding: 0 1.8rem;
-    }
-
-    .insight {
-        gap: 2.4rem;
-        padding: 1.8rem;
     }
 }
 

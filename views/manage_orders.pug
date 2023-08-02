@@ -16,7 +16,7 @@ block content
             each order of orders
                 .table-row-mp
                     span.table-row-content.table-row-product
-                        img.table-product__image(src='../product.jpg' alt='')
+                        img.table-product__image(src=`asset/img/products/${product.image}` alt='')
                         span
                             p.table-product__name= order.product.name
                             p.table-product__niche order.product.category

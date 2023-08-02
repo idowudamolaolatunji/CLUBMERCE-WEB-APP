@@ -387,7 +387,7 @@ const showUploadModal = function() {
 
                     <div class="form__body-generic">
                         <div id="uploader__image--card">
-                            <img id="uploader__image" src="/asset/img/avatar.png" alt="" />
+                            <img id="uploader__image" src="/asset/img/products/product-default.png" alt="" />
                             <div id="uploader__image--label-box">
                                 <input name="photo" id="uploader__image--input" type="file" accept="image/png, image/jpeg">
                                 <label id="uploader__image--label" for="uploader__image--input"><i class="fa-solid fa-camera"></i> Add photo</label>
@@ -468,12 +468,12 @@ const showUploadModal = function() {
                     <div class="product__sub-images">
                         <p class="form__label photo-head">Product sub images (Max of 6) upload</p>
                         <div class="sub-images">
-                            <img class="sub-image sub-image1" src="asset/img/product-default.png" alt="product sub image"/>
-                            <img class="sub-image sub-image2" src="asset/img/product-default.png" alt="product sub image"/>
-                            <img class="sub-image sub-image3" src="asset/img/product-default.png" alt="product sub image"/>
-                            <img class="sub-image sub-image4" src="asset/img/product-default.png" alt="product sub image"/>
-                            <img class="sub-image sub-image5" src="asset/img/product-default.png" alt="product sub image"/>
-                            <img class="sub-image sub-image6" src="asset/img/product-default.png" alt="product sub image"/>
+                            <img class="sub-image sub-image1" src="/asset/img/products/product-default.png" alt="product sub image"/>
+                            <img class="sub-image sub-image2" src="/asset/img/products/product-default.png" alt="product sub image"/>
+                            <img class="sub-image sub-image3" src="/asset/img/products/product-default.png" alt="product sub image"/>
+                            <img class="sub-image sub-image4" src="/asset/img/products/product-default.png" alt="product sub image"/>
+                            <img class="sub-image sub-image5" src="/asset/img/products/product-default.png" alt="product sub image"/>
+                            <img class="sub-image sub-image6" src="/asset/img/products/product-default.png" alt="product sub image"/>
                         </div>
                         <input class="btn-upload btn__image-upload" type="file" accept="image/*" id="image" name="image" multiple max="6" />
 
@@ -482,10 +482,10 @@ const showUploadModal = function() {
                     <div class="product__banners">
                         <p class="form__label photo-head">Product banner (Max of 4) upload</p>
                         <div class="banners">
-                            <img class="banner banner1" src="asset/img/product-default.png" alt="product sub image"/>
-                            <img class="banner banner2" src="asset/img/product-default.png" alt="product sub image"/>
-                            <img class="banner banner3" src="asset/img/product-default.png" alt="product sub image"/>
-                            <img class="banner banner4" src="asset/img/product-default.png" alt="product sub image"/>
+                            <img class="banner banner1" src="/asset/img/products/product-default.png" alt="product sub banner"/>
+                            <img class="banner banner2" src="/asset/img/products/product-default.png" alt="product sub banner"/>
+                            <img class="banner banner3" src="/asset/img/products/product-default.png" alt="product sub banner"/>
+                            <img class="banner banner4" src="/asset/img/products/product-default.png" alt="product sub banner"/>
                         </div>
 
                         <input class="btn-upload btn__banner-upload" type="file" accept="image/*" id="banner" name="image" multiple max="4" />
@@ -504,7 +504,7 @@ const showUploadModal = function() {
 
 
 // update markup
-const showUpdateModal = (productName) => {
+const showUpdateModal = (productName, productImage) => {
     const html = `
         <div class="product-update__overlay">
             <div class="product-update__modal">
@@ -514,7 +514,7 @@ const showUpdateModal = (productName) => {
 
                     <div class="form__body-generic">
                         <div id="uploader__image--card">
-                            <img id="uploader__image" src="/asset/img/avatar.png" alt="" />
+                            <img id="uploader__image" src="/asset/img/products/${productImage}" alt="" />
                             <div id="uploader__image--label-box">
                                 <input name="photo" id="uploader__image--input" type="file" accept="image/png, image/jpeg">
                                 <label id="uploader__image--label" for="uploader__image--input"><i class="fa-solid fa-camera"></i> Add photo</label>
@@ -583,7 +583,6 @@ const showUpdateModal = (productName) => {
                         </div>
                         <div class="form__body-generic">
                             <label class="form__label" for="product__recurring">Recurring Commissions</label>
-                            <input class="form__input" id="product-update__recurring" type="checkbox" name="product__recurring"/>
                             <select class="form__select" id="product-update__recurring" name="product__type">
                                 <option value="no">No</option>
                                 <option value="yes">Yes</option>
@@ -627,43 +626,7 @@ const showUpdateModal = (productName) => {
     document.body.insertAdjacentHTML('afterbegin', html);
 }
 
-const fileInputImage = document.getElementById('image');
-const fileInputBanner = document.getElementById('banner');
-const banners = document.querySelectorAll('.banners');
-const images = document.querySelectorAll('.images');
 
-//  fileInput.addEventListener('change', handleFileUpload);
-if(fileInputImage)
-    fileInputImage.addEventListener('change', function(e) {
-        // handleFileUpload(e, 'img', images, 6);
-        handleFileUpload(e, images, 6);
-        
-    });
-if(fileInputBanner)
-    fileInputBanner.addEventListener('change', function(e) {
-        handleFileUpload(e, banners, 4);
-    });
-
-function handleFileUpload(event, constant, amount) {
-    // Reset the src attributes of all images
-    constant.forEach((sub) => {
-        sub.src = '';
-    });
-
-    const files = event.target.files;
-    for (let i = 0; i < files.length; i++) {
-        if (i >= amount) break; // Ensure we only display up to amount images
-
-        const file = files[i];
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-        constant[i].src = e.target.result;
-        };
-
-        reader.readAsDataURL(file);
-    }
-}
 
 // Create product
 if(productCreate) {
@@ -683,13 +646,14 @@ if(productCreate) {
 let editingProductId;
 if(productAdminEdit) {
     productAdminEdit.forEach(el => el.addEventListener('click', function() {
-        const productName = el.dataset.product;
+        const productName = el.dataset.productname;
         const editingProductId = el.dataset.id;
+        const productImage = el.dataset.productimage;
         const existingModal = document.querySelector('.product-update__overlay');
         if (existingModal) {
             return; 
         }
-        showUpdateModal(productName);
+        showUpdateModal(productName, productImage);
 
         document.querySelector('.form__close-icon').addEventListener('click', function(e) {
             closeUpdateModal();
@@ -698,14 +662,14 @@ if(productAdminEdit) {
 }
 if(productEdit) {
     productEdit.forEach(el => el.addEventListener('click', function() {
-        const productName = el.dataset.product;
+        const productName = el.dataset.productname;
         const editingProductId = el.dataset.id;
-        console.log(productName, editingProductId);
+        const productImage = el.dataset.productimage;
         const existingModal = document.querySelector('.product-update__overlay');
         if (existingModal) {
             return; 
         }
-        showUpdateModal(productName);
+        showUpdateModal(productName, productImage);
 
         document.querySelector('.form__close-icon').addEventListener('click', function(e) {
             closeUpdateModal();

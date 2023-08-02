@@ -5,7 +5,7 @@ head
     meta(charset="UTF-8")
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    meta(http-equiv='Content-Security-Policy', content="script-src 'self' 'unsafe-inline' 'report-sample'; report-uri /csp-report-endpoint/")
+    //- meta(http-equiv='Content-Security-Policy', content="script-src 'self' 'unsafe-inline' 'report-sample'; report-uri /csp-report-endpoint/")
 
     //- meta(http-equiv='Content-Security-Policy', content="img-src 'self' data: blob:http://127.0.0.1:3000;")
     //- meta(http-equiv='Content-Security-Policy', content="img-src 'self' https://res.cloudinary.com/")
@@ -20,7 +20,6 @@ head
     link(rel="stylesheet" href="src/css/query_dashboard.css")
 
 
-    script(src="https://cdn.jsdelivr.net/npm/paystack-js@0.18.1/lib/paystack.min.js")
     //- script(src="/socket.io/socket.io.js")
     //- script(defer src="src/js/chat.js")
 
@@ -75,7 +74,7 @@ body
                                             span &dash;
                                             p.notify__date 10 mins ago
                                 .notify__image--box
-                                    img.notify__image(src='asset/img/idowu.png' alt='')
+                                    img.notify__image(src=`asset/img/users/${user.image}` alt='')
                                 //- .notify__icon--box
                                     i.fa-solid.fa-lock.icon.notify__icon
 
@@ -83,21 +82,21 @@ body
 
                     -if(user.role === 'admin')
                         span
-                            //- img.nav__image(src='asset/img/idowu.png')
+                            //- img.nav__image(src=`asset/img/${user.image}`)
                             .nav__image--box
-                                img.nav__image(src='asset/img/idowu.png' alt=`user's photo`)
+                                img.nav__image(src=`asset/img/users/${user.image}` alt=`user's photo`)
 
                     -else
                         span
-                            //- img.nav__image(src='asset/img/idowu.png')
+                            //- img.nav__image(src=`asset/img/${user.image}`)
                             .nav__image--box
-                                img.nav__image(src='asset/img/idowu.png' alt=`user's photo`)
+                                img.nav__image(src=`asset/img/users/${user.image}` alt=`user's photo`)
                             //- profile...
                             .Profile__hovered.hidden
                                 .profile__content
                                     .profile__owner
                                         .profile__image--box
-                                            img.profile__image(src='asset/img/idowu.png' alt=`user's photo`)
+                                            img.profile__image(src=`asset/img/users/${user.image}` alt=`user's photo`)
                                         p.profile__name= user.fullName
                                     a.profile__link.nav__link(href="/profile") My profile
                                     button.profile__button.nav__link.nav__logout signout&nbsp;
@@ -171,7 +170,7 @@ body
                         ul.menu__list
                             li.menu__item
                                 a.menu__link(href="/profile")
-                                    img.menu__profile-image(src='asset/img/avatar.png' alt=`user's photo`)
+                                    img.menu__profile-image(src=`asset/img/users/${user.image}` alt=`user's photo`)
                                     p profile
                             li.menu__item
                                 button.menu__button.menu__logout
@@ -213,8 +212,8 @@ body
                                         span
                                             //- p.insight__text= user.affiliateUrl.length
                                             p.insight__title Promotion url
-                                            //- p.insight__text= user.affiliateLinks.length - 1
-                                            p.insight__text= user.affiliateLinks[0] === 0 ? 0 : user.affiliateLinks.length 
+                                            p.insight__text= user.affiliateLinks.length
+                                            //- p.insight__text= user.affiliateLinks[0] === 0 ? 0 : user.affiliateLinks.length 
 
                                 .dashboard__table
                                     .table
@@ -244,7 +243,7 @@ body
                                         -if(commission > 0)
                                             .table-row
                                                 span.table-row-content.table-row-product
-                                                    img.table-product__image(src=`asset/img/product.jpg` alt='')
+                                                    img.table-product__image(src=`asset/img/product/${product.image}` alt='')
                                                     span
                                                         p.table-product__name= commission.product
                                                         p.table-product__niche= commission.product.category
@@ -315,7 +314,7 @@ body
                                             each order of orders
                                                 .table-row-po
                                                     span.table-row-content.table-row-product
-                                                    img.table-product__image(src='asset/img/product.jpg' alt='')
+                                                    img.table-product__image(src=`asset/img/product/${product.image}` alt='')
                                                     span
                                                         p.table-product__name= order.product.name
                                                         p.table-product__niche= order.product.category
@@ -407,7 +406,7 @@ body
                                             each order of allOrders
                                                 .table-row-po
                                                     span.table-row-content.table-row-product
-                                                        img.table-product__image(src='asset/img/product.jpg' alt='')
+                                                        img.table-product__image(src=`asset/img/products/${product.image}` alt='')
                                                         span
                                                             p.table-product__name= order.product.name
                                                             p.table-product__niche= order.product.category

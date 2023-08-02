@@ -18,10 +18,10 @@ block content
             each affiliate of affiliateLeaderboard
                 .table-row-ldb
                     span.table-row-content.table-row-product
-                        img.table-product__image(src='asset/img/idowu.png' alt='')
+                        img.table-product__image(src=`asset/img/users/${affiliate.image}` alt='')
                         span
-                            p.table-user__name= affiliate.fullName
-                            p.table-user__namename= affiliate.username
+                            p.table-user__name= `${affiliate.email === currentUser.email ? 'YOU' : affiliate.fullName}`
+                            p.table-user__namename= `${affiliate.username}`
                     span.table-row-content
                         p.email= affiliate.email
                     span.table-row-content

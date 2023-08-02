@@ -71,15 +71,16 @@ body
                                         img.notify__image(src='asset/img/product.jpg' alt='')
 
                     span
-                        img.nav__image(src=`asset/img/${user.image}.png` alt=`customer's (${user.username}) photo`)
-                        .Profile__hovered.hidden
-                            .profile__content
-                                .profile__owner
-                                    img.profile__image(src=`asset/img/${user.image}.png` alt=`customer's (${user.username}) photo`)
-                                    p.profile__name= user.fullName
-                                a.profile__link.nav__link(href="/profile") My profile
-                                button.profile__button.nav__link#logout signout&nbsp;
-                                    i.fa-solid.fa-arrow-right-to-bracket.profile__icon
+                        .nav__image--box
+                            img.nav__image(src=`asset/img/users/${user.image}` alt=`user's photo`)
+                            .Profile__hovered.hidden
+                                .profile__content
+                                    .profile__owner
+                                        img.profile__image(src=`asset/img/users/${user.image}` alt=`customer's (${user.username}) photo`)
+                                        p.profile__name= user.fullName
+                                    a.profile__link.nav__link(href="/profile") My profile
+                                    button.profile__button.nav__link#logout signout&nbsp;
+                                        i.fa-solid.fa-arrow-right-to-bracket.profile__icon
 
 
         //- -if(user.role === 'admin')
@@ -132,7 +133,7 @@ body
                                     .product__side--left    
                                         .side--top
                                             .product__image--container
-                                                img.product__image(src='../../asset/img/product.jpg' alt=product.name)
+                                                img.product__image(src=`asset/img/products/${product.image} alt=product.name)
                                             .product__heading 
                                                 h2.product__title= product.name
                                                 p.product__niche=product.category
@@ -240,11 +241,11 @@ body
                             each product in products
                                 - const id = product.vendor?._id;
 
-                                .product__card(class=`${product.isPromoted ? 'promoted' : ''}`)
+                                .product__card(class=`${product.isBoosted ? 'promoted' : ''}`)
                                     .product__side--left    
                                         .side--top
                                             .product__image--container
-                                                img.product__image(src='../../asset/img/product.jpg' alt=product.name)
+                                                img.product__image(src=`asset/img/products/${product.image}` alt=product.name)
                                             .product__heading 
                                                 h2.product__title= product.name
                                                 p.product__niche=product.niche
@@ -286,10 +287,10 @@ body
 
 
                                 figure.product__card-mobile
-                                    .product__side.front(class=`${product.isPromoted ? 'promoted-m' : ''}`)    
+                                    .product__side.front(class=`${product.isBoosted ? 'promoted-m' : ''}`)    
                                         .front--top
                                             .product__image--container
-                                                img.product__image(src='../../asset/img/product.jpg' alt=product.name)
+                                                img.product__image(src=`asset/img/products/${product.image}` alt=product.name)
                                             .product__heading 
                                                 h2.product__title= product.name
                                                 button.produt__message-m.person(data-vendor-id=`${id}`)

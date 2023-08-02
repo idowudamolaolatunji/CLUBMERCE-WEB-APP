@@ -17,26 +17,30 @@ block content
                         span.table-head-content Link purchase
                         span.table-head-content link clicks
                         span.table-head-content promotion link
-                    -if(performances < 1 || !performances)
+                        -console.log(affiliatePerformance[0].product._id)
+
+                    -if(affiliatePerformance.length > 0 )
+                        each performance of affiliatePerformance
+                            .table-row-app
+                                span.table-row-content.table-row-product
+                                    img.table-product__image(src=`asset/img/products/${performance.product.image}` alt='')
+                                    span
+                                        p.table-product__name= performance.product.name
+                                        p.table-product__category= performance.product.niche
+                                span.table-row-content
+                                    .commission= `${performance.commission}`
+                                span.table-row-content
+                                    p.purchase= performance.purchases
+                                span.table-row-content
+                                    p.click= performance.clicks
+                                span.table-row-content
+                                    p.promotion 1
+
+                    -else
                         .table-row-message
                             //- p.note-no Upload your product today, Let out affiliate make you money.
                             p.note-no You have no existing product.
-                    -else
-                        each performance of performances
-                            .table-row-app
-                                span.table-row-content.table-row-product
-                                    img.table-product__image(src='asset/img/product.jpg' alt='')
-                                    span
-                                        p.table-product__name Test product 1
-                                        p.table-product__category health &amp; fitness
-                                span.table-row-content
-                                    mmission $&nbsp;230
-                                span.table-row-content
-                                    p.purchase 4
-                                span.table-row-content
-                                    p.click 20
-                                span.table-row-content
-                                    p.promotion 1
+
 
     
     -if(user.role === 'vendor')
@@ -60,9 +64,9 @@ block content
                             p.note-no You have no existing product.
                     -else
                         each product of products
-                            .table-row-vpp(class=`${product.isPromoted ? 'prmoted-small' : ''}`)
+                            .table-row-vpp(class=`${product.isBoosted ? 'prmoted-small' : ''}`)
                                 span.table-row-content.table-row-product
-                                    img.table-product__image(src='asset/img/product.jpg' alt='')
+                                    img.table-product__image(src=`asset/img/products/${product.image}` alt='')
                                     span
                                         p.table-product__name= product.name
                                         p.table-product__category= product.product__category

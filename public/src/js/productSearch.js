@@ -115,11 +115,11 @@ const fetchProductsByCategory = async (category) => {
         products.forEach(product => {
             console.log(product)
             const markup = `
-                <div class="product__card ${product.isPromoted ? 'promoted' : ''}">
+                <div class="product__card ${product.isBoosted ? 'promoted' : ''}">
                     <div class="product__side--left">   
                         <div class="side--top">
                             <div class="product__image--container">
-                                <img class="product__image" src="../../asset/img/product.jpg"/></div>
+                                <img class="product__image" src="/asset/img/products/${product.image}"/></div>
                             <div class="product__heading"> 
                                 <h2 class="product__title">${product.name}</h2>
                                 <p class="product__niche">${product.niche}</p>
@@ -215,11 +215,11 @@ const displayProducts = (products, username) => {
     
     products.forEach((product) => {
         const markup = `
-            <div class="product__card ${product.isPromoted ? 'promoted' : ''}">
+            <div class="product__card ${product.isBoosted ? 'promoted' : ''}">
                 <div class="product__side--left">   
                     <div class="side--top">
                         <div class="product__image--container">
-                            <img class="product__image" src="../../asset/img/${product.image}.jpg"/></div>
+                            <img class="product__image" src="/asset/img/products/${product.image}"/></div>
                         <div class="product__heading"> 
                             <h2 class="product__title">${product.name}</h2>
                             <p class="product__niche">${product.niche}</p>
@@ -255,10 +255,10 @@ const displayProducts = (products, username) => {
 
 
             <figure class="product__card-mobile">
-                <div class="product__side front ${product.isPromoted ? 'promoted-m' : ''}">
+                <div class="product__side front ${product.isBoosted ? 'promoted-m' : ''}">
                     <div class="front--top">
                         <div class="product__image--container">
-                            <img class="product__image" src="../../asset/img/product.jpg" alt="${product.name}">
+                            <img class="product__image" src="/asset/img/products/${product.image}" alt="${product.name}">
                         </div>
                         <div class="product__heading">
                             <h2 class="product__title">${product.name}</h2>

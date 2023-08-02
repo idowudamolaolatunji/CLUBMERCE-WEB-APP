@@ -62,7 +62,7 @@ body
                 p.product__intro-text Get everything you need to start promoting today!
                 .product__image
                     //- img.product__img(src=`/asset/img/${product.img}.jpg` alt='product__image')
-                    img.product__img(src=`/asset/img/product.jpg` alt='product__image')
+                    img.product__img(src=`/asset/img/products${product.image}` alt='product__image')
                 .product__description
                     h2.product__heading--sec=`What is ${product.name}?`
                     span.description__text
@@ -112,18 +112,10 @@ body
             h2.product__heading--sec product images
             p.description__text You are permitted to use the following imagery in your promotions. You are not allowed to use any imagery found on this website aside from that detailed below. Click to open the image in a new window then right-click &quot;Save Image As&quot; to save to your computer.
                 .images__box
-                    a(href='product.jpg' target='_blank')
-                        img(src='/asset/img/product.jpg' alt='')
-                    a(href='product.jpg' target='_blank')
-                        img(src='/asset/img/product.jpg' alt='')
-                    a(href='product.jpg' target='_blank')
-                        img(src='/asset/img/product.jpg' alt='')
-                    a(href='product.jpg' target='_blank')
-                        img(src='/asset/img/product.jpg' alt='')
-                    a(href='product.jpg' target='_blank')
-                        img(src='/asset/img/product.jpg' alt='')
-                    a(href='product.jpg' target='_blank')
-                        img(src='/asset/img/product.jpg' alt='')
+                -const productSubImage = product.subImages
+                    a(href=`${productSubImage}` target='_blank')
+                        img(src=`/asset/img/product/${productSubImage}` alt='')
+                    
     section#demo.product__section.section__demography
         .product__section--container
             h2.product__heading--sec Demography
@@ -153,14 +145,11 @@ body
             h2.product__heading--sec Product banners
             p.description__text Feel free to use the following eye-catching banners for your promotions. These banners are designed to complement the product and capture the attention of your audience. 
             .banner__box
-                a(href='banner1.jpg' target='_blank')
-                    img(src='/asset/img/banner1.jpg' alt='')
-                a(href='banner2.jpg' target='_blank')
-                    img(src='/asset/img/banner2.jpg' alt='')
-                a(href='banner3.jpg' target='_blank')
-                    img(src='/asset/img/banner3.jpg' alt='')
-                a(href='banner4.jpg' target='_blank')
-                    img(src='/asset/img/banner4.jpg' alt='')
+                -const productBanners = product.banners;
+                each productBanner of productBanners
+                    a(href=`${productBanner}` target='_blank')
+                        img(src=`/asset/img/products/${productBanner}` alt='')
+                    
     section#contact.product__section.section__contact-seller
         .product__section--container
             h2.product__heading--sec Contact Seller
