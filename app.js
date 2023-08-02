@@ -29,12 +29,19 @@ app.use(express.json());
 app.use(cookieParser());
 
 
-// Set Content Security Policy (CSP) header
 app.use((req, res, next) => {
-    res.setHeader("Content-Security-Policy", "img-src 'self' data: blob:;");
+    res.setHeader(
+      'Report-To',
+      JSON.stringify({
+        group: 'csp-report',
+        max_age: 31536000,
+        endpoints: [{ url: '/csp-report-endpoint/' }],
+        include_subdomains: true,
+      })
+    );
     next();
 });
-
+  
 // Use the 'cors' middleware to enable CORS for all routes
 app.use(cors());
 

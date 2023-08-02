@@ -229,6 +229,8 @@ button {
 .margin__bottom--sm { margin-bottom: 2.4rem }
 .margin__top--xsm { margin-top: 1.4rem }
 .margin__bottom--xsm { margin-bottom: 1.4rem }
+.margin__right--xsm { margin-right: 1.4rem }
+.margin__left--xsm { margin-left: 1.4rem }
 
 .margin__top--none {margin-top: 0;}
 .margin__bottom--none {margin-bottom: 0;}

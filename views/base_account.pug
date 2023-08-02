@@ -5,6 +5,8 @@ head
     meta(charset="UTF-8")
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    meta(http-equiv='Content-Security-Policy', content="script-src 'self' 'unsafe-inline' 'report-sample'; report-uri /csp-report-endpoint/")
+
     //- meta(http-equiv='Content-Security-Policy', content="img-src 'self' data: blob:http://127.0.0.1:3000;")
     //- meta(http-equiv='Content-Security-Policy', content="img-src 'self' https://res.cloudinary.com/")
 
@@ -17,6 +19,8 @@ head
     link(rel="stylesheet" href="src/css/dashboard.css")
     link(rel="stylesheet" href="src/css/query_dashboard.css")
 
+
+    script(src="https://cdn.jsdelivr.net/npm/paystack-js@0.18.1/lib/paystack.min.js")
     //- script(src="/socket.io/socket.io.js")
     //- script(defer src="src/js/chat.js")
 
@@ -178,7 +182,7 @@ body
                     block content
                         -if(user.role === 'affiliate')
                             .main__dashboard--container
-                                h3.dashboard__heading=`Welcome back, ${user.fullName.split(' ')[0]}`
+                                h3.dashboard__heading.margin__left--xsm=`Welcome back, ${user.fullName.split(' ')[0]}`
                                 .dashboard__insights 
                                     .insight.insight__one
                                         .icon__box 

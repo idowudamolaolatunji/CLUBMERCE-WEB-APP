@@ -12,7 +12,7 @@ function changeText() {
   const textSets = [
     { extraText: 'Earning Potentials.' },
     { extraText: 'Financial Success.' },
-    { extraText: 'Money Vibe.' }
+    { extraText: 'Treasure Mindset.' }
   ];
 
   const outputElement = document.querySelector('.section__heading.hero__heading h1.section__heading--primary');
@@ -31,7 +31,7 @@ function changeText() {
   // Wait for the page to completely load
   window.addEventListener('load', () => {
     // Start the text changing loop
-    setInterval(updateText, 2000);
+    setInterval(updateText, 3500);
   });
 }
 

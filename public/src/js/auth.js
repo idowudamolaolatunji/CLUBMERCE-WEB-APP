@@ -61,9 +61,8 @@ const login = async (email, password, role) => {
           });
           console.log(res)
           if (!res.ok) {
-               throw new Error('Login failed, Check internet connection');
+               showAlert('error', 'Login failed, Check internet connection');
           }
-
           const data = await res.json();
           if(data.message === 'Email address not verified, Check your mail') {{
                hideLoadingOverlay();
@@ -84,7 +83,7 @@ const login = async (email, password, role) => {
           }
 
           if (data.status === 'success') {
-               showAlert('success', 'Auth Successful!');
+               showAlert('success', 'Authentication Successful!');
                setTimeout(() => {
                location.assign('/dashboard');
                }, 3000);
@@ -120,7 +119,45 @@ const adminAuthLogin = async (email, password) => {
                     return;
                }
 
-               showAlert('success', 'Auth Successful');
+               showAlert('success', 'Authentication Successful');
+               setTimeout(() => {
+                    location.assign('/dashboard');
+               }, 2000);
+          } else {
+               setTimeout(() => {
+                    hideLoadingOverlay();
+                    window.location.reload(true);
+               }, 500);
+          }
+     } catch (err) {
+          hideLoadingOverlay();
+          showAlert('error', err.message || 'Something went wrong. Please try again!');
+     }
+};
+const buyerAuthLogin = async (email, password) => {
+     try {
+          showLoadingOverlay();
+
+          const res = await fetch('/api/users/login-buyer', {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify({ email, password }),
+          });
+
+          if (!res.ok) {
+               throw new Error('Login request failed');
+          }
+
+          const data = await res.json();
+
+          if (data.status === 'success') {
+               if (data.data.role === 'vendor' || data.data.role === 'affiliate') {
+                    hideLoadingOverlay();
+                    showAlert('error', 'Access not granted.');
+                    return;
+               }
+
+               showAlert('success', 'Authentication Successful');
                setTimeout(() => {
                     location.assign('/dashboard');
                }, 2000);

@@ -12,20 +12,12 @@ head
     //- STYLES 
     link(rel="stylesheet" href="/src/css/general.css")
     link(rel="stylesheet" href="/src/css/dashboard.css")
-    link(rel="stylesheet" href="/src/css/order_and_payment.css")
+    //- link(rel="stylesheet" href="/src/css/order_and_payment.css")
 
     
 body
     main
-        .row.justify-content-center
-            .col-lg-6.container3.text-white.p-5
-                .container.pt-3
-                    form(name='myForm', action='/paystack/pay', method='POST')
-                        input#email(type='email', name='email', placeholder='Email', required)
-                        hr
-                        input#amount(type='number', name='amount', placeholder='Amount', required, min=100)
-                        .bttn.pt-2
-                            button(type='submit') ORDER
+        h3 this is the payment page
             
 
     script(src="/src/js/payment.js")
