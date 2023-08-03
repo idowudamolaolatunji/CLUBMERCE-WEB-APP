@@ -245,27 +245,12 @@ exports.loginAdmin = catchAsync(async (req, res, next) => {
 
 
 // logout
-// exports.logout = catchAsync(async (req, res) => {
-//   const token = req.cookies.jwt;
-
-//   if (!token) {
-//       return res.status(401).json({ error: 'You are not logged in' });
-//   }
-
-//   // Clear the token cookie
-//   res.clearCookie('jwt').redirect('/login');
-// });
-exports.logout = async (req, res) => {
-  try {
-    // Clear the token cookie by setting it to an empty string and setting the maxAge to 0
-    res.cookie('jwt', '', { maxAge: 0, httpOnly: true });
-    res.redirect('/login');
-  } catch(err) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Error Logging Out'
-    })
-  }
+exports.logout = (req, res) => {
+  res.cookie('jwt', '', {
+    expires: new Date(Date.now() + 10 * 500),
+    httpOnly: true
+  });
+  res.status(200).json({ status: 'success' });
 };
 
 // protect 
@@ -336,6 +321,7 @@ exports.isLoggedIn = async (req, res, next) => {
       // 2) Check if user still exists
       const currentUser = await User.findById(decoded.id);
       if (!currentUser) {
+        res.redirect('/login')
         return next();
       }
 

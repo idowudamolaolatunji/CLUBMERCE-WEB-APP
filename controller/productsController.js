@@ -90,7 +90,6 @@ exports.resizeProductImage = catchAsync(async (req, res, next) => {
 
 
 
-
 exports.aliasTopProduct = (req, res, next) => {
     req.query.limit = '20';
     req.query.sort = '-createdAt,commission';

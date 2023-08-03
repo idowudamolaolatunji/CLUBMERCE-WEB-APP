@@ -150,18 +150,19 @@ const logoutUser = async function() {
     try {
         showLoadingOverlay();
 
-        const res = await fetch('/apl/users/logout');
+        const res = await fetch('/api/users/logout');
         if(!res.ok) {
             hideLoadingOverlay();
             return;
         }
-
         const data = await res.json();
-        consle.log(data)
-
-
+        if(data.status === 'success') {
+            showAlert('success', 'Logging Out...')
+            location.reload(true);
+        }
     } catch(err) {
-        console.log(err)
+       hideLoadingOverlay();
+       showAlert('error', 'something went wrong')
     }
 }
 
