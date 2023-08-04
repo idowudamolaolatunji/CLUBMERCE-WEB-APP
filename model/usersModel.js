@@ -57,7 +57,7 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
         enum: ['buyer', 'affiliate', 'vendor', 'admin'],
-        default: "affiliate",
+        default: "buyer",
     },
     zipCode: String,
     businessName: {

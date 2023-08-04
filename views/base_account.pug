@@ -116,10 +116,11 @@ body
                 .menu__body
                     ul.menu__list
                         -if(user.role === 'buyer')
-                            +menuItem('dashboard', 'My Dashboard', 'fa-solid fa-shop', false)
+                            +menuItem('dashboard', 'My Dashboard', 'fa-solid fa-shop', true)
+                            //- +menuItem('dashboard', 'My Dashboard', 'fa-solid fa-shop', false)
 
                         -if(user.role === 'affiliate')
-                            +menuItem('dashboard', 'Dashboard', 'fa-solid fa-gauge', false)
+                            +menuItem('dashboard', 'Dashboard', 'fa-solid fa-gauge', true)
                             +menuItem('marketplace', 'Affiliate Marketplace', 'fa-solid fa-shop', false)
                             +menuItem('leaderboard', 'Affiliate Leaderboard', 'fa-solid fa-trophy', false)
                             +menuItem('performance', 'My Performance', 'fa-solid fa-chart-simple', false)
@@ -127,14 +128,14 @@ body
                             +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
 
                         -if(user.role === 'vendor')
-                            +menuItem('dashboard', 'Dashboard', 'fa-solid fa-gauge', false)
+                            +menuItem('dashboard', 'Dashboard', 'fa-solid fa-gauge', true)
                             +menuItem('product-catalog', 'Product Catalog', 'fa-solid fa-clipboard-list', false)
                             +menuItem('performance', 'Product Performance', 'fa-solid fa-chart-simple', false)
                             +menuItem('transaction', 'Transactions', 'fa-solid fa-chart-line', false)
                             +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
 
                         -if(user.role === 'admin')
-                            +menuItem('dashboard', 'All perfomance', 'fa-solid fa-chart-simple', false)
+                            +menuItem('dashboard', 'All perfomance', 'fa-solid fa-chart-simple', true)
                             //- +menuItem('product-marketplace', 'Product Marketplace', 'fa-solid fa-clipboard-list', false)
                             +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
 
@@ -276,8 +277,6 @@ body
                                         span 
                                             p.insight__title My Products
                                             p.insight__text= products.length
-                                            //- p.insight__text= user.product
-                                            //- i.fa-solid.fa-bag.insight__icon
 
                                     .insight.insight__three
                                         .icon__box 

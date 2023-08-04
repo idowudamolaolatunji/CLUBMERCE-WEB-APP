@@ -17,7 +17,7 @@ head
     script(defer src="/src/js/auth.js")
 
 
-    title Login
+    title Signu for an account
 body
 
     main
@@ -45,25 +45,25 @@ body
                 .signup__grid.signup__name
                     .form__item
                         label.form__item--label(for='fullName') Fullname
-                        input.form__item--input.signup__fullname(type='text' id="fullName" placeholder='Enter your Full Name' required='')
+                        input.form__item--input.buyer-signup__fullname(type='text' id="fullName" placeholder='Enter your Full Name' required='')
                     .form__item
                         label.form__item--label(for='username') Username
-                        input.form__item--input.signup__username(type='text' id="username" placeholder='Choose a Username' required='')
+                        input.form__item--input.buyer-signup__username(type='text' id="username" placeholder='Choose a Username' required='')
                 .form__item
                     label.form__item--label(for='email') Email Address
-                    input.form__item--input.signup__email(type='email' id="email"  placeholder='max123@example.com' required='')
+                    input.form__item--input.buyer-signup__email(type='email' id="email"  placeholder='max123@example.com' required='')
                 .signup__grid.signup__password
                     .form__item
                         label.form__item--label(for='password') Password
-                        input.form__item--input.signup__passwordMain(type='password' id="password" placeholder='••••••••••••', required, minlength='8')
+                        input.form__item--input.buyer-signup__passwordMain(type='password' id="password" placeholder='••••••••••••', required, minlength='8')
                     .form__item
                         label.form__item--label(for='passwordConfirm') Confirm Password
-                        input.form__item--input.signup__passwordconfirm(type='password' id="passwordConfirm" placeholder='••••••••••••', required, minlength='8')
+                        input.form__item--input.buyer-signup__passwordconfirm(type='password' id="passwordConfirm" placeholder='••••••••••••', required, minlength='8')
                 .form__submit
                     button.form__button(type='submit') Submit and Signup
                     p.form__text
                         span  Already have an account? 
-                        a.form__extra(href='/login') Login here.
+                        a.form__extra(href='/buyers/login') Login here.
 
     
     include _auth_footer

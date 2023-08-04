@@ -27,7 +27,7 @@ router.get('/marketplace/:slug', authController.isLoggedIn, viewController.getPr
 router.get('/leaderboard', authController.protect, viewController.leaderboard);
 
 // vendors
-router.get('/product-catalog', authController.protect, viewController.productCatalog);
+router.get('/product-catalog', authController.isLoggedIn, viewController.productCatalog);
 
 // common routes
 router.get('/dashboard', authController.protect, viewController.dashboard);

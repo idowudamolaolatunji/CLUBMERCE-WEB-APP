@@ -1,7 +1,10 @@
 const loginForm = document.querySelector('.login');
-const signupForm = document.querySelector('.signup');
 const adminAuthForm = document.querySelector('#admin-login');
+const signupForm = document.querySelector('.signup');
 const spinOverlay = document.querySelector('#spinOverlay');
+
+const buyerSignupForm = document.querySelector('#buyer-signup');
+const buyerAuthForm = document.querySelector('#buyer-login');
 
 const navMenuBtn = document.querySelector(".navigation-controls");
 const navList = document.querySelector(".nav__list");
@@ -96,7 +99,7 @@ const login = async (email, password, role) => {
      }
 };
 
-const adminAuthLogin = async (email, password) => {
+const loginAdmin = async (email, password) => {
      try {
           showLoadingOverlay();
 
@@ -134,7 +137,7 @@ const adminAuthLogin = async (email, password) => {
           showAlert('error', err.message || 'Something went wrong. Please try again!');
      }
 };
-const buyerAuthLogin = async (email, password) => {
+const loginBuyer = async (email, password) => {
      try {
           showLoadingOverlay();
 
@@ -147,16 +150,9 @@ const buyerAuthLogin = async (email, password) => {
           if (!res.ok) {
                throw new Error('Login request failed');
           }
-
           const data = await res.json();
 
           if (data.status === 'success') {
-               if (data.data.role === 'vendor' || data.data.role === 'affiliate') {
-                    hideLoadingOverlay();
-                    showAlert('error', 'Access not granted.');
-                    return;
-               }
-
                showAlert('success', 'Authentication Successful');
                setTimeout(() => {
                     location.assign('/dashboard');
@@ -221,6 +217,43 @@ const signup = async (fullName, email, password, passwordConfirm, username, coun
           if (data.status === 'success') {
                showAlert('success', data.message || 'Successful');
                showEmailVerificationModal(email);
+          } else if (data.status === 'fail') {
+               throw new Error(data.message || 'Error signing up');
+          }
+     } catch (err) {
+          showAlert('error', err.message || 'Something went wrong. Please try again!');
+     } finally {
+          hideLoadingOverlay();
+     }
+};
+
+
+// signup for buyers
+const signupBuyer = async (fullName, email, password, passwordConfirm, username) => {
+     try {
+          showLoadingOverlay();
+     
+          const res = await fetch('/api/users/signup-buyer', {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify({ fullName, email, password, passwordConfirm, username }),
+          });
+     
+          if (!res.ok) {
+               throw new Error('Error signing up');
+          }
+     
+          const data = await res.json();
+          if(data.message === 'Email already Exist') {
+               showAlert('error', data.message);
+               hideLoadingOverlay();
+          }
+          if(data.message === 'Username already Exist') {
+               showAlert('error', data.message);
+               hideLoadingOverlay();
+          }
+          if (data.status === 'success') {
+               showAlert('success', data.message || 'Successful');
           } else if (data.status === 'fail') {
                throw new Error(data.message || 'Error signing up');
           }
@@ -344,7 +377,15 @@ if (adminAuthForm) {
     e.preventDefault();
     const email = document.querySelector('#admin-email').value;
     const password = document.querySelector('#admin-password').value;
-    adminAuthLogin(email, password);
+    loginAdmin(email, password);
+  });
+}
+if (buyerAuthForm) {
+  buyerAuthForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const email = document.querySelector('#buyer-email').value;
+    const password = document.querySelector('#buyer-password').value;
+    signupBuyer(email, password);
   });
 }
 
@@ -360,5 +401,18 @@ if (signupForm) {
     const phone = document.querySelector('.signup__phone').value;
     const role = document.querySelector('.signup__role').value;
     signup(fullName, email, password, passwordConfirm, username, country, phone, role);
+  });
+}
+
+
+if (buyerSignupForm) {
+  buyerSignupForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const fullName = document.querySelector('.buyer-signup__fullname').value;
+    const email = document.querySelector('.buyer-signup__email').value;
+    const password = document.querySelector('.buyer-signup__passwordMain').value;
+    const passwordConfirm = document.querySelector('.buyer-signup__passwordconfirm').value;
+    const username = document.querySelector('.buyer-signup__username').value;
+    signupBuyer(fullName, email, password, passwordConfirm, username);
   });
 }

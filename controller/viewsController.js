@@ -188,8 +188,12 @@ exports.productCatalog = async(req, res) => {
 
 // Admin
 exports.adminAuth = (req, res) => {
+    if( req.cookies.jwt ) {
+        return res.redirect('/dashboard')
+    }
     res.status(200).render('admin_auth');
 }
+
 exports.manageUsers = async (req, res) => {
     try {
         const users = await User.find();

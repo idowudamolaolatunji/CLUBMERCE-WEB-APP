@@ -12,8 +12,6 @@ const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 
 
-express().use(cookieParser())
-
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
 const signToken = (id) => {
@@ -23,6 +21,7 @@ const signToken = (id) => {
   });
 }
 
+/*
 const createCookie = function(statusCode, user, res, message) {
   // takes the user id(payload), secretkey, and an option(expiredin)
   const token = signToken(user._id);
@@ -43,8 +42,7 @@ const createCookie = function(statusCode, user, res, message) {
     }
   });
 }
-
-
+*/
 
 const sendSignUpEmailToken = async (req, user, token) => {
   try {
@@ -65,7 +63,6 @@ const sendSignUpEmailToken = async (req, user, token) => {
     console.log(err);
   }
 };
-
 
 //////////////////////////////////////////////
 //////////////////////////////////////////////
@@ -100,6 +97,34 @@ exports.signup = catchAsync(async (req, res) => {
       }
     });
     await sendSignUpEmailToken(req, newUser, token);
+})
+exports.buyerSignup = catchAsync(async (req, res) => {
+    const emailExist = await User.findOne({email: req.body.email, role: 'buyer' });
+    const usernameExist = await User.findOne({username: req.body.username, role: 'buyer' });
+    if(emailExist) return res.json({ message: 'Email already Exist'});
+    if(usernameExist) return res.json({ message: 'Username already Exist'});
+
+
+    const newBuyer = await User.create({
+        fullName: req.body.fullName,
+        email: req.body.email,
+        password: req.body.password,
+        passwordConfirm: req.body.passwordConfirm,
+        username: req.body.username,
+        role: 'buyer',
+        isEmailVerified: true
+    });
+
+    const token = signToken(newBuyer._id);
+    
+    res.status(201).json({
+      status: "success",
+      message: "Successfully signed up",
+      token,
+      data: {
+        user: newBuyer
+      }
+    });
 })
 
 // Verification route
