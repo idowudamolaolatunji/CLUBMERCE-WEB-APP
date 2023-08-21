@@ -5,23 +5,22 @@ head
     meta(charset="UTF-8")
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    //- meta(http-equiv='Content-Security-Policy', content="script-src 'self' 'unsafe-inline' 'report-sample'; report-uri /csp-report-endpoint/")
 
-    //- meta(http-equiv='Content-Security-Policy', content="img-src 'self' data: blob:http://127.0.0.1:3000;")
-    //- meta(http-equiv='Content-Security-Policy', content="img-src 'self' https://res.cloudinary.com/")
-
+    link(rel="icon" href="./../asset/img/favicon.png" type="image/png")
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer")
-    link(rel="icon" href="../asset/img/favicon.png" type="image/png")
 
 
     //- STYLES 
-    link(rel="stylesheet" href="src/css/general.css")
-    link(rel="stylesheet" href="src/css/dashboard.css")
-    link(rel="stylesheet" href="src/css/query_dashboard.css")
+    link(rel="stylesheet" href="/src/css/general.css")
+    link(rel="stylesheet" href="/src/css/chat.css")
+    link(rel="stylesheet" href="/src/css/dashboard.css")
+    link(rel="stylesheet" href="/src/css/order_and_payment.css")
+    link(rel="stylesheet" href="/src/css/query_dashboard.css")
 
 
     //- script(src="/socket.io/socket.io.js")
-    //- script(defer src="src/js/chat.js")
+    script(defer src="/src/js/dashboard.js")
+    script(defer src="src/js/chat.js")
 
 
 
@@ -46,18 +45,26 @@ body
                 i.fa-solid.fa-close.icon.nav__icon.menubar-control.menu-closed
                 i.fa-solid.fa-bars.icon.nav__icon.menubar-control.menu-opened.hidden
                 a(href='/dashboard')
-                    img.logo(src='asset/img/logo-removebg.png' alt='clubmerce logo')
+                    img.logo(src='/asset/img/logo-removebg.png' alt='clubmerce logo')
                 a(href='/dashboard')
-                    img.logo-small(src='asset/img/favicon.png' alt='clubmerce logo')
+                    img.logo-small(src='/asset/img/favicon.png' alt='clubmerce logo')
             nav.navbar
             
-                - if(section === 'marketplace')
+                -if(section === 'marketplace')
                     form.nav__search
                         input.nav__input(type='search' placeholder='search...')
                         button.search__button(type='submit')
                             i.fa-solid.fa-magnifying-glass.icon.nav__icon
 
                 span.nav__icons
+                    -if(user.role === 'vendor')
+                        a.nav__link.nav__upgrade.nav--text(href="/upgrade-account") upgrade +
+                    -if(user.role === 'admin')
+                        a.nav--text(href='settings') change 
+                            br 
+                            | password
+
+
                     span.notification__icon
                         i.fa-regular.fa-bell.icon.nav__icon
                         //- notification...
@@ -74,7 +81,7 @@ body
                                             span &dash;
                                             p.notify__date 10 mins ago
                                 .notify__image--box
-                                    img.notify__image(src=`asset/img/users/${user.image}` alt='')
+                                    img.notify__image(src=`/asset/img/users/${user.image}` alt='')
                                 //- .notify__icon--box
                                     i.fa-solid.fa-lock.icon.notify__icon
 
@@ -84,22 +91,22 @@ body
                         span
                             //- img.nav__image(src=`asset/img/${user.image}`)
                             .nav__image--box
-                                img.nav__image(src=`asset/img/users/${user.image}` alt=`user's photo`)
+                                img.nav__image(src=`/asset/img/users/${user.image}` alt=`user's photo`)
 
                     -else
                         span
-                            //- img.nav__image(src=`asset/img/${user.image}`)
                             .nav__image--box
-                                img.nav__image(src=`asset/img/users/${user.image}` alt=`user's photo`)
+                                //- img.nav__image(class=`${user.role === 'vendor' && user.vendorAccountType ? 'vendor--type' : ''}` type=`${user.role === 'vendor' ? user.vendorAccountType : ''}` src=`/asset/img/users/${user.image}` alt=`user's photo`)
+                                img.nav__image(src=`/asset/img/users/${user.image}` alt=`user's photo`)
                             //- profile...
                             .Profile__hovered.hidden
                                 .profile__content
                                     .profile__owner
                                         .profile__image--box
-                                            img.profile__image(src=`asset/img/users/${user.image}` alt=`user's photo`)
+                                            img.profile__image(src=`/asset/img/users/${user.image}` alt=`user's photo`)
                                         p.profile__name= user.fullName
                                     a.profile__link.nav__link(href="/profile") My profile
-                                    button.profile__button.nav__link.nav__logout signout&nbsp;
+                                    button.profile__button.nav__link(class=`${user.role === 'buyer' ? 'buyer__nav--logout' : 'nav__logout'}`) signout&nbsp;
                                         i.fa-solid.fa-arrow-right-to-bracket.profile__icon
 
 
@@ -116,33 +123,36 @@ body
                 .menu__body
                     ul.menu__list
                         -if(user.role === 'buyer')
-                            +menuItem('dashboard', 'My Dashboard', 'fa-solid fa-shop', true)
-                            //- +menuItem('dashboard', 'My Dashboard', 'fa-solid fa-shop', false)
+                            +menuItem('buyers/dashboard', 'My Dashboard', 'fa-solid fa-gauge', _)
+                            +menuItem('buyers/order', 'My Orders', 'fa-solid fa-shopping-cart', _)
 
                         -if(user.role === 'affiliate')
-                            +menuItem('dashboard', 'Dashboard', 'fa-solid fa-gauge', true)
-                            +menuItem('marketplace', 'Affiliate Marketplace', 'fa-solid fa-shop', false)
-                            +menuItem('leaderboard', 'Affiliate Leaderboard', 'fa-solid fa-trophy', false)
-                            +menuItem('performance', 'My Performance', 'fa-solid fa-chart-simple', false)
-                            +menuItem('transaction', 'Transactions', 'fa-solid fa-chart-line', false)
-                            +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
+                            +menuItem('dashboard', 'Dashboard', 'fa-solid fa-gauge', _)
+                            +menuItem('marketplace', 'Affiliate Marketplace', 'fa-solid fa-shop', _)
+                            +menuItem('leaderboard', 'Affiliate Leaderboard', 'fa-solid fa-trophy', _)
+                            +menuItem('performance', 'My Performance', 'fa-solid fa-chart-simple', _)
+                            +menuItem('transaction', 'Transactions', 'fa-solid fa-chart-line', _)
+                            +menuItem('settings', 'settings', 'fa-solid fa-gear', _)
 
                         -if(user.role === 'vendor')
-                            +menuItem('dashboard', 'Dashboard', 'fa-solid fa-gauge', true)
-                            +menuItem('product-catalog', 'Product Catalog', 'fa-solid fa-clipboard-list', false)
-                            +menuItem('performance', 'Product Performance', 'fa-solid fa-chart-simple', false)
-                            +menuItem('transaction', 'Transactions', 'fa-solid fa-chart-line', false)
-                            +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
+                            +menuItem('dashboard', 'Dashboard', 'fa-solid fa-gauge', _)
+                            +menuItem('product-catalog', 'Product Catalog', 'fa-solid fa-clipboard-list', _)
+                            +menuItem('performance', 'Product Performance', 'fa-solid fa-chart-simple', _)
+                            +menuItem('transaction', 'Transactions', 'fa-solid fa-chart-line', _)
+                            +menuItem('settings', 'settings', 'fa-solid fa-gear', _)
 
                         -if(user.role === 'admin')
-                            +menuItem('dashboard', 'All perfomance', 'fa-solid fa-chart-simple', true)
-                            //- +menuItem('product-marketplace', 'Product Marketplace', 'fa-solid fa-clipboard-list', false)
-                            +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
+                            +menuItem('dashboard', 'All perfomance', 'fa-solid fa-chart-simple', _)
+                            +menuItem('manage-app', 'App settings', 'fa-solid fa-gears', _)
 
 
                 -if(user.role === 'admin')
                     .menu__bottom 
                         ul.menu__list 
+                            li.menu__item 
+                                a.menu__link(href="/manage-ads") 
+                                    i.fa-solid.fa-rectangle-ad.icon.menu__icon
+                                    p Manage Ads
                             li.menu__item 
                                 a.menu__link(href="/manage-users") 
                                     i.fa-solid.fa-users.icon.menu__icon
@@ -170,13 +180,14 @@ body
                     .menu__bottom
                         ul.menu__list
                             li.menu__item
-                                a.menu__link(href="/profile")
-                                    img.menu__profile-image(src=`asset/img/users/${user.image}` alt=`user's photo`)
+                                a.menu__link(href=`${user.role === 'buyer' ? '/buyers/profile' : '/profile'}`)
+                                    img.menu__profile-image(src=`/asset/img/users/${user.image}` alt=`user's photo`)
                                     p profile
                             li.menu__item
-                                button.menu__button.menu__logout
+                                button.menu__button(class=`${user.role === 'buyer' ? 'buyer__menu--logout' : 'menu__logout'}`)
                                     | signout&nbsp;
                                     i.fa-solid.fa-arrow-right-to-bracket
+                                    
             main.main__dashboard
                 .dashboard__content
                     block content
@@ -186,9 +197,9 @@ body
                                 .dashboard__insights 
                                     .insight.insight__one
                                         .icon__box 
-                                            i.fa-solid.fa-coins.insight__icon
+                                            i.fa-solid.fa-money-bill-1-wave.insight__icon
                                         span 
-                                            p.insight__title Total enarned
+                                            p.insight__title All Time Earnings
                                             p.insight__text=`₦${user.wallet}`
                                             //- p.insight__text ₦400,948
 
@@ -199,6 +210,7 @@ body
                                             p.insight__title Product Sold
                                             p.insight__text= user.productSold
                                             //- p.insight__text 50
+                                            
 
                                     .insight.insight__three
                                         .icon__box 
@@ -215,6 +227,24 @@ body
                                             p.insight__title Promotion url
                                             p.insight__text= user.affiliateLinks.length
                                             //- p.insight__text= user.affiliateLinks[0] === 0 ? 0 : user.affiliateLinks.length 
+
+                                    .insight.insight__two
+                                        .icon__box 
+                                            i.fa-solid.fa-comments-dollar.insight__icon
+                                        span 
+                                            p.insight__title Account Balance
+                                            p.insight__text 0
+
+
+                                    .insight.insight__four
+                                        .icon__box 
+                                            i.fa-solid.fa-coins.insight__icon
+                                        span 
+                                            p.insight__title Next Payout
+                                            p.insight__text= 0
+                                    
+
+
 
                                 .dashboard__table
                                     .table
@@ -266,10 +296,11 @@ body
                                 .dashboard__insights 
                                     .insight.insight__one
                                         .icon__box 
-                                            i.fa-solid.fa-comments-dollar.insight__icon
+                                            i.fa-solid.fa-money-bill-1-wave.insight__icon
                                         span 
-                                            p.insight__title My profit
+                                            p.insight__title All Time Earnings
                                             p.insight__text=`₦ ${products.reduce((acc, product) => acc + product.profits, 0)}`
+                                    
 
                                     .insight.insight__two
                                         .icon__box 
@@ -285,13 +316,27 @@ body
                                             p.insight__title Orders
                                             p.insight__text= products.reduce((acc, product) => acc + product.ordersCount, 0)
 
-                                    .insight.insight__four
+                                    .insight.insight__one
                                         .icon__box 
                                             i.fa-solid.fa-bullhorn.insight__icon
                                         span
                                             p.insight__title Affiliate Gravity
                                             p.insight__text= products.reduce((acc, product) => acc + product.productGravity, 0)
                                             //- p.insight__text= product.productGravity
+
+                                    .insight.insight__two
+                                        .icon__box 
+                                            i.fa-solid.fa-comments-dollar.insight__icon
+                                        span 
+                                            p.insight__title Account Balance
+                                            p.insight__text 0
+
+                                    .insight.insight__four
+                                        .icon__box 
+                                            i.fa-solid.fa-coins.insight__icon
+                                        span 
+                                            p.insight__title Pending Profit
+                                            p.insight__text= 0
                                         
 
                                 .dashboard__table
@@ -333,56 +378,99 @@ body
                             .main__dashboard--container
                                 h3.dashboard__heading=`Welcome to Admin Dashboard`
                                 .dashboard__insights 
-                                    .insight.insight__one
-                                        .icon__box 
-                                            i.fa-solid.fa-users.insight__icon
-                                        span 
-                                            p.insight__text= allUsers.length
-                                            p.insight__title Total Users
+
 
                                     .insight.insight__two
                                         .icon__box 
-                                            i.fa-solid.fa-shopping-bag.insight__icon
+                                            i.fa-solid.fa-money-bill-1-wave.insight__icon
                                         span 
-                                            p.insight__text= allProducts.length
+                                            //- come back to to redo
+                                            p.insight__title App Profit
+                                            p.insight__text 0
+
+                                    .insight.insight__one
+                                        .icon__box 
+                                            i.fa-regular.fa-user.insight__icon
+                                        span 
+                                            p.insight__title Total Affiliates
+                                            p.insight__text= allUsers.filter(user => user.role === 'affiliate').length
+
+
+                                    .insight.insight__four
+                                        .icon__box 
+                                            i.fa-solid.fa-user-tie.insight__icon
+                                        span
+                                            p.insight__title Total Vendors
+                                            p.insight__text= allUsers.filter(user => user.role === 'vendor').length
+
+                                    .insight.insight__three
+                                        .icon__box 
+                                            i.fa-solid.fa-user-tag.insight__icon
+                                        span
+                                            p.insight__title Total Buyers
+                                            p.insight__text= allUsers.filter(user => user.role === 'buyer').length
+
+                                    .insight.insight__two
+                                        .icon__box 
+                                            //- i.fa-solid.fa-shopping-bag.insight__icon
+                                            i.fa-solid.fa-basket-shopping.insight__icon
+                                        span 
                                             p.insight__title Total Products
+                                            p.insight__text= allProducts.length
 
                                     .insight.insight__three
                                         .icon__box 
                                             i.fa-solid.fa-shopping-cart.insight__icon
                                         span 
-                                            p.insight__text= allOrders.length
                                             p.insight__title Total Orders
+                                            p.insight__text= allOrders.length
+                                    
 
                                     .insight.insight__four
                                         .icon__box 
                                             i.fa-solid.fa-gift.insight__icon
                                         span
-                                            p.insight__text= totalPurchases
                                             p.insight__title Total Purchases
+                                            p.insight__text= totalPurchases
 
                                     .insight.insight__four
                                         .icon__box 
                                             i.fa-solid.fa-up-right-from-square.insight__icon
                                         span
-                                            p.insight__text= totalClicks
                                             p.insight__title Total Clicks
+                                            p.insight__text= totalClicks
 
                                     .insight.insight__three
                                         .icon__box 
                                             i.fa-solid.fa-money-bill-transfer.insight__icon
                                         span
                                             - const conversionRate = (totalPurchases / totalClicks) * 100;
-                                            p.insight__text= conversionRate.toFixed(2) + '%'
                                             p.insight__title conversion Rate
+                                            p.insight__text= conversionRate.toFixed(2) + '%'
 
                                     .insight.insight__two
                                         .icon__box 
                                             i.fa-solid.fa-percent.insight__icon
                                         span
                                             - const ctr = (totalClicks / allUsers.length) * 100;
-                                            p.insight__text= ctr.toFixed(2) + '%'
                                             p.insight__title CTR
+                                            p.insight__text= ctr.toFixed(2) + '%'
+                                    
+                                    .insight.insight__three
+                                        .icon__box 
+                                            i.fa-solid.fa-users.insight__icon
+                                        span 
+                                            p.insight__title Total Users
+                                            p.insight__text= allUsers.filter(user => user.role !== 'admin').length
+
+
+                                    .insight.insight__four
+                                        .icon__box 
+                                            i.fa-solid.fa-money-bill-transfer.insight__icon
+                                        span 
+                                            //- come back to to redo
+                                            p.insight__title All Time Payout
+                                            p.insight__text 0
                            
 
 
@@ -419,48 +507,66 @@ body
                                                         p(class=`.status .status--${order.orderStatus}`)= order.orderStatus
                                     
 
-
-
-                //- .chat__box.hidden
-                    .chat-top
-                        p.chat-name Idowu Olatunji
-                        .chat-top__icons
-                            i.fa-solid.fa-gear.chat-icon
-                            i.fa-solid.fa-close.chat-icon
-                    .chat-mid
-                        //- .chat-mid__from.main
-                            .img-box
-                                img.chat-img.from-img(src='asset/img/face.png' alt='')
-                            .chat
-                                p.chat-from__point
-                                    span ~&nbsp;
-                                    | Idowu Olatunji
-                                p.chat-date 8:30
-                                p.chat-from__message Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, illo?
-                        //- .chat-mid__me.main
-                            .img-box
-                                img.chat-img.from-img(src='asset/img/avatar.png' alt='')
-                            .chat
-                                p.chat-me__point
-                                    span ~&nbsp;
-                                    | Me
-                                p.chat-date 17:10
-                                p.chat-me__message Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, illo?
-                    .chat-end
-                        .chat-end__chat
-                            form.chat__form
-                                input.chat-end__input(type='text' placeholder='Type your message')
-                                button.chat__button(type='submit')
-                                    i.fa-solid.fa-arrow-right.chat-icon
-                        .chat-end__controls
-                            i.fa-solid.fa-paperclip.chat-icon
-                            i.fa-regular.fa-face-smile.chat-icon
- 
-                                        
-
                 include _auth_footer
 
-    script(src="src/js/dashboard.js")
-    script(src="/src/js/updateSettings.js")
+    button.chat__box-toggler
+        span.material-symbols-rounded
+            i.fa-solid.fa-comment
+            | Chat
+        span.material-symbols-outlined
+            i.fa-solid.fa-close
+
+
+    .chat__box
+        .chat-head
+            i.fa-solid.fa-arrow-left.btn-back 
+            p.chat-person Idowu Olatunji
+            span.close-btn.material-symbols-outlined close
+        //- .chat-head-chat
+            p.chat-heading Chats ✉
+            span.close-btn.material-symbols-outlined close
+        ul.chat__box--chat
+            li.chat.incoming
+                p Hi there
+        .chat-input
+            textarea(placeholder='Enter a message...' spellcheck='false' required='')
+            span#send-btn.material-symbols-rounded send
+
+                            
+
 
         
+    //- .chat__box
+        .chat-top
+            p.chat-name Idowu Olatunji
+            .chat-top__icons
+                i.fa-solid.fa-gear.chat-icon
+                i.fa-solid.fa-close.chat-icon
+        .chat-mid
+            .chat-mid__from.main
+                .img-box
+                    img.chat-img.from-img(src='asset/img/face.png' alt='')
+                .chat
+                    p.chat-from__point
+                        span ~&nbsp;
+                        | Idowu Olatunji
+                    p.chat-date 8:30
+                    p.chat-from__message Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, illo?
+            .chat-mid__me.main
+                .img-box
+                    img.chat-img.from-img(src='asset/img/avatar.png' alt='')
+                .chat
+                    p.chat-me__point
+                        span ~&nbsp;
+                        | Me
+                    p.chat-date 17:10
+                    p.chat-me__message Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, illo?
+        .chat-end
+            .chat-end__chat
+                form.chat__form
+                    input.chat-end__input(type='text' placeholder='Type your message')
+                    button.chat__button(type='submit')
+                        i.fa-solid.fa-arrow-right.chat-icon
+            .chat-end__controls
+                i.fa-solid.fa-paperclip.chat-icon
+                i.fa-regular.fa-face-smile.chat-icon

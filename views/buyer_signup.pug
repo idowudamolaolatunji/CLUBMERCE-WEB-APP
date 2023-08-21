@@ -15,6 +15,16 @@ head
     link(rel="stylesheet" href="/src/css/main.css")
 
     script(defer src="/src/js/auth.js")
+    script(type='text/javascript').
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/64e23766cc26a871b03054a8/1h89qgrqn';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
 
 
     title Signu for an account
@@ -36,11 +46,11 @@ body
             </div>
         </div>
         
-        .signup__form
+        .signup__form#buyer
 
-            form.signup#buyer-signup
+            form#buyer-signup
                 h3.form__heading
-                    | Create a cummerce account with 
+                    | Create a Buyer account with 
                     span.form__extra Clubmerce
                 .signup__grid.signup__name
                     .form__item

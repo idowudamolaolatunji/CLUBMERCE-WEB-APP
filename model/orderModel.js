@@ -10,6 +10,10 @@ const orderSchema = new mongoose.Schema({
 		type: mongoose.Schema.ObjectId,
 		ref: 'User'
 	},
+	affiliate: {
+		type: mongoose.Schema.ObjectId,
+		ref: 'User'
+	},
 	buyer: {
 		type: mongoose.Schema.ObjectId,
 		ref: 'User'
@@ -28,7 +32,8 @@ const orderSchema = new mongoose.Schema({
 		default: 1,
 	},
 	amount: Number,
-	commissionedAmount: Number,
+	vendorProfit: Number,
+	affiliateCommission: Number,
 	email: {
 		type: String,
 		required: [true, `Please provide us a reciever email address`],
@@ -45,6 +50,10 @@ const orderSchema = new mongoose.Schema({
 	city: String,
 	postalCode: String,
 	address: String,
+	reference: {
+		type: String,
+		required: true
+	},
 	createdAt: {
 		type: Date,
 		default: Date.now()
@@ -55,6 +64,9 @@ orderSchema.pre(/^find/, function(next) {
 	this.populate({
 		path: 'vendor',
 		select: '_id businessName',
+	}).populate({
+		path: 'affiliate',
+		select: '_id email'
 	}).populate({
 		path: 'buyer',
 		select: '_id email'

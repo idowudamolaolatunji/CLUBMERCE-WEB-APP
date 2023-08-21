@@ -1,0 +1,97 @@
+extends base_account 
+
+block content 
+    h3.dashboard__heading Upgrade account
+
+
+    .subscription__cards
+        figure.subscription__figure.currently
+            h3.heading__text Free
+            p.subHeading__text For free
+            span.sub__price ₦0.00
+            ui.sub__benefits
+                li.sub__items
+                    i.subscription__icon.fa-solid.fa-check
+                    | 10 Product uploads per year
+                li.sub__items
+                    i.subscription__icon.fa-solid.fa-check
+                    | 10 Product
+                li.sub__items
+                    i.subscription__icon.fa-solid.fa-check
+                    | 10 Product
+                li.sub__items
+                li.sub__items
+            button.sub__button(href='upgrade-account/subscribe' data-key='free') Subscribe
+
+
+        figure.subscription__figure.card__active
+            h3.heading__text Standard
+            p.subHeading__text For medium size businesses
+            span.sub__price ₦15,000
+            ui.sub__benefits
+                li.sub__items
+                    i.subscription__icon.fa-solid.fa-check
+                    | 50 Product uploads per year
+                li.sub__items
+                    i.subscription__icon.fa-solid.fa-check
+                    | Brand Listing
+                li.sub__items
+                    i.subscription__icon.fa-solid.fa-check
+                    | 10 Product
+                li.sub__items
+                    i.subscription__icon.fa-solid.fa-check
+                    | 10 Product
+                li.sub__items
+                    i.subscription__icon.fa-solid.fa-check
+                    | 10 Product
+            button.sub__button(href='upgrade-account/subscribe' data-key='standard') Subscribe
+
+
+        figure.subscription__figure
+            h3.heading__text Premium
+            p.subHeading__text For big businesses
+            span.sub__price ₦20,000
+            ui.sub__benefits
+                li.sub__items
+                    i.subscription__icon.fa-solid.fa-check
+                    | Unlimited Product uploads
+                li.sub__items
+                    i.subscription__icon.fa-solid.fa-check
+                    | Brand Listing
+                li.sub__items
+                    i.subscription__icon.fa-solid.fa-check
+                    | Product listing
+                li.sub__items
+                    i.subscription__icon.fa-solid.fa-check
+                    | 10 Product
+                li.sub__items
+                    i.subscription__icon.fa-solid.fa-check
+                    | 10 Product
+            button.sub__button(href='upgrade-account/subscribe' data-key='premium') Subscribe
+
+
+
+        .checkout__overlay.hidden
+            .checkout__modal
+                i.fa-solid.fa-close.icon.close__checkout
+                h3.dashboard__heading Subscribe
+                span.checkout__info
+                    span
+                        p.product__name Standard
+                        p.product__price ₦15,000
+                    span 
+                        p.product__summary For medium size businesses
+                        p.product__quantity X1
+                form.checkout__form(action="/pay", method="post")
+                    h3.dashboard__heading Form info
+                    .form__item
+                        label.form__label(for='email') Email address
+                        input#email.form__input(type='email' placeholder='Email address' required='')
+                    .form__item
+                        label.form__label(for='amount') Amount
+                        input#amount.form__input(type='number' required='')
+                    .form__item
+                        label.form__label(for='fullname') Fullname
+                        input#fullname.form__input(type='text')
+                    .form__item
+                        button.form__button(type='submit') Proceed

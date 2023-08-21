@@ -50,6 +50,7 @@ const userSchema = new mongoose.Schema({
     passwordResetToken: String,
     passwordResetExpires: Date,
     country: String,
+    state: String,
     phone: {
         type: String,
         trim: true
@@ -57,9 +58,10 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
         enum: ['buyer', 'affiliate', 'vendor', 'admin'],
-        default: "buyer",
+        default: 'affiliate',
+        required: true,
     },
-    zipCode: String,
+    zipCode: Number,
     businessName: {
         type: String,
         default: ''
@@ -75,7 +77,7 @@ const userSchema = new mongoose.Schema({
     },
     slug: String,
     bankName: String,
-    bankAccountNumber: Number,
+    bankAccountNumber: String,
     bankHolderName: String,
     active: {
         type: Boolean,
@@ -86,6 +88,30 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
+    // **** Vendor focused **** //
+    vendorAccountType: {
+        type: String,
+        enum: [null, 'free', 'standard', 'premium'],
+        default: null
+    },
+    vendorSubscriptionActive: {
+        type: Boolean,
+        default: false,
+    },
+    vendorSubscriptionType: {
+        type: String,
+        enum: [null, 'standard', 'premium'],
+        default: null
+    },
+    vendorAccountTypeExpiresIn: {
+        type: Date,
+        default: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+    },
+    vendorAccountTypeProductLendth: {
+        type: Number,
+        default: null
+    },
+    // ************** //
     clicks: {
         type: Number,
         default: 0,
@@ -141,6 +167,12 @@ userSchema.pre('save', function(next) {
     this.passwordChangedAt = Date.now() - 1000;
     next();
 })
+userSchema.pre('save', function(next) {
+    if(this.role === 'vendor' && this.vendorAccountTypeExpiresIn === Date.now()) {
+        this.vendorSubscriptionActive === false
+    }
+    return next();
+});
 
 // hide all inactive user
 userSchema.pre(/^find/, function(next) {

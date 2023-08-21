@@ -13,13 +13,46 @@ block content
             h3.dashboard__heading Add a payment account
             .form__item
                 label.form__label(for='paymentBankName') Payment Bank Name
-                input#paymentBankName.form__input(type='paymentBankName' value=`${user.bankName || ''}` placeholder="Name Of Bank" required)
+                select#paymentBankName.form__input(selected=`${user.bankName}`)
+                    option(selected)= `${user.bankName}` || 'Choose a bank'
+                    option(value='Access Bank') Access Bank
+                    option(value='Citi Bank') Citi Bank
+                    option(value='Coronation Merchant Bank') Coronation Merchant Bank
+                    option(value='EcoBank') EcoBank
+                    option(value='Fidelity Bank') Fidelity Bank
+                    option(value='First Bank of Nigeria') First Bank of Nigeria
+                    option(value='First City Monument Bank (FCMB)') First City Monument Bank (FCMB)
+                    option(value='FSDH Merchant Bank') FSDH Merchant Bank
+                    option(value='Globus Bank') Globus Bank
+                    option(value='Greenwich Merchant Bank') Greenwich Merchant Bank
+                    option(value='Guarantee Trust Bank (GTB)') Guarantee Trust Bank (GTB)
+                    option(value='Heritage Bank') Heritage Bank
+                    option(value='Jaiz Bank') Jaiz Bank
+                    option(value='Keystone Bank') Keystone Bank
+                    option(value='Kuda MFB') Kuda MFB
+                    option(value='Lotus Bank') Lotus Bank
+                    option(value='Nova Merchant Bank') Nova Merchant Bank 
+                    option(value='Opay') OPAY
+                    option(value='Polaris Bank') Polaris Bank
+                    option(value='Providus Bank') Providus Bank
+                    option(value='Rand Merchant Bank') Rand Merchant Bank 
+                    option(value='Stanbic IBTC Bank') Stanbic IBTC Bank
+                    option(value='Standard Chartered Bank') Standard Chartered Bank
+                    option(value='Sterling Bank') Sterling Bank 
+                    option(value='Suntrust Bank') Suntrust Bank 
+                    option(value='Taj Bank') Taj Bank
+                    option(value='Titan Trust Bank') Titan Trust Bank
+                    option(value='Union Bank Plc') Union Bank Plc
+                    option(value='United Bank for Africa (UBA)') United Bank for Africa (UBA)
+                    option(value='Unity Bank') Unity Bank
+                    option(value='Wema Bank') Wema Bank
+                    option(value='Zenith Bank') Zenith Bank
             .form__item
                 label.form__label(for='paymentAcctNum') Payment Account Number
-                input#paymentAcctNum.form__input(type='number' value=`${user.bankAccountNumber || ''}` required placeholder="Bank Number")
+                input#paymentAcctNum.form__input(type='num' value=`${user.bankAccountNumber || ''}` required placeholder="Bank Number" minlength='10' maxlength='10')
             .form__item
                 label.form__label(for='HoldersName') Holder's Name
-                input#HoldersName.form__input(type='HoldersName' value=`${user.bankHolderName  || ''}`  placeholder="Name As On Bank Document" required)
+                input#HoldersName.form__input(type='text' name='HoldersName' value=`${user.bankHolderName  || ''}` placeholder="Name As On Bank Document" required)
             .form__item.right
                 button.btn.form-btn.btn--save-bank Add payment account
         
@@ -29,35 +62,35 @@ block content
             h3.dashboard__heading Update Account Password
             .form__item
                 label.form__label(for='password-current') Current Password
-                input.form__input.signup__password(id='password-current' name='password-current' type='password' placeholder='••••••••••••', required, minlength='8')
+                input.form__input.signup__password#password-current(name='password-current' type='password' placeholder='••••••••••••', required, minlength='8')
             .form__item
                 label.form__label(for='password') New Password
-                input.form__input.signup__password(id='password' name='password' type='password' placeholder='••••••••••••', required, minlength='8')
+                input.form__input.signup__password#password( name='password' type='password' placeholder='••••••••••••', required, minlength='8')
             .form__item
                 label.form__label(for='password-confirm') Confirm New Password
-                input.form__input.signup__passwordconfirm(id='password-confirm' name='password-confirm' type='password' placeholder='••••••••••••', required, minlength='8')
+                input.form__input.signup__passwordconfirm#password-confirm(name='password-confirm' type='password' placeholder='••••••••••••', required, minlength='8')
             .form__item.right
                     button.btn.form-btn.btn--save-password Save password
 
 
         -if(user.role === 'affiliate')
-            form.delete-data(data-id= user._id)
+            form.delete-data(data-id= user._id, data-role= user.role)
                 h4 Delete My Account 
                 span Every info about this account, transactions, affiliate links, sold product histories, personal details and other sensitive informations would be removed as you click 
                     strong(style="color:#f15a29;") Delete My Account!
                 button.btn.delete-account(type="submit") Delete My Account
 
         -if(user.role === 'vendor')
-            form.delete-data(data-id= user._id)
+            form.delete-data(data-id= user._id, data-role= user.role)
                 h4 Delete Vendor Account 
                 span Every info about this vendor account, transactions, products, purchases, orders and order histories, personal details and other sensitive informations would be removed as you click 
                     strong(style="color:#f15a29;") Delete My Account!
                 button.btn.delete-account(type="submit") Delete My Account
 
     -if(user.role === 'admin')
-        h3.dashboard__heading Admin Settings 
+        h3.dashboard__heading Settings 
         form.form__data.form-password-data
-            h3.dashboard__heading Update Account Password
+            h3.dashboard__heading Change Account Password
             .form__item
                 label.form__label(for='password-current') Current Password
                 input.form__input.signup__password(name='password' type='password-current' placeholder='••••••••••••', required, minlength='8')

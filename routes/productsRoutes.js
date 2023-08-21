@@ -7,13 +7,6 @@ const router = express.Router();
 
 router.route('/top-20-best',)
   .get(authController.protect, productsController.aliasTopProduct, productsController.getAllProduct)
-  // .patch(
-  //   authController.protect,
-  //   // authController.restrictTo('vendor', 'admin'),
-  //   productsController.uploadProductImages,
-  //   productsController.resizeProductImages,
-  //   productsController.updateProduct
-  //   )
     
 router.route("/")
 .get(authController.protect, productsController.getAllProduct)

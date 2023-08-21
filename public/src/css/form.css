@@ -1,5 +1,8 @@
-.login__form, .signup__form {
-    padding: 12rem 0;
+.login__form, #buyer, .signup__form {
+    padding: 16rem 0 8rem;
+}
+.main .signup__form {
+    padding: 8rem 0 8rem;
 }
 
 #admin-login {
@@ -9,24 +12,24 @@
     transform: translate(-50%, -50%);
     max-width: 50rem;
 }
-
 .login__container, .signup__container {
     max-width: 108rem;
     margin: 0 auto;
     gap: 3.6rem;
-    align-items: center;
     border-radius: 1rem;
     background-image: linear-gradient(to right bottom, rgba(255, 255, 255, .5), rgba(255, 255, 255, .5));
     overflow: hidden;
     height: 55rem;
     align-items: start;
 }
-
 .signup__container {
     grid-template-columns: 1fr 1.5fr;
 }
 .login__container {
     grid-template-columns: 1fr 1fr;
+}
+form.login {
+    margin-top: 5.2rem;
 }
 
 .form__heading {
@@ -51,7 +54,8 @@
     flex-direction: column;
     justify-content: center;
     gap: .6rem;
-    margin-bottom: 1.8rem;
+    /* margin-bottom: 1.8rem; */
+    margin-bottom: 2.8rem;
 }
 
 .login__form .form__item.select .form__item--input {
@@ -90,7 +94,10 @@
     border: .15rem solid #008600;
 }
 
-.select--input { cursor: pointer; }
+.select--input { 
+    cursor: pointer;
+    width: 100%;
+}
 
 .select--input option {
     font-size: 1.4rem;
@@ -158,6 +165,28 @@ button {
     column-gap: 2.4rem;
     justify-items: space-between;
 }
+
+div.phone__input--box {
+    position: relative;
+    overflow: hidden;
+}
+input.phone__input {
+    padding-left: 6.8rem;
+}
+input.country__code {
+    position: absolute;
+    top: 2rem;
+    left: 0;
+    border: 1px solid #ac393138;
+    width: 6.2rem;
+    cursor: text;
+}
+input.country__code:focus {
+    background-color: rgba(255, 255, 255, 0.4);
+    outline: none;
+    border: transparent;
+}
+
 
 
 /* ======================= */

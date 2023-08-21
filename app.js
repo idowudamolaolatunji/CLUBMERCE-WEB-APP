@@ -3,8 +3,7 @@ const path = require('path');
 
 const express = require('express');
 const morgan = require('morgan');
-const pug = require('pug');
-const helmet = require('helmet');
+// const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
@@ -27,20 +26,7 @@ const io = require('socket.io')(require('http').createServer(app));
 // body parser and cookie parser
 app.use(express.json());
 app.use(cookieParser());
-
-
-app.use((req, res, next) => {
-    res.setHeader(
-      'Report-To',
-      JSON.stringify({
-        group: 'csp-report',
-        max_age: 31536000,
-        endpoints: [{ url: '/csp-report-endpoint/' }],
-        include_subdomains: true,
-      })
-    );
-    next();
-});
+app.use(bodyParser.json({limit: "100mb"}));
   
 // Use the 'cors' middleware to enable CORS for all routes
 app.use(cors());
@@ -56,7 +42,16 @@ if(process.env.NODE_ENV === 'development') {
 }
 
 // Set security http headers
-app.use(helmet())
+// app.use(helmet())
+// helmet.contentSecurityPolicy({
+//   useDefaults: false,
+//   directives: {
+//     defaultSrc: ["'self'"],
+//     scriptSrc: ["'self'", "example.com"], // scripts from example.com are now trusted
+//     objectSrc: ["'none'"],
+//     upgradeInsecureRequests: [],
+//   },
+// })
 
 // Rate limiting
 // const limiter = rateLimit({
@@ -70,13 +65,13 @@ app.use(helmet())
 app.use(mongoSanitize());
 
 // Data sanitization agains xss
-app.use(xss())
+// app.use(xss())
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
     // console.log(req.headers);
-    console.log(req.params)
+    // console.log(req.params)
     console.log('Hello from the Middleware...');
     next();
 });

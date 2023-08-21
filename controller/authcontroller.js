@@ -6,7 +6,8 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser')
 
 const app = require("./../app");
-const User = require("./../model/usersModel");
+const User = require("../model/usersModel");
+const confirmEmailTemplate = require('../utils/EmailTemplates');
 const sendEmail = require('../utils/Email');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
@@ -43,20 +44,25 @@ const createCookie = function(statusCode, user, res, message) {
   });
 }
 */
+// You’ve received this message because your email address has been registered with our site. Please click the button below to verify your email address and confirm that you are the owner of this account.
 
-const sendSignUpEmailToken = async (req, user, token) => {
+
+const sendSignUpEmailToken = async (_, user, token) => {
   try {
     
-    const verificationUrl = `${req.protocol}://${req.get('host')}/api/users/verify-email/${token}`;
-    const message = `
-      Please verify your email address\n
-      Click ${verificationUrl} 
-      \n to verify your email...`;
-
+    // const verificationUrl = `${req.protocol}://${req.get('host')}/api/users/verify-email/${token}`;
+    const verificationUrl = `https://clubmerce.com/api/users/verify-email/${token}`;
+    // const firstName = user.fullName;
+    // const message = `
+    //   Please verify your email address\n
+    //   Click ${verificationUrl} 
+    //   \n to verify your email...`;
+    const mailMessage = confirmEmailTemplate(user.fullName, verificationUrl);
+    console.log(mailMessage);
     await sendEmail({
       user: user.email,
       subject: 'Verify Your Email Address',
-      message
+      message: mailMessage
     });
 
   } catch (err) {
@@ -64,26 +70,27 @@ const sendSignUpEmailToken = async (req, user, token) => {
   }
 };
 
+
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 // signup
-exports.signup = catchAsync(async (req, res) => {
+exports.signupAffiliate = catchAsync(async (req, res) => {
     const emailExist = await User.findOne({email: req.body.email });
     const usernameExist = await User.findOne({username: req.body.username });
     if(emailExist) return res.json({ message: 'Email already Exist'});
     if(usernameExist) return res.json({ message: 'Username already Exist'});
-
-
+    
+    
     const newUser = await User.create({
-        fullName: req.body.fullName,
-        email: req.body.email,
-        password: req.body.password,
-        passwordConfirm: req.body.passwordConfirm,
-        username: req.body.username,
-        country: req.body.country,
-        phone: req.body.phone,
-        role: req.body.role,
+      fullName: req.body.fullName,
+      email: req.body.email,
+      password: req.body.password,
+      passwordConfirm: req.body.passwordConfirm,
+      username: req.body.username,
+      country: req.body.country,
+      phone: req.body.phone,
+      role: req.body.role,
     });
 
     const token = signToken(newUser._id);
@@ -98,7 +105,37 @@ exports.signup = catchAsync(async (req, res) => {
     });
     await sendSignUpEmailToken(req, newUser, token);
 })
-exports.buyerSignup = catchAsync(async (req, res) => {
+exports.signupVendor = catchAsync(async (req, res) => {
+    const emailExist = await User.findOne({email: req.body.email });
+    const usernameExist = await User.findOne({username: req.body.username });
+    if(emailExist) return res.json({ message: 'Email already Exist'});
+    if(usernameExist) return res.json({ message: 'Username already Exist'});
+    
+    const newUser = await User.create({
+      fullName: req.body.fullName,
+      email: req.body.email,
+      password: req.body.password,
+      passwordConfirm: req.body.passwordConfirm,
+      username: req.body.username,
+      country: req.body.country,
+      phone: req.body.phone,
+      role: req.body.role,
+      vendorAccountType: req.body.type,
+    });
+
+    const token = signToken(newUser._id);
+    
+    res.status(201).json({
+      status: "success",
+      message: "Successfully signed up, Confirm Email",
+      token,
+      data: {
+        user: newUser
+      }
+    });
+    await sendSignUpEmailToken(req, newUser, token);
+})
+exports.signupBuyer = catchAsync(async (req, res) => {
     const emailExist = await User.findOne({email: req.body.email, role: 'buyer' });
     const usernameExist = await User.findOne({username: req.body.username, role: 'buyer' });
     if(emailExist) return res.json({ message: 'Email already Exist'});
@@ -112,7 +149,7 @@ exports.buyerSignup = catchAsync(async (req, res) => {
         passwordConfirm: req.body.passwordConfirm,
         username: req.body.username,
         role: 'buyer',
-        isEmailVerified: true
+        // isEmailVerified: true
     });
 
     const token = signToken(newBuyer._id);
@@ -168,36 +205,39 @@ exports.login = catchAsync(async (req, res, next) => {
     // 2) Check if user exists rs&& password is correct
     const user = await User.findOne({ email }).select('+password');
 
-    if (!user || !(await user.comparePassword(password, user.password)) || role !== user.role) {
-        // return next(new AppError('Incorrect email or password or role', 401));
-        res.json({message: 'Incorrect email or password or role'})
+    if (!user.email || !(await user.comparePassword(password, user.password)) ) {
+        res.json({message: 'Incorrect email or password '})
     }
+    if(!user.active) {
+      res.json({ message: 'Account no longer active' });
+    }
+
+    //=//=//=//=//=//=//=//=//=//
+    const token = signToken(user._id);
+
     if(!user.isEmailVerified) {
       const token = signToken(user._id);
       res.json({message: 'Email address not verified, Check your mail'})
       await sendSignUpEmailToken(req, user, token);
-      // return next(new AppError('Email address not verified, Check your mail', 401));
     }
-    //=//=//=//=//=//=//=//=//=//
-    const token = signToken(user._id);
+
     const cookieOptions = {
         expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
-        httpOnly: true
+        httpOnly: true,
+        secure: true
     }
-    if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
     res.cookie('jwt', token, cookieOptions);
     //=//=//=//=//=//=//=//=//=//
 
     // Remove password from output
     user.password = undefined;
-
     return res.status(200).json({
-        status: "success",
-        message: "Successfully logged in",
-        token,
-        data: {
-            user,
-        }
+      status: "success",
+      message: "Successfully logged in",
+      token,
+      data: {
+          user,
+      }
     })
   });
 
@@ -211,21 +251,22 @@ exports.loginBuyer = catchAsync(async (req, res, next) => {
     }
     const user = await User.findOne({ email }).select('+password');
 
-    if (!user || !(await user.comparePassword(password, user.password))) {
+    if (!user.email || !(await user.comparePassword(password, user.password))) {
         res.json({message: 'Incorrect email or password'})
     }
     
     const token = signToken(user._id);
     const cookieOptions = {
         expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
-        httpOnly: true
+        httpOnly: true,
+        secure: true
     }
-    if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+    
     res.cookie('jwt', token, cookieOptions);
 
     // Remove password from output
     user.password = undefined;
-    res.status(200).json({
+    return res.status(200).json({
         status: "success",
         message: "Successfully logged in",
         token,
@@ -235,46 +276,47 @@ exports.loginBuyer = catchAsync(async (req, res, next) => {
     })
   });
 exports.loginAdmin = catchAsync(async (req, res, next) => {
-    const { email, password} = req.body;
+  const { email, password} = req.body;
 
-    if (!email || !password) {
-        return next(new AppError('Please provide email and password!', 400));
+  if (!email || !password) {
+      return next(new AppError('Please provide email and password!', 400));
+  }
+  // 2) Check if user exists rs&& password is correct
+  const user = await User.findOne({ email }).select('+password');
+
+  if (!user.email || !(await user.comparePassword(password, user.password)) || user.role !== 'admin') {
+      return next(new AppError('Incorrect email or password or role', 401));
+  }
+  //=//=//=//=//=//=//=//=//=//
+  const token = signToken(user._id);
+  const cookieOptions = {
+      expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
+      httpOnly: true,
+      secure: true
+  }
+  res.cookie('jwt', token, cookieOptions);
+  //=//=//=//=//=//=//=//=//=//
+
+  // Remove password from output
+  user.password = undefined;
+
+  return res.status(200).json({
+    status: "success",
+    token,
+    data: {
+        user,
     }
-    // 2) Check if user exists rs&& password is correct
-    const user = await User.findOne({ email }).select('+password');
-
-    if (!user || !(await user.comparePassword(password, user.password)) || user.role !== 'admin') {
-        return next(new AppError('Incorrect email or password or role', 401));
-    }
-    //=//=//=//=//=//=//=//=//=//
-    const token = signToken(user._id);
-    const cookieOptions = {
-        expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
-        httpOnly: true
-    }
-    if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-    res.cookie('jwt', token, cookieOptions);
-    //=//=//=//=//=//=//=//=//=//
-
-    // Remove password from output
-    user.password = undefined;
-
-    res.status(200).json({
-        status: "success",
-        token,
-        data: {
-            user,
-        }
-    })
-  });
+  })
+});
 
 
 // logout
-exports.logout = (req, res) => {
-  res.cookie('jwt', '', {
-    expires: new Date(Date.now() + 10 * 500),
-    httpOnly: true
-  });
+exports.logout = (_, res) => {
+  // res.cookie('jwt', '', {
+  //   expires: new Date(Date.now() + 10 * 500),
+  //   httpOnly: true
+  // });
+  res.clearCookie("jwt");
   res.status(200).json({ status: 'success' });
 };
 
@@ -310,12 +352,11 @@ exports.protect = catchAsync(async (req, res, next) => {
     // 3) Check if user still exists
     const currentUser = await User.findById(decoded.id);
     if (!currentUser) {
-        return next(
-        new AppError(
-            'The user belonging to this token does no longer exist.',
-            401
-        )
-        );
+      return next(
+      new AppError(
+        'The user belonging to this token does no longer exist.',
+        401 )
+      );
     }
 
     // 4) Check if user changed password after the token was issued
@@ -450,12 +491,12 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   const cookieOptions = {
     expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
-    httpOnly: true
+    httpOnly: true,
+    secure: true
   }
-  if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
   res.cookies('jwt', token, cookieOptions);
 
-  res.status(200).json({
+  return res.status(200).json({
     status: "success",
     data: {
       user,
@@ -560,9 +601,9 @@ exports.updatePassword = catchAsync(async (req, res) => {
 
     const cookieOptions = {
       expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
-      httpOnly: true
+      httpOnly: true,
+      secure: true
     }
-    if(process.env.NODE_ENV !== 'development') cookieOptions.secure = true;
     res.cookies('jwt', token, cookieOptions);
 
     return res.status(201).json({

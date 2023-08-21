@@ -2,18 +2,7 @@ extends base
 
 block content 
     main
-        #spinOverlay
-            .spin
-                div
-                div
-                div
-                div
-                div
-                div
-                div
-                div
-                div
-                div
+        
         .animation.animation-box--1
         .animation.animation-box--2
         .animation.animation-box--3
@@ -22,12 +11,13 @@ block content
         .animation.animation-box--6
 
         section.section.hero__section
+            -console.log(token)
             img.hero__svg.svg1(src='asset/svg/svg1.svg')
             img.hero__svg.svg2(src='asset/svg/svg2.svg')
             .section__container.hero
                 .section__heading.hero__heading
-                    h1.section__heading--primary
-                        | Unleash Your Earning Potentials.
+                    h1.section__heading--primary Unleash Your
+                        .primary--extra  Earning Potentials.
                     h3.section__heading--tetrary.lsp
                         | With our cutting-edge platform, one established affiliate marketing ecosystem, to achieve intelligent, scalable, and sustainable growth, and watch your revenue soar to new heights!
                     .hero__button--container
@@ -36,6 +26,11 @@ block content
                 .hero__image--box
                         //- img.hero__image.bbbb(src="/asset/img/clubmerce.png" alt="")
                         img.hero__image.bbbb(src="/asset/img/clubmerce_hero.png" alt="")
+
+
+        section 
+            .section__container.margin__bottom--minus 
+                include _ads-md
                         
 
         section.section.section__features 
@@ -87,13 +82,11 @@ block content
                         .section__content
                             h2.section__heading--secondary.how__heading.margin__bottom--md
                                 | how it works
-                            // <h3 class="section__content--title"><span class="number">01</span>Signup As An Affiliate</h3>
                             h3.section__content--title Signup As An Affiliate
                             p.section__content--text Becoming an affiliate opens doors to a world of possibilities. By partnering with our trusted brand, you can leverage your influence and network to promote our products and earn attractive commissions. 
                     .grid.how.grid__two.grid__align--center
                         .section__content
                             h3.section__content--title
-                                // <span class="number">02</span>Visit The Affiliate MarketPlace
                                 | Visit The Affiliate MarketPlace
                             p.section__content--text  As an affiliate, you'll gain access to our vibrant marketplace, where countless products and services await your promotional prowess.
                         .section__image.how__section--image.how__two
@@ -102,15 +95,45 @@ block content
                         .section__image.how__section--image.how__three
                             img.how__image(src='asset/svg/Emails-cuate.svg' alt='')
                         .section__content
-                            // <h3 class="section__content--title"><span class="number">03</span>Promote and earn</h3>
                             h3.section__content--title Promote and earn
                             p.section__content--text As an affiliate, you'll gain access to a diverse range of products and services from top-notch brands. Promote these offerings to your audience through various channels such as your website, blog, social media platforms, or email newsletters.
 
         section.section.brands__section
             .section__container
-                h2.section__heading--secondary.center Our Favourite Brands
+                h2.section__heading--secondary.center Our Featured Brands
                 .brands
                     span.brands__logo
+                        img(src='asset/logo/logo1.png')
+                    span.brands__logo
+                        img(src='asset/logo/logo3.png')
+                    span.brands__logo
+                        img(src='asset/logo/logo4.png')
+                    span.brands__logo
+                        img(src='asset/logo/logo5.png')
+                    span.brands__logo
+                        img(src='asset/logo/logo1.png')
+                    span.brands__logo
+                        img(src='asset/logo/logo3.png')
+                    span.brands__logo
+                        img(src='asset/logo/logo4.png')
+                    span.brands__logo
+                        img(src='asset/logo/logo5.png')
+                    span.brands__logo
+                        img(src='asset/logo/logo1.png')
+                    span.brands__logo
+                        img(src='asset/logo/logo3.png')
+                    span.brands__logo
+                        img(src='asset/logo/logo4.png')
+                    span.brands__logo
+                        img(src='asset/logo/logo5.png')
+                    span.brands__logo
+                        img(src='asset/logo/logo1.png')
+                    span.brands__logo
+                        img(src='asset/logo/logo3.png')
+                    span.brands__logo
+                        img(src='asset/logo/logo4.png')
+                    span.brands__logo
+                        img(src='asset/logo/logo5.png')
                         img(src='asset/logo/logo1.png')
                     span.brands__logo
                         img(src='asset/logo/logo3.png')
@@ -132,7 +155,7 @@ block content
                         .get-started__content
                             p.get-started__content--title Become an affiliate
                             p.get-started__content--text Turn your influence into income and unlock a world of unlimited possibilities. Benefit from competitive commissions, exclusive resources, and a supportive community. 
-                            a.get-started__button.btn(href='/affiliate') Get Started
+                            a.get-started__button.btn(href='/affiliate#signup') Get Started
                     .get-started__card.get-started__vendor
                         img.get-started__image(src='asset/img/vendor2_reduced.jpg' alt='')
                         .get-started__content
@@ -148,19 +171,19 @@ block content
                         .faq__accordion--item
                             .accordion__content--title
                                 h3.accordion__heading What is clubmerce?
-                                span &minus;
+                                span &plus;
                             .faq__accordion--content
                                 p.accordion__content--text Clubmerce is an innovative affiliate marketing platform that connects brands, vendors, and affiliate marketers in a seamless ecosystem. With Clubmerce, affiliates can promote a wide range of products and services while earning commissions on successful product purchase.
                         .faq__accordion--item
                             .accordion__content--title
                                 h3.accordion__heading What types of products can I promote as an affiliate?
-                                span &minus;
+                                span &plus;
                             .faq__accordion--content
                                 p.accordion__content--text As an affiliate, you can promote a diverse range of products or services including physical products, digital products, services, travel and hospitality, beauty and personal care, financial products, home and garden items, food and beverage products, fashion and accessories, and lifestyle and wellness products.
                         .faq__accordion--item
                             .accordion__content--title
                                 h3.accordion__heading Is there a minimum payout threshold for affiliate earnings?
-                                span &minus;
+                                span &plus;
                             .faq__accordion--content
                                 p.accordion__content--text The minimum payout threshold for affiliate earnings on Clubmerce is $50. Once your earnings reach this threshold, you become eligible for withdrawal. This ensures that you receive a substantial amount before initiating the payout process. Clubmerce values your efforts as an affiliate and aims to provide a fair and transparent system for earning commissions.
 
@@ -168,13 +191,13 @@ block content
                         .faq__accordion--item
                             .accordion__content--title
                                 h3.accordion__heading Can I promote multiple products from different vendors on this platform?
-                                span &minus;
+                                span &plus;
                             .faq__accordion--content
                                 p.accordion__content--text Yes, on Clubmerce, you have the flexibility to promote multiple products or services from different vendors within the platform. As an affiliate, you can explore a diverse marketplace and choose from a wide range of offerings. This allows you to diversify your promotional efforts, target various niches, and cater to the interests of your audience. Clubmerce provides a centralized platform where you can easily manage and track your promotions across different vendors, making it convenient to engage with multiple products or services simultaneously.
                         .faq__accordion--item
                             .accordion__content--title
                                 h3.accordion__heading How can I maximize my affiliate marketing success on this platform?
-                                span &minus;
+                                span &plus;
                             .faq__accordion--content
                                 p.accordion__content--text To maximize your affiliate marketing success on Clubmerce, consider implementing the following strategies:
 
@@ -195,7 +218,7 @@ block content
                     .testimonial__slide--item
                         .testimonial__slide--item-text
                             p.testimonial__content Clubmerce has been a game-changer for me! As a stay-at-home mom, I needed a flexible way to earn income. Thanks to Clubmerce, I started promoting products I love and earning commissions
-                            p.testimonial__author Chika.
+                            p.testimonial__author Ahmed.
                         .testimonial__slide--item-img
                             img.testimonial__image(src='asset/img/face.png' alt='')
                     .testimonial__slide--item
@@ -209,7 +232,7 @@ block content
                             p.testimonial__content Clubmerce provided the perfect platform to achieve that. I now promote products I genuinely believe in and earn commissions while doing what I love. 
                             p.testimonial__author Ngozi.
                         .testimonial__slide--item-img
-                            img.testimonial__image(src='asset/img/idowu.png' alt='')
+                            img.testimonial__image(src='asset/img/.png' alt='')
                     .testimonial__slide--item
                         .testimonial__slide--item-text
                             p.testimonial__content Clubmerce has been a blessing in disguise! As an aspiring entrepreneur, I was searching for ways to monetize my online presence. When I stumbled upon Clubmerce, I found the perfect solution.
@@ -219,9 +242,9 @@ block content
                     .testimonial__slide--item
                         .testimonial__slide--item-text
                             p.testimonial__content I never thought making money online could be so rewarding. With Clubmerce, I've been able to harness the power of affiliate marketing and earn a substantial income.
-                            p.testimonial__author Ahmed.
+                            p.testimonial__author Idowu.
                         .testimonial__slide--item-img
-                            img.testimonial__image(src='asset/img/face.png' alt='')
+                            img.testimonial__image(src='asset/img/idowu.png' alt='')
 
             .controls
                 button.prev-btn.controls-btn
@@ -238,4 +261,238 @@ block content
                         | Need affiliate to promote your products?
                     h3.cta__content--text Get Started As A Vendor
                     a.section__button.btn.cta__button(href='/vendor') Get started
+
+
+
+        section.product-listing__section 
+            .product-listing__container
+                h2.section__heading--secondary.center Our Featured Products
+                .product__ads
+                    .products__cards 
+                        figure.product__figure
+                            .product__figure--image
+                                img(src=`asset/img/products/product-default.png` alt='product image')
+                            .product__content
+                                h2.product__heading xyz product
+                                span.product__sub-details 
+                                    .product__logo
+                                        img(src=`asset/img/products/brand-avatar.jpeg` alt='product logo')
+                                    p.product__subheading abc brand
+                                .product__description
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Premium Category
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Health and Fitness
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Digital Product.
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | 50% commission
+                                
+                        figure.product__figure
+                            .product__figure--image
+                                img(src=`asset/img/products/product-default.png` alt='product image')
+                            .product__content
+                                h2.product__heading xyz product
+                                span.product__sub-details 
+                                    .product__logo
+                                        img(src=`asset/img/products/brand-avatar.jpeg` alt='product logo')
+                                    p.product__subheading abc brand
+
+                                .product__description
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Premium Category
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Health and Fitness
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Digital Product.
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | 50% commission
+                                
+                        figure.product__figure
+                            .product__figure--image
+                                img(src=`asset/img/products/product-default.png` alt='product image')
+                            .product__content
+                                h2.product__heading xyz product
+                                span.product__sub-details 
+                                    .product__logo
+                                        img(src=`asset/img/products/brand-avatar.jpeg` alt='product logo')
+                                    p.product__subheading abc brand
+
+                                .product__description
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Premium Category
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Health and Fitness
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Digital Product.
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | 50% commission
+                                
+                        figure.product__figure
+                            .product__figure--image
+                                img(src=`asset/img/products/product-default.png` alt='product image')
+                            .product__content
+                                h2.product__heading xyz product
+                                span.product__sub-details 
+                                    .product__logo
+                                        img(src=`asset/img/products/brand-avatar.jpeg` alt='product logo')
+                                    p.product__subheading abc brand
+                                
+                                .product__description
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Premium Category
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Health and Fitness
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Digital Product.
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | 50% commission
+                                
+                        figure.product__figure
+                            .product__figure--image
+                                img(src=`asset/img/products/product-default.png` alt='product image')
+                            .product__content
+                                h2.product__heading xyz product
+                                span.product__sub-details 
+                                    .product__logo
+                                        img(src=`asset/img/products/brand-avatar.jpeg` alt='product logo')
+                                    p.product__subheading abc brand
+                                
+                                .product__description
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Premium Category
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Health and Fitness
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Digital Product.
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | 50% commission
+                                
+                        figure.product__figure
+                            .product__figure--image
+                                img(src=`asset/img/products/product-default.png` alt='product image')
+                            .product__content
+                                h2.product__heading xyz product
+                                span.product__sub-details 
+                                    .product__logo
+                                        img(src=`asset/img/products/brand-avatar.jpeg` alt='product logo')
+                                    p.product__subheading abc brand
+
+                                .product__description
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Premium Category
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Health and Fitness
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Digital Product.
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | 50% commission
+                                
+                        figure.product__figure
+                            .product__figure--image
+                                img(src=`asset/img/products/product-default.png` alt='product image')
+                            .product__content
+                                h2.product__heading xyz product
+                                span.product__sub-details 
+                                    .product__logo
+                                        img(src=`asset/img/products/brand-avatar.jpeg` alt='product logo')
+                                    p.product__subheading abc brand
+
+                                .product__description
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Premium Category
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Health and Fitness
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Digital Product.
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | 50% commission
+                                
+                        figure.product__figure
+                            .product__figure--image
+                                img(src=`asset/img/products/product-default.png` alt='product image')
+                            .product__content
+                                h2.product__heading xyz product
+                                span.product__sub-details 
+                                    .product__logo
+                                        img(src=`asset/img/products/brand-avatar.jpeg` alt='product logo')
+                                    p.product__subheading abc brand
+
+                                .product__description
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Premium Category
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Health and Fitness
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Digital Product.
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | 50% commission
+                                
+                        figure.product__figure
+                            .product__figure--image
+                                img(src=`asset/img/products/product-default.png` alt='product image')
+                            .product__content
+                                h2.product__heading xyz product
+                                span.product__sub-details 
+                                    .product__logo
+                                        img(src=`asset/img/products/brand-avatar.jpeg` alt='product logo')
+                                    p.product__subheading abc brand
+
+                                .product__description
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Premium Category
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Health and Fitness
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | Digital Product.
+                                    p 
+                                        i.icon.fa-solid.fa-check
+                                        | 50% commission
+
+
+
+                    include _ads-vert
+                            
+                            
+
+
+        section 
+            .section__container 
+                include _ads-lg
+                                                
         

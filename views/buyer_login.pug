@@ -1,0 +1,71 @@
+DOCTYPE
+html(lang="en")
+
+head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer")
+    //- link(rel="favicon" href="")
+
+    //- STYLES 
+    link(rel="stylesheet" href="/src/css/general.css")
+    link(rel="stylesheet" href="/src/css/form.css")
+    link(rel="stylesheet" href="/src/css/main.css")
+
+    script(defer src="/src/js/auth.js")
+    script(type='text/javascript').
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/64e23766cc26a871b03054a8/1h89qgrqn';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
+
+
+    title Login to your account
+body
+
+    main
+        <div id="spinOverlay">
+            <div class="spin">
+                <div></div>   
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+                <div></div>    
+            </div>
+        </div>
+        
+        .login__form
+
+            form#buyer-login
+                h3.form__heading Login into your 
+                    span.form__extra Clubmerce Buyer 
+                    | account
+                div.form__item
+                    label.form__item--label(for="email") Email Address
+                    input.form__item--input#buyer-email(name="email" type="email" placeholder="example@gmail.com" required)
+
+                div.form__item
+                    label.form__item--label(for="password") Password
+                    input.form__item--input#buyer-password(name="password" type="password" placeholder='••••••••••••', required, minlength='8')
+
+                button.form__button(type="submit") Login
+
+                div.form__end
+                    p.form__help Need Help?
+                    span.form__text
+                        a.form__text(href="/buyers/signup") SignUp &nbsp; | &nbsp;
+                        span.form__extra.forgot.open__modal Forgot Password
+
+    include _auth_footer

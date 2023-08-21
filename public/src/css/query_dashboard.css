@@ -26,7 +26,7 @@
         padding: 2rem;
     }
     .dashboard__insights {
-        gap: 1.8rem;
+        gap: 1.6rem;
         transition: all .35s;
     }
     .insight {
@@ -370,11 +370,6 @@
 
 /* 415px === 41.5rem === 26em */
 @media screen and (max-width: 26em) {
-    
-    .section__bottom {
-        grid-template-columns: 0 1fr;
-        transition: 0ms;
-    }
     .dashboard__insights {
         max-width: 100%;
         padding: 0 1.8rem;
@@ -401,15 +396,17 @@
     }
     .nav__input {
         width: 10rem;
+        transform: translateX(-4rem);
         transition: all .35s;
     }
     .nav__input:focus {
-        position: absolute;
+        /* position: absolute;
         top: 7%;
         left: 50%;
         transform: translate(-50%, -50%);
-        z-index: 2000;
-
+        z-index: 2000; */
+        
+        width: 16rem;
         background-color: #fff;
         box-shadow: .2rem .2rem 4rem rgba(0, 0, 0, .1);
     }

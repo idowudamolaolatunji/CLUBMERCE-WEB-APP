@@ -10,6 +10,8 @@ const jwt = require('jsonwebtoken');
 dotenv.config({path: './config.env'}); // always run before the app
 const app = require('./app');
 const server = http.createServer(app);
+
+
 const io = socket(server);
 
 const formatMessage = require('./utils/formatMessage');

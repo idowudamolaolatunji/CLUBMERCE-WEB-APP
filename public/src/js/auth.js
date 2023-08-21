@@ -53,14 +53,14 @@ const showAlert = (type, msg) => {
 };
 
 
-const login = async (email, password, role) => {
+const login = async (email, password) => {
      try {
           showLoadingOverlay();
 
           const res = await fetch('/api/users/login', {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ email, password, role }),
+               body: JSON.stringify({ email, password }),
           });
           console.log(res)
           if (!res.ok) {
@@ -73,7 +73,7 @@ const login = async (email, password, role) => {
                return;
           }}
 
-          if(data.message === 'Incorrect email or password or role') {
+          if(data.message === 'Incorrect email or password!') {
                hideLoadingOverlay();
                showAlert('error', data.message);
                return;
@@ -155,7 +155,7 @@ const loginBuyer = async (email, password) => {
           if (data.status === 'success') {
                showAlert('success', 'Authentication Successful');
                setTimeout(() => {
-                    location.assign('/dashboard');
+                    location.assign('/buyers/dashboard');
                }, 2000);
           } else {
                setTimeout(() => {
@@ -191,40 +191,47 @@ if (closeButton) {
   
 
 // signup
-const signup = async (fullName, email, password, passwordConfirm, username, country, phone, role) => {
-     try {
-          showLoadingOverlay();
-     
-          const res = await fetch('/api/users/signup', {
-               method: 'POST',
-               headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ fullName, email, password, passwordConfirm, username, country, phone, role }),
-          });
-     
-          if (!res.ok) {
-               throw new Error('Error signing up');
-          }
-     
-          const data = await res.json();
-          if(data.message === 'Email already Exist') {
-               showAlert('error', data.message);
-               hideLoadingOverlay();
-          }
-          if(data.message === 'Username already Exist') {
-               showAlert('error', data.message);
-               hideLoadingOverlay();
-          }
-          if (data.status === 'success') {
-               showAlert('success', data.message || 'Successful');
-               showEmailVerificationModal(email);
-          } else if (data.status === 'fail') {
-               throw new Error(data.message || 'Error signing up');
-          }
-     } catch (err) {
-          showAlert('error', err.message || 'Something went wrong. Please try again!');
-     } finally {
-          hideLoadingOverlay();
-     }
+const signup = async (fullName, email, role, password, passwordConfirm, username, country, phone) => {
+    try {
+        let url, type;
+        if(role === 'affiliate') url = '/api/users/signup-affiliate';
+        if(role === 'vendor') {
+            url = '/api/users/signup-vendor';
+            type = window.location.href.split('/').at(-1);
+        }
+        if(role === 'admin') return;
+        showLoadingOverlay();
+    
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ fullName, email, role, password, passwordConfirm, username, country, phone, type}),
+        });
+    
+        if (!res.ok) {
+            throw new Error('Error signing up');
+        }
+    
+        const data = await res.json();
+        if(data.message === 'Email already Exist') {
+            showAlert('error', data.message);
+            hideLoadingOverlay();
+        }
+        if(data.message === 'Username already Exist') {
+            showAlert('error', data.message);
+            hideLoadingOverlay();
+        }
+        if (data.status === 'success') {
+            showAlert('success', data.message || 'Successful');
+            showEmailVerificationModal(email);
+        } else if (data.status === 'fail') {
+            throw new Error(data.message || 'Error signing up');
+        }
+    } catch (err) {
+        showAlert('error', err.message || 'Something went wrong. Please try again!');
+    } finally {
+        hideLoadingOverlay();
+    }
 };
 
 
@@ -361,58 +368,56 @@ if (verificationToken) {
 /////////////////////////////////////////////
 /////////////////////////////////////////////
 /////////////////////////////////////////////
-
 if (loginForm) {
-  loginForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const email = document.querySelector('.login__email').value;
-    const password = document.querySelector('.login__password').value;
-    const role = document.querySelector('.login__role').value;
-    login(email, password, role);
-  });
+    loginForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const email = document.querySelector('.login__email').value;
+        const password = document.querySelector('.login__password').value;
+        login(email, password);
+    });
 }
 
 if (adminAuthForm) {
-  adminAuthForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const email = document.querySelector('#admin-email').value;
-    const password = document.querySelector('#admin-password').value;
-    loginAdmin(email, password);
-  });
+    adminAuthForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const email = document.querySelector('#admin-email').value;
+        const password = document.querySelector('#admin-password').value;
+        loginAdmin(email, password);
+    });
 }
-if (buyerAuthForm) {
-  buyerAuthForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const email = document.querySelector('#buyer-email').value;
-    const password = document.querySelector('#buyer-password').value;
-    signupBuyer(email, password);
-  });
+if(buyerAuthForm) {
+    buyerAuthForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const email = document.querySelector('#buyer-email').value;
+        const password = document.querySelector('#buyer-password').value;
+        loginBuyer(email, password);
+    });
 }
-
+/////////////////////////////////////////////////
+/////////////////////////////////////////////////
 if (signupForm) {
-  signupForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const fullName = document.querySelector('.signup__fullname').value;
-    const email = document.querySelector('.signup__email').value;
-    const password = document.querySelector('.signup__passwordMain').value;
-    const passwordConfirm = document.querySelector('.signup__passwordconfirm').value;
-    const username = document.querySelector('.signup__username').value;
-    const country = document.querySelector('.signup__country').value;
-    const phone = document.querySelector('.signup__phone').value;
-    const role = document.querySelector('.signup__role').value;
-    signup(fullName, email, password, passwordConfirm, username, country, phone, role);
-  });
+    signupForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const fullName = document.querySelector('.signup__fullname').value;
+        const email = document.querySelector('.signup__email').value;
+        const password = document.querySelector('.signup__passwordMain').value;
+        const passwordConfirm = document.querySelector('.signup__passwordconfirm').value;
+        const username = document.querySelector('.signup__username').value;
+        const country = document.querySelector('.signup__country').value;
+        const phone = document.querySelector('.signup__phone').value;
+        const role = document.querySelector('#role').value;
+        signup(fullName, email, role, password, passwordConfirm, username, country, phone);
+        console.log(fullName, email, role, password, passwordConfirm, username, country, phone);
+    });
 }
-
-
 if (buyerSignupForm) {
-  buyerSignupForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const fullName = document.querySelector('.buyer-signup__fullname').value;
-    const email = document.querySelector('.buyer-signup__email').value;
-    const password = document.querySelector('.buyer-signup__passwordMain').value;
-    const passwordConfirm = document.querySelector('.buyer-signup__passwordconfirm').value;
-    const username = document.querySelector('.buyer-signup__username').value;
-    signupBuyer(fullName, email, password, passwordConfirm, username);
-  });
+    buyerSignupForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const fullName = document.querySelector('.buyer-signup__fullname').value;
+        const email = document.querySelector('.buyer-signup__email').value;
+        const password = document.querySelector('.buyer-signup__passwordMain').value;
+        const passwordConfirm = document.querySelector('.buyer-signup__passwordconfirm').value;
+        const username = document.querySelector('.buyer-signup__username').value;
+        signupBuyer(fullName, email, password, passwordConfirm, username);
+    });
 }

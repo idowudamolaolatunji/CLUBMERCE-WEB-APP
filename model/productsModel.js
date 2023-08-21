@@ -111,16 +111,21 @@ productSchema.pre('save', function(next) {
     next();
 });
 
+productSchema.pre(/^find/, function (next) {
+    this.sort({ isBoosted: -1 }); // Sort by isBoosted field in descending order
+    next();
+});
+
 productSchema.pre(/^find/, function(next) {
     this.populate({
         path: 'vendor',
-        select: 'fullName slug _id businessName email'
+        select: 'fullName slug _id businessName email active'
     });
     next();
 });
 
-productSchema.pre(/^find/, function (next) {
-    this.sort({ isBoosted: -1 }); // Sort by isBoosted field in descending order
+productSchema.pre(/^find/, function(next) {
+    this.find({ 'vendor.active': { $ne: false } })
     next();
 });
 

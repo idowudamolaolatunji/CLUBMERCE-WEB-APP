@@ -33,7 +33,7 @@ block content
                         label.form__item--label(for="password") Password
                         input.form__item--input.login__password(id="password" type="password" placeholder='••••••••••••', required, minlength='8')
 
-                    div.form__item.select
+                    //- div.form__item.select
                         label.form__item--label(for="role") Role
                         select.form__item--input.select--input.login__role(id="role" required)
                             option(disable selected value="") Choose a role 
@@ -43,10 +43,13 @@ block content
                     button.form__button(type="submit") Login
 
                     div.form__end
-                        p.form__help Need Help?
                         span.form__text
-                            a.form__text(href="/signup") SignUp &nbsp; &VerticalBar; &nbsp; 
                             span.form__extra.forgot.open__modal Forgot Password
+                        //- p.form__help Need Help?
+                        //- span.form__text
+                            //- a.form__text(href="/signup") SignUp
+                            //- |&nbsp; &VerticalBar; &nbsp; 
+                            //- span.form__extra.forgot.open__modal Forgot Password
 
                 div.login__form--image
                     img.form__image(src="../../asset/img/login_new.jpg" alt="")
@@ -59,7 +62,7 @@ block content
                 i.fa-solid.fa-close.icon
 
             div.modal__container
-                form#forgot-password(action="/forgot-password" method="post")
+                form#forgot-password.stikethrow(action="/forgot-password" method="post")
                     h3.modal__heading Forgotten Password??
                     div.form__item
                         input.form__item--input(name="forgot-password" type="email" placeholder="Enter account email address" required)

@@ -12,6 +12,51 @@ document.querySelector('.go-back').addEventListener('click', function(e) {
     showLoadingOverlay();
 });
 
+const profileBox = document.querySelector('.Profile__hovered');
+const profileImg = document.querySelector('.nav__image');
+const mainDashboard = document.querySelector('.main__dashboard');
+
+if (profileImg) {
+    profileImg.addEventListener('click', (event) => {
+        event.stopPropagation(); // Prevent the click event from propagating to the mainDashboard and body
+        profileBox.classList.toggle('hidden');
+    });
+
+    mainDashboard.addEventListener('click', () => {
+        profileBox.classList.add('hidden');
+    });
+
+    document.body.addEventListener('click', () => {
+        profileBox.classList.add('hidden');
+    });
+}
+
+const navLogout = document.querySelector('.nav__logout');
+const logoutUser = async function() {
+    try {
+        showLoadingOverlay();
+
+        const res = await fetch('/api/users/logout');
+        if(!res.ok) {
+            hideLoadingOverlay();
+            return;
+        }
+        const data = await res.json();
+        if(data.status === 'success') {
+            showAlert('success', 'Logging Out...')
+            location.assign('/login')
+        }
+    } catch(err) {
+       hideLoadingOverlay();
+       showAlert('error', 'something went wrong')
+    }
+}
+if(navLogout) {
+    navLogout.addEventListener('click', function(e) {
+        logoutUser();
+    })
+}
+
 const dashboardSection = document.querySelector('.section__dashboard')
 const searchForm = document.querySelector('.nav__search');
 const searchResults = document.getElementById('search-result');

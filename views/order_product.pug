@@ -7,131 +7,205 @@ head
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
 
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer")
-    //- link(rel="icon" href='../asset/img/favicon.png')
+    link(rel="icon" href='/../asset/img/favicon.png')
 
 
     //- STYLES 
     link(rel="stylesheet" href="/src/css/general.css")
+    link(rel="stylesheet" href="/src/css/main.css")
     link(rel="stylesheet" href="/src/css/order_and_payment.css")
+    link(rel="stylesheet" href="/src/css/dashboard.css")
+    link(rel="stylesheet" href="/src/css/query_dashboard.css")
+
+    script(type='text/javascript').
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/64e23766cc26a871b03054a8/1h89qgrqn';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
 
     title=title
 body
 
-    section.hero-section
-        .slide-container
-            each image, index in ["watch.jpg", "secondwatch.png", "thirdwatch.png", "fourthwatch.png"]
-                .slide(class=`${index === 0 ? '' : 'four'}`)
-                    img.watch-border(src=image, alt="" style="width: 100%;")
-            a.prev(onclick="plusSlides(-1)") &#10094;
-            a.next(onclick="plusSlides(1)") &#10095;
-        .row
-            each image in ["watch.jpg", "secondwatch.png", "thirdwatch.png", "fourthwatch.png"]
-                .column
-                    img.watchs.cursor(src=image, style="width: 100%;", onclick=`currentSlide(${index + 1})`, alt="")
+    #spinOverlay
+        .spin
+            div
+            div
+            div
+            div
+            div
+            div
+            div
+            div
+            div
+            div
+    section
+        .section__top.margin__left--sm
+            img.logo(src='/../asset/img/logo-removebg.png' alt='clubmerce logo')
+            img.logo-small(src='/../asset/img/favicon.png' alt='clubmerce logo')
+            nav.navbar
+                span.nav__icons
+                    i.fa-solid.fa-shopping-cart.icon.nav__icon
 
-        .watch-text
-            h1.first-text Latest iWatch
-            p.second-text Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa, iste nemo. Aliquam, eos architecto! Ducimus, rem illo praesentium voluptate quis consectetur alias tempora corrupti, magni mollitia voluptatibus pariatur ipsam, eveniet numquam fugit itaque asperiores et! Animi quas libero non. Laborum nulla omnis molestiae recusandae, in neque blanditiis, maiores provident possimus nobis dignissimos pariatur ipsam tenetur, culpa ad! Eaque itaque suscipit dignissimos doloremque consequatur, voluptas maiores minus expedita atque aspernatur nam deserunt. Temporibus corrupti quis quasi eos possimus necessitatibus velit iure!
+                    ul
+                        li.nav__item
+                            a.nav__link.nav-login(href="/buyers/login") login  
+                        li.nav__item
+                            a.nav__link.nav__button.nav-sign(href="/buyers/signup") signup
 
-    section.video
+                    //- i.fa-regular.fa-comment.icon.nav__icon
+                    //- span.notification__icon
+                        i.fa-regular.fa-bell.icon.nav__icon
+                        //- notification...
+                        .notification__hovered.hidden 
+                            h3.dashboard__heading Notification
+                            //- .notification__content you have no notification
+                            .notification
+                                .notify__details
+                                    .notify__status &nbsp;
+                                    span
+                                        h4.notify__head Lorem ipsum dolor sit amet.
+                                        span.notify__body-box
+                                            p.notify__body Lorem, ipsum.
+                                            span &dash;
+                                            p.notify__date 10 mins ago
+                                .notify__image--box
+                                    img.notify__image(src=`/../asset/img/users/avatar.png` alt='')
+                                //- .notify__icon--box
+                                    i.fa-solid.fa-lock.icon.notify__icon
+        
+                    //- span
+                        .nav__image--box
+                            img.nav__image(src=`/../asset/img/users/avatar.png` alt=`user's photo`)
+                            .Profile__hovered.hidden
+                                .profile__content
+                                    .profile__owner
+                                        img.profile__image(src=`/../asset/img/users/avatar.png` alt=`customer's photo`)
+                                        p.profile__name user
+                                    a.profile__link.nav__link(href="/profile") My profile
+                                    button.profile__button.nav__link#logout signout&nbsp;
+                                        i.fa-solid.fa-arrow-right-to-bracket.profile__icon
 
-        iframe(width="914", height="514", src="https://www.youtube.com/embed/EvnQ4Va-4Cg", title="How To Use Your Apple Watch Series 7! (Complete Beginners Guide)", frameborder="0", allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share", allowfullscreen)
+    //- h3.dashboard__heading
+        a.go-back(href="/dashboard") 
+            i.fa-solid.fa-arrow-left.font-size-sm-help.margin__r-help 
+        | Dashboard
 
-        //- <iframe width="560" height="315" src="https://www.youtube.com/embed/LWB1s6P0wgE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-    section.about
-        .about-container
-            .about-text Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ullam, molestias mollitia. Aliquid, fuga dignissimos earum suscipit neque ipsa eos ex dolorum consectetur repellat officia illum aspernatur alias inventore corrupti doloremque magnam possimus ipsam vel atque! Iure alias vel officia quibusdam! Iste ex doloribus ipsum eveniet veniam optio possimus laboriosam porro veritatis hic iure corrupti illo maxime rem, quis est tenetur quos vero corporis animi dolor debitis ut! Aut a officiis repellendus. Maiores quo id explicabo corporis aperiam placeat voluptatibus at? Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero sapiente quidem alias explicabo blanditiis deleniti rerum iure quasi! Quis totam ad dolorum voluptatem doloremque quam corrupti explicabo molestias quisquam nostrum, aut aperiam deleniti qui sequi aliquam nulla delectus facilis? Optio est cumque fugit minima. Voluptatibus eius numquam eligendi cum laborum possimus explicabo, quis illo aspernatur molestias at veniam reprehenderit temporibus quisquam. Laboriosam modi alias distinctio praesentium inventore ducimus ipsum ut. Eaque nulla repellat a consectetur cumque quidem maiores in eligendi.
+    section.hero-section.container
+        .img-container
+            .main-image
+                img(src='/../asset/img/products/product-default.png' alt='')
+            .sub--images
+                .sub-image
+                    img(src='/../asset/img/products/product-default.png' alt='')
+                .sub-image
+                    img(src='/../asset/img/products/product-default.png' alt='')
+                .sub-image
+                    img(src='/../asset/img/products/product-default.png' alt='')
+                .sub-image
+                    img(src='/../asset/img/products/product-default.png' alt='')
+
+        .hero-heading
+            h1.primary-heading About Product
+            p.secondary-heading
+                | Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa, iste nemo. Aliquam, eos architecto! Ducimus, rem illo praesentium voluptate quis consectetur alias tempora corrupti, magni mollitia voluptatibus pariatur ipsam, eveniet numquam fugit itaque asperiores et! Animi quas libero non. Laborum nulla omnis molestiae recusandae, in neque blanditiis, maiores provident possimus nobis dignissimos pariatur ipsam tenetur, culpa ad! Eaque itaque suscipit dignissimos doloremque consequatur, voluptas maiores minus expedita atque aspernatur nam deserunt. Temporibus corrupti quis quasi eos possimus necessitatibus velit iure!
+        
+
+
+    //- Youtube Video
+    //- section.video-section.container
+        .video
+            iframe(width='914' height='514' src='https://www.youtube.com/embed/EvnQ4Va-4Cg' title='How To Use Your Apple Watch Series 7! (Complete Beginners Guide)' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen='')
+
+
+
+    //- Product description
+    section.about-section
+        .about-container.container
+            p.secondary-heading
+                | Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ullam, molestias mollitia. Aliquid, fuga dignissimos earum suscipit neque ipsa eos ex dolorum consectetur repellat officia illum aspernatur alias inventore corrupti doloremque magnam possimus ipsam vel atque! Iure alias vel officia quibusdam! Iste ex doloribus ipsum eveniet veniam optio possimus laboriosam porro veritatis hic iure corrupti illo maxime rem, quis est tenetur quos vero corporis animi dolor debitis ut! Aut a officiis repellendus. Maiores quo id explicabo corporis aperiam placeat voluptatibus at? Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero sapiente quidem alias explicabo blanditiis deleniti rerum iure quasi! Quis totam ad dolorum voluptatem doloremque quam corrupti explicabo molestias quisquam nostrum, aut aperiam deleniti qui sequi aliquam nulla delectus facilis? Optio est cumque fugit minima. Voluptatibus eius numquam eligendi cum laborum possimus explicabo, quis illo aspernatur molestias at veniam reprehenderit temporibus quisquam. Laboriosam modi alias distinctio praesentium inventore ducimus ipsum ut. Eaque nulla repellat a consectetur cumque quidem maiores in eligendi.
             .about-image
-                img(src="watch.jpg", alt="")
-
-    //- section.product-card
-        .product-card-container
-            each image, index in ["png-watch3.png", "png-watch2.png", "png-watch.png"]
-                .product-card-one
-                    h2 Basic
-                    img(src=image, alt="" style="width: 100%;")
-                    .product-grid
-                        p.dollar $100
-                        p per
-                        br
-                        p watch
-                    button.buy-now-button
-                        a.buy-now(href="checkout.html")
-                            i.fa-solid.fa-cart-shopping
-                            |  Buy Now
-                    .icon-containers
-                        i.fa-brands.fa-cc-visa(style="color: navy;")
-                        i.fa-brands.fa-cc-amex(style="color: blue;")
-                        i.fa-brands.fa-cc-mastercard(style="color: red;")
-                        i.fa-brands.fa-cc-discover(style="color: orange;")
-                    p.card-base
-                        span.line-through $200
-                        |  $100
-                        br
-                        |  +Shipping
-                        br
-                        |  180 days Guarantee
-
-    .checkout-container
-        // Billing Section
-        .first-row
-            .sub-section-one
-                h3 Billing Address
-                label(for='fname')
-                    i.fa.fa-user
-                    |  Full Name
-                input#fname(type='text' name='First name' placeholder='John M. Doe')
-                label(for='email')
-                    i.fa.fa-envelope
-                    |  Email
-                input#email(type='email' name='Email' placeholder='john@example.com')
-                label(for='Address')
-                    i.fa.fa-address-card
-                    |  Address
-                input#address(type='text' name='Address' placeholder='542 W. 15th Street')
-                label(for='city')
-                    i.fa.fa-institution
-                    |  City
-                input#city(type='text' name='City' placeholder='New York')
-                .sub-section-two
-                    .state
-                        label(for='state') State
-                        input#state(type='text' name='state' placeholder='   NY')
-                    .zip
-                        label(for='state') Zip
-                        input#zip(type='number' name='zip' placeholder='   1001')
-            // Billing Section end
-            // Payment section
-            .second-row
-                .second-section
-                h3 Payment
-                p Accepted Payments
-                .icon-containers
-                    i.fa-brands.fa-cc-visa(style='color: navy;')
-                    i.fa-brands.fa-cc-amex(style='color: blue;')
-                    i.fa-brands.fa-cc-mastercard(style='color: red;')
-                    i.fa-brands.fa-cc-discover(style='color: orange;')
-                .third-section
-                label(for='card-name')
-                    i.fa-solid.fa-id-card
-                    |  Name on Card
-                input#card-name(type='text' name='card-name' placeholder='   John More Doe')
-                label(for='card-number')
-                    i.fa-solid.fa-credit-card
-                    |  Credit Card Number
-                input#card-number(type='number' name='Card-Number' placeholder='   1111-2222-3333-4444')
-                label(for='expiry')
-                    i.fa-regular.fa-calendar
-                    |  Exp Month
-                input#expiry(type='text' name='Expiry' placeholder='   Month')
-                .fourth-section
-                    .year
-                        label(for='year') Exp Year
-                        input#year(type='number' name='year' placeholder='   2025')
-                    .cvv
-                        label(for='cvv') Cvv
-                        input#cvv(type='number' name='cvv' placeholder='   352')
-                // Payment section
+                img(src='/../asset/img/products/product-default.png' alt='')
 
 
+    //- Purchase
+    section.purchase-section
+        .purchase-container.container
+            .purchase-cards
+                .purchase-card
+                    .card-heading
+                        p Buy 1
+                    .card-content
+                        .card-image-box
+                            img(src='/../asset/img/products/product-default.png' alt='order product image')
+                        span.card-price
+                            p.price $100
+                            p.text x 1
+                        a.card-button(href='#')
+                            i.fa-solid.fa-shopping-cart
+                            |  Order Now
+                        ul.card-details
+                            li Plus Shipping
+                            li 30 days Garantee
+                .purchase-card.active-card
+                    .card-heading
+                        p Buy 3
+                    .card-content
+                        .card-image-box
+                            img(src='/../asset/img/products/product-default.png' alt='order product image')
+                        span.card-price
+                            p.price $100
+                            p.text  x 3
+                        a.card-button(href='#')
+                            i.fa-solid.fa-shopping-cart
+                            |  Order Now
+                        ul.card-details
+                            li Plus Shipping
+                            li 30 days Garantee
+                .purchase-card
+                    .card-heading
+                        p Buy 9
+                    .card-content
+                        .card-image-box
+                            img(src='/../asset/img/products/product-default.png' alt='order product image')
+                        span.card-price
+                            p.price $100
+                            p.text  x 9
+                        a.card-button(href='#')
+                            i.fa-solid.fa-shopping-cart
+                            |  Order Now
+                        ul.card-details
+                            li Plus Shipping
+                            li 30 days Garantee
+
+
+
+    .checkout__overlay.hidden
+        .checkout__modal
+            i.fa-solid.fa-close.icon.close__checkout
+            h3.dashboard__heading.checkout__heading Checkout
+            span.checkout__info
+                span
+                    p.product__name Product 1
+                    p.product__price 100
+                span 
+                    p.product__summary Lorem ipsum dolor sit amet.
+                    p.product__quantity X2
+            form.checkout__form(action="/pay", method="post")
+                h3.dashboard__heading Form info
+                .form__item
+                    label.form__label(for='email') Email address
+                    input#email.form__input(type='email' placeholder='Email address' required='')
+                .form__item
+                    label.form__label(for='amount') Amount
+                    input#amount.form__input(type='number' required='')
+                .form__item
+                    label.form__label(for='fullname') Fullname
+                    input#fullname.form__input(type='text')
+                .form__item
+                    button.form__button(type='submit') Proceed

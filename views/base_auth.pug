@@ -6,15 +6,26 @@ head
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
 
+    link(rel="icon" href="./../asset/img/favicon.png" type="image/png")
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer")
 
     //- STYLES 
-    link(rel="stylesheet" href="src/css/general.css")
-    link(rel="stylesheet" href="src/css/form.css")
-    link(rel="stylesheet" href="src/css/main.css")
-    link(rel="stylesheet" href="src/css/query.css")
+    link(rel="stylesheet" href="/src/css/general.css")
+    link(rel="stylesheet" href="/src/css/form.css")
+    link(rel="stylesheet" href="/src/css/main.css")
+    link(rel="stylesheet" href="/src/css/query.css")
 
-    script(defer src="src/js/auth.js")
+    script(defer src="/src/js/auth.js")
+    script(type='text/javascript').
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/64e23766cc26a871b03054a8/1h89qgrqn';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
 
     title Clubmerce | #{title}
 
@@ -23,4 +34,4 @@ body
 
     block content
 
-    include _auth_footer
+    include _auth_footer 

@@ -1,7 +1,7 @@
 extends base_account 
 
 block content 
-    -if(user.role === 'affiliate')
+    -if(user.role === 'affiliate' || user.role === 'buyer')
         h3.dashboard__heading Your Profile
 
 
@@ -14,7 +14,7 @@ block content
             #uploader__image--card
                 img#uploader__image(src=`/asset/img/users/${user.image}` alt='')
                 #uploader__image--label-box
-                    input#uploader__image--input(name='photo' type='file' accept='image/png, image/jpeg')
+                    input#uploader__image--input(name='image' type='file' accept='image/*')
                     label#uploader__image--label(for='uploader__image--input')
                         i.fa-solid.fa-camera
                         |  Add photo
@@ -28,7 +28,7 @@ block content
                 input#fullName.form__input(type='text', value=user.fullName)
             .form__item
                 label.form__label(for='email') Email address
-                input#email.form__input(type='email' value=user.email)
+                input#email.form__input.cursor-not-allowed(type='email' value=user.email readonly disable)
             .form__item
                 label.form__label(for='phone') Phone number
                 input#phone.form__input(type='tel' value=user.phone)
@@ -40,10 +40,10 @@ block content
                 input#state.form__input(type='state' value=user.state placeholder="Enter a state")
             .form__item
                 label.form__label(for='city-region') City / Province / Region
-                input#city-region.form__input(type='city-region' value=user.region placeholder="Enter a country")
+                input#city-region.form__input(type='city-region' value=user.region placeholder="Enter a city / region")
             .form__item
                 label.form__label(for='zip-postal') Zip code / Postal code
-                input#zip-postal.form__input(type='zip-postal' value=user.zipCode placeholder="Enter a country")
+                input#zip-postal.form__input(type='number' name='zip-postal' value=user.zipCode placeholder="Enter a zip code")
             .form__item
                 button.btn.form-btn(type="submit") Save settings
 
@@ -62,9 +62,9 @@ block content
                     input#uploader__image--input(name='photo' type='file' accept='image/png, image/jpeg')
                     label#uploader__image--label(for='uploader__image--input')
                         i.fa-solid.fa-camera
-                        |  Add photo
+                        |  Add image
             p#uploader__image--username= user.businessName || user.fullName
-            button.img__upload--btn.btn(type="submit") Upload image
+            button.img__upload--btn.btn(type="submit") Upload logo / image
 
 
         form.form__data.form-profile-data#form-data-vendor
@@ -77,7 +77,7 @@ block content
                 input#businessName.form__input(type='text', value=user.businessName placeholder="Enter your business name")
             .form__item
                 label.form__label(for='email') Email address
-                input#email.form__input(type='email' value=user.email)
+                input#email.form__input(type='email' value=user.email readonly)
             .form__item
                 label.form__label(for='phone') Phone number
                 input#phone.form__input(type='tel' value=user.phone)
@@ -89,10 +89,10 @@ block content
                 input#state.form__input(type='state' value=user.state placeholder="Enter a state")
             .form__item
                 label.form__label(for='city-region') City / Province / Region
-                input#city-region.form__input(type='city-region' value=user.region placeholder="Enter a country")
+                input#city-region.form__input(type='city-region' value=user.region placeholder="Enter a city / region")
             .form__item
                 label.form__label(for='zip-postal') Zip code / Postal code
-                input#zip-postal.form__input(type='zip-postal' value=user.zipCode placeholder="Enter a country")
+                input#zip-postal.form__input(type='number' name='zip-postal' value=user.zipCode placeholder="Enter a zip code")
             
             .form__item
                 button.btn.form-btn(type="submit") Save settings

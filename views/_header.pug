@@ -1,27 +1,29 @@
-header.header
-
+header.header(style=`${section !== 'home' ? 'background-color: white' : ''}`)
     .logo--box
         a(href="/")
-            img.logo(src="asset/img/logo-removebg.png")
+            img.logo(src="/asset/img/logo-removebg.png")
     nav.navar
         button.navigation-controls
             i.fa-solid.fa-bars.navigation-icon
         ul.nav__list
             li.nav__item
-                a.nav__link(href="/") Home
+                a.nav__link(href="/" class=`${active === 'home' ? 'nav__active' : ''}`) Home
             li.nav__item
-                a.nav__link(href="/get-started") Get started
+                a.nav__link(href="/get-started" class=`${active === 'get-started' ? 'nav__active' : ''}`) Get started
                     //- i.fa-solid.fa-angle-down
             li.nav__item
-                a.nav__link(href="/affiliate") Affiliate
+                a.nav__link(href="/affiliate" class=`${active === 'affiliate' ? 'nav__active' : ''}`) Affiliate
                     //- i.fa-solid.fa-angle-down
             li.nav__item
-                a.nav__link(href="/vendor") Vendor
+                a.nav__link(href="/vendor" class=`${active === 'vendor' ? 'nav__active' : ''}`) Vendor
                     //- i.fa-solid.fa-angle-down
+            //- li.nav__item
+            //-     a.nav__link.nav-login(href="/contact-us" class=`${active === 'contact us' ? 'nav__active' : ''}`) contact us
             li.nav__item
-                a.nav__link.nav-login(href="/login") Login
-            li.nav__item
-                a.nav__link.nav__button.nav-sign(href="/signup") signup
+                -if(token)
+                    a.nav__link.nav__button.nav-sign.nav__button--active(href="/dashboard") dashboard
+                -else
+                    a.nav__link.nav__button.nav-sign(href="/login" class=`${active === 'login' ? 'nav__button--active' : ''}`) login
 
 
         ul.nav__list-m
@@ -38,9 +40,9 @@ header.header
                     //- i.fa-solid.fa-angle-down
             span.flexible
                 li.nav__item
-                    a.nav__link.nav__button.nav-sign(href="/signup") Signup
+                    a.nav__link.nav__button.nav-sign(href="/login") login
                 li.nav__item
-                    a.nav__link.nav-login(href="/login") Login
+                    a.nav__link.nav-login(href="/contact-us") contact us
 
                 
             li.footer__item.footer__icon--grid

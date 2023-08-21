@@ -17,7 +17,7 @@ head
     script(defer src="/src/js/auth.js")
 
 
-    title Login to your account
+    title Admin auth
 body
 
     main
@@ -36,20 +36,18 @@ body
             </div>
         </div>
         
-        .login__form
+        div.login__form
+            .login__container.grid.grid__two
 
-            form.login#buyer-login
-                h3.form__heading Login into your 
-                    span.form__extra Clubmerce Commerce
-                    | account
-                div.form__item
-                    label.form__item--label(for="email") Email Address
-                    input.form__item--input#buyer-email(name="email" type="email" placeholder="example@gmail.com" required)
+                form.login#admin-login
+                    h3.form__heading Admin 
+                        span.form__extra Authentication 
+                    div.form__item
+                        label.form__item--label(for="email") Email Address
+                        input.form__item--input#admin-email(name="email" type="email" value="admin@clubmerce.io" required)
 
-                div.form__item
-                    label.form__item--label(for="password") Password
-                    input.form__item--input#buyer-password(name="password" type="password" placeholder='••••••••••••', required, minlength='8')
+                    div.form__item
+                        label.form__item--label(for="password") Password
+                        input.form__item--input#admin-password(name="password" type="password" placeholder='••••••••••••', required, minlength='8')
 
-                button.form__button(type="submit") Login
-
-    include _auth_footer
+                    button.form__button(type="submit") Login

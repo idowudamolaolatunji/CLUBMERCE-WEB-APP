@@ -49,75 +49,20 @@ body
                     #search-result
 
 
-
                 span.nav__icons
-                    //- -if(user.role === 'admin')
-                        span.notification__icon
-                            i.fa-regular.fa-bell.icon.nav__icon
-                            //- notification...
-                            .notification__hovered.hidden 
-                                h3.dashboard__heading Notification
-                                //- .notification__content you have no notification
-                                .notification
-                                    .notify__details
-                                        .notify__status &nbsp;
-                                        span
-                                            h4.notify__head Lorem ipsum dolor sit amet.
-                                            span.notify__body-box
-                                                p.notify__body Lorem, ipsum.
-                                                span &dash;
-                                                p.notify__date 10 mins ago
-                                    .notify__image--box
-                                        img.notify__image(src='asset/img/product.jpg' alt='')
-
                     span
                         .nav__image--box
-                            img.nav__image(src=`asset/img/users/${user.image}` alt=`user's photo`)
-                            .Profile__hovered.hidden
-                                .profile__content
-                                    .profile__owner
-                                        img.profile__image(src=`asset/img/users/${user.image}` alt=`customer's (${user.username}) photo`)
-                                        p.profile__name= user.fullName
-                                    a.profile__link.nav__link(href="/profile") My profile
-                                    button.profile__button.nav__link#logout signout&nbsp;
-                                        i.fa-solid.fa-arrow-right-to-bracket.profile__icon
-
-
-        //- -if(user.role === 'admin')
-            mixin menuItem(link, text, icon, active)                    
-                li(class=`${active ? 'menu__item menu__active' : 'menu__item'}`)
-                    a.menu__link(href=`/${link}`)
-                        i.icon.menu__icon(class=`${icon}`)
-                        p #{text}
-
-            .section__bottom
-                menu.menubar
-                    .menu__body
-                        ul.menu__list
-                            
-                            +menuItem('dashboard', 'All perfomance', 'fa-solid fa-chart-simple', false)
-                            +menuItem('product-marketplace', 'Product Marketplace', 'fa-solid fa-clipboard-list', false)
-                            +menuItem('settings', 'settings', 'fa-solid fa-gear', false)
-
-                    .menu__bottom 
-                        ul.menu__list 
-                            li.menu__item 
-                                a.menu__link(href="/manage-users") 
-                                    i.fa-solid.fa-users.icon.menu__icon
-                                    p Manage Users
-                            li.menu__item
-                                a.menu__link(href="/manage-products") 
-                                    i.fa-solid.fa-gift.icon.menu__icon
-                                    p Manage Products
-                            li.menu__item
-                                a.menu__link(href="/manage-payment")
-                                    //- i.fa-solid.fa-shopping-cart
-                                    i.fa-solid.fa-credit-card.icon.menu__icon
-                                    p Manage Payments
-                            li.menu__item
-                                a.menu__link.admin__menu--logout
-                                    i.fa-solid.fa-arrow-right-to-bracket.icon.menu__icon
-                                    | signout&nbsp;
+                            img.nav__image(src=`/asset/img/users/${user.image}` alt=`user's photo`)
+                        //- profile...
+                        .Profile__hovered.hidden
+                            .profile__content
+                                .profile__owner
+                                    .profile__image--box
+                                        img.profile__image(src=`/asset/img/users/${user.image}` alt=`user's photo`)
+                                    p.profile__name= user.fullName
+                                a.profile__link.nav__link(href="/profile") My profile
+                                button.profile__button.nav__link.nav__logout signout&nbsp;
+                                    i.fa-solid.fa-arrow-right-to-bracket.profile__icon
 
 
         //- -if(user.role === 'admin')

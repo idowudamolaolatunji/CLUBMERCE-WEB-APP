@@ -1,16 +1,16 @@
 const multer = require('multer');
 const sharp = require('sharp');
 
-const cloudinary = require('cloudinary').v2
 
 const app = require('../app');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('./../utils/appError');
-const User = require('./../model/usersModel');
+const User = require('../model/usersModel');
 
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
 
+// const cloudinary = require('cloudinary').v2
 // cloudinary.config({
 //     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
 //     api_key: process.env.CLOUDINARY_API_KEY,
@@ -68,14 +68,16 @@ exports.uploadProfilePicture = async (req, res) => {
 
         let image;
         if(req.file) image = req.file.filename;
-        const updatedUser = await User.findByIdAndUpdate(req.user._id, {image: image}, {
+        const updatedImage = await User.findByIdAndUpdate(req.user._id, {image: image}, {
             new: true,
             runValidators: true,
         });
 
         res.status(200).json({
             status: 'success',
-            userImage: updatedUser.image
+            data: {
+                image: updatedImage.image
+            }
         });
     } catch(err) {
         console.log(err)
@@ -181,48 +183,48 @@ exports.deleteUser = async(req, res) => {
 ////////////////////////////////////////////////////
 // update current user data
 const NewObj = {}
-const filterObj = function(obj, ...allowedFileds) {
+const filterObj = function(obj, ...allowed) {
 	Object.keys(obj).forEach(el => {
-		if(allowedFileds.includes(el)) NewObj[el] = obj[el]
+		if(allowed.includes(el)) NewObj[el] = obj[el];
 	});
     return NewObj;
 }
 
 exports.updateMe = catchAsync(async (req, res, next) => {
-        // create an error if user POST's password data.
-        if(req.body.password || req.body.passwordConfirm) {
-            return next( new AppError('This route is not for password updates. Please use /updateMyPassword.', 400));
+    // create an error if user POST's password data.
+    if(req.body.password || req.body.passwordConfirm) {
+        return next( new AppError('This route is not for password updates. Please use /updateMyPassword.', 400));
+    }
+    
+    // update user documents
+    // // 1. filter
+    // const allowedFileds = [fullName, email, country, phone, state, cityRegion, zipPostal];
+    // const filterBody = filterObj(req.body, allowedFileds);
+    // console.log(filterBody)
+
+
+    // 2. update
+    const updatedUser = await User.findByIdAndUpdate(req.user.id, req.body, {
+        new: true,
+        runValidators: true
+    });
+
+    res.status(200).json({
+        status: "success",
+        data: {
+            user: updatedUser
         }
-        
-        // update user documents
-        // 1. filter
-        const allowedFileds = [fullName, email, country, phone, state, cityRegion, zipPostal];
-        const filterBody = filterObj(req.body, allowedFileds);
-        console.log(filterBody)
-
-
-        // 2. update
-        const updatedUser = await User.findByIdAndUpdate(req.user.id, filterBody, {
-            new: true,
-            runValidators: true
-        });
-
-        res.status(200).json({
-            status: "success",
-            data: {
-                user: updatedUser
-            }
-        })
+    })
 });
 
 exports.updateBankDetails = catchAsync(async (req, res, next) => {
     
     // update user bank details
-    // 1. filter
-    const allowedFileds = [bankName, bankAccountNumber, holdersName];
-    const filterBody = filterObj(req.body, allowedFileds);
+    // // 1. filter
+    // const allowedFileds = [bankName, bankAccountNumber, holdersName];
+    // const filterBody = filterObj(req.body, allowedFileds);
     // 2. update
-    const updatedDetails = await User.findByIdAndUpdate(req.user.id, filterBody, {
+    const updatedDetails = await User.findByIdAndUpdate(req.user.id, req.body, {
         new: true,
         runValidators: true
     });
@@ -236,57 +238,32 @@ exports.updateBankDetails = catchAsync(async (req, res, next) => {
 });
 
 // delete current user
-exports.deleteAccount = catchAsync(async (req, res, next) => {
+exports.deleteAccount = async(req, res, next) => {
+    try {
         // get user
-    await User.findByIdAndUpdate(req.user._id, {active: false});
+        await User.findByIdAndUpdate(req.user._id, { active: false });
 
-    res.status(204).json({
-        status: "success",
-        data: null
-    })
-    return res.cookie('jwt', '', { maxAge: 0, httpOnly: true });
-});
-
-
-// exports.uploadProfilePicture = async (req, res) => {
-//     try {
-//          // Check if a file was uploaded
-//          console.log(req, req.body, req?.file, req?.file?.path, req.form)
-//         if (!req.body.image) {
-//             return res.status(400).json({ message: 'No image file provided.' });
-//         }
-        
-//         // Upload the image to Cloudinary
-//         const uploadedImage = await cloudinary.uploader.upload(req.file.path);
-        
-//         // Check if the image upload was successful
-//         if (!uploadedImage || !uploadedImage.secure_url) {
-//             return res.status(500).json({ message: 'Error uploading image to Cloudinary.' });
-//         }
-
-//         const profilePicture = await User.findByIdAndUpdate( req.user._id, { image: uploadedImage.secure_url }, {
-//             new: true
-//         })
-//         return res.status(201).json({
-//             message: 'Profile picture updated',
-//             profilePicture,
-//         });
-//     } catch (err) {
-//         // console.log(err);
-//         return res.status(500).json({ message: 'Error occured' });
-//     }
-// }
-
-  
-// exports.getOneProfilePic = async (req, res) => {
-//     try {
-//         const { id } = req.params;
-//         const singlePicture = await userPicture.findById(id);
-//         return res.status(200).json({ singlePicture });
-//     } catch (err) {
-//         return res.status(500).json({ message: err });
-//     }
-// };
+        res.cookie('jwt', '', {
+            expires: new Date(Date.now() + 10 * 500),
+            httpOnly: true
+          }).clearCookie('jwt')
+        return res.status(204).json({
+            status: "success",
+            data: null
+        })
+    } catch(err) {
+    console.log(err)
+    }
+};
   
 
+/*
+add subscriptiontype and productCataloglength to the model
 
+if venndor.subcriptiontype === free
+    venndor.productCataloglength === 10
+if venndor.subcriptiontype === standard
+    venndor.productCataloglength === 50
+if venndor.subcriptiontype === premium
+    venndor.productCataloglength === unlimited
+*/

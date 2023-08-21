@@ -7,7 +7,7 @@ block content
         .dashboard__transaction
             .wallet__card
                 h3.dashboard__heading My wallet
-                p.wallet__amount &#x20A6; 
+                p.wallet__amount ₦ 
                     span.amount=user.wallet
                 span.wallet__info Total Accessable Amount (limit: ₦10,000)
             .withdrawal__card
@@ -22,7 +22,7 @@ block content
                 .form__grid-generic
                     .form__body-generic
                         label.form__label(for='amount') Amount
-                        input#amount.form__input(type='text' name='amount' placeholder="Withdrawal amount")
+                        input#amount.form__input(type='number' name='amount' placeholder="Withdrawal amount")
                     .form__body-generic
                         label.form__label(for='enter__password') Confirm your password
                         input#enter__password.form__input(type='password' name='enter__password' placeholder='••••••••••••')
@@ -68,7 +68,7 @@ block content
         .dashboard__transaction
             .wallet__card
                 h3.dashboard__heading My wallet
-                p.wallet__amount &#x20A6; 
+                p.wallet__amount ₦ 
                     span.amount= user.wallet
                 span.wallet__info Total Accessable Amount (limit: ₦20,000)
             .withdrawal__card
@@ -83,7 +83,7 @@ block content
                     .form__grid-generic
                         .form__body-generic
                             label.form__label(for='amount') Amount
-                            input#amount.form__input(type='text' name='amount' placeholder="Withdrawal amount")
+                            input#amount.form__input(type='number' name='amount' placeholder="Withdrawal amount")
                         .form__body-generic
                             label.form__label(for='enter__password') Confirm your password
                             input#enter__password.form__input(type='password' name='enter__password' placeholder='••••••••••••')

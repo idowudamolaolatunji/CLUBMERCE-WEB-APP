@@ -57,24 +57,6 @@ const showAlert = (type, msg) => {
     window.setTimeout(hideAlert, 5000);
 };
 
-const imageInput = document.getElementById('uploader__image--input');
-const imagePreview = document.getElementById('uploader__image');
-
-// Event listener for file input change
-if(imageInput) {
-    imageInput.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-    
-        // Check if a file was selected
-        if (file) {
-            // Create a temporary URL for the selected image
-            const imageUrl = URL.createObjectURL(file);
-            
-            // Update the image 'src' attribute with the temporary URL
-            imagePreview.src = imageUrl;
-        }
-    });
-}
 
 
 if (menu) {
@@ -144,9 +126,10 @@ if (profileImg) {
 const menuLogout = document.querySelector('.menu__logout');
 const navLogout = document.querySelector('.nav__logout');
 const adminLogout = document.querySelector('.admin__menu--logout');
-const buyerLogout = document.querySelector('.buyer__menu--logout');
+const buyerNavLogout = document.querySelector('.buyer__nav--logout');
+const buyerMenuLogout = document.querySelector('.buyer__menu--logout');
 
-const logoutUser = async function() {
+const logoutUser = async function(role) {
     try {
         showLoadingOverlay();
 
@@ -158,7 +141,7 @@ const logoutUser = async function() {
         const data = await res.json();
         if(data.status === 'success') {
             showAlert('success', 'Logging Out...')
-            location.reload(true);
+            location.assign(role === 'admin' ? '/admin/login' : role === 'buyer' ? '/buyers/login' : '/login')
         }
     } catch(err) {
        hideLoadingOverlay();
@@ -168,12 +151,17 @@ const logoutUser = async function() {
 
 if(adminLogout) {
     adminLogout.addEventListener('click', function(e) {
-        logoutUser();
+        logoutUser('admin');
     })
 }
-if(buyerLogout) {
-    buyerLogout.addEventListener('click', function(e) {
-        logoutUser();
+if(buyerNavLogout) {
+    buyerNavLogout.addEventListener('click', function(e) {
+        logoutUser('buyer');
+    })
+}
+if(buyerMenuLogout) {
+    buyerMenuLogout.addEventListener('click', function(e) {
+        logoutUser('buyer');
     })
 }
 
@@ -349,11 +337,13 @@ if(vendorProductDelete) {
 
 // upload functionality
 
-const productUpdateAdminForm = document.querySelector('.product__form-admin-update');
-const productUpdateForm = document.querySelector('.product__form-update');
-const productCreate = document.querySelector('.product-create')
-const productEdit = document.querySelectorAll('.product-edit');
-const productAdminEdit = document.querySelectorAll('.admin-product-edit');
+// const productForm = document.querySelector('.product__form-create');
+// const productUpdateForm = document.querySelector('.product__form-update');
+// const productUpdateAdminForm = document.querySelector('.product__form-admin-update');
+
+const productCreate = document.querySelector('.product-create') // btn
+const productEdit = document.querySelectorAll('.product-edit'); // btn
+const productAdminEdit = document.querySelectorAll('.admin-product-edit'); // btn
 
 const productUpdateOverlay = document.querySelector('.product-update__overlay');
 const productUpdateModal = document.querySelector('.product-update__modal');
@@ -361,7 +351,6 @@ const productUpdateModal = document.querySelector('.product-update__modal');
 const productOverlay = document.querySelector('.product__overlay');
 const productModal = document.querySelector('.product__modal');
 const productOverlayClose = document.querySelector('.form__close-icon');
-const productForm = document.querySelector('.product__form');
 
 const closeUploadModal = () => {
     const productOverlay = document.querySelector('.product__overlay');
@@ -384,14 +373,14 @@ const showUploadModal = function() {
             <div class="product__modal">
                 <i class="fa-solid fa-close icon form__close-icon"></i>
                 <h3 class="dashboard__heading">Add new product</h3>
-                <form class="product__form">
+                <form class="product__form product__form-create">
 
                     <div class="form__body-generic">
                         <div id="uploader__image--card">
                             <img id="uploader__image" src="/asset/img/products/product-default.png" alt="" />
                             <div id="uploader__image--label-box">
-                                <input name="photo" id="uploader__image--input" type="file" accept="image/png, image/jpeg">
-                                <label id="uploader__image--label" for="uploader__image--input"><i class="fa-solid fa-camera"></i> Add photo</label>
+                                <input name="image" id="uploader__image--input" type="file" name='image' accept="image/png, image/jpeg">
+                                <label id="uploader__image--label" for="uploader__image--input"><i class="fa-solid fa-camera"></i> Add image</label>
                             </div>
                         </div>
                     </div>
@@ -402,11 +391,11 @@ const showUploadModal = function() {
                     </div>
                     <div class="form__body-generic">
                         <label class="form__label" for="product__summary">Product Summary</label>
-                        <textarea class="form__input" id="product__summary" style="height: 6rem;" type="text" name="product__summary" required="" placeholder="Product Summary (not more than 120 characters)"></textarea>
+                        <textarea class="textarea form__input" id="product__summary" style="height: 6rem;" type="text" name="product__summary" required="" placeholder="Product Summary (not more than 120 characters)"></textarea>
                     </div>
                     <div class="form__body-generic">
                         <label class="form__label" for="product__description">Product Description</label>
-                        <textarea class="form__input" id="product__description" style="height: 15rem;" type="text" name="product__description" required="" placeholder="Product Description"></textarea>
+                        <textarea class="textarea form__input" id="product__description" style="height: 15rem;" type="text" name="product__description" required="" placeholder="Product Description"></textarea>
                     </div>
                     <div class="form__grid-generic">
                         <div class="form__body-generic">
@@ -459,7 +448,7 @@ const showUploadModal = function() {
 
                         <div class="form__body-generic">
                             <label class="form__label" for="product__recurring">Recurring Commissions</label>
-                            <select class="form__select" id="product-update__recurring" name="product__type">
+                            <select class="form__select" id="product__recurring" name="product__type">
                                 <option value="no">No</option>
                                 <option value="yes">Yes</option>
                             </select>
@@ -467,29 +456,23 @@ const showUploadModal = function() {
                     </div>
 
                     <div class="product__sub-images">
-                        <p class="form__label photo-head">Product sub images (Max of 6) upload</p>
+                        <p class="form__label photo-head">Product sub images | Maximum of 6 upload</p>
                         <div class="sub-images">
                             <img class="sub-image sub-image1" src="/asset/img/products/product-default.png" alt="product sub image"/>
-                            <img class="sub-image sub-image2" src="/asset/img/products/product-default.png" alt="product sub image"/>
-                            <img class="sub-image sub-image3" src="/asset/img/products/product-default.png" alt="product sub image"/>
-                            <img class="sub-image sub-image4" src="/asset/img/products/product-default.png" alt="product sub image"/>
-                            <img class="sub-image sub-image5" src="/asset/img/products/product-default.png" alt="product sub image"/>
-                            <img class="sub-image sub-image6" src="/asset/img/products/product-default.png" alt="product sub image"/>
+                            
                         </div>
-                        <input class="btn-upload btn__image-upload" type="file" accept="image/*" id="image" name="image" multiple max="6" />
+                        <input class="btn-upload btn__image-upload sub-images-input" type="file" accept="image/*" id="imagesubs" name="image" multiple max="6" />
 
                     </div>
 
                     <div class="product__banners">
-                        <p class="form__label photo-head">Product banner (Max of 4) upload</p>
+                        <p class="form__label photo-head">Product banner | Maximum of 4 upload</p>
                         <div class="banners">
                             <img class="banner banner1" src="/asset/img/products/product-default.png" alt="product sub banner"/>
-                            <img class="banner banner2" src="/asset/img/products/product-default.png" alt="product sub banner"/>
-                            <img class="banner banner3" src="/asset/img/products/product-default.png" alt="product sub banner"/>
-                            <img class="banner banner4" src="/asset/img/products/product-default.png" alt="product sub banner"/>
+                           
                         </div>
 
-                        <input class="btn-upload btn__banner-upload" type="file" accept="image/*" id="banner" name="image" multiple max="4" />
+                        <input class="btn-upload btn__banner-upload banner-input" type="file" accept="image/*" id="imagebanners" name="image" multiple max="4" />
                         
                     </div>
                         <button class="btn form__submit form__submit-generic" type="submit">Add product
@@ -511,14 +494,15 @@ const showUpdateModal = (productName, productImage) => {
             <div class="product-update__modal">
                 <i class="fa-solid fa-close icon form__close-icon"></i>
                 <h3 class="dashboard__heading">Update ${productName}</h3>
-                <form class="product__form">
+
+                <form class="product__form product__form-update product__form-admin-update">
 
                     <div class="form__body-generic">
                         <div id="uploader__image--card">
                             <img id="uploader__image" src="/asset/img/products/${productImage}" alt="" />
                             <div id="uploader__image--label-box">
-                                <input name="photo" id="uploader__image--input" type="file" accept="image/png, image/jpeg">
-                                <label id="uploader__image--label" for="uploader__image--input"><i class="fa-solid fa-camera"></i> Add photo</label>
+                                <input name="image" id="uploader__image--input" type="file" name='image' accept="image/png, image/jpeg">
+                                <label id="uploader__image--label" for="uploader__image--input"><i class="fa-solid fa-camera"></i> Add image</label>
                             </div>
                         </div>
                     </div>
@@ -528,11 +512,11 @@ const showUpdateModal = (productName, productImage) => {
                     </div>
                     <div class="form__body-generic">
                         <label class="form__label" for="product__summary">Product Summary</label>
-                        <textarea class="form__input" id="product-update__summary" style="height: 6rem;" type="text" name="product__summary" required="" placeholder="Product Summary (not more than 120 characters)"></textarea>
+                        <textarea class="textarea form__input" id="product-update__summary" style="height: 6rem;" type="text" name="product__summary" required="" placeholder="Product Summary (not more than 120 characters)"></textarea>
                     </div>
                     <div class="form__body-generic">
                         <label class="form__label" for="product__description">Product Description</label>
-                        <textarea class="form__input" id="product-update__description" style="height: 15rem;" type="text" name="product__description" required="" placeholder="Product Description"></textarea>
+                        <textarea class="textarea form__input" id="product-update__description" style="height: 15rem;" type="text" name="product__description" required="" placeholder="Product Description"></textarea>
                     </div>
                     <div class="form__grid-generic">
                         <div class="form__body-generic">
@@ -583,7 +567,7 @@ const showUpdateModal = (productName, productImage) => {
                             </select>
                         </div>
                         <div class="form__body-generic">
-                            <label class="form__label" for="product__recurring">Recurring Commissions</label>
+                            <label class="form__label" for="product-update__recurring">Recurring Commissions</label>
                             <select class="form__select" id="product-update__recurring" name="product__type">
                                 <option value="no">No</option>
                                 <option value="yes">Yes</option>
@@ -592,29 +576,23 @@ const showUpdateModal = (productName, productImage) => {
                     </div>
                     
                     <div class="product__sub-images">
-                        <p class="form__label photo-head">Product sub images (Max of 6) upload</p>
+                        <p class="form__label photo-head">Product sub images Maximim of 6 upload</p>
                         <div class="sub-images">
                             <img class="sub-image sub-image1" src="asset/img/product-default.png" alt="product sub image"/>
-                            <img class="sub-image sub-image2" src="asset/img/product-default.png" alt="product sub image"/>
-                            <img class="sub-image sub-image3" src="asset/img/product-default.png" alt="product sub image"/>
-                            <img class="sub-image sub-image4" src="asset/img/product-default.png" alt="product sub image"/>
-                            <img class="sub-image sub-image5" src="asset/img/product-default.png" alt="product sub image"/>
-                            <img class="sub-image sub-image6" src="asset/img/product-default.png" alt="product sub image"/>
+                            
                         </div>
-                        <input class="btn-upload btn__image-upload" type="file" accept="image/*" id="image" name="image" multiple max="6" />
+                        <input class="btn-upload btn__image-upload sub-images-input" type="file" accept="image/*" id="imagesubs" name="image" multiple max="6" />
 
                     </div>
 
                     <div class="product__banners">
-                        <p class="form__label photo-head">Product banner (Max of 4) upload</p>
+                        <p class="form__label photo-head">Product banner Maximum of 4 upload</p>
                         <div class="banners">
                             <img class="banner banner1" src="asset/img/product-default.png" alt="product sub image"/>
-                            <img class="banner banner2" src="asset/img/product-default.png" alt="product sub image"/>
-                            <img class="banner banner3" src="asset/img/product-default.png" alt="product sub image"/>
-                            <img class="banner banner4" src="asset/img/product-default.png" alt="product sub image"/>
+                           
                         </div>
 
-                        <input class="btn-upload btn__banner-upload" type="file" accept="image/*" id="banner" name="image" multiple max="4" />
+                        <input class="btn-upload btn__banner-upload banner-input" type="file" accept="image/*" id="banner" name="imagebanners" multiple max="4" />
                         
                     </div>
                     <button class="btn form__submit form__submit-generic" type="submit">Add product
@@ -628,6 +606,70 @@ const showUpdateModal = (productName, productImage) => {
 }
 
 
+const imageInput = document.getElementById('uploader__image--input');
+const imagePreview = document.getElementById('uploader__image');
+
+// Event listener for file input change
+if(imageInput) {
+    imageInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+    
+        // Check if a file was selected
+        if (file) {
+            // Create a temporary URL for the selected image
+            const imageUrl = URL.createObjectURL(file);
+            
+            // Update the image 'src' attribute with the temporary URL
+            imagePreview.src = imageUrl;
+        }
+    });
+}
+
+
+
+
+// const uploadProduct = async function(name, summary, description, price, commission, type, category, tools, link, recurring) {
+    const postProduct = async function(formData, type, id) {
+        console.log(formData)
+        try {
+            let url, method;
+            if(type === 'create') {
+                url = '/api/products';
+                method = 'POST'
+            }
+            if(type === 'update') {
+                url = `/api/products/${id}`;
+                method = 'PATCH'
+            }
+            showLoadingOverlay()
+            const res = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: formData
+            });
+    
+            if (!res.ok) {
+                hideLoadingOverlay()
+                showAlert('error', 'Product upload failed');
+                return;
+            }
+    
+            const data = await res.json();
+            console.log(res, data);
+            
+            if(data.status === 'success') {
+                hideLoadingOverlay();
+                showAlert('success', 'Product Updated successfully..');
+                window.location.reload(true);
+                return;
+            } 
+    
+        } catch (err) {
+            console.log(err);
+            hideLoadingOverlay()
+        }
+    };
+
 
 // Create product
 if(productCreate) {
@@ -640,11 +682,43 @@ if(productCreate) {
 
         document.querySelector('.form__close-icon').addEventListener('click', function(e) {
             closeUploadModal();
-        })
+        });
+
+        document.querySelector('.product__form-create').addEventListener('submit', function(e) {
+        
+            e.preventDefault();
+            const form = new FormData();
+            const subImages = document.querySelectorAll('.sub-images-input');
+            const banners = document.querySelectorAll('.banner-input');
+
+            form.append('image', document.getElementById('uploader__image--input').files[0])
+            form.append('name', document.querySelector('#product__name').value);
+            form.append('summary', document.querySelector('#product__summary').value);
+            form.append('description', document.querySelector('#product__description').value);
+            form.append('price', document.querySelector('#product__price').value);
+            form.append('commission ', document.querySelector('#product__commission').value);
+            form.append('type', document.querySelector('#product__type').value);
+            form.append('category', document.querySelector('#product__category').value);
+            form.append('recurring', document.querySelector('#product__recurring').value);
+            form.append('recurring', document.querySelector('#product__recurring').value);
+
+
+            // inputFiles.forEach(input => {
+            //     const files = input.files;
+            //     for (let i = 0; i < files.length; i++) {
+            //         form.append('images', files[i]);
+            //     }
+            // });
+            // console.log(form)
+            postProduct(form, 'create')
+        });
+
+        
     })
 }
 
-let editingProductId;
+
+
 if(productAdminEdit) {
     productAdminEdit.forEach(el => el.addEventListener('click', function() {
         const productName = el.dataset.productname;
@@ -659,12 +733,44 @@ if(productAdminEdit) {
         document.querySelector('.form__close-icon').addEventListener('click', function(e) {
             closeUpdateModal();
         })
+
+        document.querySelector('.product__form-admin-update').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const form = new FormData();
+            const inputFiles = document.querySelectorAll('.sub-images-input, .banner-input');
+
+
+            form.append('image', document.getElementById('uploader__image--input').files[0])
+            form.append('name', document.querySelector('#product-update__name').value)
+            form.append('summary', document.querySelector('#product-update__summary').value)
+            form.append('description', document.querySelector('#product-update__description').value)
+            form.append('price', document.querySelector('#product-update__price').value)
+            form.append('commission', document.querySelector('#product-update__commission').value)
+            form.append('type', document.querySelector('#product-update__type').value)
+            form.append('category', document.querySelector('#product-update__category').value)
+            form.append('recurring', document.querySelector('#product-update__recurring').value)
+            // Append all selected images to the FormData object
+            inputFiles.forEach(input => {
+                const files = input.files;
+                for (let i = 0; i < files.length; i++) {
+                    form.append('images', files[i]);
+                }
+            });
+
+            postProduct(form, 'update', editingProductId)
+        });
     }));
 }
+
+
 if(productEdit) {
     productEdit.forEach(el => el.addEventListener('click', function() {
         const productName = el.dataset.productname;
         const editingProductId = el.dataset.id;
+        console.log(editingProductId)
+
+
         const productImage = el.dataset.productimage;
         const existingModal = document.querySelector('.product-update__overlay');
         if (existingModal) {
@@ -675,51 +781,38 @@ if(productEdit) {
         document.querySelector('.form__close-icon').addEventListener('click', function(e) {
             closeUpdateModal();
         })
+        console.log('I was logged from update product modal')
+
+        document.querySelector('.product__form-update').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const form = new FormData();
+            const inputFiles = document.querySelectorAll('.sub-images-input, .banner-input');
+
+
+            form.append('image', document.getElementById('uploader__image--input').files[0])
+            form.append('name', document.querySelector('#product-update__name').value)
+            form.append('summary', document.querySelector('#product-update__summary').value)
+            form.append('description', document.querySelector('#product-update__description').value)
+            form.append('price', document.querySelector('#product-update__price').value)
+            form.append('commission', document.querySelector('#product-update__commission').value)
+            form.append('type', document.querySelector('#product-update__type').value)
+            form.append('category', document.querySelector('#product-update__category').value)
+            form.append('recurring', document.querySelector('#product-update__recurring').value)
+            // Append all selected images to the FormData object
+            inputFiles.forEach(input => {
+                const files = input.files;
+                for (let i = 0; i < files.length; i++) {
+                    form.append('images', files[i]);
+                }
+            });
+
+            console.log(form)
+            postProduct(form, 'update', editingProductId)
+        });
     }));
 }
 
-
-// const uploadProduct = async function(name, summary, description, price, commission, type, category, tools, link, recurring) {
-const postProduct = async function(formData, type) {
-    try {
-        let url, method;
-        if(type === 'create') {
-            url = '/api/products';
-            method = 'POST'
-        }
-        if(type === 'update') {
-            url = `/api/products/${editingProductId}`;
-            method = 'PATCH'
-        }
-        showLoadingOverlay()
-        const res = await fetch('/api/products', {
-            method: 'POST',
-            // headers: { 'Content-Type': 'application/json' },
-            // body: JSON.stringify({ name, summary, description, price, commission, type, category, tools, link, recurring }),
-            body: JSON.stringify(formData)
-        });
-
-        if (!res.ok) {
-            hideLoadingOverlay()
-            showAlert('success', 'Product upload failed');
-            return;
-        }
-
-        const data = await res.json();
-        console.log(res, data);
-        
-        if(data.status === 'success') {
-            hideLoadingOverlay();
-            showAlert('success', 'Product Updated successfully..');
-            window.location.reload(true);
-            return;
-        } 
-
-    } catch (err) {
-        console.log(err);
-        hideLoadingOverlay()
-    }
-};
 
 /*
 if (productForm) {
@@ -754,59 +847,7 @@ if (productForm) {
 }
 */
 
-
-if (productForm) {
-    productForm.addEventListener('submit', function(e) {
-        
-        e.preventDefault();
-        const form = new FormData();
-        const name = document.querySelector('#product__name').value;
-        const summary = document.querySelector('#product__summary').value;
-        const description = document.querySelector('#product__description').value;
-        const price = document.querySelector('#product__price').value;
-        const commission =  document.querySelector('#product__commission').value;
-        const type = document.querySelector('#product__type').value;
-        const category = document.querySelector('#product__category').value;
-        const recurring = document.querySelector('#product__link').checked;
-        const data = {name, summary, description, price, commission, type, category, recurring}
-        updateProduct(data, 'create')
-        console.log(data)
-    });
-}
-
-if(productUpdateAdminForm) {
-    productUpdateAdminForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const name = document.querySelector('#product-update__name').value
-        const summary = document.querySelector('#product-update__summary').value
-        const description = document.querySelector('#product-update__description').value
-        const price = document.querySelector('#product-update__price').value
-        const commission = document.querySelector('#product-update__commission').value
-        const type = document.querySelector('#product-update__type').value
-        const category = document.querySelector('#product-update__category').value
-        const recurring = document.querySelector('#product-update__recurring').value
-        const data = {name, summary, description, price, commission, type, category, recurring}
-        updateProduct(data, 'update')
-    });
-}
-
-if(productUpdateForm) {
-    productUpdateForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const name = document.querySelector('#product-update__name').value
-        const summary = document.querySelector('#product-update__summary').value
-        const description = document.querySelector('#product-update__description').value
-        const price = document.querySelector('#product-update__price').value
-        const commission = document.querySelector('#product-update__commission').value
-        const type = document.querySelector('#product-update__type').value
-        const category = document.querySelector('#product-update__category').value
-        const recurring = document.querySelector('#product-update__recurring').value
-        const data = {name, summary, description, price, commission, type, category, recurring}
-        updateProduct(data, 'update')
-    });
-}
-
-
+/*
 // User Update
 const updateUser = async function(name, email, phone, country, state, cityRegion, zipPostal) {
     try {
@@ -818,6 +859,12 @@ const updateUser = async function(name, email, phone, country, state, cityRegion
                 name, email, phone, country, state, cityRegion, zipPostal,
             }),
         });
+
+        if(!res.ok) {
+            showAlert('error', 'Update failed')
+            hideLoadingOverlay();
+            return;
+        }
 
         const data = await res.json();
         hideLoadingOverlay()
@@ -832,24 +879,240 @@ const updateUser = async function(name, email, phone, country, state, cityRegion
         }
 
     } catch(err) {
-        showAlert('error', data.message)
+        showAlert('error', 'Something Went Wrong');
         hideLoadingOverlay()
     }
 }
 
-// const userFormUpdate = document.querySelector('.form-profile-data');
-// if(userFormUpdate) {
-//     userFormUpdate.addEventListener('submit', function(e) {
-//         e.preventDefault();
-//         const formUpdateName = document.querySelector('#fullName').value
-//         const formUpdateEmail = document.querySelector('#email').value
-//         const formUpdatePhone = document.querySelector('#phone').value
-//         const formUpdateCountry = document.querySelector('#country').value
-//         const formUpdateState = document.querySelector('#state').value
-//         const formUpdateCityRegion = document.querySelector('#city-region').value
-//         const formUpdateZipPostal = document.querySelector('#zip-postal').value
-//         updateUser(formUpdateName, formUpdateEmail, formUpdatePhone, formUpdateCountry, formUpdateState, formUpdateCityRegion, formUpdateZipPostal);
-//     });
-// }
+const userFormUpdate = document.querySelector('.form-profile-data');
+if(userFormUpdate) {
+    userFormUpdate.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formUpdateName = document.querySelector('#fullName').value
+        const formUpdateEmail = document.querySelector('#email').value
+        const formUpdatePhone = document.querySelector('#phone').value
+        const formUpdateCountry = document.querySelector('#country').value
+        const formUpdateState = document.querySelector('#state').value
+        const formUpdateCityRegion = document.querySelector('#city-region').value
+        const formUpdateZipPostal = document.querySelector('#zip-postal').value
+        updateUser(formUpdateName, formUpdateEmail, formUpdatePhone, formUpdateCountry, formUpdateState, formUpdateCityRegion, formUpdateZipPostal);
+        console.log(formUpdateName, formUpdateEmail, formUpdatePhone, formUpdateCountry, formUpdateState, formUpdateCityRegion, formUpdateZipPostal);
+    });
+}
+*/
+
+const uploadProfileImage = async function(form) {
+    try {
+        showLoadingOverlay()
+        const res = await fetch('/api/users/uploadProfileImage', {
+            method: 'PATCH',
+            body: form
+        });
+
+        if(!res.ok) {
+            showAlert('error', 'Error uploading image');
+            hideLoadingOverlay();
+            return;
+        }
+
+        const data = await res.json();
+        console.log(res, data)
+        
+        if(data.status === 'success') {
+            hideLoadingOverlay();
+            window.location.reload(true)
+        }
+
+    } catch(err) {}
+}
+
+const profileImage = document.querySelector('.form-image-data');
+if(profileImage)
+    profileImage.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const form = new FormData();
+        form.append('image', document.getElementById('uploader__image--input').files[0]);
+        console.log(form)
+        uploadProfileImage(form);
+    });
 
 
+
+
+// type is either 'password' or 'data or image or bank'
+const updateSettings = async (form, type) => {
+    try {
+      showLoadingOverlay();
+        let url;
+        if(type === 'password') url = '/api/users/updateMyPassword'
+        if(type === 'data') url ='/api/users/updateMe';
+        if(type === 'bank') url ='/api/users/updateMyBank';
+    
+        const res = await fetch(url, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(form),
+        });
+
+        console.log(res)
+        if(!res.ok) {
+          showAlert('error', 'Error updating data')  
+          hideLoadingOverlay();
+          return; 
+        }
+
+        const data = await res.json();
+        console.log(data)
+        if(type === 'password' && data.message === 'Your current password is wrong.') {
+          hideLoadingOverlay();
+          showAlert('error', data.message);
+        }
+        if (data.status === 'success') { 
+          hideLoadingOverlay();
+          showAlert('success', `${type.toUpperCase()} updated successfully!`);
+          location.reload(true)
+        }
+    } catch (err) {
+        hideLoadingOverlay();
+        showAlert('error', 'Something went wrong');
+    }
+}
+
+
+const userDataForm = document.getElementById('form-data');
+if (userDataForm)
+  userDataForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const fullName = document.getElementById('fullName').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const country = document.getElementById('country').value;
+    const state = document.getElementById('state').value;
+    const cityRegion = document.getElementById('city-region').value;
+    const zipPostal = Number(document.getElementById('zip-postal').value);
+    const formData = { fullName, email, phone, country, state, cityRegion, zipPostal}
+    updateSettings(formData, 'data');
+  });
+
+
+const vendorDataForm = document.getElementById('form-data-vendor');
+if (vendorDataForm)
+  vendorDataForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const fullName = document.getElementById('fullName').value;
+    const businessName = document.getElementById('businessName').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const country = document.getElementById('country').value;
+    const state = document.getElementById('state').value;
+    const cityRegion = document.getElementById('city-region').value;
+    const zipPostal = Number(document.getElementById('zip-postal').value);
+    const formData = { fullName, businessName, email, phone, country, state, cityRegion, zipPostal}
+    updateSettings(formData, 'data');
+  });
+
+
+
+const userPasswordForm = document.querySelector('.form-password-data') 
+if (userPasswordForm)
+  userPasswordForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    document.querySelector('.btn--save-password').textContent ='Updating...';
+
+    const passwordCurrent = document.getElementById('password-current').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('password-confirm').value;
+    const formData = { passwordCurrent, password, passwordConfirm }
+    console.log(formData)
+    updateSettings(formData, 'password' );
+    document.querySelector('.btn--save-password').textContent = 'Save password';
+    document.getElementById('password-current').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('password-confirm').value = '';
+});
+
+
+const userBankForm = document.querySelector('.form-payment-data') 
+if (userBankForm)
+  userBankForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    document.querySelector('.btn--save-bank').textContent = 'Updating...';
+
+    const bankName = document.getElementById('paymentBankName').value;
+    const bankAccountNumber = document.getElementById('paymentAcctNum').value;
+    const holdersName = document.getElementById('HoldersName').value;
+    const formData = { bankName, bankAccountNumber, holdersName }
+    console.log(formData)
+    updateSettings( formData, 'bank')
+    document.querySelector('.btn--save-bank').textContent = 'Add payment account';
+});
+
+
+
+//////////////////////////////////////
+//////////////////////////////////////
+
+const showMyDeleteModal = function(item) {
+    const html = `
+      <div class="delete__overlay">
+          <div class='delete__modal'>
+              <i class="fa-solid fa-close delete__icon"></i>
+              <p class="delete__text">
+                  Are you sure you want to delete this ${item}?
+              </p>
+              <div class="delete__action">
+                  <button class="delete__button btn-yes">Yes</button>
+                  <button class="delete__button btn-no">No</button>
+              </div>
+          </div>
+      </div>
+    `;
+  
+    document.body.insertAdjacentHTML('afterbegin', html);
+}
+
+const closeAdjacentDeleteModal = () => {
+  const deleteOverlay = document.querySelector('.delete__overlay');
+  if (deleteOverlay) {
+    deleteOverlay.remove();
+  }
+};
+
+const deleteMyAccount = async function(role) {
+  try {
+    showLoadingOverlay();
+    await fetch(`/api/users/deleteAccount`, {
+      method: 'DELETE',
+    });
+
+    showAlert('success', 'Account deleted successfully!');
+    location.reload(true);
+    location.assign(`${role === 'affiliate' ? '/affiliate#signup' : role === 'vendor' ? '/vendor' : '/signup'}`);
+    
+  } catch (err) {
+    hideLoadingOverlay();
+    showAlert('error', 'Something went wrong!');
+  }
+} 
+
+
+const deleteAccount = document.querySelector('.delete-data')
+
+if(deleteAccount)
+    deleteAccount.addEventListener('submit', function(e) {
+    e.preventDefault()
+
+    showMyDeleteModal('Account');
+    const userRole = e.target.dataset.role;
+
+    document.querySelector('.btn-yes').addEventListener('click', async function() {
+        await deleteMyAccount(userRole);
+    })
+    document.querySelector('.btn-no').addEventListener('click', () => {
+        closeAdjacentDeleteModal();
+    })
+    document.querySelector('.delete__icon').addEventListener('click', () => {
+        closeAdjacentDeleteModal();
+    } )
+    })

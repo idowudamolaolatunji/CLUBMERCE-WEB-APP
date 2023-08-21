@@ -14,10 +14,22 @@ head
     link(rel="stylesheet" href="src/css/animation.css")
     link(rel="stylesheet" href="src/css/general.css")
     link(rel="stylesheet" href="src/css/otherPages.css")
+    link(rel="stylesheet" href="src/css/form.css")
     link(rel="stylesheet" href="src/css/main.css")
     link(rel="stylesheet" href="src/css/query.css")
 
     script(defer src="src/js/index.js")
+    script(type='text/javascript').
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/64e23766cc26a871b03054a8/1h89qgrqn';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
+
 
 
     title Clubmerce | #{title}
@@ -25,7 +37,23 @@ body
 
     include _header
 
+    #spinOverlay
+        .spin
+            div
+            div
+            div
+            div
+            div
+            div
+            div
+            div
+            div
+            div
+
     block content
         h1 content
 
+
+
+    
     include _footer

@@ -7,11 +7,12 @@ const userController = require("../controller/usersController");
 
 const router = express.Router();
 
-router.post("/signup", authController.signup);
+router.post("/signup-affiliate", authController.signupAffiliate);
+router.post("/signup-vendor", authController.signupVendor);
 router.post("/verify-email/:token", authController.verifyEmail);
 router.get('/logout', authController.logout)
 router.post("/login-buyer", authController.loginBuyer);
-router.post("/signup-buyer", authController.signup);
+router.post("/signup-buyer", authController.signupBuyer);
 ;
 router.post("/login", authController.login);
 router.post("/login-admin", authController.loginAdmin);

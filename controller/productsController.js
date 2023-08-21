@@ -1,6 +1,5 @@
 const multer = require('multer');
 const sharp = require('sharp');
-// const cloudinary = require('cloudinary').v2;
 
 const app = require('../app');
 const catchAsync = require('../utils/catchAsync')
@@ -11,11 +10,6 @@ const APIFeatures = require('../utils/apiFeatures');
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
 
-// cloudinary.config({
-//     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-//     api_key: process.env.CLOUDINAR_API_KEY,
-//     api_secret: process.env.CLOUDINAR_API_SECRET,
-// });
 const multerStorage = multer.memoryStorage()
 
 // create a multer filter
@@ -36,8 +30,8 @@ const upload = multer({
 
 exports.uploadProductImage = upload.fields([
   { name: 'image', maxCount: 1 },
-  { name: 'subImages', maxCount: 6  },
-  { name: 'banners', maxCount: 4 }
+  { name: 'imagesubs', maxCount: 6  },
+  { name: 'imagebanners', maxCount: 4 }
 ]);
 
 exports.resizeProductImage = catchAsync(async (req, res, next) => {
@@ -125,8 +119,6 @@ exports.getAllProduct = async(req, res) => {
         .paginate();
         const products = await features.query;
 
-       
-
         res.status(200).json({
             status: "success",
             data: {
@@ -147,12 +139,12 @@ exports.getAllProduct = async(req, res) => {
 exports.createProduct = async (req, res) => {
   try {
     const vendorId = req.user._id;
-    // Find the vendor document from the database based on the vendor ID
     const vendor = await User.findById(vendorId);
     if (!vendor) {
       return res.status(404).json({ error: 'Vendor not found' });
     }
 
+    /*
     // Validate and upload the main image to Cloudinary
     if (!req.files || !req.files['image'] || req.files['image'].length !== 1) {
       return res.status(400).json({ error: 'Invalid main image file' });
@@ -180,7 +172,6 @@ exports.createProduct = async (req, res) => {
     } else {
       return res.status(400).json({ error: 'Invalid banner files' });
     }
-
     const newProduct = await Product.create({
       ...req.body,
       vendor: vendor._id,
@@ -188,18 +179,31 @@ exports.createProduct = async (req, res) => {
       subImages: subImages,
       banners: banners,
     });
+    */
 
-    res.status(201).json({
-      status: 'success',
-      data: {
-        product: newProduct,
-      },
-    });
+    // let image;
+    // if(req.file) image = req.file.filename;
+    console.log(req, req.body);
+
+    // const newProduct = await Product.create({
+    //   ...req.body,
+    //   vendor: vendor._id,
+    //   image,
+    //   subImages,
+    //   banners,
+    // });
+
+    // res.status(201).json({
+    //   status: 'success',
+      // data: {
+      //   product: newProduct,
+      // },
+    // });
   } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err.message ||'An error occurred while processing the request',
-    });
+    // res.status(404).json({
+    //   status: 'fail',
+    //   message: err.message ||'An error occurred while processing the request',
+    // });
   }
 };
 
@@ -324,15 +328,23 @@ exports.getProductsByOption = async (req, res) => {
 
 exports.updateProduct = async(req, res) => {
     try {
-        const updated = await Product.findByIdAndUpdate(req.params.id, req.body, {
+        const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
             runValidation: true,
         });
 
+        // Update the image field if a new image is uploaded
+        if (req.body.image || req.body.subImages || req.body.banners) {
+          updatedProduct.image = req.body.image;
+          updatedProduct.subImages = req.body.subImages;
+          updatedProduct.banners = req.body.banners;
+          await updated.save();
+        }
+
         res.status(200).json({
             status: "success",
             data: {
-                product: updated
+                product: updatedProduct
             }
         })
     } catch(err) {

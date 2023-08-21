@@ -7,39 +7,58 @@ const Transaction = require('../model/transactionModel');
 const Order = require('../model/orderModel');
 
 // Global
+let token;
 exports.home = (req, res) => {
+    if( req.cookies.jwt ) token = req.cookies.jwt;
     res.status(200).render('home', {
         title: 'Official Website',
+        section: 'home',
+        active: 'home',
+        token
     });
 }
 exports.getStarted = (req, res) => {
+    if( req.cookies.jwt ) token = req.cookies.jwt;
     res.status(200).render('get-started', {
         title: 'Get Started',
+        active: 'get-started',
+        token
     });
 }
 exports.vendor = (req, res) => {
+    if( req.cookies.jwt ) token = req.cookies.jwt;
     res.status(200).render('vendor', {
         title: 'Become a vendor',
+        active: 'vendor',
+        token
     });
 }
 exports.affiliate = (req, res) => {
+    if( req.cookies.jwt ) token = req.cookies.jwt;
     res.status(200).render('affiliate', {
         title: 'Become an affiliate',
+        active: 'affiliate',
+        token
+    });
+}
+exports.contactUs = (req, res) => {
+    if( req.cookies.jwt ) token = req.cookies.jwt;
+    res.status(200).render('contact-us', {
+        title: 'Contact Us',
+        active: 'contact us',
+        token
     });
 }
 exports.login = async (req, res) => {
-    if( req.cookies.jwt ) {
+    if( req.cookies?.jwt ) {
         return res.redirect('/dashboard')
     }
     res.status(200).render('login', {
         title: 'Login your account',
+        active: 'login'
     })
 }
-exports.signUp = (req, res) => {
-    res.status(200).render('signup', {
-        title: 'Create an account'
-    });
-}
+
 
 // visitors / buyers
 exports.paymentForm = (req, res) => {
@@ -49,10 +68,10 @@ exports.getOrderProductPage = async(req, res) => {
     res.status(200).render('order_product');
 }
 exports.buyerLoginAuth = (req, res) => {
-    res.status(200).render('buyer_login_auth');
+    res.status(200).render('buyer_login');
 }
 exports.buyerSignupAuth = (req, res) => {
-    res.status(200).render('buyer_signup_auth');
+    res.status(200).render('buyer_signup');
 }
 
 // Affiliates
@@ -173,6 +192,11 @@ exports.leaderboard = async(req, res) => {
 }
 
 // Vendors
+exports.signupVendor = (req, res) => {
+    res.status(200).render('signup', {
+        title: 'Create a vendor account'
+    });
+}
 exports.productCatalog = async(req, res) => {
     try {
         const products = await Product.find({ vendor: req.user._id })
@@ -185,18 +209,18 @@ exports.productCatalog = async(req, res) => {
         res.json({message: 'You dont have any product'});
     }
 }
+exports.upgrade = (req, res) => {
+    res.status(200).render('upgrade');
+}
 
 // Admin
 exports.adminAuth = (req, res) => {
-    if( req.cookies.jwt ) {
-        return res.redirect('/dashboard')
-    }
-    res.status(200).render('admin_auth');
+    res.status(200).render('admin_login');
 }
 
 exports.manageUsers = async (req, res) => {
     try {
-        const users = await User.find();
+        const users = await User.find({ role: {"$ne": 'admin'} }).sort('-createdAt');
         res.status(200).render('manage_users', {
             title: 'All Users',
             users
@@ -237,6 +261,18 @@ exports.manageOrders = async (req, res) => {
     } catch(err) {
         res.json({message: 'There is no user yet!'});
     }
+}
+exports.manageAds = (req, res) => {
+    res.status(200).render('manage_ads', {
+        title: 'Manage Ads',
+    });
+   
+}
+exports.manageApp = (req, res) => {
+    res.status(200).render('manage_app', {
+        title: 'Global Settings',
+    });
+   
 }
 
 exports.getOrderPage = async (req, res) => {

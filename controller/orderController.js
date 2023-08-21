@@ -1,6 +1,5 @@
 const crypto = require('crypto');
 
-const mongoose = require('mongoose');
 const axios = require('axios');
 const _ = require("lodash");
 const request = require("request");
@@ -9,10 +8,10 @@ const User = require('../model/usersModel');
 const Product = require('../model/productsModel');
 const Order = require('../model/orderModel');
 const Commissions = require('../model/commissionModel');
-const AffiliateLink = require('../model/affiliteLinkModel')
-// const UserPerformance = require('../model/userPerformanceModel');
-
+const AffiliateLink = require('../model/affiliteLinkModel');
 const { initializePayment, verifyPayment } = require("../utils/paystack")(request);
+
+// const UserPerformance = require('../model/userPerformanceModel');
 
 
 // making orders and payments
@@ -21,28 +20,44 @@ exports.OrdersAndPayment = async (req, res) => {
         // Fetch the product information from the database
         const affiliate = await User.findOne({ slug: req.params.userSlug });
         const product = await Product.findOne({ slug: req.params.productSlug })
+        if(!product) return res.status(404).json({ message: 'Product Not Found!' });
 
         // come back to remodify the buyers
         const buyer = await User.findById(req.user._id);
     
-        if(!product) return res.status(404).json({ message: 'Product Not Found!' })
         const orderInfo = {
             quantity: req.body.quantity,
             address: req.body.address,
         };
+        const paymentData = {
+            email: req.body.email,
+            fullname: req.body.fullname,
+            amount: req.body.amount,
+        }
         
         // Calculate the total amount for the order
-        const totalAmount = product.price * orderInfo.quantity;
+        let charges;
+        const orderAmount = product.price * orderInfo.quantity;
+        const calcChargesAmount = 3 / 100 * orderAmount
+
+        if(calcChargesAmount > 3000) {
+            charges = 3000
+        } else {
+            charges = calcChargesAmount;
+        }
+        const totalAmount = orderAmount + charges;
 
         // Call the payment processing function
-        processPayment(totalAmount, req.body, orderInfo, product, buyer, res, affiliate);
+        await processPayment(totalAmount, paymentData, orderInfo, product, buyer, res, affiliate);
          
         const order = await Order.create({
             product: product._id,
             vendor: product.vendor,
             buyer: buyer._id,
-            commissionedAmount: paidAmount - product.commissionAmount,
-            amount: paidAmount,
+            affiliate: affiliate._id,
+            vendorProfit: totalAmount - product.commissionAmount - charges,
+            affiliateCommission: product.commissionAmount,
+            amount: totalAmount,
             ...orderInfo,
             createdAt: this.formattedCreatedAt
         });
@@ -60,9 +75,53 @@ exports.OrdersAndPayment = async (req, res) => {
     }
 }
 
+/*
+exports.initializePayment = {
+    acceptPayment: async(req, res) => {
+      try {
+        // request body from the clients
+        const email = req.body.email;
+        const amount = req.body.amount;
+        // params
+        const params = JSON.stringify({
+          "email": email,
+          "amount": amount * 100
+        })
+        // options
+        const options = {
+          hostname: 'api.paystack.co',
+          port: 443,
+          path: '/transaction/initialize',
+          method: 'POST',
+          headers: {
+            Authorization: process.env.PAYSTACK_SECCRET_API_KEY, 
+            'Content-Type': 'application/json'
+          }
+        }
+        // client request to paystack API
+        const clientReq = require('https').request(options, apiRes => {
+          let data = ''
+          apiRes.on('data', (chunk) => {
+            data += chunk
+          });
+          apiRes.on('end', () => {
+            console.log(JSON.parse(data));
+            return res.status(200).json(data);
+          })
+        }).on('error', error => {
+          console.error(error)
+        })
+        clientReq.write(params)
+        clientReq.end()
+        
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred' });
+      }
+    },
+}*/
 
-
-
+/*
 exports.pay = async (req, res, next) => {
     try {
       res.render("pay");
@@ -86,8 +145,9 @@ exports.successPage = async(req, res, next) => {
       return next(new ErrorResponse(e.message, 500));
     }
 }
+*/
 
-
+// product-default.png
 const processPayment = async (amount, paymentData, orderInfo, product, buyer, res, affiliate) => {
     const form = _.pick(paymentData, ["amount", "email", "fullname"]);
     form.metadata = {
@@ -108,7 +168,7 @@ const processPayment = async (amount, paymentData, orderInfo, product, buyer, re
     });
   
     const verifyPayment = async (req, res, next) => {
-        const session = await mongoose.startSession();
+        const session = await require('mongoose').startSession();
         session.startTransaction();
     
         try {
