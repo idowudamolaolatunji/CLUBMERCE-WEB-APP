@@ -17,6 +17,8 @@ head
     link(rel="stylesheet" href="/src/css/dashboard.css")
     link(rel="stylesheet" href="/src/css/query_dashboard.css")
 
+    script(defer src="/src/js/paymentAndOrder.js")
+    script(src="https://js.paystack.co/v2/inline.js")
     script(type='text/javascript').
         var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
         (function(){
@@ -118,9 +120,9 @@ body
 
 
     //- Youtube Video
-    //- section.video-section.container
+    section.video-section.container
         .video
-            iframe(width='914' height='514' src='https://www.youtube.com/embed/EvnQ4Va-4Cg' title='How To Use Your Apple Watch Series 7! (Complete Beginners Guide)' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen='')
+            iframe(width='900' height='500' src='https://www.youtube.com/embed/EvnQ4Va-4Cg' title='How To Use Your Apple Watch Series 7! (Complete Beginners Guide)' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen='')
 
 
 
@@ -131,10 +133,11 @@ body
                 | Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ullam, molestias mollitia. Aliquid, fuga dignissimos earum suscipit neque ipsa eos ex dolorum consectetur repellat officia illum aspernatur alias inventore corrupti doloremque magnam possimus ipsam vel atque! Iure alias vel officia quibusdam! Iste ex doloribus ipsum eveniet veniam optio possimus laboriosam porro veritatis hic iure corrupti illo maxime rem, quis est tenetur quos vero corporis animi dolor debitis ut! Aut a officiis repellendus. Maiores quo id explicabo corporis aperiam placeat voluptatibus at? Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero sapiente quidem alias explicabo blanditiis deleniti rerum iure quasi! Quis totam ad dolorum voluptatem doloremque quam corrupti explicabo molestias quisquam nostrum, aut aperiam deleniti qui sequi aliquam nulla delectus facilis? Optio est cumque fugit minima. Voluptatibus eius numquam eligendi cum laborum possimus explicabo, quis illo aspernatur molestias at veniam reprehenderit temporibus quisquam. Laboriosam modi alias distinctio praesentium inventore ducimus ipsum ut. Eaque nulla repellat a consectetur cumque quidem maiores in eligendi.
             .about-image
                 img(src='/../asset/img/products/product-default.png' alt='')
+    
 
 
     //- Purchase
-    section.purchase-section
+    //- section.purchase-section
         .purchase-container.container
             .purchase-cards
                 .purchase-card
@@ -144,44 +147,45 @@ body
                         .card-image-box
                             img(src='/../asset/img/products/product-default.png' alt='order product image')
                         span.card-price
-                            p.price $100
+                            p.price ₦100
                             p.text x 1
-                        a.card-button(href='#')
+                        button.card-button(data-amount="1")
                             i.fa-solid.fa-shopping-cart
                             |  Order Now
                         ul.card-details
                             li Plus Shipping
                             li 30 days Garantee
-                .purchase-card.active-card
+                //- .purchase-card.active-card
                     .card-heading
                         p Buy 3
                     .card-content
                         .card-image-box
                             img(src='/../asset/img/products/product-default.png' alt='order product image')
                         span.card-price
-                            p.price $100
+                            p.price ₦100
                             p.text  x 3
-                        a.card-button(href='#')
+                        button.card-button(data-amount="3")
                             i.fa-solid.fa-shopping-cart
                             |  Order Now
                         ul.card-details
                             li Plus Shipping
                             li 30 days Garantee
-                .purchase-card
+                //- .purchase-card
                     .card-heading
-                        p Buy 9
+                        p Buy 5
                     .card-content
                         .card-image-box
                             img(src='/../asset/img/products/product-default.png' alt='order product image')
                         span.card-price
-                            p.price $100
-                            p.text  x 9
-                        a.card-button(href='#')
+                            p.price ₦100
+                            p.text  x 5
+                        button.card-button(data-amount="5")
                             i.fa-solid.fa-shopping-cart
                             |  Order Now
                         ul.card-details
                             li Plus Shipping
                             li 30 days Garantee
+
 
 
 
@@ -192,20 +196,23 @@ body
             span.checkout__info
                 span
                     p.product__name Product 1
-                    p.product__price 100
+                    p.product__price ₦2000
                 span 
                     p.product__summary Lorem ipsum dolor sit amet.
-                    p.product__quantity X2
-            form.checkout__form(action="/pay", method="post")
+                    p.product__quantity x1
+            form.checkout__form#order-checkout(data-price='2000' data-quantity='1')
                 h3.dashboard__heading Form info
                 .form__item
                     label.form__label(for='email') Email address
-                    input#email.form__input(type='email' placeholder='Email address' required='')
-                .form__item
-                    label.form__label(for='amount') Amount
-                    input#amount.form__input(type='number' required='')
+                    input#email.form__input(type='email' placeholder='Email address' required)
+                //- .form__item
+                //-     label.form__label(for='amount') Amount
+                //-     input#amount.form__input(type='number' placeholder='Amount' required)
                 .form__item
                     label.form__label(for='fullname') Fullname
-                    input#fullname.form__input(type='text')
+                    input#fullname.form__input(type='text' placeholder='Full Name' required)
                 .form__item
                     button.form__button(type='submit') Proceed
+
+
+    include _auth_footer

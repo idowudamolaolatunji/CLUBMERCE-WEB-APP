@@ -18,8 +18,6 @@ router.get('/login', viewController.login);
 router.get('/buyers/login', viewController.buyerLoginAuth)
 router.get('/buyers/signup', viewController.buyerSignupAuth)
 router.get('/order-product/:username/:productSlug', viewController.getOrderPage);
-// router.get('/buyers/order-product/pay', authController.isLoggedIn, viewController.paymentForm);
-
 router.get('/buyers/dashboard', authController.protect, viewController.dashboard);
 router.get('/buyers/profile', authController.isLoggedIn, viewController.profile);
 

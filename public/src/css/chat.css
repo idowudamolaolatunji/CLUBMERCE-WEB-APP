@@ -13,7 +13,7 @@
     border-radius: 50%;
     background: #2e3192;
     transition: all 0.2s ease;
-    z-index: 1000;
+    z-index: 999;
 }
 body.show-chat__box .chat__box-toggler {
     transform: rotate(90deg);
@@ -43,7 +43,7 @@ body.show-chat__box .chat__box-toggler span:last-child {
     position: fixed;
     right: 3.6rem;
     bottom: 9rem;
-    width: 42rem;
+    width: 40rem;
     background: #fff;
     border-radius: 1.6rem;
     overflow: hidden;
@@ -59,7 +59,7 @@ body.show-chat__box .chat__box {
     opacity: 1;
     pointer-events: auto;
     transform: scale(1);
-    z-index: 2000;
+    z-index: 999;
 }
 .chat__box .chat-head {
     padding: 1.6rem 0;

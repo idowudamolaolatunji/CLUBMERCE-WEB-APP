@@ -18,9 +18,11 @@ head
     link(rel="stylesheet" href="/src/css/query_dashboard.css")
 
 
-    //- script(src="/socket.io/socket.io.js")
     script(defer src="/src/js/dashboard.js")
-    script(defer src="src/js/chat.js")
+    script(defer src="/src/js/chat.js")
+    script(defer src="/src/js/paymentAndOrder.js")
+    script(src="https://js.paystack.co/v2/inline.js")
+    script(src="/socket.io/socket.io.js")
 
 
 
@@ -72,18 +74,25 @@ body
                             h3.dashboard__heading Notification
                             //- .notification__content you have no notification
                             .notification
-                                .notify__details
-                                    .notify__status &nbsp;
-                                    span
-                                        h4.notify__head Lorem ipsum dolor sit amet.
-                                        span.notify__body-box
-                                            p.notify__body Lorem, ipsum.
-                                            span &dash;
-                                            p.notify__date 10 mins ago
-                                .notify__image--box
-                                    img.notify__image(src=`/asset/img/users/${user.image}` alt='')
-                                //- .notify__icon--box
-                                    i.fa-solid.fa-lock.icon.notify__icon
+                                -if(user.role !== 'admin')
+                                    .notify__details
+                                        .notify__status &nbsp;
+                                        span
+                                            h4.notify__head Coming Soon.
+                                            span.notify__body-box
+                                                p.notify__body From Admin.
+                                                span &dash;
+                                                p.notify__date 0 mins ago
+                                    .notify__image--box
+                                        img.notify__image(src=`/asset/img/users/${user.image}` alt='')
+                                    //- .notify__icon--box
+                                        i.fa-solid.fa-lock.icon.notify__icon
+                                -else 
+                                    .notify__details
+                                        p Coming Soon
+                                
+                    -if(user.role === 'buyer')
+                        i.fa-solid.fa-shopping-cart.icon.nav__icon
 
 
 
@@ -124,7 +133,7 @@ body
                     ul.menu__list
                         -if(user.role === 'buyer')
                             +menuItem('buyers/dashboard', 'My Dashboard', 'fa-solid fa-gauge', _)
-                            +menuItem('buyers/order', 'My Orders', 'fa-solid fa-shopping-cart', _)
+                            //- +menuItem('buyers/order', 'My Orders', 'fa-solid fa-shopping-cart', _)
 
                         -if(user.role === 'affiliate')
                             +menuItem('dashboard', 'Dashboard', 'fa-solid fa-gauge', _)
@@ -505,34 +514,104 @@ body
                                                         p.brand= order.vendor.businessName
                                                     span.table-row-content
                                                         p(class=`.status .status--${order.orderStatus}`)= order.orderStatus
-                                    
+
+
+                        -if(user.role === 'buyer')
+                            .main__dashboard--container
+                                h3.dashboard__heading.margin__left--xsm=`Welcome back, ${user.fullName.split(' ')[0]}`
+                                .dashboard__insights 
+                                    .insight.insight__one
+                                        .icon__box 
+                                            i.fa-solid.fa-shopping-cart.insight__icon
+                                        span 
+                                            p.insight__title Cart Item
+                                            p.insight__text= 0
+
+                                    .insight.insight__one
+                                        .icon__box 
+                                            i.fa-solid.fa-basket-shopping.insight__icon
+                                        span 
+                                            p.insight__title Current Orders
+                                            p.insight__text= 0
+
+                                    .insight.insight__two
+                                        .icon__box 
+                                            i.fa-solid.fa-gift.insight__icon
+                                        span 
+                                            p.insight__title Products Bought
+                                            p.insight__text= 0
+
+                                .dashboard__table
+                                    .table.table-po
+                                        .table-title
+                                            h4.table-heading Product orders
+                                        .table-head-po
+                                            span.table-head-content Product
+                                            span.table-head-content quantity
+                                            span.table-head-content Total price
+                                            span.table-head-content location
+                                            span.table-head-content status
+                                        
+                                        -if(allOrders < 1) 
+                                            .table-row-message
+                                                p.note-no No order at the moment...
+                                            
 
                 include _auth_footer
-
-    button.chat__box-toggler
-        span.material-symbols-rounded
-            i.fa-solid.fa-comment
-            | Chat
-        span.material-symbols-outlined
-            i.fa-solid.fa-close
+                                    
 
 
-    .chat__box
-        .chat-head
-            i.fa-solid.fa-arrow-left.btn-back 
-            p.chat-person Idowu Olatunji
-            span.close-btn.material-symbols-outlined close
-        //- .chat-head-chat
-            p.chat-heading Chats ✉
-            span.close-btn.material-symbols-outlined close
-        ul.chat__box--chat
-            li.chat.incoming
-                p Hi there
-        .chat-input
-            textarea(placeholder='Enter a message...' spellcheck='false' required='')
-            span#send-btn.material-symbols-rounded send
 
-                            
+    -if(user.role === 'vendor' && user.vendorAccountType !== 'free' && !user.vendorSubscriptionActive)
+        .checkout__overlay
+            .checkout__modal
+                span.checkout__info
+                    span
+                        p.product__name Standard
+                        p.product__price ₦15,000
+                    span 
+                        p.product__summary For medium size businesses
+                        p.product__quantity
+
+                form.checkout__form#onSignup-upgrade-checkout(data-price='15000' data-quantity='1')
+                    h3.dashboard__heading Subscription Payment
+                    .form__item
+                        label.form__label(for='email') Email address
+                        input#email.form__input(type='email' placeholder='Email address' required)
+                    .form__item
+                        label.form__label(for='fullname') Fullname
+                        input#fullname.form__input(type='text' placeholder='Full Name' required)
+                    .form__item
+                        button.form__button(type='submit') Proceed
+
+
+
+
+    -if(user.role !== 'admin')
+        button.chat__box-toggler
+            span.material-symbols-rounded
+                i.fa-solid.fa-comment
+                | Chat
+            span.material-symbols-outlined
+                i.fa-solid.fa-close
+
+
+        .chat__box
+            .chat-head
+                i.fa-solid.fa-arrow-left.btn-back 
+                p.chat-person From Admin
+                span.close-btn.material-symbols-outlined close
+            //- .chat-head-chat
+                p.chat-heading Chats ✉
+                span.close-btn.material-symbols-outlined close
+            ul.chat__box--chat
+                li.chat.incoming
+                    p Coming Soon...
+            .chat-input
+                textarea(placeholder='Enter a message...' spellcheck='false' required='')
+                span#send-btn.material-symbols-rounded send
+
+                                
 
 
         

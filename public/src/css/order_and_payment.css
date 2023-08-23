@@ -153,7 +153,7 @@
   flex-wrap: wrap;
   font-size: 1.2rem;
 }
-.card-button:link, .card-button:visited {
+.card-button {
   text-decoration: none;
   display: inline-block;
   border: none;
@@ -183,15 +183,16 @@
   height: 100vh;
   background-color: rgba(0, 0, 0, .25);
   overflow: hidden;
-  z-index: 10;
+  z-index: 1000;
 }
 .checkout__modal {
   box-shadow: 0 0 .4rem rgba(0, 0, 0, .15);
-  width: 55rem;
+  width: 50rem;
   height: auto;
   background-color: #fff;
-  border-top: .36rem solid lightblue;
+  border-top: .36rem solid #2e3192;
   padding: 2.4rem 3.2rem;
+  border-radius: .28rem;
 
   position: fixed;
   top: 50%;
@@ -255,4 +256,5 @@
   padding: 1.2rem 2.4rem;
   background-color: #2e3192;
   color: #fff;
+  font-weight: 600;
 }

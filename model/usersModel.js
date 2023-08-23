@@ -84,15 +84,23 @@ const userSchema = new mongoose.Schema({
         default: true,
         select: false
     },
-    wallet: {
+    availableAmountWallet: {
+        type: Number,
+        default: 0,
+    },
+    pendingAmountWallet: {
+        type: Number,
+        default: 0,
+    },
+    totalAmountWallet: {
         type: Number,
         default: 0,
     },
     // **** Vendor focused **** //
     vendorAccountType: {
         type: String,
-        enum: [null, 'free', 'standard', 'premium'],
-        default: null
+        enum: ['free', 'standard', 'premium'],
+        default: 'free'
     },
     vendorSubscriptionActive: {
         type: Boolean,

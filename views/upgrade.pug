@@ -71,7 +71,7 @@ block content
 
 
 
-        .checkout__overlay.hidden
+        .checkout__overlay
             .checkout__modal
                 i.fa-solid.fa-close.icon.close__checkout
                 h3.dashboard__heading Subscribe
@@ -81,17 +81,14 @@ block content
                         p.product__price ₦15,000
                     span 
                         p.product__summary For medium size businesses
-                        p.product__quantity X1
-                form.checkout__form(action="/pay", method="post")
+                        p.product__quantity x1
+                form#upgrade-checkout.checkout__form(data-price='15000' data-quantity='1')
                     h3.dashboard__heading Form info
                     .form__item
                         label.form__label(for='email') Email address
-                        input#email.form__input(type='email' placeholder='Email address' required='')
-                    .form__item
-                        label.form__label(for='amount') Amount
-                        input#amount.form__input(type='number' required='')
+                        input#email.form__input(type='email' placeholder='Email address' required)
                     .form__item
                         label.form__label(for='fullname') Fullname
-                        input#fullname.form__input(type='text')
+                        input#fullname.form__input(type='text' placeholder='Your fullname' required)
                     .form__item
                         button.form__button(type='submit') Proceed

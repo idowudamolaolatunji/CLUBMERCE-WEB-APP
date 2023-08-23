@@ -679,6 +679,21 @@ section {
 
 .fa-close {
     cursor: pointer;
+    transition: all .35s;
+}
+
+.fa-close:hover, .fa-close:active {
+    transform: rotate(360deg);
+}
+.nav__logo i.fa-solid:hover, .nav__logo .fa-close:active {
+    transform: rotate(0);
+}
+
+/* 950px === 95rem === 59em */
+@media screen and (max-width: 59.37em) {
+    .fa-close:hover, .fa-close:active {
+        transform: rotate(0);
+    }
 }
 
 #buyer-signup  {

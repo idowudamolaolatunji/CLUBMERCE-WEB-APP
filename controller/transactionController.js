@@ -5,6 +5,36 @@ const User = require('../model/usersModel');
 const Transaction = require('../model/transactionModel');
 
 
+// verify transaction
+exports.verifyPaystackPayment = async (req, res) => {
+    try {
+        const { reference } = req.params;
+        const headers = {
+            'Authorization': 'Bearer ' + process.env.PAYSTACK_SECRET_KEY,
+        };
+        const check = axios.get(`https://api.paystack.co/transaction/verify/${reference}`, { headers });
+        const response = await check;
+
+        if (response.data.data.status !== "success") {
+            return res.status(400).json({
+                message: "Unable to Verify Payment"
+            })
+        }
+         console.log(response.status)
+    } catch(err) {
+         console.log(err)
+    }
+}
+
+const createTransaction = async (req, res) => {
+    try {
+
+    } catch(err) {
+
+    }
+}
+
+
 // get one transaction by admin
 exports.getTransaction = async (req, res) => {
     try {
