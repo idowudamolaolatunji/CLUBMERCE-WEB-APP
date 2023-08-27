@@ -193,16 +193,11 @@ if (closeButton) {
 // signup
 const signup = async (fullName, email, role, password, passwordConfirm, username, country, phone) => {
     try {
-        let url, type;
-        if(role === 'affiliate') url = '/api/users/signup-affiliate';
-        if(role === 'vendor') {
-            url = '/api/users/signup-vendor';
-            type = window.location.href.split('/').at(-1);
-        }
-        if(role === 'admin') return;
+         if(role === 'admin' || role === 'affiliate' || role === 'buyer') return;
+         const type = window.location.href.split('/').at(-1);
         showLoadingOverlay();
     
-        const res = await fetch(url, {
+        const res = await fetch('/api/users/signup-vendor', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ fullName, email, role, password, passwordConfirm, username, country, phone, type}),
@@ -238,6 +233,7 @@ const signup = async (fullName, email, role, password, passwordConfirm, username
 // signup for buyers
 const signupBuyer = async (fullName, email, password, passwordConfirm, username) => {
      try {
+         if(role === 'admin' || role === 'affiliate' || role === 'vendor') return;
           showLoadingOverlay();
      
           const res = await fetch('/api/users/signup-buyer', {

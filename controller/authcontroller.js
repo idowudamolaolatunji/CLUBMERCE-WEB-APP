@@ -238,8 +238,8 @@ exports.login = catchAsync(async (req, res, next) => {
       data: {
           user,
       }
-    })
-  });
+    });
+});
 
 
 // Login buyers
@@ -580,7 +580,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 */
 
 // Updating current logged in user password
-exports.updatePassword = catchAsync(async (req, res) => {
+exports.updatePassword = async (req, res) => {
   try {
       // get user 
     const user = await User.findById(req.user.id).select('+password');
@@ -591,14 +591,13 @@ exports.updatePassword = catchAsync(async (req, res) => {
     }
 
     // if so, update user password
-    user.passsword = req.body.passsword;
+    user.password = req.body.password;
     user.passwordConfirm = req.body.passwordConfirm;
     await user.save();
     // User.findByIdAndUpdate, will not work here...
 
     // log user in, send jwt
     const token = signToken(user._id);
-
     const cookieOptions = {
       expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
       httpOnly: true,
@@ -614,10 +613,10 @@ exports.updatePassword = catchAsync(async (req, res) => {
       }
     });
   } catch(err) {
+    console.log(err)
     return res.status(404).json({
       status: 'fail',
       message: err
     })
   }
-
-})
+};

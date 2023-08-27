@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
         required: [true, "Enter your full name"],
         maxLength: [40, "Full name must not be more than 40 characters"],
         minLength: [8, "Full name must not be more than 8 characters"],
+        lowercase: true
     },
     username: {
         type: String,
@@ -115,10 +116,7 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
     },
-    vendorAccountTypeProductLendth: {
-        type: Number,
-        default: null
-    },
+    vendorAccountTypeProductLendth: Number,
     // ************** //
     clicks: {
         type: Number,
@@ -175,12 +173,17 @@ userSchema.pre('save', function(next) {
     this.passwordChangedAt = Date.now() - 1000;
     next();
 })
+
 userSchema.pre('save', function(next) {
-    if(this.role === 'vendor' && this.vendorAccountTypeExpiresIn === Date.now()) {
-        this.vendorSubscriptionActive === false
+    if(this.role === 'vendor' && this.vendorAccountType === 'standard' && this.vendorSubscriptionActive) {
+        this.vendorAccountTypeProductLendth = 50;
+    } else if(this.role === 'vendor' && this.vendorAccountType === 'premium' && this.vendorSubscriptionActive) {
+        this.vendorAccountTypeProductLendth = 10000000000;
+    } else {
+        this.vendorAccountTypeProductLendth = 10;
     }
-    return next();
-});
+    next();
+})
 
 // hide all inactive user
 userSchema.pre(/^find/, function(next) {
@@ -216,6 +219,12 @@ userSchema.methods.createPasswordResetToken = function() {
     return resetToken;
     // send the unencrypted version
 }
+// userSchema.pre('save', function(next) {
+//     if(this.role === 'vendor' && this.vendorAccountTypeExpiresIn === Date.now()) {
+//         this.vendorSubscriptionActive === false
+//     }
+//     return next();
+// });
 
 
 const User = mongoose.model('User', userSchema);

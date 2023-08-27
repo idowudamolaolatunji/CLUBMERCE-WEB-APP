@@ -78,6 +78,8 @@ app.use((req, res, next) => {
 ///////////////////////////////////////////////////////
 app.use('/', viewsRouter)
 app.get('/unique_/:userSlug/:productSlug', affiliateLinkController.countClicksRedirects);
+// app.get('/api/payment-verification/:reference', transactionController.verifyPaystackPayment);
+
 
 app.use('/api/products', productsRouter);
 app.use('/api/users', usersRouter);

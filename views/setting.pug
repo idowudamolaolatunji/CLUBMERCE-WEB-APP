@@ -51,8 +51,8 @@ block content
                 label.form__label(for='paymentAcctNum') Payment Account Number
                 input#paymentAcctNum.form__input(type='num' value=`${user.bankAccountNumber || ''}` required placeholder="Bank Number" minlength='10' maxlength='10')
             .form__item
-                label.form__label(for='HoldersName') Holder's Name
-                input#HoldersName.form__input(type='text' name='HoldersName' value=`${user.bankHolderName  || ''}` placeholder="Name As On Bank Document" required)
+                label.form__label(for='holdersName') Holder's Name
+                input#holdersName.form__input(type='text' name='holdersName' value=`${user.bankHolderName  || ''}` placeholder="Name As On Bank Document" required)
             .form__item.right
                 button.btn.form-btn.btn--save-bank Add payment account
         

@@ -7,28 +7,34 @@ head
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
 
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer")
-    link(rel="icon" href='/../asset/img/favicon.png')
+    link(rel="icon" href='/asset/img/favicon.png')
 
 
     //- STYLES 
     link(rel="stylesheet" href="/src/css/general.css")
     link(rel="stylesheet" href="/src/css/main.css")
-    link(rel="stylesheet" href="/src/css/order_and_payment.css")
     link(rel="stylesheet" href="/src/css/dashboard.css")
+    link(rel="stylesheet" href="/src/css/chat.css")
+    link(rel="stylesheet" href="/src/css/order_and_payment.css")
     link(rel="stylesheet" href="/src/css/query_dashboard.css")
 
+
     script(defer src="/src/js/paymentAndOrder.js")
+    script(defer src="/src/js/chat.js")
+    script(defer src="/src/js/dashboard.js")
     script(src="https://js.paystack.co/v2/inline.js")
-    script(type='text/javascript').
-        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-        (function(){
-            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-            s1.async=true;
-            s1.src='https://embed.tawk.to/64e23766cc26a871b03054a8/1h89qgrqn';
-            s1.charset='UTF-8';
-            s1.setAttribute('crossorigin','*');
-            s0.parentNode.insertBefore(s1,s0);
-        })();
+
+    -if(!token)
+        script(type='text/javascript').
+            var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+            (function(){
+                var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+                s1.async=true;
+                s1.src='https://embed.tawk.to/64e23766cc26a871b03054a8/1h89qgrqn';
+                s1.charset='UTF-8';
+                s1.setAttribute('crossorigin','*');
+                s0.parentNode.insertBefore(s1,s0);
+            })();
 
     title=title
 body
@@ -47,50 +53,56 @@ body
             div
     section
         .section__top.margin__left--sm
-            img.logo(src='/../asset/img/logo-removebg.png' alt='clubmerce logo')
-            img.logo-small(src='/../asset/img/favicon.png' alt='clubmerce logo')
+            img.logo(src='/asset/img/logo-removebg.png' alt='clubmerce logo')
+            img.logo-small(src='/asset/img/favicon.png' alt='clubmerce logo')
             nav.navbar
                 span.nav__icons
-                    i.fa-solid.fa-shopping-cart.icon.nav__icon
+                    span.shop-cart
+                        i.fa-solid.fa-shopping-cart.icon.nav__icon.shopping-cart(data-digits=0)
+                    .shopping__cart
+                        h4.dashboard__heading.checkout__heading Cart
+                        .chackout__box
+                            .checkout--card
+                                .checkout--card__image
+                                    img(src='/asset/img/products/product-default.png' alt='product image')
+                                .checkout--card__info
+                                    p.checkout--card__product-name Test product
+                                    span.checkout--card__figures
+                                        p.checkout--card__product-quantity 1 x
+                                        p.checkout--card__product-price ₦15,000
+                                i.fa-solid.fa-close.icon.delete-cart
+                        .checkout__box--controls
+                            span.checkout__box--controls-info
+                                p Sub Total
+                                span ₦15,000
+                            .controls
+                                button Proceed to checkout
 
-                    ul
-                        li.nav__item
-                            a.nav__link.nav-login(href="/buyers/login") login  
-                        li.nav__item
-                            a.nav__link.nav__button.nav-sign(href="/buyers/signup") signup
 
-                    //- i.fa-regular.fa-comment.icon.nav__icon
-                    //- span.notification__icon
-                        i.fa-regular.fa-bell.icon.nav__icon
-                        //- notification...
-                        .notification__hovered.hidden 
-                            h3.dashboard__heading Notification
-                            //- .notification__content you have no notification
-                            .notification
-                                .notify__details
-                                    .notify__status &nbsp;
-                                    span
-                                        h4.notify__head Lorem ipsum dolor sit amet.
-                                        span.notify__body-box
-                                            p.notify__body Lorem, ipsum.
-                                            span &dash;
-                                            p.notify__date 10 mins ago
-                                .notify__image--box
-                                    img.notify__image(src=`/../asset/img/users/avatar.png` alt='')
-                                //- .notify__icon--box
-                                    i.fa-solid.fa-lock.icon.notify__icon
-        
-                    //- span
-                        .nav__image--box
-                            img.nav__image(src=`/../asset/img/users/avatar.png` alt=`user's photo`)
-                            .Profile__hovered.hidden
-                                .profile__content
-                                    .profile__owner
-                                        img.profile__image(src=`/../asset/img/users/avatar.png` alt=`customer's photo`)
-                                        p.profile__name user
-                                    a.profile__link.nav__link(href="/profile") My profile
-                                    button.profile__button.nav__link#logout signout&nbsp;
-                                        i.fa-solid.fa-arrow-right-to-bracket.profile__icon
+                    -if(token)
+                        span
+                            .nav__image--box
+                                img.nav__image(src=`/asset/img/users/avatar.png` alt=`user's photo`)
+                                .Profile__hovered
+                                    .profile__content
+                                        //- .profile__owner
+                                            img.profile__image(src=`/asset/img/users/avatar.png` alt=`customer's photo`)
+                                            //- p.profile__name user.fullName
+                                            p.profile__name 
+                                        a.profile__link.nav__link(href="/buyers/dashboard") Dashboard
+                                        a.profile__link.nav__link(href="/buyers/profile") My profile
+                                        button.profile__button.nav__link#logout signout&nbsp;
+                                            i.fa-solid.fa-arrow-right-to-bracket.profile__icon
+
+
+                    -else
+                        ul
+                            li.nav__item
+                                a.nav__link.nav-login(href="/buyers/login") login  
+                            li.nav__item
+                                a.nav__link.nav__button.nav-sign(href="/buyers/signup") signup
+
+                    
 
     //- h3.dashboard__heading
         a.go-back(href="/dashboard") 
@@ -101,38 +113,62 @@ body
     section.hero-section.container
         .img-container
             .main-image
-                img(src='/../asset/img/products/product-default.png' alt='')
+                img(src=`/asset/img/products/${image}` alt='product image')
             .sub--images
-                .sub-image
-                    img(src='/../asset/img/products/product-default.png' alt='')
-                .sub-image
-                    img(src='/../asset/img/products/product-default.png' alt='')
-                .sub-image
-                    img(src='/../asset/img/products/product-default.png' alt='')
-                .sub-image
-                    img(src='/../asset/img/products/product-default.png' alt='')
+                -if(product.subImage || product.subImages.length < 1)
+                    .sub-image
+                        img(src=`/asset/img/products/${image}` alt='product image')
+                        
+                        
+                -else
+                    each subImage of product.subImages
+                        .sub-image
+                            img(src=`/asset/img/products/${subImage}` alt='')
+                
 
         .hero-heading
-            h1.primary-heading About Product
-            p.secondary-heading
-                | Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa, iste nemo. Aliquam, eos architecto! Ducimus, rem illo praesentium voluptate quis consectetur alias tempora corrupti, magni mollitia voluptatibus pariatur ipsam, eveniet numquam fugit itaque asperiores et! Animi quas libero non. Laborum nulla omnis molestiae recusandae, in neque blanditiis, maiores provident possimus nobis dignissimos pariatur ipsam tenetur, culpa ad! Eaque itaque suscipit dignissimos doloremque consequatur, voluptas maiores minus expedita atque aspernatur nam deserunt. Temporibus corrupti quis quasi eos possimus necessitatibus velit iure!
+            h1.primary-heading.dashboard__heading= product.name
+            p.secondary-heading #{product.summary}
+            span.product__info
+                p.product__price ₦#{product.price}
+                span.quantity.product__quantity
+                    button(onclick='changeQuantity(-1)') &minus;
+                    p#quantityNumber 1 
+                    button(onclick='changeQuantity(1)') &plus;
+                    script.
+                        const quantityDisplay = document.getElementById('quantityNumber');
+
+                        function changeQuantity(change) {
+                            let currentQuantity = parseInt(quantityDisplay.textContent);
+                            currentQuantity += change;
+                            if (currentQuantity >= 1 && currentQuantity <= 5) {
+                                quantityDisplay.textContent = currentQuantity;
+                            }
+                        }
+            button.card-button Add to Cart
+                i.fa-solid.fa-shopping-cart
+            
         
 
 
     //- Youtube Video
     section.video-section.container
         .video
-            iframe(width='900' height='500' src='https://www.youtube.com/embed/EvnQ4Va-4Cg' title='How To Use Your Apple Watch Series 7! (Complete Beginners Guide)' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen='')
+            //- #{product.video}
+            <iframe src="https://www.youtube.com/embed/FJsGxP6f9xs?si=V2ndVxBeFeUz4b8W" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            
 
 
 
     //- Product description
     section.about-section
         .about-container.container
-            p.secondary-heading
-                | Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ullam, molestias mollitia. Aliquid, fuga dignissimos earum suscipit neque ipsa eos ex dolorum consectetur repellat officia illum aspernatur alias inventore corrupti doloremque magnam possimus ipsam vel atque! Iure alias vel officia quibusdam! Iste ex doloribus ipsum eveniet veniam optio possimus laboriosam porro veritatis hic iure corrupti illo maxime rem, quis est tenetur quos vero corporis animi dolor debitis ut! Aut a officiis repellendus. Maiores quo id explicabo corporis aperiam placeat voluptatibus at? Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero sapiente quidem alias explicabo blanditiis deleniti rerum iure quasi! Quis totam ad dolorum voluptatem doloremque quam corrupti explicabo molestias quisquam nostrum, aut aperiam deleniti qui sequi aliquam nulla delectus facilis? Optio est cumque fugit minima. Voluptatibus eius numquam eligendi cum laborum possimus explicabo, quis illo aspernatur molestias at veniam reprehenderit temporibus quisquam. Laboriosam modi alias distinctio praesentium inventore ducimus ipsum ut. Eaque nulla repellat a consectetur cumque quidem maiores in eligendi.
+            span
+                p.secondary-heading #{product.description}
+                button.card-button Add to Cart
+                    i.fa-solid.fa-shopping-cart
             .about-image
-                img(src='/../asset/img/products/product-default.png' alt='')
+                img(src='/asset/img/products/product-default.png' alt='')
     
 
 
@@ -145,7 +181,7 @@ body
                         p Buy 1
                     .card-content
                         .card-image-box
-                            img(src='/../asset/img/products/product-default.png' alt='order product image')
+                            img(src='/asset/img/products/product-default.png' alt='order product image')
                         span.card-price
                             p.price ₦100
                             p.text x 1
@@ -160,7 +196,7 @@ body
                         p Buy 3
                     .card-content
                         .card-image-box
-                            img(src='/../asset/img/products/product-default.png' alt='order product image')
+                            img(src='/asset/img/products/product-default.png' alt='order product image')
                         span.card-price
                             p.price ₦100
                             p.text  x 3
@@ -175,7 +211,7 @@ body
                         p Buy 5
                     .card-content
                         .card-image-box
-                            img(src='/../asset/img/products/product-default.png' alt='order product image')
+                            img(src='/asset/img/products/product-default.png' alt='order product image')
                         span.card-price
                             p.price ₦100
                             p.text  x 5
@@ -185,6 +221,30 @@ body
                         ul.card-details
                             li Plus Shipping
                             li 30 days Garantee
+
+    -if(token)
+        button.chat__box-toggler
+            span.material-symbols-rounded
+                i.fa-solid.fa-comment
+                | Chat
+            span.material-symbols-outlined
+                i.fa-solid.fa-close
+
+
+        .chat__box
+            .chat-head
+                i.fa-solid.fa-arrow-left.btn-back 
+                p.chat-person From Admin
+                span.close-btn.material-symbols-outlined close
+            //- .chat-head-chat
+                p.chat-heading Chats ✉
+                span.close-btn.material-symbols-outlined close
+            ul.chat__box--chat
+                li.chat.incoming
+                    p Coming Soon...
+            .chat-input
+                textarea(placeholder='Enter a message...' spellcheck='false' required='')
+                span#send-btn.material-symbols-rounded send
 
 
 
@@ -200,14 +260,12 @@ body
                 span 
                     p.product__summary Lorem ipsum dolor sit amet.
                     p.product__quantity x1
-            form.checkout__form#order-checkout(data-price='2000' data-quantity='1')
+            form.checkout__form#order-checkout(data-price=product.price data-quantity='1' data-user=user)
                 h3.dashboard__heading Form info
                 .form__item
                     label.form__label(for='email') Email address
                     input#email.form__input(type='email' placeholder='Email address' required)
-                //- .form__item
-                //-     label.form__label(for='amount') Amount
-                //-     input#amount.form__input(type='number' placeholder='Amount' required)
+                
                 .form__item
                     label.form__label(for='fullname') Fullname
                     input#fullname.form__input(type='text' placeholder='Full Name' required)

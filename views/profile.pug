@@ -28,7 +28,7 @@ block content
                 input#fullName.form__input(type='text', value=user.fullName)
             .form__item
                 label.form__label(for='email') Email address
-                input#email.form__input.cursor-not-allowed(type='email' value=user.email readonly disable)
+                input#email.form__input.disable(type='email' value=user.email readonly disable)
             .form__item
                 label.form__label(for='phone') Phone number
                 input#phone.form__input(type='tel' value=user.phone)
@@ -77,7 +77,7 @@ block content
                 input#businessName.form__input(type='text', value=user.businessName placeholder="Enter your business name")
             .form__item
                 label.form__label(for='email') Email address
-                input#email.form__input(type='email' value=user.email readonly)
+                input#email.form__input.disable(type='email' value=user.email readonly disable)
             .form__item
                 label.form__label(for='phone') Phone number
                 input#phone.form__input(type='tel' value=user.phone)

@@ -10,7 +10,7 @@ const menu = document.querySelector('.menubar-control');
 const menuButton = document.querySelector('.menu__button');
 const mainDashboard = document.querySelector('.main__dashboard')
 const sectionBottom = document.querySelector('.section__bottom');
-const dashboradWidth = mainDashboard.getBoundingClientRect();
+// const dashboradWidth = mainDashboard.getBoundingClientRect();
 
 const spinOverlay = document.querySelector('#spinOverlay');
 
@@ -101,10 +101,10 @@ if (notifyIcon) {
         event.stopPropagation(); // Prevent the click event from propagating to the mainDashboard
         notifyBox.classList.toggle('hidden');
     });
-
-    mainDashboard.addEventListener('click', () => {
-        notifyBox.classList.add('hidden');
-    });
+    if(mainDashboard)
+        mainDashboard.addEventListener('click', () => {
+            notifyBox.classList.add('hidden');
+        });
 }
 
 if (profileImg) {
@@ -113,14 +113,22 @@ if (profileImg) {
         profileBox.classList.toggle('hidden');
     });
 
-    mainDashboard.addEventListener('click', () => {
-        profileBox.classList.add('hidden');
-    });
+    if(mainDashboard)
+        mainDashboard.addEventListener('click', () => {
+            profileBox.classList.add('hidden');
+        });
 
     document.body.addEventListener('click', () => {
         profileBox.classList.add('hidden');
     });
 }
+
+// const shoppingCart = document.querySelector('.shopping-cart');
+// if(shoppingCart) {
+//     shoppingCart.addEventListener('click', function(e) {
+        
+//     })
+// }
 
 
 const menuLogout = document.querySelector('.menu__logout');
@@ -849,14 +857,14 @@ if (productForm) {
 
 /*
 // User Update
-const updateUser = async function(name, email, phone, country, state, cityRegion, zipPostal) {
+const updateUser = async function(name, email, phone, country, state, region, zipCode) {
     try {
         showLoadingOverlay();
         const res = await fetch('/api/users/updateMe', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
-                name, email, phone, country, state, cityRegion, zipPostal,
+                name, email, phone, country, state, region, zipCode,
             }),
         });
 
@@ -894,9 +902,9 @@ if(userFormUpdate) {
         const formUpdateCountry = document.querySelector('#country').value
         const formUpdateState = document.querySelector('#state').value
         const formUpdateCityRegion = document.querySelector('#city-region').value
-        const formUpdateZipPostal = document.querySelector('#zip-postal').value
-        updateUser(formUpdateName, formUpdateEmail, formUpdatePhone, formUpdateCountry, formUpdateState, formUpdateCityRegion, formUpdateZipPostal);
-        console.log(formUpdateName, formUpdateEmail, formUpdatePhone, formUpdateCountry, formUpdateState, formUpdateCityRegion, formUpdateZipPostal);
+        const formUpdatezipCode = document.querySelector('#zip-postal').value
+        updateUser(formUpdateName, formUpdateEmail, formUpdatePhone, formUpdateCountry, formUpdateState, formUpdateCityRegion, formUpdatezipCode);
+        console.log(formUpdateName, formUpdateEmail, formUpdatePhone, formUpdateCountry, formUpdateState, formUpdateCityRegion, formUpdatezipCode);
     });
 }
 */
@@ -989,9 +997,9 @@ if (userDataForm)
     const phone = document.getElementById('phone').value;
     const country = document.getElementById('country').value;
     const state = document.getElementById('state').value;
-    const cityRegion = document.getElementById('city-region').value;
-    const zipPostal = Number(document.getElementById('zip-postal').value);
-    const formData = { fullName, email, phone, country, state, cityRegion, zipPostal}
+    const region = document.getElementById('city-region').value;
+    const zipCode = Number(document.getElementById('zip-postal').value);
+    const formData = { fullName, email, phone, country, state, region, zipCode}
     updateSettings(formData, 'data');
   });
 
@@ -1006,9 +1014,9 @@ if (vendorDataForm)
     const phone = document.getElementById('phone').value;
     const country = document.getElementById('country').value;
     const state = document.getElementById('state').value;
-    const cityRegion = document.getElementById('city-region').value;
-    const zipPostal = Number(document.getElementById('zip-postal').value);
-    const formData = { fullName, businessName, email, phone, country, state, cityRegion, zipPostal}
+    const region = document.getElementById('city-region').value;
+    const zipCode = Number(document.getElementById('zip-postal').value);
+    const formData = { fullName, businessName, email, phone, country, state, region, zipCode}
     updateSettings(formData, 'data');
   });
 
@@ -1041,8 +1049,8 @@ if (userBankForm)
 
     const bankName = document.getElementById('paymentBankName').value;
     const bankAccountNumber = document.getElementById('paymentAcctNum').value;
-    const holdersName = document.getElementById('HoldersName').value;
-    const formData = { bankName, bankAccountNumber, holdersName }
+    const bankHolderName = document.getElementById('holdersName').value;
+    const formData = { bankName, bankAccountNumber, bankHolderName }
     console.log(formData)
     updateSettings( formData, 'bank')
     document.querySelector('.btn--save-bank').textContent = 'Add payment account';

@@ -35,7 +35,7 @@ body
             div
     header.product__header
         .product__logo
-            img.p-logo(src='/asset/brand_logo.png' alt='brand product logo')
+            img.p-logo(src=`/asset/img/product${product.image}` alt='brand product logo')
         nav.product__nav
             ul.product__nav--list
                 li.product__nav--item
@@ -61,8 +61,7 @@ body
                     | extraordinary new #{product.niche} offer&mldr;
                 p.product__intro-text Get everything you need to start promoting today!
                 .product__image
-                    //- img.product__img(src=`/asset/img/${product.img}.jpg` alt='product__image')
-                    img.product__img(src=`/asset/img/products${product.image}` alt='product__image')
+                    img.product__img(src=`/asset/img/products/${product.image}` alt='product__image')
                 .product__description
                     h2.product__heading--sec=`What is ${product.name}?`
                     span.description__text
@@ -114,7 +113,7 @@ body
                 .images__box
                 -const productSubImage = product.subImages
                     a(href=`${productSubImage}` target='_blank')
-                        img(src=`/asset/img/product/${productSubImage}` alt='')
+                        img(src=`/asset/img/products/${product.image}` alt='')
                     
     section#demo.product__section.section__demography
         .product__section--container
@@ -148,7 +147,7 @@ body
                 -const productBanners = product.banners;
                 each productBanner of productBanners
                     a(href=`${productBanner}` target='_blank')
-                        img(src=`/asset/img/products/${productBanner}` alt='')
+                        img(src=`/asset/img/products/${product.image}` alt='')
                     
     section#contact.product__section.section__contact-seller
         .product__section--container

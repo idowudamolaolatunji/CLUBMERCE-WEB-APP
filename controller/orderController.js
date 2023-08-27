@@ -11,7 +11,20 @@ const Commissions = require('../model/commissionModel');
 const AffiliateLink = require('../model/affiliteLinkModel');
 // const UserPerformance = require('../model/userPerformanceModel');
 // const { initializePayment, verifyPayment } = require("../utils/paystack")(request);
+const verifyPayment = require('../utils/verifyPayment');
 
+
+exports.verifyPaystackPayment = async function(req, _) {
+    try {
+        const { reference, type } = req.params;
+        const paymentVerfification = await verifyPayment(reference);
+        const [booValue, response] = paymentVerfification;
+
+        
+    } catch(err) {
+        console.log(err)
+    }
+}
 
 
 exports.createOrder = async (req, res) => {
@@ -23,6 +36,21 @@ exports.createOrder = async (req, res) => {
         // come back to remodify the buyers
         const buyer = await User.findById(req.user._id);
 
+        // if()
+        const order = await Order.create({
+            product: product._id,
+            vendor: product.vendor,
+            buyer: buyer._id,
+            affiliate: affiliate._id,
+            vendorProfit: totalAmount - product.commissionAmount - charges,
+            affiliateCommission: product.commissionAmount,
+            // amount: totalAmount,
+            // quantity: req.body.quantity,
+            address: req.body.address,
+            email: req.body.email,
+            fullname: req.body.fullname,
+            createdAt: this.formattedCreatedAt
+        });
 
 
         affiliate.pendingAmountWallet += product.commissionAmount;
@@ -45,38 +73,22 @@ exports.createOrder = async (req, res) => {
 
         const UpdateAffiliateLink = await AffiliateLink.findByIdAndUpdate(
             { affiliate: affiliate._id, product: product._id }, 
-            { purchases: this.purchases += product.commissionAmount },
+            { purchases: this.purchases += product.commissionAmount, commission: product.commissionAmount},
             { new: true }
         )
 
-        const orderTransaction = await Transaction.create({
-            affiliate: affiliate._id,
-            trnxType: "CR",
-            purpose: "order",
-            amount: amount,
-        });
-         
-        const order = await Order.create({
-            product: product._id,
-            vendor: product.vendor,
-            buyer: buyer._id,
-            affiliate: affiliate._id,
-            vendorProfit: totalAmount - product.commissionAmount - charges,
-            affiliateCommission: product.commissionAmount,
-            // amount: totalAmount,
-            createdAt: this.formattedCreatedAt
-        });
-        // quantity: req.body.quantity,
-        //     address: req.body.address,
-        //     email: req.body.email,
-        //     fullname: req.body.fullname,
-
+        // const orderTransaction = await Transaction.create({
+        //     affiliate: affiliate._id,
+        //     trnxType: "CR",
+        //     purpose: "order",
+        //     amount: amount,
+        // });
 
         return res.status(200).json({
             status: 'success',
             message: 'Transaction completed successfully',
             data: {
-                // newOrder: order,
+                newOrder: order,
                 commission,
                 affiliatePerofmance,
                 orderTransaction,

@@ -1,4 +1,7 @@
-const app = require('../app')
+const { promisify } = require('util');
+const jwt = require('jsonwebtoken');
+
+const app = require('../app');
 const User = require('../model/usersModel');
 const Product = require('../model/productsModel');
 const Commissions = require('../model/commissionModel');
@@ -277,13 +280,20 @@ exports.manageApp = (req, res) => {
 
 exports.getOrderPage = async (req, res) => {
     try {
+        let token;
+        if(req.cookies.jwt) {
+            token = req.cookies.jwt;
+        }
+
         const { username, productSlug } = req.params;
-        const user = await Product.findOne({ username });
+        const affiliate = await User.findOne({ username });
         const product = await Product.findOne({ slug: productSlug });
         res.status(200).render('order_product', {
             title: 'Order ',
             product,
-            user
+            affiliate,
+            // user,
+            token
         });
     } catch(err) {
         res.json({message: err});

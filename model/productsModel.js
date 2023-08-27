@@ -13,7 +13,8 @@ const productSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'A product must have a name'],
-        trim: true
+        trim: true,
+        lowercase: true
     },
     brandLogo: String,
     image: {
@@ -129,12 +130,12 @@ productSchema.pre(/^find/, function(next) {
     next();
 });
 
-productSchema.pre('save', function (next) {
-    if (typeof this.price !== 'number') return '';
-    const formattedPrice = this.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    this.price = formattedPrice ;
-    next();
-});
+// productSchema.pre('save', function (next) {
+//     if (typeof this.price !== 'number') return '';
+//     const formattedPrice = this.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+//     this.price = formattedPrice ;
+//     next();
+// });
 
 const Product = mongoose.model('Product', productSchema);
 module.exports = Product;

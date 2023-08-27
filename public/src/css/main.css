@@ -358,7 +358,6 @@
 }
 
 .testimonial__slide--item {
-    height: auto;
     width: 30rem;
     position: relative;
     transition: all .35s ease-in-out;

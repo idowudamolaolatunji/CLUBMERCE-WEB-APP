@@ -7,7 +7,7 @@ const transactionSchema = new mongoose.Schema({
     amount: { type: Number, required: true },
     purpose: {
         type: String,
-        default: 'withdrawal'
+        default: 'order'
     },
     createdAt: {
         type: Date,

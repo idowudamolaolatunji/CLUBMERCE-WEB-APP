@@ -12,12 +12,13 @@ head
 
 
     //- STYLES 
-    link(rel="stylesheet" href="../src/css/general.css")
-    link(rel="stylesheet" href="../src/css/dashboard.css")
-    link(rel="stylesheet" href="../src/css/query_dashboard.css")
+    link(rel="stylesheet" href="/src/css/general.css")
+    link(rel="stylesheet" href="/src/css/dashboard.css")
+    link(rel="stylesheet" href="/src/css/chat.css")
+    link(rel="stylesheet" href="/src/css/query_dashboard.css")
 
     script(src="/socket.io/socket.io.js")
-    //- script(defer src="/src/js/chat.js")
+    script(defer src="/src/js/chat.js")
     script(defer src="/src/js/productSearch.js")
 
 
@@ -235,7 +236,7 @@ body
                                     .product__side.front(class=`${product.isBoosted ? 'promoted-m' : ''}`)    
                                         .front--top
                                             .product__image--container
-                                                img.product__image(src=`asset/img/products/${product.image}` alt=product.name)
+                                                img.product__image(src=`/asset/img/products/${product.image}` alt=product.name)
                                             .product__heading 
                                                 h2.product__title= product.name
                                                 button.produt__message-m.person(data-vendor-id=`${id}`)

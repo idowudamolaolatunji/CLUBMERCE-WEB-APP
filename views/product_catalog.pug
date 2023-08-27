@@ -17,30 +17,32 @@ block content
                     span.table-head-content approved
                     span.table-head-content actions
 
-                - if(products.lenght < 1)
+                - if(products.lenght > 1)
+                    each product of products
+                        //- .table-row-vp
+                        .table-row-vp(class=`${product.isBoosted ? 'prmoted-small' : ''}`)
+                            span.table-row-content.table-row-product
+                                img.table-product__image(src=`asset/img/products/${product.image}` alt='')
+                                span
+                                    p.table-product__name= product.name 
+                                    p.table-product__category= product.niche 
+                            span.table-row-content
+                                p.price= `₦ ${product.price}` 
+                            span.table-row-content
+                                //- -if(product.type)
+                                p.product-type= `${product.type} product` 
+                            span.table-row-content
+                                p.aff-comm= `${product.commissionPercentage}%` 
+                            span.table-row-content
+                                p.approved.status.status--success Approved
+                            span.table-row-content.table-row-btn
+                                button.btn-edit.table-btn.product-edit(data-productName=`${product.name}` data-id=`${product._id}` data-productImage=`${product.image}`) Edit
+                                button.btn-delete.table-btn.product-delete(data-id=`${product._id}`) Delete
+
+                -else
                     .table-row-message
                         //- p.note-no Upload your product today, Let out affiliate make you money.
                         p.note-no You have no existing product.
-                each product of products
-                    //- .table-row-vp
-                    .table-row-vp(class=`${product.isBoosted ? 'prmoted-small' : ''}`)
-                        span.table-row-content.table-row-product
-                            img.table-product__image(src=`asset/img/products/${product.image}` alt='')
-                            span
-                                p.table-product__name= product.name 
-                                p.table-product__category= product.niche 
-                        span.table-row-content
-                            p.price= `₦ ${product.price}` 
-                        span.table-row-content
-                            //- -if(product.type)
-                            p.product-type= `${product.type} product` 
-                        span.table-row-content
-                            p.aff-comm= `${product.commissionPercentage}%` 
-                        span.table-row-content
-                            p.approved.status.status--success Approved
-                        span.table-row-content.table-row-btn
-                            button.btn-edit.table-btn.product-edit(data-productName=`${product.name}` data-id=`${product._id}` data-productImage=`${product.image}`) Edit
-                            button.btn-delete.table-btn.product-delete(data-id=`${product._id}`) Delete
                
 
 

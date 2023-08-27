@@ -689,6 +689,11 @@ section {
     transform: rotate(0);
 }
 
+.video iframe {
+    width: 90rem;
+    height: 50rem;
+}
+
 /* 950px === 95rem === 59em */
 @media screen and (max-width: 59.37em) {
     .fa-close:hover, .fa-close:active {
@@ -773,11 +778,11 @@ input[type="number"] {
     z-index: 1;
     background-color: #2e3192;
 }
-.currently {
-    opacity: 0.5;
-    cursor: not-allowed;
+.currently, .previoused, .disable {
+    opacity: 0.6;
+    transform: scale(1);
 }
-.currently .sub__button {
+.currently .sub__button, .previoused .sub__button, .disable {
     cursor: not-allowed;
 }
 

@@ -9,9 +9,7 @@ router.post('/', authController.protect, transactionController.makeTransferCreat
 router.get('/', authController.protect, transactionController.getAllTransactions);
 router.get('/:id',authController.protect, transactionController.getTransaction);
 router.get('/:userId', authController.protect, transactionController.getAllTransactionByUser);
-
-
-router.get('/payment-verification/:reference', transactionController.verifyPaystackPayment);
+// router.get('/payment-verification/:reference', transactionController.verifyPaystackPayment);
 
 
 module.exports = router;

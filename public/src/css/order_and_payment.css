@@ -38,13 +38,14 @@
 
 .sub--images {
   width: 100%;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: .64rem;
 }
 
 .sub-image {
   width: 100%;
-  height: 6.2rem;
+  height: 8rem;
   border-radius: .6rem;
   overflow: hidden;
   cursor: pointer;
@@ -60,16 +61,55 @@
   transform: scale(1.1);
 }
 
-
+.hero-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+}
 .primary-heading{
-  text-align: center;
-  margin-bottom: 1.8rem;
+  /* text-align: center; */
+
+  text-transform: capitalize;
 }
 .secondary-heading{
   line-height: 1.8;
   color: #666;
   font-size: 1.4rem;
+  margin-top: -4.8rem;
 }
+.product__info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 50%;
+}
+.product__info .product__quantity {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+}
+.product__info .product__quantity button {
+  background-color: #f15a29;
+  color: #fff;
+  width: 2.8rem;
+  height: 2.8rem;
+  font-weight: 600;
+  border-radius: 50%;
+}
+.product__info .product__quantity p {
+  font-size: 1.8rem;
+}
+.product__info .product__price {
+  font-size: 1.8rem;
+}
+.hero-heading .card-button {
+  width: 50%;
+}
+.card-button i {
+  font-size: 1.8rem;
+  color: #fff;
+}
+
 
 .video-section {
   display: flex;
@@ -89,6 +129,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4.8rem;
+  align-items: center;
 }
 
 .about-image {
@@ -101,6 +142,10 @@
   border-radius: 1rem;
   height: 100%;
   width: 100%;
+}
+
+.about-container .secondary-heading {
+  margin-bottom: 1.8rem;
 }
 
 .purchase-cards {
@@ -159,9 +204,15 @@
   border: none;
   padding: 1.2rem 2rem;
   border-radius: .4rem;
-  color: #444;
-  background-color: #eee;
+  color: #fff;
+  background-color: #2e3192;
   font-size: 1.4rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.8rem;
+  /* width: 100%; */
 }
 .card-details {
   list-style: none;
@@ -174,6 +225,9 @@
 }
 
 
+
+
+/* ******* ****** */
 .checkout__overlay {
   position: fixed;
   top: 50%;
@@ -224,6 +278,7 @@
 }
 .product__name {
   font-size: 1.8rem;
+  text-transform: capitalize;
 }
 .product__price {
   font-weight: 600;

@@ -5,9 +5,9 @@ block content
 
 
     .subscription__cards
-        figure.subscription__figure.currently
+        figure.subscription__figure(class=`${user.role === 'vendor' && user.vendorAccountType === 'free' ? 'currently' : user.vendorAccountType === 'standard' ? 'previoused' : ''}`)
             h3.heading__text Free
-            p.subHeading__text For free
+            p.subHeading__text For small businesses
             span.sub__price ₦0.00
             ui.sub__benefits
                 li.sub__items
@@ -21,10 +21,10 @@ block content
                     | 10 Product
                 li.sub__items
                 li.sub__items
-            button.sub__button(href='upgrade-account/subscribe' data-key='free') Subscribe
+            button.sub__button(data-key='free') Subscribe
 
 
-        figure.subscription__figure.card__active
+        figure.subscription__figure.card__active(class=`${user.role === 'vendor' && user.vendorAccountType === 'standard' ? 'currently' : user.vendorAccountType === 'premium' ? 'previoused' : ''}`)
             h3.heading__text Standard
             p.subHeading__text For medium size businesses
             span.sub__price ₦15,000
@@ -44,10 +44,10 @@ block content
                 li.sub__items
                     i.subscription__icon.fa-solid.fa-check
                     | 10 Product
-            button.sub__button(href='upgrade-account/subscribe' data-key='standard') Subscribe
+            button.sub__button(data-plan='standard' data-price='₦15,000' data-amount='15000' data-text='For medium size businesses' class=`${user.role === 'vendor' && user.vendorAccountType === 'standard' ? '' : 'checkout__button'}`) Subscribe
 
 
-        figure.subscription__figure
+        figure.subscription__figure(class=`${user.role === 'vendor' && user.vendorAccountType === 'premium' ? 'currently' : ''}`)
             h3.heading__text Premium
             p.subHeading__text For big businesses
             span.sub__price ₦20,000
@@ -67,22 +67,22 @@ block content
                 li.sub__items
                     i.subscription__icon.fa-solid.fa-check
                     | 10 Product
-            button.sub__button(href='upgrade-account/subscribe' data-key='premium') Subscribe
+            button.sub__button(data-plan='premium' data-price='₦20,000' data-amount='15000' data-text='For big businesses' class=`${user.role === 'vendor' && user.vendorAccountType === 'preimum' ? '' : 'checkout__button'}`)  Subscribe
 
 
 
-        .checkout__overlay
+        .checkout__overlay.hidden
             .checkout__modal
                 i.fa-solid.fa-close.icon.close__checkout
                 h3.dashboard__heading Subscribe
-                span.checkout__info
+                span.checkout__info 
                     span
-                        p.product__name Standard
-                        p.product__price ₦15,000
+                        p.product__name Free
+                        p.product__price 0
                     span 
-                        p.product__summary For medium size businesses
+                        p.product__summary For small businesses
                         p.product__quantity x1
-                form#upgrade-checkout.checkout__form(data-price='15000' data-quantity='1')
+                form#upgrade-checkout.checkout__form(data-quantity='1' data-user=user)
                     h3.dashboard__heading Form info
                     .form__item
                         label.form__label(for='email') Email address
