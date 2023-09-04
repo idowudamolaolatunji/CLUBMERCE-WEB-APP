@@ -247,7 +247,7 @@ function displayCartItem() {
                             <p class="checkout--card__product-name">${product.name}</p>
                             <span class="checkout--card__figures">
                                 <p class="checkout--card__product-quantity">${product.quantity} x</p>
-                                <p class="checkout--card__product-price">₦${product.price}</p>
+                                <p class="checkout--card__product-price">₦${product.price.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
                             </span>
                         </div>
                         <i class="fa-solid fa-close icon delete-cart" data-id="${product.id}"></i>
@@ -261,7 +261,7 @@ function displayCartItem() {
         let prices = cartStorage?.storageProductItems?.map(product => product.price);
         const sumTotal = prices.reduce((cur, i) => cur + i, 0);
         if(document.querySelector('.total-checkout')) {
-            document.querySelector('.total-checkout').textContent = `₦${sumTotal}`;
+            document.querySelector('.total-checkout').textContent = `₦${sumTotal.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
         }
     }
 }
@@ -295,7 +295,7 @@ if(document.querySelectorAll('.delete-cart')) {
             // Recalculate and display the total price
             const allPrices = cartData.storageProductItems.map(product => product.price);
             const sumTotal = allPrices.reduce((cur, price) => cur + price, 0);
-            document.querySelector('.total-checkout').textContent = `₦${sumTotal}`;
+            document.querySelector('.total-checkout').textContent = `₦${sumTotal.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
         });
     });
 }
@@ -305,8 +305,8 @@ if(document.querySelectorAll('.delete-cart')) {
 let sumTotals;
 document.querySelectorAll('.order__checkout--button').forEach((button) => {
     button.addEventListener('click', function() {
-        sumTotals = Number(document.querySelector('.total-checkout').textContent.slice(1));
-        document.querySelector('.sumTotal').textContent = `₦${sumTotals}`;
+        sumTotals = Number(document.querySelector('.total-checkout').textContent.slice(1).replace(/,/g, ''));
+        document.querySelector('.sumTotal').textContent = `₦${Number(sumTotals).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
 
 
         if(sumTotals > 1000 && window.location.href.includes('/order-product/')) {
@@ -327,7 +327,7 @@ document.querySelectorAll('.order__checkout--button').forEach((button) => {
                     <span class="checkout__info">
                         <span>
                             <p class="product__name">${item.name}</p>
-                            <p class="product__price">₦${item.price / item.quantity}</p>
+                            <p class="product__price">₦${(item.price / item.quantity).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
                         </span>
                         <span>
                             <p class="product__summary">${item.niche}</p>

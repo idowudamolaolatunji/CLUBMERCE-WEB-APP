@@ -735,7 +735,7 @@ if(imageInput) {
 
 
 
-const postProduct = async function(formData, type, id) {
+const postProduct = async function(form, type, id) {
     let url, method;
     try {
         if(type === 'create') {
@@ -746,12 +746,10 @@ const postProduct = async function(formData, type, id) {
             url = `/api/products/${id}`;
             method = 'PATCH'
         }
-        console.log(url, method)
         showLoadingOverlay()
         const res = await fetch(url, {
             method: method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
+            body: form
         });
         console.log(res)
 
@@ -799,17 +797,16 @@ if (productCreate) {
         document.body.addEventListener('submit', (e) => {
             const target = e.target;
             if (target.classList.contains('product__form-create')) {
-        
                 // e.preventDefault();
                 // const form = new FormData();
-                // form.append('name', document.querySelector('#product__name').value);
-                // form.append('summary', document.querySelector('#product__summary').value);
-                // form.append('description', document.querySelector('#product__description').value);
-                // form.append('price', document.querySelector('#product__price').value);
-                // form.append('commissionPercentage', document.querySelector('#product__commission').value);
-                // form.append('type', document.querySelector('#product__type').value);
-                // form.append('niche', document.querySelector('#product__category').value);
-                // form.append('recurringCommission', document.querySelector('#product__recurring').value);
+                // form.append('name', document.getElementById('product__name'));
+                // form.append('summary', document.getElementById('product__summary'));
+                // form.append('description', document.getElementById('product__description'));
+                // form.append('price', document.getElementById('product__price'));
+                // form.append('commissionPercentage', document.getElementById('product__commission'));
+                // form.append('type', document.getElementById('product__type'));
+                // form.append('niche', document.getElementById('product__category'));
+                // form.append('recurringCommission', document.getElementById('product__recurring'));
                 // console.log(form);
 
                 e.preventDefault();

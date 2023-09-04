@@ -81,29 +81,37 @@ body
                                     button.order__checkout--button Proceed to checkout
 
 
-                    span.notification__icon
-                        i.fa-regular.fa-bell.icon.nav__icon(data-digits=0)
-                        //- notification...
-                        .notification__hovered.hidden 
-                            h3.dashboard__heading Notification
-                            //- .notification__content you have no notification
-                            .notification
-                                -if(user.role !== 'admin')
-                                    .notify__details
-                                        .notify__status &nbsp;
-                                        span
-                                            h4.notify__head Coming Soon.
-                                            span.notify__body-box
-                                                p.notify__body From Admin.
-                                                span &dash;
-                                                p.notify__date 0 mins ago
-                                    .notify__image--box
-                                        img.notify__image(src=`/asset/img/users/${user.image}` alt='')
-                                    //- .notify__icon--box
-                                        i.fa-solid.fa-lock.icon.notify__icon
-                                -else 
-                                    .notify__details
-                                        p Coming Soon
+                    -if(user.role !== 'admin')
+                        //- -const counts = notifications.filter(notification => notification.isActive).length
+                        span.notification__icon
+                            //- i.fa-regular.fa-bell.icon.nav__icon(data-digits= counts)
+                            i.fa-regular.fa-bell.icon.nav__icon(data-digits= 0)
+                            //- notification...
+                            .notification__hovered.hidden 
+                                h3.dashboard__heading Notification
+
+
+
+                                //- .notification
+                                    -if(notifications && notifications.length < 1)
+                                        .notify__details
+                                            p.notification__content You have no notification.
+                                    -else  
+                                        each notification of notifications
+                                            -if(notification.user.role !== 'admin')
+                                                .notify__details
+                                                    .notify__status(class=`color--${notification.isActive ? 'active' : 'inactive'}`) &nbsp;
+                                                    span(style=`${!notification.isActive ? 'color: #aaa;' : ''}`)
+                                                        h4.notify__head= notification.message
+                                                        span.notify__body-box(style=`${!notification.isActive ? 'color: #aaa;' : ''}`)
+                                                            p.notify__body From Admin
+                                                            p.notify__date= notification.notifiedAt
+                                                //- .notify__image--box
+                                                    img.notify__image(src=`/asset/img/users/${user.image}` alt='')
+                                            //- -else 
+                                                .notify__details
+                                                    p Coming Soon
+                                
                                 
                     -if(user.role === 'admin')
                         span

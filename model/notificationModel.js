@@ -28,7 +28,7 @@ const notificationSchema = new mongoose.Schema({
 notificationSchema.pre(/^find/, function(next) {
     this.populate({
       path: 'user',
-      select: '_id fullName'
+      select: '_id fullName role'
     });
     next();
 })

@@ -126,13 +126,12 @@ exports.dashboard = async (req, res) => {
         const commissions = await Commissions.find({ affiliate: req.user._id});
         const recieviedOrders = await Order.find({ vendor: req.user._id });
         const requestingOrders = await Order.find({ buyer: req.user._id });
-        const notifications = await Notification.find({ user: req.user._id })
+        const notifications = await Notification.find({ user: user.id });
 
         const allUsers = await User.find();
         const allProducts = await Product.find();
         const allOrders = await Order.find();
 
- 
         const totalClicks = allUsers.reduce((total, user) => total + user.clicks, 0);
         const totalPurchases = allProducts.reduce((total, product) => total + product.purchasesCount, 0);
         
@@ -142,6 +141,8 @@ exports.dashboard = async (req, res) => {
             commissions,
             recieviedOrders,
             requestingOrders,
+            notifications,
+
             allProducts,
             allUsers,
             allOrders,
@@ -154,10 +155,10 @@ exports.dashboard = async (req, res) => {
         res.json({message: 'No user with this Id'});
     }
 }
-exports.profile = (req, res) => {
+exports.profile = (_, res) => {
     res.status(200).render('profile');
 }
-exports.settings = (req, res) => {
+exports.settings = (_, res) => {
     res.status(200).render('setting');
 }
 exports.performance = async (req, res) => {

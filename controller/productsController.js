@@ -165,17 +165,16 @@ exports.uploadProductImages = upload.fields([
 
 exports.createProduct = async (req, res) => {
   try {
-    // const vendorId = '64a4483d886820076894d056';
     const vendorId = req.user._id;
     const vendor = await User.findById(vendorId);
-    console.log(vendorId, vendor)
+    // console.log(vendorId, vendor)
     if (!vendor) {
       return res.status(404).json({ error: 'Vendor not found' });
     }
 
-    // if (!req.files || !req.files['image'] || req.files['image'].length !== 1) {
-    //   return res.status(400).json({ message: 'Invalid main image file' });
-    // }
+    if (!req.files || !req.files['image'] || req.files['image'].length !== 1) {
+      return res.status(400).json({ message: 'Invalid main image file' });
+    }
 
     /*
     // Validate and upload the main image to Cloudinary
@@ -257,6 +256,7 @@ exports.createProduct = async (req, res) => {
       // subImages: subImages.map(image => image.secure_url),
       // banners: banners.map(banner => banner.secure_url),
     });
+    console.log(req.body)
     
 
     res.status(201).json({
@@ -266,7 +266,7 @@ exports.createProduct = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err)
+    console.log(err, err.message)
     res.status(404).json({
       status: 'fail',
       message: err.message ||'An error occurred while processing the request',
@@ -415,6 +415,7 @@ exports.updateProduct = async(req, res) => {
             }
         })
     } catch(err) {
+        console.log(err, err.message)
         res.status(404).json({
             status: 'fail',
             message: err.message

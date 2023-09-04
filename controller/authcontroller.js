@@ -52,8 +52,8 @@ const createCookie = function(statusCode, user, res, message) {
 
 const sendSignUpEmailToken = async (_, user, token) => {
   try {
-    const verificationUrl = `${_.protocol}://${_.get('host')}/api/users/verify-email/${token}`;
-    // const verificationUrl = `https://clubmerce.com/api/users/verify-email/${token}`;
+    // const verificationUrl = `${_.protocol}://${_.get('host')}/api/users/verify-email/${token}`;
+    const verificationUrl = `https://clubmerce.com/api/users/verify-email/${token}`;
     const mailMessage = confirmEmailTemplate(user.fullName, verificationUrl);
     console.log(verificationUrl)
     await sendEmail({
@@ -234,7 +234,7 @@ exports.verifyEmail = async (req, res) => {
           res.cookie('jwt', token, cookieOptions);
 
           res.redirect('/email-verifed/success');
-          const destinationUrl = `${user.role === 'buyer' ? 'http://127.0.0.1:3000/buyers/dashboard' : 'http://127.0.0.1:3000/dashboard'}`;
+          const destinationUrl = `${user.role === 'buyer' ? 'https://clubmerce.com/buyers/dashboard' : 'https://clubmerce.com/dashboard'}`;
           const mailMessage = emailConfirmedTemplate(user.fullName, destinationUrl);
           await sendEmail({
             user: user.email,
@@ -451,12 +451,12 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // 3) Send it to user's email
-  const resetURL = `${req.protocol}://${req.get(
-    'host'
-  )}/api/users/resetPassword/${resetToken}`;
+  // const resetURL = `${req.protocol}://${req.get(
+  //   'host'
+  // )}/api/users/resetPassword/${resetToken}`;
+  const resetURL = `https://clubmerce.com/api/users/resetPassword/${resetToken}`;
 
   const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
-
   try {
     await sendEmail({
       email: user.email,
