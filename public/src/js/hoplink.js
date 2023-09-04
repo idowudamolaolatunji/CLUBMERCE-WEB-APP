@@ -25,7 +25,15 @@ const hideAlert = () => {
   
 const showAlert = (type, msg) => {
     hideAlert();
-    const markup = `<div class="alert alert--${type}">${msg}</div>`;
+    // const markup = `<div class="alert alert--${type}">${msg}</div>`;
+    const markup = `
+        <div class="alert alert--${type}">
+            ${msg}&nbsp;
+            <picture>
+                <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/${type === 'error' ? '1f61f' : '2728'}/512.webp" type="image/webp">
+                <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/${type === 'error' ? '1f61f/512.gif" alt="😟"' : '2728/512.gif" alt="✨"'} width="32" height="32">
+            </picture>
+        </div>`;
     document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
     setTimeout(hideAlert, 5000);
 };

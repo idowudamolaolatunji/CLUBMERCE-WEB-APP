@@ -17,7 +17,15 @@ const hideAlert = () => {
 
 const showAlert = (type, msg) => {
   hideAlert();
-  const markup = `<div class="alert alert--${type}">${msg}</div>`;
+  // const markup = `<div class="alert alert--${type}">${msg}</div>`;
+  const markup = `
+    <div class="alert alert--${type}">
+      ${msg}&nbsp;
+      <picture>
+        <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/${type === 'error' ? '1f61f' : '2728'}/512.webp" type="image/webp">
+        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/${type === 'error' ? '1f61f/512.gif" alt="😟"' : '2728/512.gif" alt="✨"'} width="32" height="32">
+      </picture>
+    </div>`;
   document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
   setTimeout(hideAlert, 5000);
 };
@@ -95,80 +103,6 @@ const closeIcons = document.querySelectorAll('.email-confirm__close--icon');
      icon.addEventListener('click', closeEmailConfirmationModal);
 });
    
-// verify email
-const verifyEmail = async function (verificationToken) {
-     try {
-       // Retrieve the verification token from the URL
-     //   const urlParams = new URLSearchParams(window.location.search);
-     //   const verificationToken = urlParams.get('token');
-   
-       // Make a GET request to the backend verification route
-       const response = await fetch(`/api/users/verify-email/${verificationToken}`);
-   
-       if (response.ok) {
-         // Verification successful
-         const confirmationMessage = `
-           <div class="email__drop-down drop-down__shadow">
-             <div class="email-confirmed__modal modal">
-               <i class="fa-solid fa-close close__icon email-confirm__close--icon"></i>
-               <div class="modal__container">
-                 <h3 class="extra__heading">Success!</h3>
-                 <p class="modal__text">Your email address has been verified successfully!</p>
-                 <a class="form__button proceed__button" href="/login">Proceed to login</a>
-               </div>
-             </div>
-           </div>
-         `;
-   
-         // Add the confirmation message to the document body
-         document.body.insertAdjacentHTML('beforeend', confirmationMessage);
-       } else {
-         // Verification failed
-         const errorMessage = `
-          <div class="email__drop-down drop-down__shadow">
-               <div class="email-confirmed__modal modal">
-                    <i class="fa-solid fa-close close__icon email-confirm__close--icon"></i>
-                    <div class="modal__container">
-                         <h3 class="extra__heading">Failed!</h3>
-                         <p class="modal__text">Email verification failed. Please try again.</p>
-                    </div>
-               </div>
-          </div>
-         `;
-   
-         // Add the error message to the document body
-         document.body.insertAdjacentHTML('beforeend', errorMessage);
-       }
-     } catch (error) {
-       // Handle network or other errors
-       console.log(error);
-       const errorMessage = `
-         <div class="email__drop-down drop-down__shadow">
-           <div class="email-confirmed__modal modal">
-             <i class="fa-solid fa-close close__icon email-confirm__close--icon"></i>
-             <div class="modal__container">
-               <h3 class="extra__heading">Error!</h3>
-               <p class="modal__text">An error occurred. Please try again later.</p>
-             </div>
-           </div>
-         </div>
-       `;
-   
-       // Add the error message to the document body
-       document.body.insertAdjacentHTML('beforeend', errorMessage);
-     }
-}
-
-
-function getVerificationTokenFromURL() {
-     const urlParams = new URLSearchParams(window.location.search);
-     return urlParams.get('token');
-}
-// Check if a verification token exists in the URL
-const verificationToken = getVerificationTokenFromURL();
-if (verificationToken) {
-     verifyEmail(verificationToken);
-}
 if (signupForm) {
   signupForm.addEventListener('submit', function (e) {
     e.preventDefault();

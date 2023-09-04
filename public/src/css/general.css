@@ -264,7 +264,11 @@ a .font-size-sm-help { font-size: 1.8rem; }
     right: 0;
     z-index: 2;
 }
-
+.body_fictional {
+    width: 100%;
+    height: 70vh;
+    background-color: #fff;
+}
 .spinner-overlay {
     width: 100%;
     height: 110vh;
@@ -449,6 +453,11 @@ color: #080707;
     max-width: 50rem;
     width: 80%;
     box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.25);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.4rem;
 }
 .alert--success {
     background-color: #2e9254;
@@ -677,6 +686,10 @@ section {
     background-color: transparent;
 }
 
+.delete-cart {
+    font-size: 1.4rem !important;
+    color: #666;
+}
 .fa-close {
     cursor: pointer;
     transition: all .35s;
@@ -685,8 +698,13 @@ section {
 .fa-close:hover, .fa-close:active {
     transform: rotate(360deg);
 }
-.nav__logo i.fa-solid:hover, .nav__logo .fa-close:active {
+.nav__logo i.fa-solid:hover, .nav__logo .fa-close:active, .material-symbols-outlined .fa-close:hover, .material-symbols-outlined .fa-close:active, .shopping__cart .fa-close:after, .shopping__cart .fa-close:hover {
     transform: rotate(0);
+}
+
+.profile-resized {
+    width: 18rem;
+    height: 10rem !important;
 }
 
 .video iframe {
@@ -856,6 +874,21 @@ input[type="number"] {
 }
 .cursor-not-allowed {
     cursor: not-allowed;
+}
+.modal-success {
+    background-color: #fff;
+    position: absolute;
+    border-radius: .4rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    padding: 1.2rem;
+}
+.modal-success .extra__heading {
+    margin: 0;
+    margin-top: 1rem;
 }
 /* .vendor--type::after {
     display: inline-block;

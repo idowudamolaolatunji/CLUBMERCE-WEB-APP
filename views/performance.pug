@@ -22,12 +22,12 @@ block content
                         each performance of affiliatePerformance
                             .table-row-app
                                 span.table-row-content.table-row-product
-                                    img.table-product__image(src=`asset/img/products/${performance.product.image}` alt='')
+                                    img.table-product__image(src=`asset/img/products/${performance.product.image}` alt='product image')
                                     span
                                         p.table-product__name= performance.product.name
-                                        p.table-product__category= performance.product.niche
+                                        p.table-product__category= performance.product.niche || performance.product.category
                                 span.table-row-content
-                                    .commission= `${performance.commission}`
+                                    .commission= `₦${Number(performance.commission).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                                 span.table-row-content
                                     p.purchase= performance.purchases
                                 span.table-row-content
@@ -37,7 +37,6 @@ block content
 
                     -else
                         .table-row-message
-                            //- p.note-no Upload your product today, Let out affiliate make you money.
                             p.note-no You have no existing product.
 
 
@@ -57,7 +56,7 @@ block content
                         span.table-head-content Aff gravity
                         span.table-head-content Clicks
 
-                    - if(products.lenght < 1 || !products)
+                    - if(products.length < 1 || !products)
                         .table-row-message
                             //- p.note-no Upload your product today, Let out affiliate make you money.
                             p.note-no You have no existing product.
@@ -70,11 +69,11 @@ block content
                                         p.table-product__name= product.name
                                         p.table-product__category= product.product__category
                                 span.table-row-content
-                                    p.purchase= product.purchasesCount
+                                    p.purchase #{Math.trunc(product.purchasesCount)}
                                 span.table-row-content
-                                    p.order= product.ordersCount
+                                    p.order #{Math.trunc(product.ordersCount)}
                                 span.table-row-content
-                                    p.profit= `₦${product.profits}`
+                                    p.profit= `₦${Number(product.profits).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                                 span.table-row-content
                                     p.aff-gravity= product.productGravity
                                 span.table-row-content

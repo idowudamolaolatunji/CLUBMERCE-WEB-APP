@@ -8,6 +8,7 @@ const Commissions = require('../model/commissionModel');
 const AffiliateLink = require('../model/affiliteLinkModel');
 const Transaction = require('../model/transactionModel');
 const Order = require('../model/orderModel');
+const Notification = require('../model/notificationModel');
 
 // Global
 let token;
@@ -61,6 +62,13 @@ exports.login = async (req, res) => {
         active: 'login'
     })
 }
+exports.verified = async (req, res) => {
+    if( req.cookies.jwt ) token = req.cookies.jwt;
+    res.status(200).render('verified', {
+        title: 'Email Successfully Verified',
+        token
+    })
+}
 
 
 // visitors / buyers
@@ -80,7 +88,7 @@ exports.buyerSignupAuth = (req, res) => {
 // Affiliates
 exports.marketPlace = async (req, res) => {
     try {
-        const products = await Product.find().sort({ createdAt: -1, productGravity: -1, purchasesCount: -1 });
+        const products = await Product.find().sort({ isBoosted: -1, createdAt: -1, productGravity: -1, purchasesCount: -1 });
 
         res.status(200).render('marketplace', {
             title: 'Affiliate marketPlace',
@@ -115,8 +123,10 @@ exports.dashboard = async (req, res) => {
         // console.log(req)
         const user = await User.findById(req.user._id);
         const products = await Product.find({ vendor: req.user._id });
-        const commission = await Commissions.find({ user: req.user._id});
-        const orders = await Order.find({ vendor: req.user._id });
+        const commissions = await Commissions.find({ affiliate: req.user._id});
+        const recieviedOrders = await Order.find({ vendor: req.user._id });
+        const requestingOrders = await Order.find({ buyer: req.user._id });
+        const notifications = await Notification.find({ user: req.user._id })
 
         const allUsers = await User.find();
         const allProducts = await Product.find();
@@ -129,8 +139,9 @@ exports.dashboard = async (req, res) => {
         res.status(200).render('base_account', {
             user,
             products,
-            commission,
-            orders,
+            commissions,
+            recieviedOrders,
+            requestingOrders,
             allProducts,
             allUsers,
             allOrders,
@@ -153,7 +164,6 @@ exports.performance = async (req, res) => {
     try {
         const user = await User.findById(req.user._id);
         const affiliatePerformance = await AffiliateLink.find({ affiliate: req.user._id })
-        console.log(affiliatePerformance)
         const products = await Product.find({ vendor: req.user._id });
         res.status(200).render('performance', {
             title: 'Your perfomance',
@@ -167,11 +177,13 @@ exports.performance = async (req, res) => {
 }
 exports.transaction = async (req, res) => {
     try {
-        const transaction = await Transaction.find({ user: req.user._id })
+        const transactions = await Transaction.find({ user: req.user._id });
+        const user = await User.findById(req.user._id);
 
         res.status(200).render('transaction', {
             title: 'Your Transactions',
-            transaction,        
+            transactions,
+            user
         });
     } catch(err) {
         console.log(err)
@@ -181,18 +193,24 @@ exports.transaction = async (req, res) => {
 
 exports.leaderboard = async(req, res) => {
     try {
-        const affiliateLeaderboard = await User.find({ role: 'affiliate'}).sort({ wallet: -1, promotionLinksCounts: -1, clicks: -1 });
+        const affiliateLeaderboard = await User.find({ role: 'affiliate'}).sort({ totalAmountWallet: -1, promotionLinksCounts: -1, clicks: -1 });
+        const vendorLeaderboard = await User.find({ role: 'vendor'}).sort({ totalAmountWallet: -1});
         const currentUser = await User.findById(req.user._id);
+        const vendorProducts = await Product.find()
 
         res.status(200).render('leaderboard', {
-            title: `Your Leaderboard`,
+            title: `${'v'} Leaderboards`,
             affiliateLeaderboard,
-            currentUser
+            vendorLeaderboard,
+            currentUser,
+            vendorProducts
         });
     } catch(err) {
         res.status(400).json({message: err});
     }
 }
+
+
 
 // Vendors
 exports.signupVendor = (req, res) => {
@@ -216,6 +234,7 @@ exports.upgrade = (req, res) => {
     res.status(200).render('upgrade');
 }
 
+
 // Admin
 exports.adminAuth = (req, res) => {
     res.status(200).render('admin_login');
@@ -223,7 +242,7 @@ exports.adminAuth = (req, res) => {
 
 exports.manageUsers = async (req, res) => {
     try {
-        const users = await User.find({ role: {"$ne": 'admin'} }).sort('-createdAt');
+        const users = await User.find({ role: {"$ne": 'admin'} }).sort('-createdAt').select('+active');
         res.status(200).render('manage_users', {
             title: 'All Users',
             users
@@ -256,7 +275,7 @@ exports.managePayments = async (req, res) => {
 }
 exports.manageOrders = async (req, res) => {
     try {
-        const orders = await Order.find();
+        const orders = await Order.find().sort('-createdAt');
         res.status(200).render('manage_orders', {
             title: 'All Orders',
             orders

@@ -12,6 +12,7 @@ router.get('/vendor', viewController.vendor);
 router.get('/affiliate', viewController.affiliate);
 router.get('/contact-us', viewController.contactUs);
 router.get('/login', viewController.login);
+router.get('/email-verifed/success', viewController.verified);
 
 
 // buyers
@@ -25,7 +26,6 @@ router.get('/buyers/profile', authController.isLoggedIn, viewController.profile)
 // affiliates
 router.get('/marketplace', authController.isLoggedIn, viewController.marketPlace);
 router.get('/marketplace/:slug', authController.isLoggedIn, viewController.getProduct);
-router.get('/leaderboard', authController.protect, viewController.leaderboard);
 
 // vendors
 router.get('/product-catalog', authController.isLoggedIn, viewController.productCatalog);
@@ -40,6 +40,7 @@ router.get('/settings', authController.isLoggedIn, viewController.settings);
 router.get('/profile', authController.isLoggedIn, viewController.profile);
 router.get('/performance', authController.isLoggedIn, viewController.performance);
 router.get('/transaction', authController.isLoggedIn, viewController.transaction);
+router.get('/leaderboard', authController.protect, viewController.leaderboard);
 
 // admin
 router.get('/admin/login', viewController.adminAuth);

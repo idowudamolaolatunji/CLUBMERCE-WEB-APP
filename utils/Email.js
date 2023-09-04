@@ -4,10 +4,10 @@ const nodemailer = require('nodemailer');
 const sendEmail = async function(options) {
     try {
         // create a transporter
-        const transporter = nodemailer.createTransport({
+        let transporter = nodemailer.createTransport({
             host: process.env.EMAIL_HOST,
             port: process.env.EMAIL_PORT,
-            secure: true,
+            secure: false,
             auth: {
                 user: process.env.EMAIL_USERNAME,
                 pass: process.env.EMAIL_PASSWORD,
@@ -17,14 +17,22 @@ const sendEmail = async function(options) {
             }
         });
 
+         // Add a verify callback to get debugging information
+        transporter.verify(function(error, success) {
+            if (error) {
+                console.log('Transporter verification error:', error);
+            } else {
+                console.log('Transporter is ready to take messages');
+            }
+        });
+
         // define the email options 
         const mailOptions = {
-            // sender mail options 
-            // from: 'info@clubmerce.com',
-            from: process.env.EMAIL_USERNAME,
-            to: options.email,
+            from: 'info@clubmerce.com',
+            to: options.user,
             subject: options.subject,
-            text: options.message,
+            // text: options.message,
+            html: options.message
         };
 
         // actually send the email
@@ -32,8 +40,9 @@ const sendEmail = async function(options) {
        console.log('Email sent successfully!', data);
     } catch (error) {
         console.error('Error sending email:', error);
-        throw error; // Rethrow the error to be handled at the calling code
+        throw error;
     }
 };
+
 
 module.exports = sendEmail;

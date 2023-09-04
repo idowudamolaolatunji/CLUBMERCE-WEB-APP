@@ -1,35 +1,37 @@
 // Message.js
 const mongoose = require('mongoose');
 
-const messageSchema = new mongoose.Schema({
-  sender: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  receiver: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  message: {
-    type: String,
-    required: true
-  },
-  timestamp: {
-    type: Date,
-    default: Date.now
-  }
+const notificationSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User', 
+    },
+    message: {
+        type: String,
+        required: true,
+    },
+    notifiedAt: String,
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
+    isActive: {
+        type: Boolean,
+        default: function() {
+            return Date.now() < (this.createdAt.getTime() + (24 * 60 * 60 * 1000));
+        }
+    }
+}, {
+    timestamp: true
 });
 
-messageSchema(/^find/, function(next) {
+notificationSchema.pre(/^find/, function(next) {
     this.populate({
-        path: 'sender',
-    }).populate({
-        path: 'receiver'
-    })
-
+      path: 'user',
+      select: '_id fullName'
+    });
     next();
 })
 
-module.exports = mongoose.model('Message', messageSchema);
+const Notification = mongoose.model('Notification', notificationSchema);
+module.exports = Notification;

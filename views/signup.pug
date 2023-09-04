@@ -320,20 +320,27 @@ block content
         .email__drop-down.drop-down__shadow.hidden
             .email-verify__modal.modal
                 i.fa-solid.fa-close.close__icon.verify__close--icon 
+
                 .modal__container
-                    h3.extra__heading 
-                        | Successful signup!
-                    i.fa-solid.fa-thumbs-up.welcome
-                    p.modal__content A link has been sent! Please click the link in your email and verify your email.
+                    h3.extra__heading Successful signup!
+                    //- i.fa-solid.fa-thumbs-up
+                    picture.welcome
+                        source(srcset='https://fonts.gstatic.com/s/e/notoemoji/latest/1f44d_1f3fc/512.webp' type='image/webp')
+                        img(src='https://fonts.gstatic.com/s/e/notoemoji/latest/1f44d_1f3fc/512.gif' alt='👍' width='32' height='32')
+                    p.modal__text A link has been sent! Please click the link in your email and verify your email.
                         br
                         span.user__email emailaddress@example.com
 
-
-        //- .email__drop-down.drop-down__shadow.hidden
-            .email-confirmed__modal.modal
-                i.fasolid.fa-close.close__icon.email-confirm__close--icon 
-                .modal__container
-                    h3.extra__heading  Success!
-                    // icon goes here
-                    p.modal__text Your email address has been verified successfully!
-                    a.form__button.proceed__button(href='/login') Proceed to login
+        //- <div class="email__drop-down email-confirm-overlay hidden">
+        //-     <div class="email-confirmed__modal modal">
+        //-         <i class="fa-solid fa-close close__icon email-confirm__close--icon"></i>
+        //-         <div class="modal__container">
+        //-             <h3 class="extra__heading">Success!</h3>
+        //-             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0,0,256,256" style="fill:#737373;">
+        //-                 <g fill="#737373" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.12,5.12)"><path d="M25,2c-12.69071,0 -23,10.3093 -23,23c0,12.6907 10.30929,23 23,23c12.69071,0 23,-10.3093 23,-23c0,-12.6907 -10.30929,-23 -23,-23zM25,4c11.60983,0 21,9.39017 21,21c0,11.60983 -9.39017,21 -21,21c-11.60983,0 -21,-9.39017 -21,-21c0,-11.60982 9.39017,-21 21,-21z"></path></g></g>
+        //-             </svg>
+        //-             <p class="modal__text">Your email address has been verified successfully!</p>
+        //-             <a class="form__button proceed__button" href="/login">Proceed to login</a>
+        //-         </div>
+        //-     </div>
+        //- </div>

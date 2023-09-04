@@ -2,39 +2,36 @@ extends base_account
 
 block content 
     .dashboard__table
-        .table.table-mp
+        .table.table-mpt
             .table-title
                 h4.table-heading Manage Transactions
-            .table-head-mp
+            .table-head-mpt
                 span.table-head-content transaction ID
                 span.table-head-content user
                 span.table-head-content amount
                 span.table-head-content purpose
                 span.table-head-content status
-                span.table-head-content actions
+                span.table-head-content date
 
 
            
 
             -if(transactions.length > 0)
                 each transaction of transactions
-                    .table-row-mp
+                    .table-row-mpt
                         span.table-row-content
                             p.transaction= transaction.transactionId
                         span.table-row-content
-                            p.user= transaction.user.username
+                            p.user= transaction.user.fullName
                         span.table-row-content
-                            p.price= `₦${transaction.amount}`
+                            p.price= `${transaction.amount}`
                         span.table-row-content
                             p.purpose= transaction.purpose
                         span.table-row-content
-                            //- p(class=`.approved.status.status--${}`) Approved
-                            p.approved.status.status--success success
+                            p(class=`status status--${transaction.status}`)= transaction.status
                         span.table-row-content
-                            p.date= transaction.createdAt
-                        //- span.table-row-content.table-row-btn
-                            button.btn-edit.table-btn Approved
-                            button.btn-delete.table-btn Unapproved
+                            p.date= transaction.paidAt
+                        
         
             - else 
                 .table-row-message

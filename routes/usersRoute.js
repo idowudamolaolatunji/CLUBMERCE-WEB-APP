@@ -8,8 +8,9 @@ const userController = require("../controller/usersController");
 const router = express.Router();
 
 router.post("/signup-affiliate", authController.signupAffiliate);
+
 router.post("/signup-vendor", authController.signupVendor);
-router.post("/verify-email/:token", authController.verifyEmail);
+router.get("/verify-email/:token", authController.verifyEmail);
 router.get('/logout', authController.logout)
 router.post("/login-buyer", authController.loginBuyer);
 router.post("/signup-buyer", authController.signupBuyer);
@@ -19,6 +20,7 @@ router.post("/login-admin", authController.loginAdmin);
 
 router.post("/forgotPassword", authController.forgotPassword)
 router.patch("/resetPassword/:token", authController.resetPassword)
+
 
 router.get("/getMe", authController.protect, userController.getMe);
 // router.patch("/uploadImage", authController.protect, userController.uploadProfilePicture);

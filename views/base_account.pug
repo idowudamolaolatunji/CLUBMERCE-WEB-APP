@@ -19,9 +19,9 @@ head
 
 
     script(defer src="/src/js/dashboard.js")
-    script(defer src="/src/js/chat.js")
     script(defer src="/src/js/paymentAndOrder.js")
     script(src="https://js.paystack.co/v2/inline.js")
+    script(defer src="/src/js/chat.js")
     script(src="/socket.io/socket.io.js")
 
 
@@ -59,7 +59,8 @@ body
                             i.fa-solid.fa-magnifying-glass.icon.nav__icon(data-digits=0)
 
                 span.nav__icons
-                    -if(user.role === 'vendor' && !user.vendorSubscriptionActive)
+                    //- -if(user.role === 'vendor')
+                    -if(user.role === 'vendor' && user.vendorSubscriptionType !== 'premium')
                         a.nav__link.nav__upgrade.nav--text(href="/upgrade-account") upgrade +
                     -if(user.role === 'admin')
                         a.nav--text(href='settings') change 
@@ -68,24 +69,16 @@ body
                     -if(user.role === 'buyer')
                         span.shop-cart
                             i.fa-solid.fa-shopping-cart.icon.nav__icon.shopping-cart(data-digits=0)
-                        .shopping__cart
+                        .shopping__cart.hidden
                             h4.dashboard__heading.checkout__heading Cart
-                            .chackout__box
-                                .checkout--card
-                                    .checkout--card__image
-                                        img(src='/asset/img/products/product-default.png' alt='product image')
-                                    .checkout--card__info
-                                        p.checkout--card__product-name Test product
-                                        span.checkout--card__figures
-                                            p.checkout--card__product-quantity 1 x
-                                            p.checkout--card__product-price ₦15,000
-                                    i.fa-solid.fa-close.icon.delete-cart
+                            .checkout__box
+                                //- 
                             .checkout__box--controls
                                 span.checkout__box--controls-info
                                     p Sub Total
-                                    span ₦15,000
+                                    span.total-checkout ₦0
                                 .controls
-                                    button Proceed to checkout
+                                    button.order__checkout--button Proceed to checkout
 
 
                     span.notification__icon
@@ -120,7 +113,6 @@ body
                     -else
                         span
                             .nav__image--box
-                                //- img.nav__image(class=`${user.role === 'vendor' && user.vendorAccountType ? 'vendor--type' : ''}` type=`${user.role === 'vendor' ? user.vendorAccountType : ''}` src=`/asset/img/users/${user.image}` alt=`user's photo`)
                                 img.nav__image(src=`/asset/img/users/${user.image}` alt=`user's photo`)
                             //- profile...
                             .Profile__hovered.hidden
@@ -130,7 +122,7 @@ body
                                             img.profile__image(src=`/asset/img/users/${user.image}` alt=`user's photo`)
                                         p.profile__name= user.fullName
                                     a.profile__link.nav__link(href="/profile") My profile
-                                    button.profile__button.nav__link(class=`${user.role === 'buyer' ? 'buyer__nav--logout' : 'nav__logout'}`) signout&nbsp;
+                                    button.profile__button.order-nav__link(class=`${user.role === 'buyer' ? 'buyer__nav--logout' : 'nav__logout'}`) signout&nbsp;
                                         i.fa-solid.fa-arrow-right-to-bracket.profile__icon
 
 
@@ -162,6 +154,7 @@ body
                             +menuItem('dashboard', 'Dashboard', 'fa-solid fa-gauge', _)
                             +menuItem('product-catalog', 'Product Catalog', 'fa-solid fa-clipboard-list', _)
                             +menuItem('performance', 'Product Performance', 'fa-solid fa-chart-simple', _)
+                            +menuItem('leaderboard', 'Vendor Leaderboard', 'fa-solid fa-trophy', _)
                             +menuItem('transaction', 'Transactions', 'fa-solid fa-chart-line', _)
                             +menuItem('settings', 'settings', 'fa-solid fa-gear', _)
 
@@ -217,23 +210,28 @@ body
                     block content
                         -if(user.role === 'affiliate')
                             .main__dashboard--container
-                                h3.dashboard__heading.margin__left--xsm=`Welcome back, ${user.fullName.split(' ')[0]}`
-                                span &nbsp;👋🏾
+                                span.heading
+                                    //- span &nbsp;👋🏾
+                                    h3.dashboard__heading.margin__left--xsm=`Welcome back, ${user.fullName.split(' ')[0]}`
+                                    span &nbsp;
+                                        picture
+                                            source(srcset='https://fonts.gstatic.com/s/e/notoemoji/latest/1f44b_1f3fe/512.webp' type='image/webp')
+                                            img(src='https://fonts.gstatic.com/s/e/notoemoji/latest/1f44b_1f3fe/512.gif' alt='👋' width='32' height='32')
                                 .dashboard__insights 
                                     .insight.insight__one
                                         .icon__box 
                                             i.fa-solid.fa-money-bill-1-wave.insight__icon
                                         span 
                                             p.insight__title All Time Earnings
-                                            p.insight__text=`₦${user.totalAmountWallet}.00`
+                                            p.insight__text=`₦${user.totalAmountWallet.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                                             //- p.insight__text ₦400,948
 
                                     .insight.insight__two
                                         .icon__box 
                                             i.fa-solid.fa-comments-dollar.insight__icon
                                         span 
-                                            p.insight__title Avaliable Profit
-                                            p.insight__text= `₦${user.availableAmountWallet}.00`
+                                            p.insight__title Avail. Profit
+                                            p.insight__text= `₦${user.availableAmountWallet.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
 
 
                                     .insight.insight__four
@@ -241,15 +239,14 @@ body
                                             i.fa-solid.fa-coins.insight__icon
                                         span 
                                             p.insight__title Pending Profit
-                                            p.insight__text= `₦${user.pendingAmountWallet}.00`
+                                            p.insight__text= `₦${user.pendingAmountWallet.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
 
                                     .insight.insight__two
                                         .icon__box 
                                             i.fa-solid.fa-comments-dollar.insight__icon
                                         span 
                                             p.insight__title Product Sold
-                                            p.insight__text= user.productSold
-                                            //- p.insight__text 50
+                                            p.insight__text= `${Number(Math.trunc(user.productSold))}`
                                             
 
                                     .insight.insight__three
@@ -268,8 +265,6 @@ body
                                             p.insight__text= user.affiliateLinks.length
                                             //- p.insight__text= user.affiliateLinks[0] === 0 ? 0 : user.affiliateLinks.length 
 
-                                    
-                                    
 
 
 
@@ -284,65 +279,59 @@ body
                                             span.table-head-content Status
                                             span.table-head-content date
 
-                                        //- .table-row
-                                        //-     span.table-row-content.table-row-product
-                                        //-         img.table-product__image(src='asset/tests/two.jpg' alt='')
-                                        //-         span
-                                        //-             p.table-product__name Apilean Weight Loss
-                                        //-             p.table-product__niche health &amp; fitness
-                                        //-     span.table-row-content
-                                        //-         p.order ₦290,000
-                                        //-     span.table-row-content
-                                        //-         .status.status--success success
-                                        //-     span.table-row-content
-                                        //-         .date 10/3/2023
-
-
-                                        -if(commission > 0)
-                                            .table-row
-                                                span.table-row-content.table-row-product
-                                                    img.table-product__image(src=`asset/img/product/${product.image}` alt='')
-                                                    span
-                                                        p.table-product__name= commission.product
-                                                        p.table-product__niche= commission.product.category
-                                                span.table-row-content
-                                                    p.price= `₦${commission.amount}`
-                                                span.table-row-content
-                                                    p.status.status--pending= commission.status
-                                                span.table-row-content
-                                                    p.date= commission.createdAt
-                                        - else
+                                        -if(commissions.length < 1)
                                             .table-row-message
                                                 p.note-no You've have not made any sale commission...
+
+                                        - else
+                                            each commission of commissions
+                                                .table-row
+                                                    span.table-row-content.table-row-product
+                                                        img.table-product__image(src=`/asset/img/products/${commission.product.image}` alt='')
+                                                        span
+                                                            p.table-product__name= commission.product.name
+                                                            p.table-product__niche= commission.product.category
+                                                    span.table-row-content
+                                                        p.price= `₦${Number(commission.commissionAmount).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                                                    span.table-row-content
+                                                        p(class=`status status--${commission.status}`)= commission.status
+                                                    span.table-row-content
+                                                        p.date= commission.paidAt
+                                            
 
                             
 
                         -if(user.role === "vendor")
                             .main__dashboard--container
-                                h3.dashboard__heading=`Welcome back, ${!user.business ? user.fullName.split(' ')[0] : user.businessName}`
-                                span &nbsp;👋🏾
+                                span.heading
+                                    h3.dashboard__heading=`Welcome back, ${!user.business ? user.fullName.split(' ')[0] : user.businessName}`
+                                    //- span &nbsp;👋🏾
+                                    span &nbsp;
+                                        picture
+                                            source(srcset='https://fonts.gstatic.com/s/e/notoemoji/latest/1f44b_1f3fe/512.webp' type='image/webp')
+                                            img(src='https://fonts.gstatic.com/s/e/notoemoji/latest/1f44b_1f3fe/512.gif' alt='👋' width='32' height='32')
                                 .dashboard__insights 
                                     .insight.insight__one
                                         .icon__box 
                                             i.fa-solid.fa-money-bill-1-wave.insight__icon
                                         span 
                                             p.insight__title All Time Earnings
-                                            p.insight__text=`₦ ${products.reduce((acc, product) => acc + product.profits, 0)}`
+                                            p.insight__text=`₦${user.totalAmountWallet.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
 
 
                                     .insight.insight__two
                                         .icon__box 
                                             i.fa-solid.fa-comments-dollar.insight__icon
                                         span 
-                                            p.insight__title Available Balance
-                                            p.insight__text=`₦0`
+                                            p.insight__title Avail. Balance
+                                            p.insight__text=`₦${user.availableAmountWallet.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
 
                                     .insight.insight__four
                                         .icon__box 
                                             i.fa-solid.fa-coins.insight__icon
                                         span 
                                             p.insight__title Pending Profit
-                                            p.insight__text=`₦0`
+                                            p.insight__text=`₦${user.pendingAmountWallet.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                                     
 
                                     .insight.insight__two
@@ -351,13 +340,14 @@ body
                                         span 
                                             p.insight__title My Products
                                             p.insight__text= products.length
-
+                                            
+                                    -const currentOrderCount = recieviedOrders.filter(order => order.orderStatus === 'pending');
                                     .insight.insight__three
                                         .icon__box 
                                             i.fa-solid.fa-shopping-cart.insight__icon
                                         span
                                             p.insight__title Orders
-                                            p.insight__text= products.reduce((acc, product) => acc + product.ordersCount, 0)
+                                            p.insight__text= currentOrderCount.length
 
                                     .insight.insight__one
                                         .icon__box 
@@ -368,45 +358,87 @@ body
                                             //- p.insight__text= product.productGravity
                                         
 
+                                //- .dashboard__table
+                                    .table.table-po
+                                        .table-title
+                                            h4.table-heading Product orders
+                                        .table-head-po
+                                            span.table-head-content Product
+                                            span.table-head-content Quantity
+                                            span.table-head-content Total price
+                                            span.table-head-content location
+                                            span.table-head-content status
+                                            span.table-head-content Actions
+
+                                    -if(recieviedOrders < 1)
+                                        .table-row-message
+                                            p.note-no You've no order at the moment...
+
+                                    -else
+                                        each order of recieviedOrders
+                                            .table-row-po
+                                                span.table-row-content.table-row-product
+                                                    img.table-product__image(src=`asset/img/products/${order.product.image}` alt='')
+                                                    span
+                                                        p.table-product__name= order.product.name
+                                                        p.table-product__niche= order.product.category
+                                                span.table-row-content
+                                                    p.order= order.quantity
+                                                span.table-row-content
+                                                    p.price= `₦${Number(order.amount).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                                                span.table-row-content
+                                                    p.brand= order.vendor.businessName
+                                                span.table-row-content
+                                                    p(class=`status status--${order.orderStatus}`)= order.orderStatus
+                                                span.table-row-content
+                                                    //- p(class=`status status--${order.orderStatus}`)= order.orderStatus
+                                
                                 .dashboard__table
                                     .table.table-po
                                         .table-title
                                             h4.table-heading Product orders
                                         .table-head-po
                                             span.table-head-content Product
-                                            span.table-head-content orders
+                                            span.table-head-content Quantity
                                             span.table-head-content Total price
-                                            span.table-head-content location
-                                            span.table-head-content status
-
-                                        -if(orders < 1)
+                                            span.table-head-content Location
+                                            span.table-head-content Status
+                                            span.table-head-content Date
+                                        
+                                        -if(recieviedOrders < 1) 
                                             .table-row-message
-                                                p.note-no You've no order at the moment...
+                                                p.note-no No order at the moment...
 
                                         -else
-                                            each order of orders
+                                            each order of recieviedOrders
                                                 .table-row-po
                                                     span.table-row-content.table-row-product
-                                                    img.table-product__image(src=`asset/img/product/${product.image}` alt='')
-                                                    span
-                                                        p.table-product__name= order.product.name
-                                                        p.table-product__niche= order.product.category
+                                                        img.table-product__image(src=`/asset/img/products/${order.product.image}` alt='product image')
+                                                        span
+                                                            p.table-product__name= order.product.name
+                                                            p.table-product__niche= order.product.niche
                                                     span.table-row-content
-                                                    p.order= order.quantity
+                                                        p.order= order.quantity
                                                     span.table-row-content
-                                                    p.price= `₦${order.amount}`
+                                                        p.price= `₦${Number(order.vendorProfit).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                                                     span.table-row-content
-                                                    p.brand= order.vendor.businessName
+                                                        p.brand= order.buyer.country
                                                     span.table-row-content
-                                                    p.status.status--success= order.orderStatus
-                                        
+                                                        p(class=`status status--${order.orderStatus}`)= order.orderStatus
+                                                    span.table-row-content
+                                                        p.time= order.orderedAt
 
                    
 
                         -if(user.role == "admin")
                             .main__dashboard--container
-                                h3.dashboard__heading=`Welcome back Boss (Admin)`
-                                span &nbsp;👋🏾
+                                span.heading
+                                    h3.dashboard__heading=`Welcome back Boss (Admin)`
+                                    //- span &nbsp;👋🏾
+                                    span &nbsp;
+                                        picture
+                                            source(srcset='https://fonts.gstatic.com/s/e/notoemoji/latest/1f44b_1f3fe/512.webp' type='image/webp')
+                                            img(src='https://fonts.gstatic.com/s/e/notoemoji/latest/1f44b_1f3fe/512.gif' alt='👋' width='32' height='32')
                                 .dashboard__insights 
 
 
@@ -461,7 +493,7 @@ body
                                             i.fa-solid.fa-gift.insight__icon
                                         span
                                             p.insight__title Total Purchases
-                                            p.insight__text= totalPurchases
+                                            p.insight__text= `${Math.trunc(totalPurchases)}`
 
                                     .insight.insight__four
                                         .icon__box 
@@ -504,16 +536,17 @@ body
                            
 
 
-                                .dashboard__table
+                                //- .dashboard__table
                                     .table.table-po
                                         .table-title
                                             h4.table-heading Product orders
                                         .table-head-po
                                             span.table-head-content Product
-                                            span.table-head-content quantity
+                                            span.table-head-content Quantity
                                             span.table-head-content Total price
-                                            span.table-head-content location
-                                            span.table-head-content status
+                                            span.table-head-content Location
+                                            span.table-head-content Status
+                                            span.table-head-content Date
                                         
                                         -if(allOrders < 1) 
                                             .table-row-message
@@ -523,45 +556,55 @@ body
                                             each order of allOrders
                                                 .table-row-po
                                                     span.table-row-content.table-row-product
-                                                        img.table-product__image(src=`asset/img/products/${product.image}` alt='')
+                                                        img.table-product__image(src=`/asset/img/products/${order.product.image}` alt='product image')
                                                         span
                                                             p.table-product__name= order.product.name
-                                                            p.table-product__niche= order.product.category
+                                                            p.table-product__niche= order.product.niche
                                                     span.table-row-content
                                                         p.order= order.quantity
                                                     span.table-row-content
-                                                        p.price= order.commissionedAmount
+                                                        p.price= `₦${Number(order.amount).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                                                     span.table-row-content
-                                                        p.brand= order.vendor.businessName
+                                                        p.brand= order.buyer.country
                                                     span.table-row-content
-                                                        p(class=`.status .status--${order.orderStatus}`)= order.orderStatus
+                                                        p(class=`status status--${order.orderStatus}`)= order.orderStatus
+                                                    span.table-row-content
+                                                        p.time= order.orderedAt
 
 
                         -if(user.role === 'buyer')
                             .main__dashboard--container
-                                h3.dashboard__heading.margin__left--xsm=`Welcome back, ${user.fullName.split(' ')[0]}`
-                                span &nbsp;👋🏾
+                                span.heading
+                                    h3.dashboard__heading.margin__left--xsm=`Welcome back, ${user.fullName.split(' ')[0]}`
+                                    //- span &nbsp;👋🏾
+                                    span &nbsp;
+                                        picture
+                                            source(srcset='https://fonts.gstatic.com/s/e/notoemoji/latest/1f44b_1f3fe/512.webp' type='image/webp')
+                                            img(src='https://fonts.gstatic.com/s/e/notoemoji/latest/1f44b_1f3fe/512.gif' alt='👋' width='32' height='32')
+
+                                -const currentOrders = requestingOrders.filter(order => order.orderStatus === 'pending');
+                                -const deliveredOrders = requestingOrders.filter(order => order.orderStatus === 'delivered');
                                 .dashboard__insights 
                                     .insight.insight__one
                                         .icon__box 
                                             i.fa-solid.fa-shopping-cart.insight__icon
                                         span 
                                             p.insight__title Cart Item
-                                            p.insight__text= 0
+                                            p.insight__text.dashboard-cart 0
 
                                     .insight.insight__one
                                         .icon__box 
                                             i.fa-solid.fa-basket-shopping.insight__icon
                                         span 
                                             p.insight__title Current Orders
-                                            p.insight__text= 0
+                                            p.insight__text= currentOrders.length
 
                                     .insight.insight__two
                                         .icon__box 
                                             i.fa-solid.fa-gift.insight__icon
                                         span 
                                             p.insight__title Products Bought
-                                            p.insight__text= 0
+                                            p.insight__text= deliveredOrders.length
 
                                 .dashboard__table
                                     .table.table-po
@@ -574,9 +617,48 @@ body
                                             span.table-head-content location
                                             span.table-head-content status
                                         
-                                        -if(allOrders < 1) 
+                                        -if(requestingOrders < 1) 
                                             .table-row-message
                                                 p.note-no No order at the moment...
+                                        -else
+                                            each order of requestingOrders
+                                                .table-row-po
+                                                    span.table-row-content.table-row-product
+                                                        img.table-product__image(src=`/asset/img/products/${order.product.image}` alt='product image')
+                                                        span
+                                                            p.table-product__name= order.product.name
+                                                            p.table-product__niche= order.product.niche
+                                                    span.table-row-content
+                                                        p.order= order.quantity
+                                                    span.table-row-content
+                                                        p.price= `₦${Number(order.amount).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                                                    span.table-row-content
+                                                        p.brand= order.buyer.country
+                                                    span.table-row-content
+                                                        p(class=`status status--${order.orderStatus}`)= order.orderStatus
+                                                    span.table-row-content
+                                                        p.time= order.orderedAt
+                -if(user.role === 'buyer')
+                    .checkout__overlay.hidden
+                        .checkout__modal
+                            i.fa-solid.fa-close.icon.close__checkout
+                            h3.dashboard__heading.checkout__heading Checkout
+                            span.checkout__info--box
+                                //-    
+                            form.checkout__form#order-checkout(data-user=user)
+                                span
+                                    h3.dashboard__heading Form info
+                                    p.sumTotal N2000
+
+                                .form__item
+                                    label.form__label(for='email') Email address
+                                    input#email.form__input(type='email' placeholder='Email address' required)
+                                
+                                .form__item
+                                    label.form__label(for='fullname') Fullname
+                                    input#fullname.form__input(type='text' placeholder='Full Name' required)
+                                .form__item
+                                    button.form__button(type='submit') Proceed
                                             
 
                 include _auth_footer
@@ -584,7 +666,7 @@ body
 
 
 
-    //- -if(user.role === 'vendor' && user.vendorAccountType !== 'free' && !user.vendorSubscriptionActive)
+    -if(user.role === 'vendor' && user.vendorAccountType !== 'free' && !user.vendorSubscriptionActive)
         .checkout__overlay
             .checkout__modal
                 span.checkout__info
@@ -609,29 +691,29 @@ body
 
 
 
-    -if(user.role !== 'admin')
-        button.chat__box-toggler
-            span.material-symbols-rounded
-                i.fa-solid.fa-comment
-                | Chat
-            span.material-symbols-outlined
-                i.fa-solid.fa-close
+    //- chat box
+    button.chat__box-toggler(style=`${user.role === 'admin' ? 'display: none; opacity: 0;' : ''}`)
+        span.material-symbols-rounded
+            i.fa-solid.fa-comment
+            | Chat
+        span.material-symbols-outlined
+            i.fa-solid.fa-close
 
 
-        .chat__box
-            .chat-head
-                i.fa-solid.fa-arrow-left.btn-back 
-                p.chat-person From Admin
-                span.close-btn.material-symbols-outlined close
-            //- .chat-head-chat
-                p.chat-heading Chats ✉
-                span.close-btn.material-symbols-outlined close
-            ul.chat__box--chat
-                li.chat.incoming
-                    p Coming Soon...
-            .chat-input
-                textarea(placeholder='Enter a message...' spellcheck='false' required='')
-                span#send-btn.material-symbols-rounded send
+    .chat__box
+        .chat-head
+            i.fa-solid.fa-arrow-left.btn-back 
+            p.chat-person From Admin
+            span.close-btn.material-symbols-outlined close
+        //- .chat-head-chat
+            p.chat-heading Chats ✉
+            span.close-btn.material-symbols-outlined close
+        ul.chat__box--chat
+            li.chat.incoming
+                p Coming Soon...
+        .chat-input
+            textarea(placeholder='Enter a message...' spellcheck='false' required='')
+            span#send-btn.material-symbols-rounded send
 
                                 
 

@@ -6,10 +6,11 @@ block content
         h3.dashboard__heading Transactions and Wallet
         .dashboard__transaction
             .wallet__card
-                h3.dashboard__heading My wallet
+                h3.dashboard__heading My wallet 
+                p.wallet__type Available Balance
                 p.wallet__amount ₦ 
-                    span.amount=user.wallet
-                span.wallet__info Total Accessable Amount (limit: ₦10,000)
+                    span.amount= Number(user.availableAmountWallet).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                span.wallet__info Total Accessable Amount (limit: ₦15,000)
             .withdrawal__card
                 h3.dashboard__heading Withdrawal
                 form.withdraw__form
@@ -35,30 +36,31 @@ block content
                 .table-title
                     h4.table-heading Recent transaction
                     i.fa-silid.fa-vertical-dots.table__icon
-                .table-head-po
+                .table-head-ptt
                     span.table-head-content Trasaction id
                     span.table-head-content Type
                     span.table-head-content amount
                     span.table-head-content Status
                     span.table-head-content date
-
-                -if(transactions > 1)
+                    -console.log(transactions)
+                
+                
+                -if(transactions.length < 1)
+                    .table-row-message
+                        p.note-no No recent transaction...
+                -else
                     each transaction of transactions
-                        .table-row-po
+                        .table-row-ptt
                             span.table-row-content
-                                p.id= transaction.transactionId
+                                p.id transact-#{transaction.transactionId}
                             span.table-row-content
                                 p.type= transaction.purpose
                             span.table-row-content
-                                p.price= `₦ ${transaction.amount}`
+                                p.price= transaction.amount
                             span.table-row-content
-                                p.status.status--pending pending
+                                p.status.status--success success
                             span.table-row-content
-                                p.date= transaction.createdAt
-                -else
-                    .table-row-message
-                        p.note-no No recent transaction...
-
+                                p.date= transaction.paidAt
 
 
 
@@ -68,9 +70,10 @@ block content
         .dashboard__transaction
             .wallet__card
                 h3.dashboard__heading My wallet
+                p.wallet__type Available Balance
                 p.wallet__amount ₦ 
-                    span.amount= user.wallet
-                span.wallet__info Total Accessable Amount (limit: ₦20,000)
+                    span.amount= Number(user.availableAmountWallet).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                span.wallet__info Total Accessable Amount (limit: ₦25,000)
             .withdrawal__card
                 h3.dashboard__heading Withdrawal
                 form.withdraw__form
@@ -96,7 +99,7 @@ block content
                 .table-title
                     h4.table-heading Recent transaction
                     i.fa-silid.fa-vertical-dots.table__icon
-                .table-head-po
+                .table-head-ptt
                     span.table-head-content Trasaction id
                     span.table-head-content Type
                     span.table-head-content amount
@@ -104,19 +107,19 @@ block content
                     span.table-head-content date
 
                 
-                -if(transactions > 1)
+                -if( transactions.length < 1)
+                    .table-row-message
+                        p.note-no No recent transaction...
+                -else
                     each transaction of transactions
-                        .table-row-po
+                        .table-row-ptt
                             span.table-row-content
-                                p.id= transaction.transactionId
+                                p.id transact-#{transaction.transactionId}
                             span.table-row-content
                                 p.type= transaction.purpose
                             span.table-row-content
-                                p.price= `₦ ${transaction.amount}`
+                                p.price= transaction.amount
                             span.table-row-content
                                 p.status.status--success success
                             span.table-row-content
-                                p.date= transaction.createdAt
-                -else
-                    .table-row-message
-                        p.note-no No recent transaction...
+                                p.date= transaction.paidAt

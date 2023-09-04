@@ -20,7 +20,7 @@ head
 
 
     script(defer src="/src/js/paymentAndOrder.js")
-    script(defer src="/src/js/chat.js")
+    //- script(defer src="/src/js/chat.js")
     script(defer src="/src/js/dashboard.js")
     script(src="https://js.paystack.co/v2/inline.js")
 
@@ -59,31 +59,23 @@ body
                 span.nav__icons
                     span.shop-cart
                         i.fa-solid.fa-shopping-cart.icon.nav__icon.shopping-cart(data-digits=0)
-                    .shopping__cart
+                    .shopping__cart.hidden
                         h4.dashboard__heading.checkout__heading Cart
-                        .chackout__box
-                            .checkout--card
-                                .checkout--card__image
-                                    img(src='/asset/img/products/product-default.png' alt='product image')
-                                .checkout--card__info
-                                    p.checkout--card__product-name Test product
-                                    span.checkout--card__figures
-                                        p.checkout--card__product-quantity 1 x
-                                        p.checkout--card__product-price ₦15,000
-                                i.fa-solid.fa-close.icon.delete-cart
+                        .checkout__box
+                            //- this is where we add the elements
                         .checkout__box--controls
                             span.checkout__box--controls-info
                                 p Sub Total
-                                span ₦15,000
+                                span.total-checkout ₦0
                             .controls
-                                button Proceed to checkout
+                                button.order__checkout--button Proceed to checkout
 
 
                     -if(token)
                         span
                             .nav__image--box
-                                img.nav__image(src=`/asset/img/users/avatar.png` alt=`user's photo`)
-                                .Profile__hovered
+                                img.nav__image(src=`/asset/img/users/avatar.png` alt='user image')
+                                .Profile__hovered.profile-resized.hidden
                                     .profile__content
                                         //- .profile__owner
                                             img.profile__image(src=`/asset/img/users/avatar.png` alt=`customer's photo`)
@@ -91,7 +83,7 @@ body
                                             p.profile__name 
                                         a.profile__link.nav__link(href="/buyers/dashboard") Dashboard
                                         a.profile__link.nav__link(href="/buyers/profile") My profile
-                                        button.profile__button.nav__link#logout signout&nbsp;
+                                        //- button.profile__button.nav__link#logout signout&nbsp;
                                             i.fa-solid.fa-arrow-right-to-bracket.profile__icon
 
 
@@ -113,17 +105,17 @@ body
     section.hero-section.container
         .img-container
             .main-image
-                img(src=`/asset/img/products/${image}` alt='product image')
+                img(src=`/asset/img/products/${product.image}` alt='product image')
             .sub--images
                 -if(product.subImage || product.subImages.length < 1)
                     .sub-image
-                        img(src=`/asset/img/products/${image}` alt='product image')
+                        img(src=`/asset/img/products/${product.image}` alt='product image')
                         
                         
                 -else
                     each subImage of product.subImages
                         .sub-image
-                            img(src=`/asset/img/products/${subImage}` alt='')
+                            img(src=`/asset/img/products/${subImage}` alt='product image')
                 
 
         .hero-heading
@@ -145,7 +137,7 @@ body
                                 quantityDisplay.textContent = currentQuantity;
                             }
                         }
-            button.card-button Add to Cart
+            button.card-button(data-product=product) Add to Cart
                 i.fa-solid.fa-shopping-cart
             
         
@@ -165,10 +157,10 @@ body
         .about-container.container
             span
                 p.secondary-heading #{product.description}
-                button.card-button Add to Cart
+                button.card-button(data-product=product) Add to Cart
                     i.fa-solid.fa-shopping-cart
             .about-image
-                img(src='/asset/img/products/product-default.png' alt='')
+                img(src='/asset/img/products/product-default.png' alt='product image')
     
 
 
@@ -253,15 +245,12 @@ body
         .checkout__modal
             i.fa-solid.fa-close.icon.close__checkout
             h3.dashboard__heading.checkout__heading Checkout
-            span.checkout__info
+            span.checkout__info--box
+                //-  
+            form.checkout__form#order-checkout(data-user=user)
                 span
-                    p.product__name Product 1
-                    p.product__price ₦2000
-                span 
-                    p.product__summary Lorem ipsum dolor sit amet.
-                    p.product__quantity x1
-            form.checkout__form#order-checkout(data-price=product.price data-quantity='1' data-user=user)
-                h3.dashboard__heading Form info
+                    h3.dashboard__heading Form info
+                    p.sumTotal N2000
                 .form__item
                     label.form__label(for='email') Email address
                     input#email.form__input(type='email' placeholder='Email address' required)

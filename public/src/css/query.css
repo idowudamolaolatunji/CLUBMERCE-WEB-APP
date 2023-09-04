@@ -642,8 +642,13 @@
         flex-direction: column;
         align-items: flex-start;
     }
-    .email-confirmed__modal {
+    
+}
+
+/* 500px === 50rem === 31.25em */
+@media screen and (max-width: 31.25em) {
+    .email-confirmed__modal, .email-verify__modal {
         width: 90%;
-        word-break: break-all;
+        /* word-break: break-all; */
     }
 }

@@ -93,12 +93,12 @@ block content
             h3.dashboard__heading Change Account Password
             .form__item
                 label.form__label(for='password-current') Current Password
-                input.form__input.signup__password(name='password' type='password-current' placeholder='••••••••••••', required, minlength='8')
+                input.form__input.signup__password#password-current(name='password-current' type='password' placeholder='••••••••••••', required, minlength='8')
             .form__item
                 label.form__label(for='password') New Password
-                input.form__input.signup__password(name='password' type='password' placeholder='••••••••••••', required, minlength='8')
+                input.form__input.signup__password#password(name='password' type='password' placeholder='••••••••••••', required, minlength='8')
             .form__item
                 label.form__label(for='password-confirm') Confirm New Password
-                input.form__input.signup__passwordconfirm(name='password-confirm' type='password' placeholder='••••••••••••', required, minlength='8')
+                input.form__input.signup__passwordconfirm#password-confirm(name='password-confirm' type='password' placeholder='••••••••••••', required, minlength='8')
             .form__item.right
-                button.btn.form-btn Save password
+                button.btn.form-btn.btn--save-password Save password

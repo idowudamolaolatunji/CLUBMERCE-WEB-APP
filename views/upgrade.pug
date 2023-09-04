@@ -5,7 +5,7 @@ block content
 
 
     .subscription__cards
-        figure.subscription__figure(class=`${user.role === 'vendor' && user.vendorAccountType === 'free' ? 'currently' : user.vendorAccountType === 'standard' ? 'previoused' : ''}`)
+        figure.subscription__figure(class=`${user.role === 'vendor' && user.vendorAccountType === 'free' ? 'currently' : user.vendorSubscriptionType === 'standard' ? 'previoused' : 'previoused'}`)
             h3.heading__text Free
             p.subHeading__text For small businesses
             span.sub__price ₦0.00
@@ -24,7 +24,7 @@ block content
             button.sub__button(data-key='free') Subscribe
 
 
-        figure.subscription__figure.card__active(class=`${user.role === 'vendor' && user.vendorAccountType === 'standard' ? 'currently' : user.vendorAccountType === 'premium' ? 'previoused' : ''}`)
+        figure.subscription__figure.card__active(class=`${user.role === 'vendor' && user.vendorSubscriptionType === 'standard' ? 'currently' : user.vendorSubscriptionType === 'premium' ? 'previoused' : ''}`)
             h3.heading__text Standard
             p.subHeading__text For medium size businesses
             span.sub__price ₦15,000
@@ -44,10 +44,10 @@ block content
                 li.sub__items
                     i.subscription__icon.fa-solid.fa-check
                     | 10 Product
-            button.sub__button(data-plan='standard' data-price='₦15,000' data-amount='15000' data-text='For medium size businesses' class=`${user.role === 'vendor' && user.vendorAccountType === 'standard' ? '' : 'checkout__button'}`) Subscribe
+            button.sub__button(data-plan='standard' data-price='₦15,000' data-amount='15000' data-text='For medium size businesses' class=`${user.role === 'vendor' && user.vendorSubscriptionType === 'standard' ? '' : 'checkout__button'}`) Subscribe
 
 
-        figure.subscription__figure(class=`${user.role === 'vendor' && user.vendorAccountType === 'premium' ? 'currently' : ''}`)
+        figure.subscription__figure(class=`${user.role === 'vendor' && user.vendorSubscriptionType === 'premium' ? 'currently' : ''}`)
             h3.heading__text Premium
             p.subHeading__text For big businesses
             span.sub__price ₦20,000
@@ -67,7 +67,7 @@ block content
                 li.sub__items
                     i.subscription__icon.fa-solid.fa-check
                     | 10 Product
-            button.sub__button(data-plan='premium' data-price='₦20,000' data-amount='15000' data-text='For big businesses' class=`${user.role === 'vendor' && user.vendorAccountType === 'preimum' ? '' : 'checkout__button'}`)  Subscribe
+            button.sub__button(data-plan='premium' data-price='₦20,000' data-amount='20000' data-text='For big businesses' class=`${user.role === 'vendor' && user.vendorSubscriptionType === 'preimum' ? '' : 'checkout__button'}`)  Subscribe
 
 
 
@@ -92,3 +92,5 @@ block content
                         input#fullname.form__input(type='text' placeholder='Your fullname' required)
                     .form__item
                         button.form__button(type='submit') Proceed
+
+        

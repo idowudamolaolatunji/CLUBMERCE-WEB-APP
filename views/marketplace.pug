@@ -18,7 +18,7 @@ head
     link(rel="stylesheet" href="/src/css/query_dashboard.css")
 
     script(src="/socket.io/socket.io.js")
-    script(defer src="/src/js/chat.js")
+    //- script(defer src="/src/js/chat.js")
     script(defer src="/src/js/productSearch.js")
 
 
@@ -66,52 +66,6 @@ body
                                     i.fa-solid.fa-arrow-right-to-bracket.profile__icon
 
 
-        //- -if(user.role === 'admin')
-            main.main__dashboard
-                .dashboard__content
-                    h3.dashboard__heading All Product Marketplace
-
-                    span
-                        .products__cards--box 
-                            each product in products
-
-                                .product__card
-                                    .product__side--left    
-                                        .side--top
-                                            .product__image--container
-                                                img.product__image(src=`asset/img/products/${product.image} alt=product.name)
-                                            .product__heading 
-                                                h2.product__title= product.name
-                                                p.product__niche=product.category
-                                                .product__content
-                                                    h4.product__description #{product.summary}...
-                                        .side--bottom
-                                            ul.product__info
-                                                //- each icon in product.others
-                                                li.product__info--item 
-                                                    i.fa-solid.fa-truck-fast.product__icon.icon
-                                                    | Digital Product
-                                                li.product__info--item 
-                                                    i.fa-solid.fa-tools.product__icon.icon
-                                                    | Affiliate tools
-                                                li.product__info--item 
-                                                    i.fa-solid.fa-link.product__icon.icon
-                                                    | Unique Link
-                                                li.product__info--item 
-                                                    i.fa-regular.fa-square-check.product__icon.icon
-                                                    | Approved
-                                                li.product__info--item 
-                                                    i.fa-solid.fa-rotate.product__icon.icon
-                                                    | Recurring
-                                                
-
-                                    .product__side--right
-                                        span.product__commission
-                                            p.commision avg commission 
-                                            span.commission__amount= `₦ ${product.price}`
-                                        a.btn.product__button.promote(data-productSlug=product.slug) Buyer/Order page
-                                        a.product__button.page(target="_blank" href=`/marketplace/${product.slug}`) affiliate page
-
     
         main.main__dashboard
             .dashboard__content
@@ -153,7 +107,6 @@ body
                         .product__category
                             p catergories
                                 ul.catergory__list
-                                    //- each category of categories
                                     li.category__item(data-item='all') All (#{products.length})
                                     li.category__item(data-item='arts') Arts (#{products.filter(product => product.category === 'arts').length})
                                     li.category__item(data-item='betting') Betting (#{products.filter(product => product.category === 'betting').length})
@@ -176,7 +129,6 @@ body
                                     li.category__item(data-item='reciepe') Reciepe (#{products.filter(product => product.category === 'languages').length})
                                     li.category__item(data-item='parenting-and-Families') Parenting and Families (#{products.filter(product => product.category === 'parenting-and-Families').length})
                                     li.category__item(data-item='self-Help') Self-Help (#{products.filter(product => product.category === 'self-Help').length})
-                                    //- li.category__item(data-item='spirituality') Spirituality (#{products.filter(product => product.category === 'spirituality').length})
                                     li.category__item(data-item='sports') Sports (#{products.filter(product => product.category === 'sports').length})
 
                     span
@@ -185,16 +137,19 @@ body
 
                         .products__cards--box 
                             each product in products
-                                - const id = product.vendor?._id;
+                                -const id = product.vendor?._id;
 
                                 .product__card(class=`${product.isBoosted ? 'promoted' : ''}`)
                                     .product__side--left    
                                         .side--top
                                             .product__image--container
-                                                img.product__image(src=`asset/img/products/${product.image}` alt=product.name)
+                                                img.product__image(src=`/asset/img/products/${product.image}` alt=product.name)
                                             .product__heading 
                                                 h2.product__title= product.name
-                                                p.product__niche=product.niche
+                                                span.product__npInfo
+                                                    p.product__niche=product.niche
+                                                    p &#x7C;
+                                                    p.product__price=`₦${product.price.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                                                 
                                                 button.product__message.person(data-vendor-id=`${id}`)
                                                     i.fa-solid.fa-envelope.icon
@@ -224,12 +179,11 @@ body
 
                                     .product__side--right
                                         span.product__commission
-                                            p.commision avg commission 
-                                            span.commission__amount= `₦ ${product.price}`
-                                        a.btn.product__button.promote(data-productSlug=product.slug) Promote
-                                        //- -console.log(product.slug)
+                                            p.commision avg commissions 
+                                            span.commission__amount #{product.commissionPercentage}%
+                                            p.commission__percent= `₦${product.commissionAmount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                                        button.btn.product__button.promote(data-productSlug=product.id) Promote
                                         a.product__button.page(target="_blank" href=`/marketplace/${product.slug}`) affiliate page
-
 
 
                                 figure.product__card-mobile
@@ -247,7 +201,6 @@ body
                                                     a.product__button.page.margin__bottom--xsm(target="_blank" href=`/marketplace/${product.slug}`) affiliate page
                                         .front--bottom
                                             ul.product__info
-                                                //- each icon in product.others
                                                 
                                                 li.product__info--item(style=`${product.recurringCommission === false ? 'grid-template-columns: repeat(4, 1fr);' : ''}`)
                                                     i.fa-solid.product__icon.icon(class=`${product.type !== 'Digital' ? 'fa-truck-fast' : 'fa-file'}`)
@@ -309,7 +262,7 @@ body
                             button.hoplink__copy-button.outline Copy
         
 
-            .chat__box
+            //- .chat__box
                 .chat-top
                     p.chat-name Idowu Olatunji
                     .chat-top__icons
@@ -344,6 +297,20 @@ body
                         i.fa-solid.fa-paperclip.chat-icon
                         i.fa-regular.fa-face-smile.chat-icon
 
+            .chat__box
+                .chat-head
+                    i.fa-solid.fa-arrow-left.btn-back 
+                    p.chat-person From Admin
+                    span.close-btn.material-symbols-outlined close
+                //- .chat-head-chat
+                    p.chat-heading Chats ✉
+                    span.close-btn.material-symbols-outlined close
+                ul.chat__box--chat
+                    li.chat.incoming
+                        p Coming Soon...
+                .chat-input
+                    textarea(placeholder='Enter a message...' spellcheck='false' required='')
+                    span#send-btn.material-symbols-rounded send
 
             .back-to-top
                 i.fa-solid.fa-top-arrow

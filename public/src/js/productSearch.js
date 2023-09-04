@@ -60,7 +60,7 @@ if(navLogout) {
 const dashboardSection = document.querySelector('.section__dashboard')
 const searchForm = document.querySelector('.nav__search');
 const searchResults = document.getElementById('search-result');
-console.log('I am connected');
+
 
 searchForm.addEventListener('keyup', function (e) {
   e.preventDefault();
@@ -167,7 +167,11 @@ const fetchProductsByCategory = async (category) => {
                                 <img class="product__image" src="/asset/img/products/${product.image}"/></div>
                             <div class="product__heading"> 
                                 <h2 class="product__title">${product.name}</h2>
-                                <p class="product__niche">${product.niche}</p>
+                                <span class="product__npInfo">
+                                    <p class="product__niche">${product.niche}</p>
+                                    <span>|</span>
+                                    <p class="product__price">₦${product.price.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
+                                </span>
                                 <button class="product__message person" data-vendor-id=${product.vendor?._id}>
                                     <i class="fa-solid fa-envelope icon"></i>
                                     Chat vendor
@@ -190,9 +194,10 @@ const fetchProductsByCategory = async (category) => {
                     <div class="product__side--right">
                         <span class="product__commission">
                             <p class="commision">avg commission</p>
-                            <span class="commission__amount">₦ ${product.price}</span>
+                            <span class="commission__amount">${product.commissionPercentage}%</span>
+                            <p class="commission__percent">₦${product.commissionAmount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
                         </span>
-                        <a class="btn product__button promote" data-productSlug="${product.slug}">Promote</a>
+                        <button class="btn product__button promote" data-productSlug="${product.slug}">Promote</button>
                         <a class="product__button page" target="_blank" href="/marketplace/${product.slug}">affiliate page</a>
                     </div>
                 </div>
@@ -221,10 +226,9 @@ if(categoryList) {
     });
 }
 
-const selectElement = document.querySelectorAll('.select__input');
 
 // Function to fetch products based on the selected option
-const fetchProducts = async (option) => {
+const fetchProductsByOptions = async (option) => {
   try {
     // Show the spinner during the fetch request
     showLoadingOverlay();
@@ -267,7 +271,11 @@ const displayProducts = (products, username) => {
                             <img class="product__image" src="/asset/img/products/${product.image}"/></div>
                         <div class="product__heading"> 
                             <h2 class="product__title">${product.name}</h2>
-                            <p class="product__niche">${product.niche}</p>
+                            <span class="product__npInfo">
+                                <p class="product__niche">${product.niche}</p>
+                                <span>|</span>
+                                <p class="product__price">₦${product.price.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
+                            </span>
                             <button class="product__message person" data-vendor-id=${product.vendor?._id}>
                                 <i class="fa-solid fa-envelope icon"></i>
                                 Chat vendor
@@ -290,9 +298,10 @@ const displayProducts = (products, username) => {
                 <div class="product__side--right">
                     <span class="product__commission">
                         <p class="commision">avg commission</p>
-                        <span class="commission__amount">₦ ${product.price}</span>
+                        <span class="commission__amount">${product.commissionPercentage}%</span>
+                        <p class="commission__percent">₦${product.commissionAmount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
                     </span>
-                    <a class="btn product__button promote" data-productSlug="${product.slug}">Promote</a>
+                    <button class="btn product__button promote" data-productSlug="${product.slug}">Promote</button>
                     <a class="product__button page" target="_blank" href="/marketplace/${product.slug}">affiliate page</a>
                 </div>
             </div>
@@ -358,13 +367,14 @@ const displayProducts = (products, username) => {
     });
 };
 
-// Event listener for the select element
+
+const selectElement = document.querySelectorAll('.select__input');
 if(selectElement) {
     selectElement.forEach(el => el.addEventListener('change', async(event) => {
         selectedOption = event.target.value;
         const requestingUser = event.target.dataset.user;
         console.log(selectedOption, 'i was clicked..')
-        const products = await fetchProducts(selectedOption);
+        const products = await fetchProductsByOptions(selectedOption);
         displayProducts(products, requestingUser);
     }));
 }
@@ -381,11 +391,11 @@ chatBtn.forEach(el => el.addEventListener('click', function(e) {
 
 
 // MODALS
-const openModal = function(overlay, modal) {
+function openModal(overlay, modal) {
     overlay.classList.remove('hidden');
     modal.classList.remove('hidden');
 }
-const closeModal = function(overlay, modal) {
+function closeModal(overlay, modal) {
     overlay.classList.add('hidden');
     modal.classList.add('hidden');
 }
@@ -399,7 +409,15 @@ const hideAlert = () => {
 // type is 'success' or 'error'
 const showAlert = (type, msg) => {
     hideAlert();
-    const markup = `<div class="alert alert--${type}">${msg}</div>`;
+    // const markup = `<div class="alert alert--${type}">${msg}</div>`;
+    const markup = `
+        <div class="alert alert--${type}">
+            ${msg}&nbsp;
+            <picture>
+                <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/${type === 'error' ? '1f61f' : '2728'}/512.webp" type="image/webp">
+                <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/${type === 'error' ? '1f61f/512.gif" alt="😟"' : '2728/512.gif" alt="✨"'} width="32" height="32">
+            </picture>
+        </div>`;
     document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
     window.setTimeout(hideAlert, 5000);
 };
@@ -417,6 +435,7 @@ const hoplinkCopyModal = document.querySelector('.copy__modal');
 const hoplinkCopyOk = document.querySelector('.btnOk');
 const hoplinkText = document.querySelector('.hoplink__copy');
 const copyButton = document.querySelector('.hoplink__copy-button');
+
 
 
 const openCopyModal = function (link) {
@@ -489,15 +508,31 @@ if (hoplinkModalCopyOk) {
 }
 
 let productSlug
-if(hoplinkOpen) {
-    hoplinkOpen.forEach(function(el) {
-        el.addEventListener('click', function() {
+if(productBox) {
+    productBox.addEventListener('click', (e) => {
+        const target = e.target;
+
+        if (target.classList.contains('promote')) {
+            productSlug = target.dataset.productslug;
+
             openModal(hoplinkGetOverlay, hoplinkGetModal);
-            productSlug = el.dataset.productslug;
-        });
+            productSlug = productSlug;
+
+            e.preventDefault();
+        }
+    });
+
+
+    productBox.addEventListener('submit', (e) => {
+        const target = e.target;
+        if (target.classList.contains('hoplink-mobile')) {
+            e.preventDefault();
+            const productSlug = target.dataset.productslugMobile;
+            const hoplinkUsername = target.querySelector('.hoplink-username-mobile').value;
+            getHoplink(hoplinkUsername, productSlug);
+        }
     });
 }
-
 
 // modal hoplink
 const modalHoplinkForm = document.querySelector('#hoplink');
@@ -507,19 +542,6 @@ if (modalHoplinkForm) {
       const hoplinkUsername = document.querySelector('#hoplink-username').value;
     //   const hoplinkTrackId = document.querySelector('#hoplink-trackingid').value;
       
-      getHoplink(hoplinkUsername, productSlug);
-    });
-}
-
-// mobile hoplink
-const mobileHoplinkForm = document.querySelector('.hoplink-mobile');
-if (mobileHoplinkForm) {
-    mobileHoplinkForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const hoplinkUsername = document.querySelector('.hoplink-username-mobile').value;
-    //   const hoplinkTrackId = document.querySelector('#hoplink-trackingid').value;
-
-      const productSlug = this.dataset.productslugMobile;
       getHoplink(hoplinkUsername, productSlug);
     });
 }

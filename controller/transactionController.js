@@ -1,18 +1,6 @@
 const User = require('../model/usersModel');
 const Transaction = require('../model/transactionModel');
-const verifyPayment = require('../utils/verifyPayment');
 
-
-// verify transaction
-// exports.verifyPaystackPayment = async function(req, _) {
-//     try {
-//         const { reference, type } = req.params;
-//         const paymentVerfification = await verifyPayment(reference);
-//         const [booValue, response] = paymentVerfification;
-//     } catch(err) {
-//         console.log(err)
-//     }
-// }
 
 
 // get one transaction by admin
@@ -53,7 +41,7 @@ exports.getAllTransactions = async (req, res) => {
 };
 
 // Create a new transaction for transferring to a bank account
-exports.makeTransferCreateTransaction = async (req, res) => {
+exports.withdrawal = async (req, res) => {
     try {
         const { bankAccount, amount } = req.body;
         

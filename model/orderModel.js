@@ -18,7 +18,7 @@ const orderSchema = new mongoose.Schema({
 		type: mongoose.Schema.ObjectId,
 		ref: 'User'
 	},
-	orderStaus: {
+	orderStatus: {
         type: String,
 		enum: ['pending', 'delivered'],
         default: 'pending',
@@ -31,7 +31,7 @@ const orderSchema = new mongoose.Schema({
 		type: Number,
 		default: 1,
 	},
-	amount: Number,
+	amount: String,
 	vendorProfit: Number,
 	affiliateCommission: Number,
 	email: {
@@ -46,14 +46,15 @@ const orderSchema = new mongoose.Schema({
 		required: [true, `Please provide a reciever's fullname`],
 	},
 	country: String,
-	state: String,
-	city: String,
-	postalCode: String,
-	address: String,
+	// state: String,
+	// city: String,
+	// postalCode: String,
+	// address: String,
 	reference: {
 		type: String,
 		required: true
 	},
+	orderedAt: String,
 	createdAt: {
 		type: Date,
 		default: Date.now()
@@ -69,10 +70,10 @@ orderSchema.pre(/^find/, function(next) {
 		select: '_id email'
 	}).populate({
 		path: 'buyer',
-		select: '_id email'
+		select: '_id email country'
 	}).populate({
 		path: 'product',
-		select: '_id name image slug'
+		select: '_id name image slug niche category type'
 	})
 	next();
 })

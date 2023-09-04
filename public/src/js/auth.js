@@ -1,4 +1,4 @@
-const loginForm = document.querySelector('.login');
+const loginForm = document.querySelector('.user-login');
 const adminAuthForm = document.querySelector('#admin-login');
 const signupForm = document.querySelector('.signup');
 const spinOverlay = document.querySelector('#spinOverlay');
@@ -37,6 +37,13 @@ document.addEventListener("DOMContentLoaded", function() {
 window.addEventListener("load", function() {
      hideLoadingOverlay()
 });
+const proceed = document.querySelector('.proceed__button');
+if(proceed) {
+  proceed.addEventListener('click', function() {
+    showLoadingOverlay();
+  })
+}
+
 
 
 // ALERTS
@@ -47,7 +54,14 @@ const hideAlert = () => {
 
 const showAlert = (type, msg) => {
      hideAlert();
-     const markup = `<div class="alert alert--${type}">${msg}</div>`;
+     const markup = `
+          <div class="alert alert--${type}">
+               ${msg}&nbsp;
+               <picture>
+                    <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/${type === 'error' ? '1f61f' : '2728'}/512.webp" type="image/webp">
+                    <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/${type === 'error' ? '1f61f/512.gif" alt="😟"' : '2728/512.gif" alt="✨"'} width="32" height="32">
+               </picture>
+          </div>`;
      document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
      setTimeout(hideAlert, 5000);
 };
@@ -56,6 +70,7 @@ const showAlert = (type, msg) => {
 const login = async (email, password) => {
      try {
           showLoadingOverlay();
+          console.log(email, password)
 
           const res = await fetch('/api/users/login', {
                method: 'POST',
@@ -65,33 +80,23 @@ const login = async (email, password) => {
           console.log(res)
           if (!res.ok) {
                showAlert('error', 'Login failed, Check internet connection');
+               hideLoadingOverlay();
           }
           const data = await res.json();
-          if(data.message === 'Email address not verified, Check your mail') {{
+          console.log(data)
+          if(data.message === 'Email address not verified, Check your mail' || data.message === 'Account no longer active' || data.message === 'Incorrect email or password') {{
                hideLoadingOverlay();
                showAlert('error', data.message);
                return;
           }}
-
-          if(data.message === 'Incorrect email or password!') {
-               hideLoadingOverlay();
-               showAlert('error', data.message);
-               return;
-          }
-
-          if (data.data.role === 'admin') {
-               hideLoadingOverlay();
-               showAlert('error', 'Admins cannot log in through this form.');
-               return;
-          }
-
           if (data.status === 'success') {
                showAlert('success', 'Authentication Successful!');
                setTimeout(() => {
                location.assign('/dashboard');
                }, 3000);
           } else if (data.status === 'fail') {
-               throw new Error(data.message || 'email or password or role incorrect');
+               hideLoadingOverlay();
+               throw new Error(data.message);
           }
      } catch (err) {
           hideLoadingOverlay();
@@ -116,7 +121,7 @@ const loginAdmin = async (email, password) => {
           const data = await res.json();
 
           if (data.status === 'success') {
-               if (data.data.role === 'vendor' || data.data.role === 'affiliate') {
+               if (data.data.user.role !== 'admin') {
                     hideLoadingOverlay();
                     showAlert('error', 'Only admins can log in through this form.');
                     return;
@@ -151,6 +156,16 @@ const loginBuyer = async (email, password) => {
                throw new Error('Login request failed');
           }
           const data = await res.json();
+          if(data.message === 'Email address not verified, Check your mail' || data.message === 'Account no longer active' || data.message === 'Incorrect email or password!') {{
+               hideLoadingOverlay();
+               showAlert('error', data.message);
+               return;
+          }}
+          if (data.data.user.role !== 'buyer') {
+               hideLoadingOverlay();
+               showAlert('error', 'Only buyers can log in through this form.');
+               return;
+          }
 
           if (data.status === 'success') {
                showAlert('success', 'Authentication Successful');
@@ -285,79 +300,48 @@ const closeIcons = document.querySelectorAll('.email-confirm__close--icon');
 });
    
 // verify email
-const verifyEmail = async function (verificationToken) {
-     try {
-       // Retrieve the verification token from the URL
-     //   const urlParams = new URLSearchParams(window.location.search);
-     //   const verificationToken = urlParams.get('token');
+// const verifyEmail = async function (verificationToken) {
+//      try {
+//        // Retrieve the verification token from the URL
+//      //   const urlParams = new URLSearchParams(window.location.search);
+//      //   const verificationToken = urlParams.get('token');
    
-       // Make a GET request to the backend verification route
-       const response = await fetch(`/api/users/verify-email/${verificationToken}`);
+//        // Make a GET request to the backend verification route
+//        const response = await fetch(`/api/users/verify-email/${verificationToken}`);
    
-       if (response.ok) {
-         // Verification successful
-         const confirmationMessage = `
-           <div class="email__drop-down drop-down__shadow">
-             <div class="email-confirmed__modal modal">
-               <i class="fa-solid fa-close close__icon email-confirm__close--icon"></i>
-               <div class="modal__container">
-                 <h3 class="extra__heading">Success!</h3>
-                 <p class="modal__text">Your email address has been verified successfully!</p>
-                 <a class="form__button proceed__button" href="/login">Proceed to login</a>
-               </div>
-             </div>
-           </div>
-         `;
+//        if (response.ok) {
+//          // Verification successful
+//          const confirmationMessage = `
+//            <div class="email__drop-down drop-down__shadow">
+//              <div class="email-confirmed__modal modal">
+//                <i class="fa-solid fa-close close__icon email-confirm__close--icon"></i>
+//                <div class="modal__container">
+//                  <h3 class="extra__heading">Success!</h3>
+//                  <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0,0,256,256"
+//                     style="fill:#737373;">
+//                     <g fill="#737373" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.12,5.12)"><path d="M25,2c-12.69071,0 -23,10.3093 -23,23c0,12.6907 10.30929,23 23,23c12.69071,0 23,-10.3093 23,-23c0,-12.6907 -10.30929,-23 -23,-23zM25,4c11.60983,0 21,9.39017 21,21c0,11.60983 -9.39017,21 -21,21c-11.60983,0 -21,-9.39017 -21,-21c0,-11.60982 9.39017,-21 21,-21z"></path></g></g>
+//                  </svg>
+//                  <p class="modal__text">Your email address has been verified successfully!</p>
+//                  <a class="form__button proceed__button" href="/login">Proceed to login</a>
+//                </div>
+//              </div>
+//            </div>
+//          `;
    
-         // Add the confirmation message to the document body
-         document.body.insertAdjacentHTML('beforeend', confirmationMessage);
-       } else {
-         // Verification failed
-         const errorMessage = `
-          <div class="email__drop-down drop-down__shadow">
-               <div class="email-confirmed__modal modal">
-                    <i class="fa-solid fa-close close__icon email-confirm__close--icon"></i>
-                    <div class="modal__container">
-                         <h3 class="extra__heading">Failed!</h3>
-                         <p class="modal__text">Email verification failed. Please try again.</p>
-                    </div>
-               </div>
-          </div>
-         `;
-   
-         // Add the error message to the document body
-         document.body.insertAdjacentHTML('beforeend', errorMessage);
-       }
-     } catch (error) {
-       // Handle network or other errors
-       console.log(error);
-       const errorMessage = `
-         <div class="email__drop-down drop-down__shadow">
-           <div class="email-confirmed__modal modal">
-             <i class="fa-solid fa-close close__icon email-confirm__close--icon"></i>
-             <div class="modal__container">
-               <h3 class="extra__heading">Error!</h3>
-               <p class="modal__text">An error occurred. Please try again later.</p>
-             </div>
-           </div>
-         </div>
-       `;
-   
-       // Add the error message to the document body
-       document.body.insertAdjacentHTML('beforeend', errorMessage);
-     }
-}
+//          // Add the confirmation message to the document body
+//          document.body.insertAdjacentHTML('beforeend', confirmationMessage);
+// }
 
 
-function getVerificationTokenFromURL() {
-     const urlParams = new URLSearchParams(window.location.search);
-     return urlParams.get('token');
-}
-// Check if a verification token exists in the URL
-const verificationToken = getVerificationTokenFromURL();
-if (verificationToken) {
-     verifyEmail(verificationToken);
-}
+// function getVerificationTokenFromURL() {
+//      const urlParams = new URLSearchParams(window.location.search);
+//      return urlParams.get('token');
+// }
+// // Check if a verification token exists in the URL
+// const verificationToken = getVerificationTokenFromURL();
+// if (verificationToken) {
+//      verifyEmail(verificationToken);
+// }
 
    
 

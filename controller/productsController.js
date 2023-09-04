@@ -10,6 +10,7 @@ const APIFeatures = require('../utils/apiFeatures');
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
 
+/*
 const multerStorage = multer.memoryStorage()
 
 // create a multer filter
@@ -79,8 +80,10 @@ exports.resizeProductImage = catchAsync(async (req, res, next) => {
    })
   );
   
+  
   next();
 })
+*/
 
 
 
@@ -134,15 +137,45 @@ exports.getAllProduct = async(req, res) => {
     }
 };
 
+const multerStorage = multer.memoryStorage();
+
+// Create a multer filter
+const multerFilter = (req, file, cb) => {
+  // The goal is to check that the uploaded file is an image
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError('Not an image! Please upload only images', 400), false);
+  }
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+// Upload middleware
+exports.uploadProductImages = upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'imagesubs', maxCount: 6 },
+  { name: 'imagebanners', maxCount: 4 },
+]);
+
 
 
 exports.createProduct = async (req, res) => {
   try {
+    // const vendorId = '64a4483d886820076894d056';
     const vendorId = req.user._id;
     const vendor = await User.findById(vendorId);
+    console.log(vendorId, vendor)
     if (!vendor) {
       return res.status(404).json({ error: 'Vendor not found' });
     }
+
+    // if (!req.files || !req.files['image'] || req.files['image'].length !== 1) {
+    //   return res.status(400).json({ message: 'Invalid main image file' });
+    // }
 
     /*
     // Validate and upload the main image to Cloudinary
@@ -181,29 +214,63 @@ exports.createProduct = async (req, res) => {
     });
     */
 
-    // let image;
-    // if(req.file) image = req.file.filename;
-    console.log(req, req.body);
+    // const mainImageResult = req.files.image[0];
+    // const subImages = req.files.imagesubs || [];
+    // const banners = req.files.imagebanners || [];
 
-    // const newProduct = await Product.create({
-    //   ...req.body,
-    //   vendor: vendor._id,
-    //   image,
-    //   subImages,
-    //   banners,
-    // });
+    // const mainImageResult = await sharp(req.files['image'][0].buffer)
+    //   .resize(750, 750)
+    //   .toFormat('jpeg')
+    //   .jpeg({ quality: 90 })
+    //   .toFile(`public/asset/img/products/product-${req.params.id}-${Date.now()}-main.jpeg`);
 
-    // res.status(201).json({
-    //   status: 'success',
-      // data: {
-      //   product: newProduct,
-      // },
-    // });
+    // // Process subImages
+    // const subImages = [];
+    // if (req.files['imagesubs'] && Array.isArray(req.files['imagesubs'])) {
+    //   for (const subImage of req.files['imagesubs']) {
+    //     const result = await sharp(subImage.buffer)
+    //       .resize(750, 750)
+    //       .toFormat('jpeg')
+    //       .jpeg({ quality: 90 })
+    //       .toFile(`public/asset/img/products/product-${req.params.id}-${Date.now()}-${subImages.length + 1}.jpeg`);
+    //     subImages.push(result);
+    //   }
+    // }
+
+    // // Process banners
+    // const banners = [];
+    // if (req.files['imagebanners'] && Array.isArray(req.files['imagebanners'])) {
+    //   for (const banner of req.files['imagebanners']) {
+    //     const result = await sharp(banner.buffer)
+    //       .resize(2000, 950)
+    //       .toFormat('jpeg')
+    //       .jpeg({ quality: 90 })
+    //       .toFile(`public/asset/img/products/product-${req.params.id}-${Date.now()}-${banners.length + 1}.jpeg`);
+    //     banners.push(result);
+    //   }
+    // }
+
+    const newProduct = await Product.create({
+      ...req.body,
+      vendor: vendorId,
+      // image: mainImageResult.secure_url,
+      // subImages: subImages.map(image => image.secure_url),
+      // banners: banners.map(banner => banner.secure_url),
+    });
+    
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        product: newProduct,
+      },
+    });
   } catch (err) {
-    // res.status(404).json({
-    //   status: 'fail',
-    //   message: err.message ||'An error occurred while processing the request',
-    // });
+    console.log(err)
+    res.status(404).json({
+      status: 'fail',
+      message: err.message ||'An error occurred while processing the request',
+    });
   }
 };
 
@@ -284,27 +351,27 @@ exports.getProductsByOption = async (req, res) => {
       // Logic to get products based on the selected option
       let products;
       if (option === 'all') {
-        products = await Product.find().sort({ createdAt: -1 });
+        products = await Product.find().sort({ isBoosted: -1, createdAt: -1 });
       } else if (option === 'most-promoted') {
-        products = await Product.find().sort({ clicks: -1 }).limit(20);
+        products = await Product.find().sort({ clicks: -1 });
       } else if (option === 'gravity-high-low') {
-        products = await Product.find().sort({ productGravity: -1 }).limit(20);
+        products = await Product.find().sort({ productGravity: -1 });
       } else if (option === 'gravity-low-high') {
-        products = await Product.find().sort({ productGravity: 1 }).limit(20);
+        products = await Product.find().sort({ productGravity: 1 });
       } else if (option === 'physical-product') {
-        products = await Product.find({ type: 'Physical' }).limit(20);
+        products = await Product.find({ type: 'Physical' });
       } else if (option === 'recurring-commission') {
-        products = await Product.find({ recurringCommission: true }).limit(20);
+        products = await Product.find({ recurringCommission: true });
       } else if (option === 'commission-high-low') {
-        products = await Product.find().sort({ commissionPercentage: { $gt: 20 } }).limit(20);
+        products = await Product.find().sort({ commissionPercentage: { $gt: 20 } });
       } else if (option === 'commission-low-high') {
-        products = await Product.find().sort({ commissionPercentage: { $lt: 20 } }).limit(20);
+        products = await Product.find().sort({ commissionPercentage: { $lt: 20 } });
       } else if (option === 'digital-product') {
-        products = await Product.find({ type: 'Digital' }).limit(20);
+        products = await Product.find({ type: 'Digital' });
       } else if (option === 'least-promoted') {
-        products = await Product.find().sort({ clicks: 1 }).limit(20);
+        products = await Product.find().sort({ clicks: 1 });
       } else {
-        products = await Product.find().limit(20);
+        products = await Product.find();
       }
   
         //   res.render('products', { products }); // Replace 'products' with your actual view name

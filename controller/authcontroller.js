@@ -3,20 +3,23 @@ const crypto = require('crypto')
 
 const express = require('express')
 const jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser')
 
 const app = require("./../app");
 const User = require("../model/usersModel");
-const confirmEmailTemplate = require('../utils/EmailTemplates');
+const { confirmEmailTemplate, emailConfirmedTemplate } = require('../utils/EmailTemplates');
 const sendEmail = require('../utils/Email');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
+
+// const nodemailer = require('nodemailer')
+// const handleForm = require('../utils/Email.js')
+
 
 
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
 const signToken = (id) => {
-    // takes the user id(payload), secretkey, and an option(expiredin)
+  // takes the user id(payload), secretkey, and an option(expiredin)
   return jwt.sign({ id: id }, process.env.CLUBMERCE_JWT_SECRET_TOKEN, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
@@ -49,16 +52,10 @@ const createCookie = function(statusCode, user, res, message) {
 
 const sendSignUpEmailToken = async (_, user, token) => {
   try {
-    
-    // const verificationUrl = `${req.protocol}://${req.get('host')}/api/users/verify-email/${token}`;
-    const verificationUrl = `https://clubmerce.com/api/users/verify-email/${token}`;
-    // const firstName = user.fullName;
-    // const message = `
-    //   Please verify your email address\n
-    //   Click ${verificationUrl} 
-    //   \n to verify your email...`;
+    const verificationUrl = `${_.protocol}://${_.get('host')}/api/users/verify-email/${token}`;
+    // const verificationUrl = `https://clubmerce.com/api/users/verify-email/${token}`;
     const mailMessage = confirmEmailTemplate(user.fullName, verificationUrl);
-    console.log(mailMessage);
+    console.log(verificationUrl)
     await sendEmail({
       user: user.email,
       subject: 'Verify Your Email Address',
@@ -92,9 +89,8 @@ exports.signupAffiliate = catchAsync(async (req, res) => {
       phone: req.body.phone,
       role: req.body.role,
     });
-
-    const token = signToken(newUser._id);
     
+    const token = signToken(newUser._id);
     res.status(201).json({
       status: "success",
       message: "Successfully signed up, Confirm Email",
@@ -104,7 +100,8 @@ exports.signupAffiliate = catchAsync(async (req, res) => {
       }
     });
     await sendSignUpEmailToken(req, newUser, token);
-})
+});
+
 exports.signupVendor = catchAsync(async (req, res) => {
     const emailExist = await User.findOne({email: req.body.email });
     const usernameExist = await User.findOne({username: req.body.username });
@@ -164,60 +161,30 @@ exports.signupBuyer = catchAsync(async (req, res) => {
     });
 })
 
-// Verification route
-exports.verifyEmail = async (req, res) => {
-    try {
-        // Verify the token
-        const decoded = jwt.verify(req.params.token, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
-    
-        // Find the user based on the decoded token
-        const user = await User.findById( decoded.id);
-        console.log(user)
-    
-        if (user) {
-            // Update the user's email verification status
-            user.isEmailVerified = true;
-            await user.save();
-
-        } else {
-            // Handle user not found error
-            res.status(404).json({ message: 'User not found' });
-        }
-        res.status(200).json({
-          message: 'Verification Successful..',
-          user,
-          token,
-        })
-    } catch (error) {
-      // Handle invalid token or other errors
-      res.status(400).json({status: 'fail', message: 'Invalid token' });
-    }
-};
-  
 
 // Login
 exports.login = catchAsync(async (req, res, next) => {
-    const { email, password, role} = req.body;
+    const { email, password} = req.body;
 
     if (!email || !password) {
       return next(new AppError('Please provide email and password!', 400));
     }
     // 2) Check if user exists rs&& password is correct
     const user = await User.findOne({ email }).select('+password');
-
-    if (!user.email || !(await user.comparePassword(password, user.password)) ) {
-        res.json({message: 'Incorrect email or password '})
+    if(!user) return res.status(404).json({ message: 'User not found!' });
+    if (!user.email || !(await user.comparePassword(password, user?.password)) ) {
+        return res.status(400).json({message: 'Incorrect email or password'})
     }
-    if(!user.active) {
-      res.json({ message: 'Account no longer active' });
+    if(user?.active === false) {
+      return res.status(404).json({ message: 'Account no longer active' });
     }
 
     //=//=//=//=//=//=//=//=//=//
     const token = signToken(user._id);
-
-    if(!user.isEmailVerified) {
+    
+    if(user?.isEmailVerified === false) {
       const token = signToken(user._id);
-      res.json({message: 'Email address not verified, Check your mail'})
+      res.status(400).json({message: 'Email address not verified, Check your mail'})
       await sendSignUpEmailToken(req, user, token);
     }
 
@@ -240,6 +207,51 @@ exports.login = catchAsync(async (req, res, next) => {
       }
     });
 });
+
+
+// Verification route
+exports.verifyEmail = async (req, res) => {
+  try {
+      // Verify the token
+      const { token } = req.params
+      const decoded = jwt.verify(token, process.env.CLUBMERCE_JWT_SECRET_TOKEN);
+  
+      // Find the user based on the decoded token
+      const user = await User.findById( decoded.id);
+      console.log(user)
+  
+      if (user) {
+          // Update the user's email verification status
+          user.isEmailVerified = true;
+          await user.save({ validateBeforeSave: false });
+
+          const token = signToken(user._id);
+          const cookieOptions = {
+            expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
+            httpOnly: true,
+            secure: true
+          }
+          res.cookie('jwt', token, cookieOptions);
+
+          res.redirect('/email-verifed/success');
+          const destinationUrl = `${user.role === 'buyer' ? 'http://127.0.0.1:3000/buyers/dashboard' : 'http://127.0.0.1:3000/dashboard'}`;
+          const mailMessage = emailConfirmedTemplate(user.fullName, destinationUrl);
+          await sendEmail({
+            user: user.email,
+            subject: 'Email Verification Success!',
+            message: mailMessage
+          });
+
+      } else {
+          // Handle user not found error
+          res.status(404).json({ message: 'User not found' });
+        }
+  } catch (err) {
+    // Handle invalid token or other errors
+    console.log(err)
+    res.status(400).json({status: 'fail', message: 'Invalid token' });
+  }
+};
 
 
 // Login buyers
@@ -593,7 +605,7 @@ exports.updatePassword = async (req, res) => {
     // if so, update user password
     user.password = req.body.password;
     user.passwordConfirm = req.body.passwordConfirm;
-    await user.save();
+    await user.save({ validateModifiedOnly: true });
     // User.findByIdAndUpdate, will not work here...
 
     // log user in, send jwt
@@ -603,7 +615,7 @@ exports.updatePassword = async (req, res) => {
       httpOnly: true,
       secure: true
     }
-    res.cookies('jwt', token, cookieOptions);
+    res.cookie('jwt', token, cookieOptions);
 
     return res.status(201).json({
       status: "success",

@@ -8,7 +8,6 @@ const productSchema = new mongoose.Schema({
     vendor: { 
         type: mongoose.Schema.ObjectId, 
         ref: 'User',
-        // required: [true, 'A product must have a vendor']
     },
     name: {
         type: String,
@@ -16,11 +15,9 @@ const productSchema = new mongoose.Schema({
         trim: true,
         lowercase: true
     },
-    brandLogo: String,
     image: {
         type: String,
-        required: [true, 'A product must have an image'],
-        detault: 'product-default.png'
+        default: 'product-default.png'
     },
     price: {
         type: Number,
@@ -30,20 +27,19 @@ const productSchema = new mongoose.Schema({
         type: String,
         trim: true,
         required: [true, 'A product must have a description'],
-        maxLength: [4000, "Description must not be more than 4000 characters"],
-        minLength: [500, "Description must not be more than 800 characters"],
+        maxLength: [5000, "Description must not be more than 5000 characters"],
+        minLength: [500, "Description must not be more than 500 characters"],
     },
     summary: {
         type: String,
         required: [true, 'A product must have a summary'],
         trim: true,
-        maxLength: [130, "Summary must not be more than 200 characters"],
-        minLength: [80, "Summary must not be more than 60 characters"],
+        maxLength: [200, "Summary must not be more than 200 characters"],
+        minLength: [60, "Summary must not be more than 60 characters"],
     },
     niche: {
         type: String,
-        trim: true,
-        // required: [true, 'A product must have a niche'],
+        required: [true, 'A product must have a niche'],
     },
     commissionPercentage: {
         type: Number,
@@ -51,7 +47,6 @@ const productSchema = new mongoose.Schema({
     },
     commissionAmount: {
         type: Number,
-        required: [true, 'A product must have a Commission Amount'],
     },
     type: {
         type: String,
@@ -81,7 +76,11 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    // isBoosted
+    approval: {
+        type: String,
+        enum: ['approved', 'pending', 'decined'],
+        default: 'pending'
+    },
     recurringCommission: {
         type: Boolean,
         default: false,
@@ -108,19 +107,28 @@ productSchema.pre('save', function(next) {
 });
 
 productSchema.pre('save', function(next) {
-    this.category = slugify(this.niche, { lower: true });
+    if(typeof this.niche === 'string') {
+        this.category = slugify(this.niche, { lower: true });
+    }
     next();
 });
+
+productSchema.pre('save', function(next) {
+    const commission = (this.commissionPercentage / 100) * this.price;
+    this.commissionAmount = Math.trunc(commission);
+    next();
+})
 
 productSchema.pre(/^find/, function (next) {
     this.sort({ isBoosted: -1 }); // Sort by isBoosted field in descending order
     next();
 });
 
+
 productSchema.pre(/^find/, function(next) {
     this.populate({
         path: 'vendor',
-        select: 'fullName slug _id businessName email active'
+        select: 'fullName slug _id username businessName email active pendingAmountWallet totalAmountWallet'
     });
     next();
 });

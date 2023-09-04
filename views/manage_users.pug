@@ -30,7 +30,7 @@ block content
                         span.table-row-content
                             p.country= user.country
                         span.table-row-content
-                            p(class=`status status--${user.active ? 'active' : 'inactive'}`)= user.active ? 'active' : 'inactive'
+                            p(class=`status status--${user.active ? 'active' : 'inactive'}`)= `${user.active ? 'active' : 'inactive'}`
                         span.table-row-content.table-row-btn
                             button.btn-edit.table-btn.admin-user-edit(data-id=`${user._id}`) Edit
                             button.btn-delete.table-btn.admin-user-delete(data-id=`${user._id}`) Delete

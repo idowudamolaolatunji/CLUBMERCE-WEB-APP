@@ -18,4 +18,3 @@ if(menuLogout) menuLogout.addEventListener('click', function() {
 });
 if(navLogout) navLogout.addEventListener('click', logout);
 if(adminLogout) adminLogout.addEventListener('click', logout);
-

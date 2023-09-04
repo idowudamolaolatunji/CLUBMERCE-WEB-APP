@@ -8,31 +8,31 @@ block content
             span.table-head-content Product
             span.table-head-content brand name
             span.table-head-content price
-            span.table-head-content quantity
             span.table-head-content Type
-            span.table-head-content approved
+            span.table-head-content Status
+            span.table-head-content Actions
 
-        -if(orders > 0)
+        -if(orders.length > 0)
             each order of orders
                 .table-row-mp
                     span.table-row-content.table-row-product
-                        img.table-product__image(src=`asset/img/products/${product.image}` alt='')
+                        img.table-product__image(src=`asset/img/products/${order.product.image}` alt='order product image')
                         span
                             p.table-product__name= order.product.name
-                            p.table-product__niche order.product.category
+                            p.table-product__niche= order.product.niche
                     span.table-row-content
-                        p.brand= order.vendor.bussinessName
-                    span.table-row-content
-                        p.category= order.quantity
-                    span.table-row-content
-                        p.price= `₦ ${order.amount}`
+                        p.brand= order.vendor.businessName
+                    span.table-row-content.price-quantity
+                        p.price= `₦${Number(order.amount).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                        P.table-quantity= `x ${order.quantity}`
                     span.table-row-content
                         p.type= order.product.type
                     span.table-row-content
-                        p.approved.status.status--success Approved
-                    //- span.table-row-content.table-row-btn
-                        button.btn-decline.table-btn Decline
-                        button.btn-approve.table-btn Approve
+                        p.approved(class=`status status--${order.orderStatus}`)= order.orderStatus
+                    span.table-row-content.table-row-btn
+                        button.btn-decline.table-btn Order Recieved &check;
+                        //- button.btn-approve.table-btn 
+
 
         -else
             .table-row-message

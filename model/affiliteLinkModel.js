@@ -22,7 +22,7 @@ affiliateLinkSchema.pre(/^find/, function(next) {
     select: '_id fullName'
   }).populate({
     path: 'product',
-    select: '_id name image'
+    select: '_id name image niche category'
   })
   next();
 })

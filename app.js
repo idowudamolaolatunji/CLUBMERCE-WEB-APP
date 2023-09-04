@@ -18,28 +18,29 @@ const viewsRouter = require('./routes/viewsRoutes');
 const ordersRouter = require('./routes/ordersRoutes');
 const affiliateLinkRouter = require('./routes/affiliateLinkRoutes');
 const transactionRouter = require('./routes/transactionRoutes');
+const authController = require('./controller/authcontroller');
 const affiliateLinkController = require('./controller/affiliateLinkController')
+const subscriptionController = require('./controller/subscriptionController')
 
 const app = express();
 const io = require('socket.io')(require('http').createServer(app));
 
 // body parser and cookie parser
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+// app.use(bodyParser.json({limit: "100mb"}));
+app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(bodyParser.json({limit: "100mb"}));
   
 // Use the 'cors' middleware to enable CORS for all routes
-app.use(cors());
+// app.use(cors());
 
 
 // pug
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
+app.use(morgan('dev'));
 
-
-if(process.env.NODE_ENV === 'development') {
-    app.use(morgan('dev'));
-}
 
 // Set security http headers
 // app.use(helmet())
@@ -62,7 +63,7 @@ if(process.env.NODE_ENV === 'development') {
 // app.use('/', limiter)
 
 // Data sanitization agains NoSql query injestion
-app.use(mongoSanitize());
+// app.use(mongoSanitize());
 
 // Data sanitization agains xss
 // app.use(xss())
@@ -78,7 +79,8 @@ app.use((req, res, next) => {
 ///////////////////////////////////////////////////////
 app.use('/', viewsRouter)
 app.get('/unique_/:userSlug/:productSlug', affiliateLinkController.countClicksRedirects);
-// app.get('/api/payment-verification/:reference', transactionController.verifyPaystackPayment);
+app.get('/api/subscribe/payment-verification/:reference', authController.isLoggedIn,  subscriptionController.verifyPaystackPayment);
+// app.get('/api/boost/payment-verification/:reference', subscriptionController.verifyPaystackPayment);
 
 
 app.use('/api/products', productsRouter);

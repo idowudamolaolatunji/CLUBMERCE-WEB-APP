@@ -3,33 +3,72 @@ extends base_account
 block content 
     h3.dashboard__heading Leaderboard
 
-    .dashboard__table
-        .table.table-ldb
-            .table-title
-                h4.table-heading Affiliate Leaderboard
-            .table-head-ldb
-                span.table-head-content user
-                span.table-head-content email
-                span.table-head-content Earned
-                span.table-head-content Clicks
-                span.table-head-content Promoting
-                span.table-head-content Sales
+    -if(currentUser.role === 'affiliate')
+        .dashboard__table
+            .table.table-ldb
+                .table-title
+                    h4.table-heading Affiliate Leaderboard
+                .table-head-ldb
+                    span.table-head-content user
+                    span.table-head-content email
+                    span.table-head-content Earned
+                    span.table-head-content Clicks
+                    span.table-head-content Promoting
+                    span.table-head-content Sales
 
-            each affiliate of affiliateLeaderboard
-                .table-row-ldb
-                    span.table-row-content.table-row-product
-                        img.table-product__image(src=`asset/img/users/${affiliate.image}` alt='')
-                        span
-                            p.table-user__name= `${affiliate.email === currentUser.email ? 'YOU' : affiliate.fullName}`
-                            p.table-user__namename= `${affiliate.username}`
-                    span.table-row-content
-                        p.email= affiliate.email
-                    span.table-row-content
-                        p.wallet= affiliate.wallet
-                    span.table-row-content
-                        p.clicks= affiliate.clicks
-                    span.table-row-content
-                        p.links= affiliate.promotionLinksCounts
-                    span.table-row-content
-                        p.sold= affiliate.productSold
+                each affiliate of affiliateLeaderboard
+                    .table-row-ldb
+                        span.table-row-content.table-row-product
+                            img.table-product__image(src=`asset/img/users/${affiliate.image}` alt='')
+                            span
+                                p.table-user__name= `${affiliate.email === currentUser.email ? 'YOU' : affiliate.fullName}`
+                                p.table-user__namename= `${affiliate.username}`
+                        span.table-row-content
+                            -const email = affiliate.email;
+                            -const fromAt = email.split('@').at(-1);
+                            p.email= email.substring(0, 2) + '*'.repeat(email.length - fromAt.length) + '@' + fromAt
+                        span.table-row-content
+                            p.wallet= `₦${affiliate.totalAmountWallet.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                        span.table-row-content
+                            p.clicks= affiliate.clicks
+                        span.table-row-content
+                            p.links #{Number(Math.trunc(affiliate.promotionLinksCounts))}
+                        span.table-row-content
+                            p.sold #{Number(Math.trunc(affiliate.productSold))}
+
+
+    -if(currentUser.role === 'vendor')
+        .dashboard__table
+            .table.table-ldb
+                .table-title
+                    h4.table-heading Vendor Leaderboard
+                .table-head-ldb
+                    span.table-head-content Vendo
+                    span.table-head-content email
+                    span.table-head-content Earned
+                    span.table-head-content Clicks
+                    span.table-head-content Promoting
+                    span.table-head-content Sales
+
+                each vendor of vendorLeaderboard
+                    .table-row-ldb
+                        span.table-row-content.table-row-product
+                            img.table-product__image(src=`asset/img/users/${vendor.image}` alt='')
+                            span
+                                p.table-user__name= `${vendor.email === currentUser.email ? 'YOU' : vendor.businessName || vendor.fullName}`
+                                p.table-user__namename= `${vendor.username}`
+                        span.table-row-content
+                            -const email = vendor.email;
+                            -const fromAt = email.split('@').at(-1);
+                            p.email= email.substring(0, 2) + '*'.repeat(email.length - fromAt.length) + '@' + fromAt
+                        span.table-row-content
+                            p.wallet= `₦${vendor.totalAmountWallet.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                        span.table-row-content
+                            -const myProducts = vendorProducts.filter(product => product.vendor.id === vendor.id)
+                            p.clicks= myProducts.reduce((acc, product) => Math.trunc(acc + Number(product.clicks)), 0)
+                        span.table-row-content
+                            p.links= myProducts.reduce((acc, product) => Math.trunc(acc + Number(product.productGravity)), 0)
+                        span.table-row-content
+                            p.sold= myProducts.reduce((acc, product) => Math.trunc(acc + Number(product.purchasesCount)), 0)
+    
                     

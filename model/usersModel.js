@@ -87,17 +87,29 @@ const userSchema = new mongoose.Schema({
     },
     availableAmountWallet: {
         type: Number,
-        default: 0,
+        default: 0.00,
     },
     pendingAmountWallet: {
         type: Number,
-        default: 0,
+        default: 0.00,
     },
     totalAmountWallet: {
         type: Number,
-        default: 0,
+        default: 0.00,
+    },
+    isAffiliate: {
+        type: Boolean,
+        default: false,
+    },
+    isBuyer: {
+        type: Boolean,
+        default: false,
     },
     // **** Vendor focused **** //
+    isVendor: {
+        type: Boolean,
+        default: false,
+    },
     vendorAccountType: {
         type: String,
         enum: ['free', 'standard', 'premium'],
@@ -114,7 +126,6 @@ const userSchema = new mongoose.Schema({
     },
     vendorAccountTypeExpiresIn: {
         type: Date,
-        default: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
     },
     vendorAccountTypeProductLendth: Number,
     // ************** //
@@ -122,22 +133,22 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    transactions: {
-        type: Number,
-        default: 0
-    },
+    // transactions: {
+    //     type: Number,
+    //     default: 0
+    // },
+    // commissions: Number,
     promotionLinksCounts: { type: Number, default: 0 },
-    commissions: Number,
     affiliateLinks: [mongoose.Schema.Types.Mixed],
     productSold: {
         type: Number,
         default: 0
     },
-    active: {
-        type: Boolean,
-        default: true,
-    },
     socketId: String,
+    isAdmin: {
+        type: Boolean,
+        default: false,
+    },
     createdAt: {
         type: Date,
         default: Date.now(),
@@ -173,9 +184,16 @@ userSchema.pre('save', function(next) {
     this.passwordChangedAt = Date.now() - 1000;
     next();
 })
+userSchema.pre('save', function(next) {
+    this.totalAmountWallet = this.pendingAmountWallet += this.availableAmountWallet
+    next();
+})
 
 userSchema.pre('save', function(next) {
-    if(this.role === 'vendor' && this.vendorAccountType === 'standard' && this.vendorSubscriptionActive) {
+    if(this.role !== 'vendor') {
+        this.vendorAccountType = null;
+        this.vendorAccountTypeExpiresIn = null;
+    }else if(this.role === 'vendor' && this.vendorAccountType === 'standard' && this.vendorSubscriptionActive) {
         this.vendorAccountTypeProductLendth = 50;
     } else if(this.role === 'vendor' && this.vendorAccountType === 'premium' && this.vendorSubscriptionActive) {
         this.vendorAccountTypeProductLendth = 10000000000;
@@ -191,12 +209,9 @@ userSchema.pre(/^find/, function(next) {
     this.find({ active: { $ne: false }});
     next();
 });
-
-
-userSchema.methods.comparePassword = async function(cnadidatePassword, hashedPassword) {
-    return await bcrypt.compare(cnadidatePassword, hashedPassword);
+userSchema.methods.comparePassword = async function(candidatePassword, hashedPassword) {
+    return await bcrypt.compare(candidatePassword, hashedPassword);
 }
-
 userSchema.methods.changedPasswordAfter = function (jwtTimeStamp) {
     if(this.passwordChangedAt) {
         const changeTimeStamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
@@ -205,7 +220,6 @@ userSchema.methods.changedPasswordAfter = function (jwtTimeStamp) {
     // return false means not changed
     return false;
 }
-
 userSchema.methods.createPasswordResetToken = function() {
     // create random bytes token
     const resetToken = crypto.randomBytes(32).toString('hex');
@@ -219,12 +233,6 @@ userSchema.methods.createPasswordResetToken = function() {
     return resetToken;
     // send the unencrypted version
 }
-// userSchema.pre('save', function(next) {
-//     if(this.role === 'vendor' && this.vendorAccountTypeExpiresIn === Date.now()) {
-//         this.vendorSubscriptionActive === false
-//     }
-//     return next();
-// });
 
 
 const User = mongoose.model('User', userSchema);
