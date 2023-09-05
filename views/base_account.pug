@@ -92,7 +92,7 @@ body
 
 
 
-                                .notification
+                                //- .notification
                                     -if(notifications && notifications.length < 1)
                                         .notify__details
                                             p.notification__content You have no notification.
@@ -111,6 +111,24 @@ body
                                             //- -else 
                                                 .notify__details
                                                     p Coming Soon
+
+                                .notification
+                                    - if (!notifications)
+                                        .notify__details
+                                            p.notification__content You have no notifications.
+                                    - else if (notifications.length === 0)
+                                        .notify__details
+                                            p.notification__content You have no notifications.
+                                    - else
+                                        each notification in notifications
+                                            - if (notification.user.role !== 'admin')
+                                            .notify__details
+                                                .notify__status(class=`color--${notification.isActive ? 'active' : 'inactive'}`) &nbsp;
+                                                span(style=`${!notification.isActive ? 'color: #aaa;' : ''}`)
+                                                    h4.notify__head= notification.message
+                                                    span.notify__body-box(style=`${!notification.isActive ? 'color: #aaa;' : ''}`)
+                                                        p.notify__body From Admin
+                                                        p.notify__date= notification.notifiedAt
                                 
                                 
                     -if(user.role === 'admin')

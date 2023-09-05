@@ -89,6 +89,11 @@ const login = async (email, password) => {
                showAlert('error', data.message);
                return;
           }}
+          if (data.data.user.role === 'buyer' || data.data.user.role === 'admin') {
+               hideLoadingOverlay();
+               showAlert('error', 'Only affiliates or vendors can log in through this form.');
+               return;
+          }
           if (data.status === 'success') {
                showAlert('success', 'Authentication Successful!');
                setTimeout(() => {
@@ -113,20 +118,18 @@ const loginAdmin = async (email, password) => {
                headers: { 'Content-Type': 'application/json' },
                body: JSON.stringify({ email, password }),
           });
-
           if (!res.ok) {
                throw new Error('Login request failed');
           }
 
           const data = await res.json();
-
+          
+          if (data.data.user.role !== 'admin') {
+               hideLoadingOverlay();
+               showAlert('error', 'Only admins can log in through this form.');
+               return;
+          }
           if (data.status === 'success') {
-               if (data.data.user.role !== 'admin') {
-                    hideLoadingOverlay();
-                    showAlert('error', 'Only admins can log in through this form.');
-                    return;
-               }
-
                showAlert('success', 'Authentication Successful');
                setTimeout(() => {
                     location.assign('/dashboard');

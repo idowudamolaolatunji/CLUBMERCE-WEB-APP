@@ -824,12 +824,12 @@ if (productCreate) {
 
                 const form = new FormData(target);
 
-                const fileInput = document.getElementById('uploader__image--input');
-if (fileInput.files.length > 0) {
-    const file = fileInput.files[0];
-    // Append the file to the FormData
-    form.append('image', file);
-}
+//                 const fileInput = document.getElementById('uploader__image--input');
+// if (fileInput.files.length > 0) {
+//     const file = fileInput.files[0];
+//     // Append the file to the FormData
+//     form.append('image', file);
+// }
 
                 const formData = {};
                 for (const [key, value] of form) {

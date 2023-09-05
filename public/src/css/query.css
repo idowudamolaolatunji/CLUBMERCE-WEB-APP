@@ -531,6 +531,11 @@
     .product__figure {
         width: 28rem;
     }
+
+    .alert {
+        width: 90% !important;
+        padding: 1.6rem;
+    }
 }
 
 /* 400px === 40rem === 23.125em */
