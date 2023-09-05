@@ -122,11 +122,11 @@ exports.dashboard = async (req, res) => {
     try {
         // console.log(req)
         const user = await User.findById(req.user._id);
-        const products = await Product.find({ vendor: req.user._id });
-        const commissions = await Commissions.find({ affiliate: req.user._id});
-        const recieviedOrders = await Order.find({ vendor: req.user._id });
-        const requestingOrders = await Order.find({ buyer: req.user._id });
-        const notifications = await Notification.find({ user: user.id });
+        const products = await Product.find({ vendor: req.user._id }).sort({ createdAt: -1});
+        const commissions = await Commissions.find({ affiliate: req.user._id}).sort({ createdAt: -1});
+        const recieviedOrders = await Order.find({ vendor: req.user._id }).sort({ createdAt: -1});
+        const requestingOrders = await Order.find({ buyer: req.user._id }).sort({ createdAt: -1});
+        const notifications = await Notification.find({ user: user.id }).sort({ createdAt: -1});
 
         const allUsers = await User.find();
         const allProducts = await Product.find();
@@ -164,7 +164,7 @@ exports.settings = (_, res) => {
 exports.performance = async (req, res) => {
     try {
         const user = await User.findById(req.user._id);
-        const affiliatePerformance = await AffiliateLink.find({ affiliate: req.user._id })
+        const affiliatePerformance = await AffiliateLink.find({ affiliate: req.user._id }).sort({ createdAt: -1})
         const products = await Product.find({ vendor: req.user._id });
         res.status(200).render('performance', {
             title: 'Your perfomance',
@@ -194,8 +194,8 @@ exports.transaction = async (req, res) => {
 
 exports.leaderboard = async(req, res) => {
     try {
-        const affiliateLeaderboard = await User.find({ role: 'affiliate'}).sort({ totalAmountWallet: -1, promotionLinksCounts: -1, clicks: -1 });
-        const vendorLeaderboard = await User.find({ role: 'vendor'}).sort({ totalAmountWallet: -1});
+        const affiliateLeaderboard = await User.find({ role: 'affiliate'}).sort({ totalAmountWallet: -1, promotionLinksCounts: -1, clicks: -1, createdAt: -1 });
+        const vendorLeaderboard = await User.find({ role: 'vendor'}).sort({ totalAmountWallet: -1, createdAt: -1 });
         const currentUser = await User.findById(req.user._id);
         const vendorProducts = await Product.find()
 
@@ -254,7 +254,7 @@ exports.manageUsers = async (req, res) => {
 }
 exports.manageProducts = async (req, res) => {
     try {
-        const products = await Product.find();
+        const products = await Product.find().sort({ createdAt: -1});
         res.status(200).render('manage_products', {
             title: 'All Products',
             products
@@ -265,7 +265,7 @@ exports.manageProducts = async (req, res) => {
 }
 exports.managePayments = async (req, res) => {
     try {
-        const transactions = await Transaction.find();
+        const transactions = await Transaction.find().sort({ createdAt: -1});
         res.status(200).render('manage_payments', {
             title: 'All Transactions',
             transactions
