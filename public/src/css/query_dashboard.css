@@ -123,11 +123,11 @@
     .copy__modal {
         width: 50rem;
     }
-    .open .admin__menu--logout {
-        padding-left: 1.6rem;
+    .open .menubar .menu__link.admin__menu--logout {
         display: flex;
         align-items: center;
-        
+        justify-content: flex-start;
+        gap: 1.4rem;
     }
     
     /* popup modal */
@@ -383,6 +383,9 @@
     .alert {
         width: 90% !important;
         padding: 1.6rem;
+    }
+    .menu__list {
+        gap: 1.8rem;
     }
 }
 

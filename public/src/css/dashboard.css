@@ -498,7 +498,11 @@ a.nav--text {
     display: inline-block;
     opacity: 1;
 }
-
+.admin__menu--logout {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+}
      
 /*
 ////////////////////////////////////////////////
