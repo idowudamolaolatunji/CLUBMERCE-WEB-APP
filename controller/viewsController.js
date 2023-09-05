@@ -8,7 +8,7 @@ const Commissions = require('../model/commissionModel');
 const AffiliateLink = require('../model/affiliteLinkModel');
 const Transaction = require('../model/transactionModel');
 const Order = require('../model/orderModel');
-const Notification = require('../model/notificationModel');
+const Notification = require('../model/notificationModel'); // there might be an error with the notification
 
 // Global
 let token;

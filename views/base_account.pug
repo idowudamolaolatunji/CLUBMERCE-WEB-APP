@@ -286,10 +286,8 @@ body
                                         .icon__box 
                                             i.fa-solid.fa-bullhorn.insight__icon
                                         span
-                                            //- p.insight__text= user.affiliateUrl.length
                                             p.insight__title Promotion url
                                             p.insight__text= user.affiliateLinks.length
-                                            //- p.insight__text= user.affiliateLinks[0] === 0 ? 0 : user.affiliateLinks.length 
 
 
 
@@ -381,44 +379,8 @@ body
                                         span
                                             p.insight__title Affiliate Gravity
                                             p.insight__text= products.reduce((acc, product) => acc + product.productGravity, 0)
-                                            //- p.insight__text= product.productGravity
                                         
 
-                                //- .dashboard__table
-                                    .table.table-po
-                                        .table-title
-                                            h4.table-heading Product orders
-                                        .table-head-po
-                                            span.table-head-content Product
-                                            span.table-head-content Quantity
-                                            span.table-head-content Total price
-                                            span.table-head-content location
-                                            span.table-head-content status
-                                            span.table-head-content Actions
-
-                                    -if(recieviedOrders < 1)
-                                        .table-row-message
-                                            p.note-no You've no order at the moment...
-
-                                    -else
-                                        each order of recieviedOrders
-                                            .table-row-po
-                                                span.table-row-content.table-row-product
-                                                    img.table-product__image(src=`asset/img/products/${order.product.image}` alt='')
-                                                    span
-                                                        p.table-product__name= order.product.name
-                                                        p.table-product__niche= order.product.category
-                                                span.table-row-content
-                                                    p.order= order.quantity
-                                                span.table-row-content
-                                                    p.price= `₦${Number(order.amount).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                                                span.table-row-content
-                                                    p.brand= order.vendor.businessName
-                                                span.table-row-content
-                                                    p(class=`status status--${order.orderStatus}`)= order.orderStatus
-                                                span.table-row-content
-                                                    //- p(class=`status status--${order.orderStatus}`)= order.orderStatus
-                                
                                 .dashboard__table
                                     .table.table-po
                                         .table-title
@@ -454,6 +416,7 @@ body
                                                     span.table-row-content
                                                         p.time= order.orderedAt
 
+
                    
 
                         -if(user.role == "admin")
@@ -474,7 +437,7 @@ body
                                         span 
                                             //- come back to to redo
                                             p.insight__title App Profit
-                                            p.insight__text 0
+                                            p.insight__text ₦0
 
                                     .insight.insight__one
                                         .icon__box 
@@ -558,7 +521,8 @@ body
                                         span 
                                             //- come back to to redo
                                             p.insight__title All Time Payout
-                                            p.insight__text 0
+                                            p.insight__text= `₦${allUsers.filter(user => user.role !== 'admin' && user.role !== 'buyer').reduce((acc, user) => user.pendingAmountWallet + acc, 0)}`
+                                            //- .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                            
 
 
