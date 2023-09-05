@@ -13,7 +13,7 @@ router.route("/")
 // .post(authController.protect, productsController.uploadProductImage, productsController.resizeProductImage, productsController.createProduct)
 .post(
   authController.protect,
-  // productsController.uploadProductImages,
+  productsController.uploadProductImages,
   productsController.createProduct
 );
 

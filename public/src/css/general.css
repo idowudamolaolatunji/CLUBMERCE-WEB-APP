@@ -896,3 +896,23 @@ input[type="number"] {
 }*/
 
 /* query */
+
+/* 950px === 95rem === 59em */
+@media screen and (max-width: 59.37em) {
+    .subscription__cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* 600px === 60rem === 37.5em */
+@media screen and (max-width: 37.5em) {
+    .subscription__cards {
+        display: flex;
+        flex-direction: column;
+        gap: 3.2rem;
+    }
+    .subscription__figure {
+        width: 100%;
+    }
+}

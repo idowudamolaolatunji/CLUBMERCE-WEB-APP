@@ -519,6 +519,16 @@ const showUploadModal = function() {
                 <h3 class="dashboard__heading">Add new product</h3>
                 <form class="product__form product__form-create">
 
+                    <div class="form__body-generic">
+                        <div id="uploader__image--card">
+                            <img id="uploader__image" src="/asset/img/products/product-default.png" alt="" />
+                            <div id="uploader__image--label-box">
+                                <input name="image" id="uploader__image--input" type="file" name='image' accept="image/png, image/jpeg">
+                                <label id="uploader__image--label" for="uploader__image--input"><i class="fa-solid fa-camera"></i> Add image</label>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <div class="form__body-generic">
                         <label class="form__label" for="product__name">Product Name</label>
@@ -535,7 +545,7 @@ const showUploadModal = function() {
                     <div class="form__grid-generic">
                         <div class="form__body-generic">
                             <label class="form__label" for="product__price">Product Price (NGN)</label>
-                            <input class="form__input" id="product__price" type="number" name="product__price" required="" placeholder="Product price (NGN)"/>
+                            <input class="form__input" id="product__price" type="number" name="price" required="" placeholder="Product price (NGN)"/>
                         </div>
                         <div class="form__body-generic">
                             <label class="form__label" for="product__commission">Product Commission in (%)</label>
@@ -735,6 +745,8 @@ if(imageInput) {
 
 
 
+
+
 const postProduct = async function(form, type, id) {
     let url, method;
     try {
@@ -749,7 +761,10 @@ const postProduct = async function(form, type, id) {
         showLoadingOverlay()
         const res = await fetch(url, {
             method: method,
-            body: form
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(form)
         });
         console.log(res)
 
@@ -797,31 +812,31 @@ if (productCreate) {
         document.body.addEventListener('submit', (e) => {
             const target = e.target;
             if (target.classList.contains('product__form-create')) {
-                // e.preventDefault();
-                // const form = new FormData();
-                // form.append('name', document.getElementById('product__name'));
-                // form.append('summary', document.getElementById('product__summary'));
-                // form.append('description', document.getElementById('product__description'));
-                // form.append('price', document.getElementById('product__price'));
-                // form.append('commissionPercentage', document.getElementById('product__commission'));
-                // form.append('type', document.getElementById('product__type'));
-                // form.append('niche', document.getElementById('product__category'));
-                // form.append('recurringCommission', document.getElementById('product__recurring'));
-                // console.log(form);
-
                 e.preventDefault();
-                const name =  document.querySelector('#product__name').value;
-                const summary =  document.querySelector('#product__summary').value;
-                const description =  document.querySelector('#product__description').value;
-                const price =  document.querySelector('#product__price').value;
-                const commissionPercentage =  document.querySelector('#product__commission').value;
-                const type =  document.querySelector('#product__type').value;
-                const niche =  document.querySelector('#product__category').value;
-                const recurringCommission =  document.querySelector('#product__recurring').value;
-                const form = { name, summary, summary, description, price, commissionPercentage, type, niche, recurringCommission };
-                console.log(form);
-            
-                postProduct(form, 'create');
+
+                document.getElementById('uploader__image--input').addEventListener('change', (event) => {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const imageUrl = URL.createObjectURL(file);
+                        document.getElementById('uploader__image').src = imageUrl;
+                    }
+                });
+
+                const form = new FormData(target);
+
+                const fileInput = document.getElementById('uploader__image--input');
+if (fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+    // Append the file to the FormData
+    form.append('image', file);
+}
+
+                const formData = {};
+                for (const [key, value] of form) {
+                    formData[key] = value;
+                    console.log(key, value)
+                }
+                postProduct(formData, 'create');
             }
         });
     });

@@ -2,6 +2,7 @@ const moment = require('moment');
 
 const User = require('../model/usersModel');
 const Transaction = require('../model/transactionModel');
+const Notification = require('../model/notificationModel');
 const verifyPayment = require('../utils/verifyPayment');
 const koboToNaira = require('../utils/koboToNaira');
 // const formattedDate = moment(inputDateString).format('dddd, MMMM DD YYYY HH:mm:ss');

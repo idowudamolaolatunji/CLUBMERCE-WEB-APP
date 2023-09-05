@@ -171,6 +171,7 @@ exports.createProduct = async (req, res) => {
     if (!vendor) {
       return res.status(404).json({ error: 'Vendor not found' });
     }
+    console.log(req.body)
 
     if (!req.files || !req.files['image'] || req.files['image'].length !== 1) {
       return res.status(400).json({ message: 'Invalid main image file' });
@@ -217,11 +218,11 @@ exports.createProduct = async (req, res) => {
     // const subImages = req.files.imagesubs || [];
     // const banners = req.files.imagebanners || [];
 
-    // const mainImageResult = await sharp(req.files['image'][0].buffer)
-    //   .resize(750, 750)
-    //   .toFormat('jpeg')
-    //   .jpeg({ quality: 90 })
-    //   .toFile(`public/asset/img/products/product-${req.params.id}-${Date.now()}-main.jpeg`);
+    const mainImageResult = await sharp(req.files['image'][0].buffer)
+      .resize(750, 750)
+      .toFormat('jpeg')
+      .jpeg({ quality: 90 })
+      .toFile(`public/asset/img/products/product-${req.params.id}-${Date.now()}-main.jpeg`);
 
     // // Process subImages
     // const subImages = [];
@@ -252,11 +253,10 @@ exports.createProduct = async (req, res) => {
     const newProduct = await Product.create({
       ...req.body,
       vendor: vendorId,
-      // image: mainImageResult.secure_url,
+      image: mainImageResult.secure_url,
       // subImages: subImages.map(image => image.secure_url),
       // banners: banners.map(banner => banner.secure_url),
     });
-    console.log(req.body)
     
 
     res.status(201).json({

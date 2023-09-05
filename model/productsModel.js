@@ -119,6 +119,19 @@ productSchema.pre('save', function(next) {
     next();
 })
 
+productSchema.pre('save',function(next) {
+    if(typeof this.recurringCommission === 'string') {
+        this.recurringCommission = this.recurringCommission === 'true'
+    }
+    next();
+});
+
+productSchema.pre('save', function (next) {
+    this.price = parseFloat(this.price);
+    this.commissionPercentage = parseFloat(this.commissionPercentage);
+    next();
+  });
+
 productSchema.pre(/^find/, function (next) {
     this.sort({ isBoosted: -1 }); // Sort by isBoosted field in descending order
     next();

@@ -366,6 +366,9 @@
     .insight {
         padding: 1.4rem 1rem;
     }
+    .checkout__modal {
+        width: 90%;
+    }
 }
 
 /* 415px === 41.5rem === 26em */
