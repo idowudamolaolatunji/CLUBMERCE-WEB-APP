@@ -34,6 +34,10 @@ block content
                         span.table-row-content.table-row-btn
                             button.btn-edit.table-btn.admin-user-edit(data-id=`${user._id}`) Edit
                             button.btn-delete.table-btn.admin-user-delete(data-id=`${user._id}`) Delete
+
+            -else 
+                .table-row-message
+                    p.note-no No availiable user
         
 
             //- .delete__overlay

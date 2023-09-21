@@ -10,12 +10,13 @@ router.route('/top-20-best',)
     
 router.route("/")
 .get(authController.protect, productsController.getAllProduct)
-// .post(authController.protect, productsController.uploadProductImage, productsController.resizeProductImage, productsController.createProduct)
-.post(
-  authController.protect,
-  productsController.uploadProductImages,
-  productsController.createProduct
-);
+.post(authController.protect, productsController.uploadProductImage, productsController.resizeProductImage, productsController.createProduct)
+// .post(
+//   authController.protect,
+//   productsController.uploadProductImages,
+//   productsController.createProduct
+// );
+// .post( authController.protect, productsController.createProduct );
 
 router.route('/vendor-product')
   .get(authController.protect, productsController.getProductsByVendor)

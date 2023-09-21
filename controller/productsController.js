@@ -1,5 +1,6 @@
 const multer = require('multer');
 const sharp = require('sharp');
+const cloudinary = require('cloudinary').v2
 
 const app = require('../app');
 const catchAsync = require('../utils/catchAsync')
@@ -9,8 +10,12 @@ const APIFeatures = require('../utils/apiFeatures');
 
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
+cloudinary.config({ 
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+  api_key: process.env.CLOUDINARY_API_KEY, 
+  api_secret: process.env.CLOUDINARY_SECRET_KEY 
+});
 
-/*
 const multerStorage = multer.memoryStorage()
 
 // create a multer filter
@@ -83,7 +88,8 @@ exports.resizeProductImage = catchAsync(async (req, res, next) => {
   
   next();
 })
-*/
+
+
 
 
 
@@ -137,32 +143,9 @@ exports.getAllProduct = async(req, res) => {
     }
 };
 
-const multerStorage = multer.memoryStorage();
-
-// Create a multer filter
-const multerFilter = (req, file, cb) => {
-  // The goal is to check that the uploaded file is an image
-  if (file.mimetype.startsWith('image')) {
-    cb(null, true);
-  } else {
-    cb(new AppError('Not an image! Please upload only images', 400), false);
-  }
-};
-
-const upload = multer({
-  storage: multerStorage,
-  fileFilter: multerFilter,
-});
-
-// Upload middleware
-exports.uploadProductImages = upload.fields([
-  { name: 'image', maxCount: 1 },
-  { name: 'imagesubs', maxCount: 6 },
-  { name: 'imagebanners', maxCount: 4 },
-]);
 
 
-
+/*
 exports.createProduct = async (req, res) => {
   try {
     const vendorId = req.user._id;
@@ -171,7 +154,7 @@ exports.createProduct = async (req, res) => {
     if (!vendor) {
       return res.status(404).json({ error: 'Vendor not found' });
     }
-    console.log(req.body)
+    console.log(req.File)
 
     if (!req.files || !req.files['image'] || req.files['image'].length !== 1) {
       return res.status(400).json({ message: 'Invalid main image file' });
@@ -218,7 +201,7 @@ exports.createProduct = async (req, res) => {
     // const subImages = req.files.imagesubs || [];
     // const banners = req.files.imagebanners || [];
 
-    const mainImageResult = await sharp(req.files['image'][0].buffer)
+    /*const mainImageResult = await sharp(req.files['image'][0].buffer)
       .resize(750, 750)
       .toFormat('jpeg')
       .jpeg({ quality: 90 })
@@ -273,6 +256,143 @@ exports.createProduct = async (req, res) => {
     });
   }
 };
+*/
+
+
+
+/*
+// Validate and upload the main image to Cloudinary
+    if (!req.files || !req.files['image'] || req.files['image'].length !== 1) {
+      return res.status(400).json({ error: 'Invalid main image file' });
+    }
+    const mainImageResult = await cloudinary.uploader.upload(req.files['image'][0].path);
+
+    // Validate and upload sub-images to Cloudinary
+    const subImages = [];
+    if (req.files && req.files['subImages'] && Array.isArray(req.files['subImages'])) {
+      for (const subImage of req.files['subImages']) {
+        const result = await cloudinary.uploader.upload(subImage.path);
+        subImages.push(result.secure_url);
+      }
+    } else {
+      return res.status(400).json({ error: 'Invalid sub-images files' });
+    }
+
+    // Validate and upload banners to Cloudinary
+    const banners = [];
+    if (req.files && req.files['banners'] && Array.isArray(req.files['banners'])) {
+      for (const banner of req.files['banners']) {
+        const result = await cloudinary.uploader.upload(banner.path);
+        banners.push(result.secure_url);
+      }
+    } else {
+      return res.status(400).json({ error: 'Invalid banner files' });
+    }
+*/
+
+exports.createProduct = async (req, res) => {
+  try {
+    const vendorId = req.user._id;
+    
+
+    // Create a new product document using Mongoose
+    // const newProduct = await Product.create({
+    //   ...req.body,
+    //   vendor: vendorId,
+      // image: mainImage,
+      // subImages: subImages,
+      // banners: bannerImages,
+    // });
+
+    // Respond with a success message
+    // res.status(201).json({
+    //   status: 'success',
+    //   message: 'Product created successfully',
+    //   data: {
+    //     // product: newProduct
+    //   }
+    // });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({
+      status: 'fail',
+      message: 'Product creation failed'
+    });
+  }
+};
+
+
+// const multerStorage = multer.memoryStorage();
+// const multerFilter = (req, file, cb) => {
+//     if (file.mimetype.startsWith('image')) {
+//       console.log(file)
+//         cb(null, true);
+//     } else {
+//         cb(new Error('Not an image! Please upload only images'), false);
+//     }
+// }
+// const upload = multer({
+//     storage: multerStorage,
+//     fileFilter: multerFilter
+// });
+
+// exports.uploadProductImages = upload.fields([
+//   { name: 'image', maxCount: 1 },
+//   { name: 'imagesubs', maxCount: 6  },
+//   { name: 'imagebanners', maxCount: 4 }
+// ]);
+
+// exports.createProduct = async (req, res) => {
+//   try {
+//     // Handle the uploaded image using Sharp
+//     console.log(req.files)
+//     const mainImage = await sharp(req.files.image[0].buffer)
+//     .resize(750, 750)
+//     .toFormat('jpeg')
+//     .jpeg({ quality: 90 })
+//     .toBuffer();
+
+//     // Handle the uploaded subImages using Sharp
+//     const subImages = await Promise.all(req.files.imagesubs.map(async (file, i) => {
+//         return sharp(file.buffer)
+//             .resize(750, 750)
+//             .toFormat('jpeg')
+//             .jpeg({ quality: 90 })
+//             .toBuffer();
+//     }));
+
+//     // Handle the uploaded bannerImages using Sharp
+//     const bannerImages = await Promise.all(req.files.imagebanners.map(async (file, i) => {
+//         return sharp(file.buffer)
+//             .resize(2000, 950)
+//             .toFormat('jpeg')
+//             .jpeg({ quality: 90 })
+//             .toBuffer();
+//     }));
+
+//     // Create a new product document using Mongoose
+//     const product = new Product({
+//       ...req.body,
+//       vendor: vendorId,
+//       image: mainImage,
+//       subImages: subImages,
+//       banners: bannerImages,
+//     });
+
+//     // Save the product document to MongoDB
+//     await product.save();
+
+//     // Respond with a success message
+//     res.status(201).json({ status: 'success', message: 'Product created successfully' });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(400).json({ status: 'fail', message: 'Product creation failed' });
+//   }
+// };
+
+
+
+
 
 
 exports.getProductsByVendor = async (req, res) => {

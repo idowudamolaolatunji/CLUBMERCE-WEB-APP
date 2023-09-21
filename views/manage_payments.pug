@@ -8,6 +8,7 @@ block content
             .table-head-mpt
                 span.table-head-content transaction ID
                 span.table-head-content user
+                span.table-head-content role
                 span.table-head-content amount
                 span.table-head-content purpose
                 span.table-head-content status
@@ -20,9 +21,11 @@ block content
                 each transaction of transactions
                     .table-row-mpt
                         span.table-row-content
-                            p.transaction= transaction.transactionId
+                            p.transaction transact-#{transaction.transactionId}
                         span.table-row-content
-                            p.user= transaction.user.fullName
+                            p.user= `${transaction.user.fullName}`
+                        span.table-row-content
+                            p.user= `${transaction.user.role}`
                         span.table-row-content
                             p.price= `${transaction.amount}`
                         span.table-row-content

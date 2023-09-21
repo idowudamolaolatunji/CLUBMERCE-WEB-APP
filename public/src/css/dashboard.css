@@ -626,7 +626,7 @@ a.nav--text {
 .table, .table-po {
     max-width: 87rem;
 }
-.table-mu, .table-mp, .table-vp, .table-vpp, .table-app, .table-ldb {
+.table-mu, .table-mp, .table-vp, .table-vpp, .table-app, .table-ldb, .table-mpt {
     max-width: 90rem;
 }
 
@@ -753,7 +753,7 @@ a.nav--text {
     grid-template-columns: 2.4fr 1.9fr 1.2fr 1fr 1.2fr 1.5fr;
 }
 .table-row-mpt, .table-head-mpt {
-    grid-template-columns: 2.2fr 1.9fr 1.2fr 1fr 1.2fr 1.8fr;
+    grid-template-columns: 2.1fr 2.1fr 1fr 1.3fr 1.2fr 1fr 1.8fr;
 }
 .table-row-vp, .table-head-vp  {
     /* grid-template-columns: 2.6fr 1.2fr 1.5fr 1.5fr 1.2fr 1fr; */

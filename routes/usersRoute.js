@@ -14,7 +14,7 @@ router.get("/verify-email/:token", authController.verifyEmail);
 router.get('/logout', authController.logout)
 router.post("/login-buyer", authController.loginBuyer);
 router.post("/signup-buyer", authController.signupBuyer);
-;
+
 router.post("/login", authController.login);
 router.post("/login-admin", authController.loginAdmin);
 

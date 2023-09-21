@@ -133,11 +133,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    // transactions: {
-    //     type: Number,
-    //     default: 0
-    // },
-    // commissions: Number,
+    isLogIn: {
+        type: Boolean,
+        default: false
+    },
     promotionLinksCounts: { type: Number, default: 0 },
     affiliateLinks: [mongoose.Schema.Types.Mixed],
     productSold: {

@@ -56,9 +56,7 @@ body
             .product__intro
                 h1.product__heading Introducing 
                     span.dashboard__heading= product.name
-                p.product__intro-text=`Get ready to earn massive ${product.commissionPercentage}% commission with this` 
-                    br
-                    | extraordinary new #{product.niche} offer&mldr;
+                p.product__intro-text=`Get ready to earn massive ${product.commissionPercentage}% commission with this extraordinary new ${product.niche} offer...`
                 p.product__intro-text Get everything you need to start promoting today!
                 .product__image
                     img.product__img(src=`/asset/img/products/${product.image}` alt='product__image')
@@ -70,7 +68,7 @@ body
 
     section#why.product__section.why-you-should-promote__Section
         .product__section--container
-            h2.product__heading--sec=`Why You Should Promote ${product.name}`
+            h2.product__heading--sec=`Why You Should Promote ${product.name}?`
             .why-card__box
                 .why-card
                     i.fa-solid.fa-coins.p-icon
@@ -100,7 +98,7 @@ body
                 p.hoplink__text  Earn commission for every customer you refer to this product using your personalized affiliate hoplink.
                 form.hoplink-form
                     .hoplink__body.margin__bottom--xsm.margin__top--none
-                        input.hoplink__input.hoplink-username(type='text' placeholder='Username' required)
+                        input.hoplink__input.hoplink-username(type='text' value=user.username required)
                         p.hoplink__body--text Required
                     //- .hoplink__body
                         input.hoplink__input.hoplink-trackingid(type='text' placeholder='Tracing Id')

@@ -2,7 +2,7 @@
 const notifyIcon = document.querySelector('.notification__icon');
 const notifyBox = document.querySelector('.notification__hovered')
 const profileBox = document.querySelector('.Profile__hovered')
-const profileImg = document.querySelector('.nav__image')
+const profileImg = document.querySelector('.profile__image')
 
 
 // MENUS
@@ -163,6 +163,7 @@ const logoutUser = async function(role) {
             hideLoadingOverlay();
             return;
         }
+        document.cookie = 'jwt' + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         const data = await res.json();
         if(data.status === 'success') {
             showAlert('success', 'Logging Out...')
@@ -517,14 +518,14 @@ const showUploadModal = function() {
             <div class="product__modal">
                 <i class="fa-solid fa-close icon form__close-icon"></i>
                 <h3 class="dashboard__heading">Add new product</h3>
-                <form class="product__form product__form-create">
+                <form class="product__form product__form-create" enctype="multipart/form-data">
 
                     <div class="form__body-generic">
                         <div id="uploader__image--card">
                             <img id="uploader__image" src="/asset/img/products/product-default.png" alt="" />
                             <div id="uploader__image--label-box">
-                                <input name="image" id="uploader__image--input" type="file" name='image' accept="image/png, image/jpeg">
-                                <label id="uploader__image--label" for="uploader__image--input"><i class="fa-solid fa-camera"></i> Add image</label>
+                                <input name="image" id="product__image" type="file" name='image'>
+                                <label id="uploader__image--label" for="product__image"><i class="fa-solid fa-camera"></i> Add image</label>
                             </div>
                         </div>
                     </div>
@@ -598,9 +599,23 @@ const showUploadModal = function() {
                             </select>
                         </div>
                     </div>
+                    
+                    <div class="product__sub-images">
+                        <p class="form__label photo-head">Product sub images Maximim of 6 upload</p>
+                        <div class="sub-images">
+                            <img class="sub-image sub-image1" src="asset/img/product-default.png" alt="product sub image"/>
+                        </div>
+                        <input class="btn-upload btn__image-upload sub-images-input" type="file" accept="image/*" id="imagesubs" name="imagesubs" multiple max="6" />
+                    </div>
+                    <div class="product__banners">
+                        <p class="form__label photo-head">Product banner Maximum of 4 upload</p>
+                        <div class="banners">
+                            <img class="banner banner1" src="asset/img/product-default.png" alt="product sub image"/>
+                        </div>
+                        <input class="btn-upload btn__banner-upload banner-input" type="file" accept="image/*" id="imagebanners" name="imagebanners" multiple max="4" />
+                    </div>
 
-                        <button class="btn form__submit form__submit-generic" type="submit">Add product
-                        </button>
+                    <button class="btn form__submit form__submit-generic" type="submit">Add product</button>
                 </form>
             </div>
         </div>
@@ -608,7 +623,6 @@ const showUploadModal = function() {
   
     document.body.insertAdjacentHTML('afterbegin', html);
 }
-// ${product.banners.forEach(img => `<img class="banner banner1" src="asset/img/${img}" alt="product sub image"/>`)}
 
 
 // update markup
@@ -702,21 +716,16 @@ const showUpdateModal = (productName, productImage) => {
                         <p class="form__label photo-head">Product sub images Maximim of 6 upload</p>
                         <div class="sub-images">
                             <img class="sub-image sub-image1" src="asset/img/product-default.png" alt="product sub image"/>
-                            
                         </div>
-                        <input class="btn-upload btn__image-upload sub-images-input" type="file" accept="image/*" id="imagesubs" name="image" multiple max="6" />
-
+                        <input class="btn-upload btn__image-upload sub-images-input" type="file" accept="image/*" id="imagesubs" name="imagesubs" multiple max="6" />
                     </div>
 
                     <div class="product__banners">
                         <p class="form__label photo-head">Product banner Maximum of 4 upload</p>
                         <div class="banners">
                             <img class="banner banner1" src="asset/img/product-default.png" alt="product sub image"/>
-                           
                         </div>
-
-                        <input class="btn-upload btn__banner-upload banner-input" type="file" accept="image/*" id="banner" name="imagebanners" multiple max="4" />
-                        
+                        <input class="btn-upload btn__banner-upload banner-input" type="file" accept="image/*" id="imagebanners" name="imagebanners" multiple max="4" />
                     </div>
                     <button class="btn form__submit form__submit-generic" type="submit">Add product
                     </button>
@@ -744,7 +753,19 @@ if(imageInput) {
 
 
 
+/*
 
+ document.body.addEventListener('change', (e) => {
+            const target = e.target;
+            if(target.classList.contains('product__image')) {
+                const file = target.files[0];
+                if (file) {
+                    const imageUrl = URL.createObjectURL(file);
+                    document.getElementById('uploader__image').src = imageUrl;
+                }
+            }
+        });
+*/
 
 
 const postProduct = async function(form, type, id) {
@@ -754,17 +775,18 @@ const postProduct = async function(form, type, id) {
             url = '/api/products';
             method = 'POST'
         }
-        if(type === 'update') {
-            url = `/api/products/${id}`;
-            method = 'PATCH'
-        }
+        // if(type === 'update') {
+        //     url = `/api/products/${id}`;
+        //     method = 'PATCH'
+        // }
         showLoadingOverlay()
         const res = await fetch(url, {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(form)
+            // body: JSON.stringify(form)
+            body: form
         });
         console.log(res)
 
@@ -809,34 +831,55 @@ if (productCreate) {
             closeUploadModal();
         });
 
+       
         document.body.addEventListener('submit', (e) => {
             const target = e.target;
             if (target.classList.contains('product__form-create')) {
                 e.preventDefault();
+                
+                // const form = new FormData(target);
+                // const imageInput = document.getElementById('product__image');
+                // const subImagesInput = document.getElementById('imagesubs');
+                // const bannerImagesInput = document.getElementById('imagebanners');
+                // if (imageInput.files.length > 0) {
+                //     form.append('image', imageInput.files[0]);
+                // }
+                // if (subImagesInput.files.length > 0) {
+                //     for (let i = 0; i < subImagesInput.files.length; i++) {
+                //         form.append('imagesubs', subImagesInput.files[i]);
+                //     }
+                // }
+                // if (bannerImagesInput.files.length > 0) {
+                //     for (let i = 0; i < bannerImagesInput.files.length; i++) {
+                //         form.append('imagebanners', bannerImagesInput.files[i]);
+                //     };
+                // }
+                // const formData = {};
+                // for (const [key, value] of form) {
+                //     formData[key] = value;
+                //     console.log(key, value)
+                // }
 
-                document.getElementById('uploader__image--input').addEventListener('change', (event) => {
-                    const file = event.target.files[0];
-                    if (file) {
-                        const imageUrl = URL.createObjectURL(file);
-                        document.getElementById('uploader__image').src = imageUrl;
-                    }
-                });
-
-                const form = new FormData(target);
-
-//                 const fileInput = document.getElementById('uploader__image--input');
-// if (fileInput.files.length > 0) {
-//     const file = fileInput.files[0];
-//     // Append the file to the FormData
-//     form.append('image', file);
-// }
-
-                const formData = {};
-                for (const [key, value] of form) {
-                    formData[key] = value;
-                    console.log(key, value)
+                const form = new FormData();
+                form.append('image', document.getElementById('product__image').files[0]);
+                form.append('name', document.getElementById('product__name').value);
+                form.append('summary', document.getElementById('product__summary').value);
+                form.append('description', document.getElementById('product__description').value);
+                form.append('price', document.getElementById('product__price').value);
+                form.append('commissionPercentage', document.getElementById('product__commission').value);
+                form.append('type', document.getElementById('product__type').value);
+                form.append('niche', document.getElementById('product__category').value);
+                form.append('recurringCommission', document.getElementById('product__recurring').value);
+                for (let i = 0; i < document.getElementById('imagesubs').files.length; i++) {
+                    form.append('imagesubs', document.getElementById('imagesubs').files[i]);
                 }
-                postProduct(formData, 'create');
+                for (let i = 0; i < document.getElementById('imagebanners').files.length; i++) {
+                    form.append('imagebanners', document.getElementById('imagebanners').files[i]);
+                };
+                // form.append('imagesubs', document.getElementById('imagesubs'));
+                // form.append('imagebanners', document.getElementById('imagebanners'));
+                
+                postProduct(form, 'create');
             }
         });
     });

@@ -729,6 +729,7 @@ section {
     margin: 0 auto;
 }
 
+/* scrollbar */
 ::-webkit-scrollbar {
     width: .8rem;
 }

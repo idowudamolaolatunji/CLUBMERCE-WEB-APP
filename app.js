@@ -28,15 +28,17 @@ const io = require('socket.io')(require('http').createServer(app));
 // body parser and cookie parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(bodyParser.json({limit: "100mb"}));
-app.use(bodyParser.json());
+
+// app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
   
 // Use the 'cors' middleware to enable CORS for all routes
-// app.use(cors());
+app.use(cors());
 
 
-// pug
+// pug view template
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 app.use(morgan('dev'));

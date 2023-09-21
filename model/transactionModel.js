@@ -25,7 +25,7 @@ const transactionSchema = new mongoose.Schema({
 transactionSchema.pre(/^find/, function(next) {
     this.populate({
         path: 'user',
-        select: '_id role'
+        select: '_id role fullName businessName'
     })
     next();
 });

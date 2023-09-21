@@ -12,14 +12,19 @@ const Notification = require('../model/notificationModel'); // there might be an
 
 // Global
 let token;
-exports.home = (req, res) => {
-    if( req.cookies.jwt ) token = req.cookies.jwt;
-    res.status(200).render('home', {
-        title: 'Official Website',
-        section: 'home',
-        active: 'home',
-        token
-    });
+
+exports.home = async (req, res) => {
+    try{
+        if( req.cookies.jwt ) token = req.cookies.jwt;
+        res.status(200).render('home', {
+            title: 'Official Website',
+            section: 'home',
+            active: 'home',
+            token,
+        });
+    } catch(err) {
+        console.log(err)
+    }
 }
 exports.getStarted = (req, res) => {
     if( req.cookies.jwt ) token = req.cookies.jwt;
@@ -103,6 +108,7 @@ exports.getProduct = async (req, res) => {
     try {
         // 1) Get the data, for the requested product
         const product = await Product.findOne({ slug: req.params.slug })
+        const user = await User.findById(req.user._id);
         if (!product) {
             return res.json({message: 'There is no product with that name.'})
         }
@@ -110,7 +116,8 @@ exports.getProduct = async (req, res) => {
         // 3) Render template using data from 1)
         res.status(200).render('product', {
             title: product.name,
-            product
+            product,
+            user,
         });
     } catch(err) {
         res.status(400).json({message: err});

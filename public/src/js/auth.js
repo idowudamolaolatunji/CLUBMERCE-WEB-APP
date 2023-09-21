@@ -10,20 +10,36 @@ const navMenuBtn = document.querySelector(".navigation-controls");
 const navList = document.querySelector(".nav__list");
 const icon = document.querySelector('.navigation-icon');
 
+// if (navMenuBtn) {
+//      navMenuBtn.addEventListener("click", function() {
+//           if (icon.classList.contains('fa-close')) {
+//                navList.style.transform = 'translateX(100%)';
+//                setTimeout(() => {
+//                     navList.style.visibility = 'hidden';
+//                }, 500);
+//           } else {
+//                navList.style.visibility = 'visible';
+//                navList.style.transform = 'translateX(0)';
+//           }
+//           icon.classList.toggle('fa-close');
+//      });
+// }
+
+
 if (navMenuBtn) {
      navMenuBtn.addEventListener("click", function() {
-          if (icon.classList.contains('fa-close')) {
-               navList.style.transform = 'translateX(100%)';
-               setTimeout(() => {
-                    navList.style.visibility = 'hidden';
-               }, 500);
-          } else {
-               navList.style.visibility = 'visible';
-               navList.style.transform = 'translateX(0)';
-          }
-          icon.classList.toggle('fa-close');
+       if (icon.classList.contains('fa-close')) {
+         navList.style.transform = 'translateX(100%)';
+         setTimeout(() => {
+           navList.style.visibility = 'hidden';
+         }, 500);
+       } else {
+         navList.style.visibility = 'visible';
+         navList.style.transform = 'translateX(0)';
+       }
+       icon.classList.toggle('fa-close');
      });
-}
+   }
 
 const showLoadingOverlay = () => {
      spinOverlay.style.visibility = 'visible';

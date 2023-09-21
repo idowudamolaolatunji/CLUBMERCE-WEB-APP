@@ -139,7 +139,7 @@ body
                     -else
                         span
                             .nav__image--box
-                                img.nav__image(src=`/asset/img/users/${user.image}` alt=`user's photo`)
+                                img.nav__image.profile__image(src=`/asset/img/users/${user.image}` alt=`user's photo`)
                             //- profile...
                             .Profile__hovered.hidden
                                 .profile__content
@@ -496,8 +496,9 @@ body
                                             i.fa-solid.fa-money-bill-transfer.insight__icon
                                         span
                                             - const conversionRate = (totalPurchases / totalClicks) * 100;
+                                            - console.log(totalPurchases, totalClicks, conversionRate)
                                             p.insight__title conversion Rate
-                                            p.insight__text= conversionRate.toFixed(2) + '%'
+                                            p.insight__text= `${conversionRate && coversionRate !== NAN ? coversionRate + '%' : '0%'}`
 
                                     .insight.insight__two
                                         .icon__box 

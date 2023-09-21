@@ -15,8 +15,8 @@ exports.createAffiliateLink = async (req, res) => {
 
     // Generate the affiliate promotion link
     
-      // const promotionLink = `https://www.clubmerce.com/unique_/${user.slug}/${product.slug}`
-    const promotionLink = `${req.protocol}://${req.get('host')}/unique_/${user.slug}/${product.slug}`
+    const promotionLink = `https://clubmerce.com/unique_/${user.slug}/${product.slug}`;
+    // const promotionLink = `${req.protocol}://${req.get('host')}/unique_/${user.slug}/${product.slug}`
 
     const gravity = await AffiliateLink.find({ product: product._id });
     console.log(gravity.length)

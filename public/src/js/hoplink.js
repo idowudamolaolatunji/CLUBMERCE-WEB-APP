@@ -17,10 +17,10 @@ window.addEventListener("load", function() {
 
 // ALERTS
 const hideAlert = () => {
-    const alert = document.querySelector('.alert');
-    if (alert) {
-      alert.parentElement.removeChild(alert);
-    }
+  const alert = document.querySelector('.alert');
+  if (alert) {
+    alert.parentElement.removeChild(alert);
+  }
 };
   
 const showAlert = (type, msg) => {
@@ -64,14 +64,14 @@ const openCopyModal = function (link) {
 };
   
 
-const getHoplink = async function (username, trackingId, productSlug) {
+const getHoplink = async function (username, productSlug) {
     try {
       showLoadingOverlay();
 
       const res = await fetch(`/api/promotion/generate-affiliate-link/${productSlug}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, trackingId }),
+        body: JSON.stringify({ username }),
       });
   
       if (!res.ok) {
@@ -130,7 +130,7 @@ if (hoplinkForm) {
     //   const hoplinkTrackId = document.querySelector('#hoplink-trackingid').value;
     //   const productSlug = window.location.pathname.split('/').pop();
       const productSlug = window.location.pathname.split('/').at(-1);
-      getHoplink(hoplinkUsername, hoplinkTrackId, productSlug);
+      getHoplink(hoplinkUsername, productSlug);
     });
 }
 

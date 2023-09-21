@@ -61,7 +61,6 @@ if (navMenuBtn) {
 }
 
 
-// LEC 16) A Better Way: The Intersection Observer API
 if (window.innerWidth >= 750) {
 
   const obsCallback = function (entries, observer) {

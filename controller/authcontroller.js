@@ -52,8 +52,8 @@ const createCookie = function(statusCode, user, res, message) {
 
 const sendSignUpEmailToken = async (_, user, token) => {
   try {
-    // const verificationUrl = `${_.protocol}://${_.get('host')}/api/users/verify-email/${token}`;
-    const verificationUrl = `https://clubmerce.com/api/users/verify-email/${token}`;
+    const verificationUrl = `${_.protocol}://${_.get('host')}/api/users/verify-email/${token}`;
+    // const verificationUrl = `https://clubmerce.com/api/users/verify-email/${token}`;
     const mailMessage = confirmEmailTemplate(user.fullName, verificationUrl);
     console.log(verificationUrl)
     await sendEmail({
@@ -159,7 +159,7 @@ exports.signupBuyer = catchAsync(async (req, res) => {
         user: newBuyer
       }
     });
-})
+});
 
 
 // Login
@@ -189,14 +189,15 @@ exports.login = catchAsync(async (req, res, next) => {
     }
 
     const cookieOptions = {
-        expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
-        httpOnly: true,
+      expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
+      httpOnly: true,
         secure: true
     }
     res.cookie('jwt', token, cookieOptions);
     //=//=//=//=//=//=//=//=//=//
-
+    
     // Remove password from output
+    user.isLogIn = true;
     user.password = undefined;
     return res.status(200).json({
       status: "success",
@@ -223,6 +224,7 @@ exports.verifyEmail = async (req, res) => {
       if (user) {
           // Update the user's email verification status
           user.isEmailVerified = true;
+          user.isLogIn = true;
           await user.save({ validateBeforeSave: false });
 
           const token = signToken(user._id);
@@ -268,12 +270,18 @@ exports.loginBuyer = catchAsync(async (req, res, next) => {
     }
     
     const token = signToken(user._id);
+    if(user?.isEmailVerified === false) {
+      const token = signToken(user._id);
+      res.status(400).json({message: 'Email address not verified, Check your mail'})
+      await sendSignUpEmailToken(req, user, token);
+    }
+    
     const cookieOptions = {
         expires: new Date(Date.now() + process.env.COOKIES_EXPIRES * 24 * 60 * 60 * 1000),
         httpOnly: true,
         secure: true
     }
-    
+    user.isLogIn = true;
     res.cookie('jwt', token, cookieOptions);
 
     // Remove password from output
@@ -323,14 +331,26 @@ exports.loginAdmin = catchAsync(async (req, res, next) => {
 
 
 // logout
-exports.logout = (_, res) => {
-  // res.cookie('jwt', '', {
-  //   expires: new Date(Date.now() + 10 * 500),
-  //   httpOnly: true
-  // });
-  res.clearCookie("jwt");
-  res.status(200).json({ status: 'success' });
+// exports.logout = (_, res) => {
+//   res.clearCookie("jwt");
+//   res.status(200).json({ status: 'success' });
+// };
+exports.logout = async (req, res) => {
+  try {
+    const token = req.cookies.jwt;
+    const decokedTokenId = await jwt.verify(token, process.env.CLUBMERCE_JWT_SECRET_TOKEN).id;
+    const user = await User.findById(decokedTokenId);
+    user.isLogIn = false;
+    user.save({ validateBeforeSave: false })
+    res.clearCookie("jwt");
+    res.status(200).json({ status: 'success' });
+  } catch(err) {
+    console.log(err)
+  }
 };
+
+
+
 
 // protect 
 exports.protect = catchAsync(async (req, res, next) => {
