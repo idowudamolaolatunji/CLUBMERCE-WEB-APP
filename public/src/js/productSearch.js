@@ -8,16 +8,24 @@ const hideLoadingOverlay = () => {
     spinOverlay.style.visibility = 'hidden';
 };
 
-document.querySelector('.chatHref').addEventListener('click', function(e) {
+// document.querySelector('.chatHref').addEventListener('click', function(e) {
+//     showLoadingOverlay();
+//     window.setTimeout(() => {
+//         hideLoadingOverlay();
+//     }, 5000);
+// });
+
+
+document.querySelectorAll('a').forEach(el => el.addEventListener('click', function(e) {
     showLoadingOverlay();
     window.setTimeout(() => {
         hideLoadingOverlay();
     }, 5000);
-});
+}));
 
-document.querySelector('.go-back').addEventListener('click', function(e) {
-    showLoadingOverlay();
-});
+// document.querySelector('.go-back').addEventListener('click', function(e) {
+//     showLoadingOverlay();
+// });
 
 // document.querySelector('.back-to-top').addEventListener('click', function(e) {
 //     showLoadingOverlay();
@@ -503,7 +511,7 @@ const getHoplink = async function (username, productSlug) {
         
     } catch (err) {
         hideLoadingOverlay()
-      showAlert('error', 'Something went wrong');
+      showAlert('error', err.message || 'Something went wrong');
       console.error(err);
     }
 };
@@ -517,7 +525,7 @@ if (hoplinkClose) {
   
 if (hoplinkModalCopyOk) {
     hoplinkModalCopyOk.addEventListener('click', () => {
-      closeModal(hoplinkCopyOverlay, hoplinkCopyModal);
+    //   closeModal(hoplinkCopyOverlay, hoplinkCopyModal);
     });
 }
 

@@ -148,6 +148,7 @@ exports.getAllProduct = async(req, res) => {
 exports.createProduct = async (req, res) => {
   try {
     const vendorId = req.user._id;
+    console.log(vendorId)
 
     // Create a new product document using Mongoose
     const newProduct = await Product.create({
@@ -204,7 +205,7 @@ exports.createProductImages = async(req, res) =>{
           .resize(750, 750)
           .toFormat('jpeg')
           .jpeg({ quality: 90 })
-          .toFile(`public/asset/img/banners/${fileName}`);
+          .toFile(`public/asset/img/products/${fileName}`);
         subImages.push(fileName);
       }
     }
@@ -218,7 +219,7 @@ exports.createProductImages = async(req, res) =>{
           .resize(2000, 950)
           .toFormat('jpeg')
           .jpeg({ quality: 90 })
-          .toFile(`public/asset/img/products/${fileName}`);
+          .toFile(`public/asset/img/banners/${fileName}`);
         banners.push(fileName);
       }
     }

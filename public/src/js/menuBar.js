@@ -60,7 +60,7 @@ if (window.innerWidth >= 750) {
   const nav = document.querySelector('.header');
   const navHeight = nav.getBoundingClientRect().height;
 
-  const stickNav = function (entries, observer) {
+  const stickNav = function (entries) {
     const [entry] = entries;
 
     if (!entry.isIntersecting) {
@@ -72,7 +72,7 @@ if (window.innerWidth >= 750) {
 
   const headerObserver = new IntersectionObserver(stickNav, {
     root: null,
-    threshold: 0,
+    threshold: 0.1,
     rootMargin: `-${navHeight}px`,
   });
 

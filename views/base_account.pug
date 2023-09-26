@@ -21,8 +21,8 @@ head
     script(defer src="/src/js/dashboard.js")
     script(defer src="/src/js/paymentAndOrder.js")
     script(src="https://js.paystack.co/v2/inline.js")
-    //- script(src="/socket.io/socket.io.js")
     script(src='https://js.pusher.com/8.2.0/pusher.min.js')
+    //- script(src="/socket.io/socket.io.js")
     //- script(defer src="/src/js/chat.js")
     //- script.
         // Enable pusher logging - don't include this in production
@@ -152,7 +152,8 @@ body
                                 img.nav__image(src=`/asset/img/users/${user.image}` alt=`user's photo`)
                     -else
                         span
-                            .nav__image--box
+                            -console.log(user.vendorAccountType)
+                            .nav__image--box(class=`${user.role === 'vendor' && user.vendorAccountType === 'free' ? 'profileType free' : user.role === 'vendor' && user.vendorAccountType === 'standard' ? 'profileType standard' : user.role === 'vendor' && user.vendorAccountType === 'premium' ? 'profileType premium' : '' }`)
                                 img.nav__image.profile__image(src=`/asset/img/users/${user.image}` alt=`user's photo`)
                             //- profile...
                             .Profile__hovered.hidden

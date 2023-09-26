@@ -6,9 +6,9 @@ const spinOverlay = document.querySelector('#spinOverlay');
 const buyerSignupForm = document.querySelector('#buyer-signup');
 const buyerAuthForm = document.querySelector('#buyer-login');
 
-const navMenuBtn = document.querySelector(".navigation-controls");
-const navList = document.querySelector(".nav__list");
-const icon = document.querySelector('.navigation-icon');
+// const navMenuBtn = document.querySelector(".navigation-controls");
+// const navList = document.querySelector(".nav__list");
+// const icon = document.querySelector('.navigation-icon');
 
 
 const showLoadingOverlay = () => {

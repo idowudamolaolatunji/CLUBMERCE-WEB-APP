@@ -529,7 +529,7 @@ const showUploadModal = function() {
                     </div>
                     <div class="form__body-generic">
                         <label class="form__label" for="product__summary">Product Summary (Short Summary)</label>
-                        <textarea class="textarea form__input" id="product__summary" style="height: 6rem;" type="text" name="summary" required="" placeholder="Product Summary (not more than 120 characters)" minlength="60" maxlength="200"></textarea>
+                        <textarea class="textarea form__input" id="product__summary" style="height: 6rem;" type="text" name="summary" required="" placeholder="Product Summary (not more than 200 characters)" minlength="60" maxlength="200"></textarea>
                         <p class="error"></p>
                     </div>
                     <div class="form__body-generic">
@@ -674,7 +674,7 @@ const showUpdateModal = (productName, _) => {
                     </div>
                     <div class="form__body-generic">
                         <label class="form__label" for="product-update__summary">Product Summary</label>
-                        <textarea class="textarea form__input" id="product-update__summary" style="height: 6rem;" type="text" name="product__summary" required="" placeholder="Product Summary (not more than 120 characters)"></textarea>
+                        <textarea class="textarea form__input" id="product-update__summary" style="height: 6rem;" type="text" name="product__summary" required="" placeholder="Product Summary (not more than 200 characters)"></textarea>
                     </div>
                     <div class="form__body-generic">
                         <label class="form__label" for="product-update__description">Product Description</label>

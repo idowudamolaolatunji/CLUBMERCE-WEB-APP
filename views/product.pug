@@ -35,7 +35,8 @@ body
             div
     header.product__header
         .product__logo
-            img.p-logo(src=`${product.vendor.image !== 'avatar.png' ? `/asset/img/users/${product.vendor.image}` : `/asset/img/products/${product.image}`}` alt='brand product logo')
+            //- p #{product.vendor.businessName}
+            img.p-logo(src=`${ product.vendor.image !== 'avatar.png' ? `/asset/img/users/${product.vendor.image}` : `/asset/img/products/${product.image}`}` alt='brand product logo')
         nav.product__nav
             ul.product__nav--list
                 li.product__nav--item
@@ -111,9 +112,9 @@ body
             .images__box
                 -const productSubImages = product.subImages
                 each productSubImage of productSubImages
-                    //- a(href=`https://clubmerce.com/asset/img/products/${productSubImage}` target='_blank')
-                    a(href=`http://127.0.0.1:3000/asset/img/products/${productSubImage}` target='_blank')
-                        img(src=`/asset/img/products/${product.image}` alt='')
+                    //- a(href=`http://127.0.0.1:3000/asset/img/products/${productSubImage}` target='_blank')
+                    a(href=`https://clubmerce.com/asset/img/products/${productSubImage}` target='_blank')
+                        img(src=`/asset/img/products/${productSubImage}` alt='product subimage')
                     
     section#demo.product__section.section__demography
         .product__section--container
@@ -146,8 +147,8 @@ body
             .banner__box
                 -const productBanners = product.banners;
                 each productBanner of productBanners
-                    a(href=`${productBanner}` target='_blank')
-                        img(src=`/asset/img/banners/${product.image}` alt='')
+                    a(href=`https://clubmerce.com/asset/img/banners/${productBanner}` target='_blank')
+                        img(src=`/asset/img/banners/${productBanner}` alt='product banner image')
                     
     section#contact.product__section.section__contact-seller
         .product__section--container

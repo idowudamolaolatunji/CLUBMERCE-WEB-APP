@@ -40,7 +40,10 @@ header.header(style=`${section !== 'home' ? 'background-color: white' : ''}`)
                     //- i.fa-solid.fa-angle-down
             span.flexible
                 li.nav__item
-                    a.nav__link.nav__button.nav-sign(href="/login") login
+                    -if(token)
+                        a.nav__link.nav__button.nav-sign.nav__button--active(href="/dashboard") dashboard
+                    -else
+                        a.nav__link.nav__button.nav-sign(href="/login") login
                 li.nav__item
                     a.nav__link.nav-login(href="/contact-us") contact us
 

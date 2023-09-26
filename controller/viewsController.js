@@ -108,7 +108,8 @@ exports.marketPlace = async (req, res) => {
 exports.getProduct = async (req, res) => {
     try {
         // 1) Get the data, for the requested product
-        const product = await Product.findOne({ slug: req.params.slug })
+        const product = await Product.findOne({ slug: req.params.slug });
+        const vendor = await User.findOne({ })
         const user = await User.findById(req.user._id);
         if (!product) {
             return res.json({message: 'There is no product with that name.'})
@@ -218,7 +219,7 @@ exports.performance = async (req, res) => {
 }
 exports.transaction = async (req, res) => {
     try {
-        const transactions = await Transaction.find({ user: req.user._id });
+        const transactions = await Transaction.find({ user: req.user._id }).sort({ createdAt: -1 });
         const user = await User.findById(req.user._id);
 
         res.status(200).render('transaction', {
@@ -253,8 +254,10 @@ exports.leaderboard = async(req, res) => {
 
 // Vendors
 exports.signupVendor = (req, res) => {
+    if( req.cookies.jwt ) token = req.cookies.jwt;
     res.status(200).render('signup', {
-        title: 'Create a vendor account'
+        title: 'Create a vendor account',
+        token
     });
 }
 exports.productCatalog = async(req, res) => {

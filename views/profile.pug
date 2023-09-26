@@ -56,7 +56,7 @@ block content
                 //- img.form__user-photo(src=`${user.image}` alt='User photo')
                 //- input.form__upload(type='file', accept='image/*', id='photo', name='photo')
 
-            #uploader__image--card
+            #uploader__image--card(class=`${user.role === 'vendor' && user.vendorAccountType === 'free' ? 'profileType free' : user.role === 'vendor' && user.vendorAccountType === 'standard' ? 'profileType standard' : user.role === 'vendor' && user.vendorAccountType === 'premium' ? 'profileType premium' : '' }`)
                 img#uploader__image(src=`/asset/img/users/${user.image}` alt='')
                 #uploader__image--label-box
                     input#uploader__image--input.user-profile-image(name='photo' type='file' accept='image/png, image/jpeg')

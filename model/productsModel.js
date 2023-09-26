@@ -8,6 +8,7 @@ const productSchema = new mongoose.Schema({
     vendor: { 
         type: mongoose.Schema.ObjectId, 
         ref: 'User',
+        required: true,
     },
     name: {
         type: String,
@@ -35,7 +36,6 @@ const productSchema = new mongoose.Schema({
         required: [true, 'A product must have a summary'],
         trim: true,
         maxLength: [200, "Summary must not be more than 200 characters"],
-        minLength: [60, "Summary must not be more than 60 characters"],
     },
     niche: {
         type: String,
@@ -44,6 +44,7 @@ const productSchema = new mongoose.Schema({
     commissionPercentage: {
         type: Number,
         required: [true, 'A product must have a Commission percentage'],
+        minLength: [10, "Commission percent must not be less than 10%"]
     },
     commissionAmount: {
         type: Number,
@@ -145,7 +146,7 @@ productSchema.pre(/^find/, function (next) {
 productSchema.pre(/^find/, function(next) {
     this.populate({
         path: 'vendor',
-        select: 'fullName slug _id image username businessName email active pendingAmountWallet totalAmountWallet'
+        select: 'slug _id image username businessName email active pendingAmountWallet totalAmountWallet'
     });
     next();
 });

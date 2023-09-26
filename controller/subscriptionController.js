@@ -50,6 +50,7 @@ async function createTransaction(paymentResponse, _, response) {
         });
         
         subcribingUser.vendorSubscriptionActive = true;
+        subcribingUser.vendorAccountType = `${Number(data.amount) < 2000000 ? 'standard' : 'premium'}`
         subcribingUser.vendorSubscriptionType = `${Number(data.amount) < 2000000 ? 'standard' : 'premium'}`
         subcribingUser.vendorAccountTypeExpiresIn = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
         subcribingUser.save({ validateBeforeSave: false });

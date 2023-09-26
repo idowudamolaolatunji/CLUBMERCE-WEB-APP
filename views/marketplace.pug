@@ -71,7 +71,7 @@ body
                 h3.dashboard__heading
                     a.go-back(href="/dashboard") 
                         i.fa-solid.fa-arrow-left.font-size-sm-help.margin__r-help 
-                    | Clubmerce marketplace
+                    | Clubmerce Marketplace
 
                 span.product__filtering-btn
                     select.select__input(id="select" data-user=`${user.username}`)
@@ -261,10 +261,12 @@ body
                             button.hoplink__copy-button.outline Copy
         
 
-            //- a.chat__box-toggler.chatHref(href="/chatS" data-id=`${user._id}` data-fullName=`${user.fullName}` data-img=`${user.image}` style=`${page === 'chat' || user.role === 'admin' ? 'display: none; opacity: 0;' : ''}`)
+            //- a.chat__box-toggler.chatHref(href="/chats" data-id=`${user._id}` data-fullName=`${user.fullName}` data-img=`${user.image}` style=`${page === 'chat' || user.role === 'admin' ? 'display: none; opacity: 0;' : ''}`)
                 span.material-symbols-rounded
                     i.fa-solid.fa-comment
-                    | Chat
+                    | Chats
+
+
 
             //- .chat__box
                 .chat-top
@@ -316,8 +318,8 @@ body
                     textarea(placeholder='Enter a message...' spellcheck='false' required='')
                     span#send-btn.material-symbols-rounded send
 
-            .back-to-top
+            a.back-to-top(href='#')
                 i.fa-solid.fa-top-arrow
-        
+    
             
             include _auth_footer
