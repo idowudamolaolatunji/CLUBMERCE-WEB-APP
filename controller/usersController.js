@@ -64,7 +64,7 @@ exports.resizeUserImage = catchAsync(async (req, res, next) => {
 
 exports.uploadProfilePicture = async (req, res) => {
     try {
-        console.log(req.body, req.file);
+        console.log(req.body, req.file, req.files);
 
         let image;
         if(req.file) image = req.file.filename;

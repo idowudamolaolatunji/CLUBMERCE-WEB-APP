@@ -10,36 +10,6 @@ const navMenuBtn = document.querySelector(".navigation-controls");
 const navList = document.querySelector(".nav__list");
 const icon = document.querySelector('.navigation-icon');
 
-// if (navMenuBtn) {
-//      navMenuBtn.addEventListener("click", function() {
-//           if (icon.classList.contains('fa-close')) {
-//                navList.style.transform = 'translateX(100%)';
-//                setTimeout(() => {
-//                     navList.style.visibility = 'hidden';
-//                }, 500);
-//           } else {
-//                navList.style.visibility = 'visible';
-//                navList.style.transform = 'translateX(0)';
-//           }
-//           icon.classList.toggle('fa-close');
-//      });
-// }
-
-
-if (navMenuBtn) {
-     navMenuBtn.addEventListener("click", function() {
-       if (icon.classList.contains('fa-close')) {
-         navList.style.transform = 'translateX(100%)';
-         setTimeout(() => {
-           navList.style.visibility = 'hidden';
-         }, 500);
-       } else {
-         navList.style.visibility = 'visible';
-         navList.style.transform = 'translateX(0)';
-       }
-       icon.classList.toggle('fa-close');
-     });
-   }
 
 const showLoadingOverlay = () => {
      spinOverlay.style.visibility = 'visible';
@@ -135,7 +105,7 @@ const loginAdmin = async (email, password) => {
                body: JSON.stringify({ email, password }),
           });
           if (!res.ok) {
-               throw new Error('Login request failed');
+               throw new Error('Login request failed, Check internet connection!');
           }
 
           const data = await res.json();
@@ -171,15 +141,15 @@ const loginBuyer = async (email, password) => {
                body: JSON.stringify({ email, password }),
           });
 
-          if (!res.ok) {
-               throw new Error('Login request failed');
-          }
           const data = await res.json();
           if(data.message === 'Email address not verified, Check your mail' || data.message === 'Account no longer active' || data.message === 'Incorrect email or password!') {{
                hideLoadingOverlay();
                showAlert('error', data.message);
                return;
           }}
+          if (!res.ok) {
+               throw new Error('Login request failed');
+          }
           if (data.data.user.role !== 'buyer') {
                hideLoadingOverlay();
                showAlert('error', 'Only buyers can log in through this form.');
@@ -225,7 +195,7 @@ if (closeButton) {
   
 
 // signup
-const signup = async (fullName, email, role, password, passwordConfirm, username, country, phone) => {
+const signup = async (businessName, email, role, password, passwordConfirm, username, country, phone) => {
     try {
          if(role === 'admin' || role === 'affiliate' || role === 'buyer') return;
          const type = window.location.href.split('/').at(-1);
@@ -234,7 +204,7 @@ const signup = async (fullName, email, role, password, passwordConfirm, username
         const res = await fetch('/api/users/signup-vendor', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ fullName, email, role, password, passwordConfirm, username, country, phone, type}),
+            body: JSON.stringify({ businessName, email, role, password, passwordConfirm, username, country, phone, type}),
         });
     
         if (!res.ok) {
@@ -267,7 +237,6 @@ const signup = async (fullName, email, role, password, passwordConfirm, username
 // signup for buyers
 const signupBuyer = async (fullName, email, password, passwordConfirm, username) => {
      try {
-         if(role === 'admin' || role === 'affiliate' || role === 'vendor') return;
           showLoadingOverlay();
      
           const res = await fetch('/api/users/signup-buyer', {
@@ -397,7 +366,7 @@ if(buyerAuthForm) {
 if (signupForm) {
     signupForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        const fullName = document.querySelector('.signup__fullname').value;
+        const businessName = document.querySelector('.signup__businessName').value;
         const email = document.querySelector('.signup__email').value;
         const password = document.querySelector('.signup__passwordMain').value;
         const passwordConfirm = document.querySelector('.signup__passwordconfirm').value;
@@ -405,8 +374,8 @@ if (signupForm) {
         const country = document.querySelector('.signup__country').value;
         const phone = document.querySelector('.signup__phone').value;
         const role = document.querySelector('#role').value;
-        signup(fullName, email, role, password, passwordConfirm, username, country, phone);
-        console.log(fullName, email, role, password, passwordConfirm, username, country, phone);
+        signup(businessName, email, role, password, passwordConfirm, username, country, phone);
+        console.log(businessName, email, role, password, passwordConfirm, username, country, phone);
     });
 }
 if (buyerSignupForm) {

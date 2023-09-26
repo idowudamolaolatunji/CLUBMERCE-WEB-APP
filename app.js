@@ -16,6 +16,7 @@ const productsRouter = require('./routes/productsRoutes');
 const usersRouter = require('./routes/usersRoute');
 const viewsRouter = require('./routes/viewsRoutes');
 const ordersRouter = require('./routes/ordersRoutes');
+// const chatRouter = require('./routes/chatRoutes');
 const affiliateLinkRouter = require('./routes/affiliateLinkRoutes');
 const transactionRouter = require('./routes/transactionRoutes');
 const authController = require('./controller/authcontroller');
@@ -90,6 +91,7 @@ app.use('/api/users', usersRouter);
 app.use('/api/promotion', affiliateLinkRouter);
 app.use('/api/transactions', transactionRouter);
 app.use('/api/orders', ordersRouter);
+// app.use('/api/message', chatRouter);
 
 module.exports = app;
 

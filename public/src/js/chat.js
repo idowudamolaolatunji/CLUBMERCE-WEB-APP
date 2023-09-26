@@ -98,30 +98,44 @@ console.log('i am connected')
 */
 
 
+
+
+/*
 const chatbotToggler = document.querySelector(".chat__box-toggler");
 const closeBtn = document.querySelector(".close-btn");
 const chatboxChat = document.querySelector(".chat__box--chat");
-const chatInput = document.querySelector(".chat-input textarea");
-const sendChatBtn = document.querySelector(".chat-input span");
+const chatInput = document.getElementById("textarea");
+const sendChatBtn = document.getElementById("send-btn");
 
 let userMessage = null; // Variable to store user's message
 const inputInitHeight = chatInput.scrollHeight;
 
 const createChatLi = (message, className) => {
-    // Create a chat <li> element with passed message and className
-    const chatLi = document.createElement("li");
-    chatLi.classList.add("chat", `${className}`);
-    let chatContent = className === "outgoing" ? `<p></p>` : `<span class="material-symbols-outlined">smart_toy</span><p></p>`;
-    chatLi.innerHTML = chatContent;
-    chatLi.querySelector("p").textContent = message;
-    return chatLi; // return chat <li> element
+  // Create a chat <li> element with passed message and className
+  const chatLi = document.createElement("li");
+  chatLi.classList.add("chat", `${className}`);
+  let chatContent = className === "outgoing" ? `<p></p>` : `<span class="material-symbols-outlined">smart_toy</span><p></p>`;
+  chatLi.innerHTML = chatContent;
+  chatLi.querySelector("p").textContent = message;
+  return chatLi; // return chat <li> element
 }
+
 
 
 const handleChat = () => {
   userMessage = chatInput.value.trim(); // Get user entered message and remove extra whitespace
   if(!userMessage) return;
 
+  console.log(userMessage)
+  const message = { message: userMessage };
+  fetch('/api/message/send-message', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+      body: JSON.stringify(message)
+  });
+  
   // Clear the input textarea and set its height to default
   chatInput.value = "";
   chatInput.style.height = `${inputInitHeight}px`;
@@ -138,14 +152,101 @@ chatInput.addEventListener("input", () => {
 });
 
 chatInput.addEventListener("keydown", (e) => {
-  // If Enter key is pressed without Shift key and the window 
-  // width is greater than 800px, handle the chat
-  if(e.key === "Enter" && !e.shiftKey && window.innerWidth > 800) {
-      e.preventDefault();
-      handleChat();
+  if(e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    handleChat();
   }
 });
 
 sendChatBtn.addEventListener("click", handleChat);
 closeBtn.addEventListener("click", () => document.body.classList.remove("show-chat__box"));
 chatbotToggler.addEventListener("click", () => document.body.classList.toggle("show-chat__box"));
+*/
+
+
+const chatButton = document.querySelector('.chat__box-toggler');
+const { id, fullname, img } = chatButton.dataset;
+console.log(id, fullname, img);
+
+// Enable pusher logging - don't include this in production
+var pusher = new Pusher('3518bd1be26b07addc01', {
+  cluster: 'mt1'
+});
+pusher.logToConsole = true;
+var channel = pusher.subscribe(`conversation-${id}`); // id === user's id
+channel.bind('message', function(data) {
+  alert(JSON.stringify(data));
+  if(data.senderId !== id && data.recieverId === id) {
+    appendMessage('', 'friend-message', data.message);
+  }
+});
+
+
+// function appendMessage(name, img, side, text) {
+//   //   Simple solution for small apps
+//   const msgHTML = `
+//     <div class="msg ${side}-msg">
+//       <div class="msg-img" style="background-image: url(${img})"></div>
+
+//       <div class="msg-bubble">
+//         <div class="msg-info">
+//           <div class="msg-info-name">${name}</div>
+//           <div class="msg-info-time">${formatDate(new Date())}</div>
+//         </div>
+
+//         <div class="msg-text">${text}</div>
+//       </div>
+//     </div>
+//   `;
+// }
+
+
+
+const messagesBox = document.querySelector('.messages-chat')
+const inputChat = document.getElementById("write-message");
+const sendChat = document.getElementById("send");
+
+function appendMessage( _, side, text) {
+  //   Simple solution for small apps
+  const markup = `
+    <div class="message ${side}">
+      <span class="photo">
+        <img src="/../asset/img/users/avatar.png" alt="chat image"/>
+      </span>
+      <p class="text">${text}</p>
+    </div>
+    <p class="${side}-time time">${new Date()}</p>
+  `;
+
+  messagesBox.insertAdjacentHTML("beforeend", markup);
+  messagesBox.scrollTop += 500;
+}
+
+const handleChat = async() => {
+  userMessage = inputChat.value.trim();
+  if(!userMessage) return;
+
+  const message = { message: userMessage };
+  fetch('/api/message/send-message', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+      body: JSON.stringify(message)
+  });
+  appendMessage('', 'my-message', userMessage);
+  inputChat.value = "";
+  messagesBox.scrollTo(0, messagesBox.scrollHeight);
+}
+
+
+if(inputChat) {
+  inputChat.addEventListener("keydown", (e) => {
+    if(e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleChat();
+    }
+  });
+}
+if(sendChat)
+  sendChat.addEventListener("click", handleChat);

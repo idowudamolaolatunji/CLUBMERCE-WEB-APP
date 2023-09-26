@@ -17,7 +17,8 @@ block content
                     span.table-head-content approved
                     span.table-head-content actions
 
-                - if(products.length > 1)
+
+                - if(products.length > 0)
                     each product of products
                         //- .table-row-vp
                         .table-row-vp(class=`${product.isBoosted ? 'prmoted-small' : ''}`)

@@ -8,7 +8,7 @@ const slugify = require('slugify');
 const userSchema = new mongoose.Schema({
     fullName: {
         type: String,
-        required: [true, "Enter your full name"],
+        // required: [true, "Enter your full name"],
         maxLength: [40, "Full name must not be more than 40 characters"],
         minLength: [8, "Full name must not be more than 8 characters"],
         lowercase: true
@@ -65,7 +65,9 @@ const userSchema = new mongoose.Schema({
     zipCode: Number,
     businessName: {
         type: String,
-        default: ''
+        maxLength: [40, "Full name must not be more than 40 characters"],
+        minLength: [8, "Full name must not be more than 8 characters"],
+        lowercase: true
     },
     region: String,
     image: {

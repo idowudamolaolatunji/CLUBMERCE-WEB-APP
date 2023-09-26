@@ -12,6 +12,7 @@ exports.createAffiliateLink = async (req, res) => {
     const user = await User.findOne({ username });
     const product = await Product.findOne({ slug: req.params.productSlug });
     if(!user) return res.status(400).json({ message: 'Enter a valid user...' });
+    console.log(user, product)
 
     // Generate the affiliate promotion link
     

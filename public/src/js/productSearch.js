@@ -8,9 +8,23 @@ const hideLoadingOverlay = () => {
     spinOverlay.style.visibility = 'hidden';
 };
 
+document.querySelector('.chatHref').addEventListener('click', function(e) {
+    showLoadingOverlay();
+    window.setTimeout(() => {
+        hideLoadingOverlay();
+    }, 5000);
+});
+
 document.querySelector('.go-back').addEventListener('click', function(e) {
     showLoadingOverlay();
 });
+
+// document.querySelector('.back-to-top').addEventListener('click', function(e) {
+//     showLoadingOverlay();
+// });
+
+
+
 
 const profileBox = document.querySelector('.Profile__hovered');
 const profileImg = document.querySelector('.nav__image');

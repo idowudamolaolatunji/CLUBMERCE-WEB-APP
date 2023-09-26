@@ -12,9 +12,9 @@ block content
 
 
             #uploader__image--card
-                img#uploader__image(src=`/asset/img/users/${user.image}` alt='')
+                img#uploader__image.uploader__image(src=`/asset/img/users/${user.image}` alt=`${user.image}`)
                 #uploader__image--label-box
-                    input#uploader__image--input(name='image' type='file' accept='image/*')
+                    input#uploader__image--input.user-profile-image(name='image' type='file' accept='image/*')
                     label#uploader__image--label(for='uploader__image--input')
                         i.fa-solid.fa-camera
                         |  Add photo
@@ -59,25 +59,22 @@ block content
             #uploader__image--card
                 img#uploader__image(src=`/asset/img/users/${user.image}` alt='')
                 #uploader__image--label-box
-                    input#uploader__image--input(name='photo' type='file' accept='image/png, image/jpeg')
+                    input#uploader__image--input.user-profile-image(name='photo' type='file' accept='image/png, image/jpeg')
                     label#uploader__image--label(for='uploader__image--input')
                         i.fa-solid.fa-camera
                         |  Add image
-            p#uploader__image--username= user.businessName || user.fullName
-            button.img__upload--btn.btn(type="submit") Upload logo / image
+            p#uploader__image--username= user.businessName
+            button.img__upload--btn.btn(type="submit") Upload brand logo
 
 
         form.form__data.form-profile-data#form-data-vendor
             h3.dashboard__heading Update profile info
             .form__item
-                label.form__label(for='fullName') Full name
-                input#fullName.form__input(type='text', value=user.fullName)
-            .form__item
-                label.form__label(for='businessName') Business name
-                input#businessName.form__input(type='text', value=user.businessName placeholder="Enter your business name")
+                label.form__label(for='businessName') Brand name
+                input#businessName.form__input.disable(readonly disable type='text', value=user.businessName placeholder="Enter your brand name")
             .form__item
                 label.form__label(for='email') Email address
-                input#email.form__input.disable(type='email' value=user.email readonly disable)
+                input#email.form__input.disable(type='email' value=`${user.email}` readonly disable)
             .form__item
                 label.form__label(for='phone') Phone number
                 input#phone.form__input(type='tel' value=user.phone)

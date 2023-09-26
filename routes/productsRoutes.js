@@ -10,20 +10,19 @@ router.route('/top-20-best',)
     
 router.route("/")
 .get(authController.protect, productsController.getAllProduct)
-.post(authController.protect, productsController.uploadProductImage, productsController.resizeProductImage, productsController.createProduct)
-// .post(
-//   authController.protect,
-//   productsController.uploadProductImages,
-//   productsController.createProduct
-// );
-// .post( authController.protect, productsController.createProduct );
+.post(authController.protect, productsController.createProduct)
+router.patch('/uploadProductImage/:id' , authController.protect, productsController.uploadProductImage, productsController.createProductImages)
+// router.patch('/uploadProductImage/:id' , authController.protect, productsController.uploadProductImage, productsController.resizeProductImage, productsController.createProductImages)
+// router.patch('/uploadProductImage/:id' , authController.protect, productsController.createProductImages)
 
 router.route('/vendor-product')
   .get(authController.protect, productsController.getProductsByVendor)
 
 router.route("/:id")
 .get(authController.protect, productsController.getProduct)
-// .patch(authController.protect, productsController.uploadProductImage, productsController.resizeProductImage, productsController.updateProduct)
+.patch(authController.protect, productsController.updateProduct)
+// .patch(authController.protect, productsController.uploadProductImage, productsController.resizeProductImage, productsController.updateProductImages)
+
 .delete(productsController.deleteProduct);
 
 router.route('/search-product').post(authController.protect, productsController.searchProduct);

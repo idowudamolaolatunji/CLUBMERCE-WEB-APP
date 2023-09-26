@@ -52,8 +52,8 @@ const createCookie = function(statusCode, user, res, message) {
 
 const sendSignUpEmailToken = async (_, user, token) => {
   try {
-    const verificationUrl = `${_.protocol}://${_.get('host')}/api/users/verify-email/${token}`;
-    // const verificationUrl = `https://clubmerce.com/api/users/verify-email/${token}`;
+    // const verificationUrl = `${_.protocol}://${_.get('host')}/api/users/verify-email/${token}`;
+    const verificationUrl = `https://clubmerce.com/api/users/verify-email/${token}`;
     const mailMessage = confirmEmailTemplate(user.fullName, verificationUrl);
     console.log(verificationUrl)
     await sendEmail({
@@ -109,7 +109,7 @@ exports.signupVendor = catchAsync(async (req, res) => {
     if(usernameExist) return res.json({ message: 'Username already Exist'});
     
     const newUser = await User.create({
-      fullName: req.body.fullName,
+      businessName: req.body.businessName,
       email: req.body.email,
       password: req.body.password,
       passwordConfirm: req.body.passwordConfirm,
@@ -159,6 +159,7 @@ exports.signupBuyer = catchAsync(async (req, res) => {
         user: newBuyer
       }
     });
+    await sendSignUpEmailToken(req, newUser, token);
 });
 
 

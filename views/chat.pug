@@ -1,0 +1,67 @@
+extends base_account 
+
+block content 
+    
+
+    .chat__container
+        .chat__container--head
+            .chat--searchbar
+                i.fa.fa-search.icon(aria-hidden='true')
+                input(type='text' placeholder='Anyone')
+            .chat--title
+                //- i.icon.fa.fa-user
+                p.name.dashboard__heading Idowu Olatunji
+                i.icon.fa.fa-ellipsis(aria-hidden='true')
+
+
+                        
+        .chat__container--body
+            section.discussions__card
+
+                -console.log(chats)
+                -if(chats.length > 0) 
+                    each chat of chats
+                        a.discussion__figure(href=`/chat/${chat.recieverId._id}`)
+                            span.photo
+                                img(src=`/../asset/img/users${chat.recieverId.image}` alt="chat image")
+                            .chat-contact
+                                p.name #{chat.recieverId.name}
+                                p.message 9 pm at the bar if possible
+                -else
+                    p no recent chats
+                
+                
+                
+
+
+            section.chat
+                .messages-chat
+
+                    .message.friend-message
+                        span.photo
+                            img(src="/../asset/img/idowu.png" alt="chat image")
+                        p.text Hi, how are you ? 
+                    p.friend-message-time.time 14h58
+                    .message.friend-message
+                        span.photo
+                            img(src="/../asset/img/idowu.png" alt="chat image")
+                        p.text What are you doing tonight ? Want to go take a drink ?
+                    p.friend-message-time.time 14h58
+                    
+
+                    .message.my-message
+                        span.photo
+                            img(src="/../asset/img/users/avatar.png" alt="chat image")
+                        p.text Hey Megan ! It's been a while
+                    p.my-message-time.time 15h04
+                    .message.my-message
+                        span.photo
+                            img(src="/../asset/img/users/avatar.png" alt="chat image")
+                        p.text When can we meet ?
+                    p.my-message-time.time 15h05
+
+                .chat-footer
+                    input.write-message#write-message(type='text' placeholder='Type your message here')
+                    button.send#send 
+                        i.icon.fa.fa-paper-plane
+                        

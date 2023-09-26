@@ -1,5 +1,4 @@
-console.log('====== PAYSTACK PAYMENT =======');
-// console.log(document.cookie)
+// console.log('====== PAYSTACK PAYMENT =======');
 
 const calcTotalAmount = function(price, quantity ) {
     // Calculate the total amount for the order
@@ -40,8 +39,8 @@ const payWithPaystack = function(price, _, email, sucMessage, errMessage, type, 
 
     const amountInKobo = calcTotalAmount(price, 1) * 100;
     var handler = PaystackPop.setup({
-        // key: 'pk_test_ec63f7d3f340612917fa775bde47924bb4a90af7',
-        key: 'pk_live_34cf0528cd04ac9d4f4675db08bf427bfa1509ad',
+        // key: 'pk_live_34cf0528cd04ac9d4f4675db08bf427bfa1509ad',
+        key: 'pk_test_ec63f7d3f340612917fa775bde47924bb4a90af7',
         email: email,
         amount: amountInKobo,
         currency: 'NGN',

@@ -114,6 +114,7 @@ body
                         
                 -else
                     each subImage of product.subImages
+                        -console.log(subImage)
                         .sub-image
                             img(src=`/asset/img/products/${subImage}` alt='product image')
                 

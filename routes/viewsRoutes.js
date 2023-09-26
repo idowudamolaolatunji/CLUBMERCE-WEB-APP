@@ -1,6 +1,6 @@
 const express = require('express');
+const authController = require('./../controller/authcontroller')
 const viewController = require('../controller/viewsController')
-const authController = require('../controller/authcontroller')
 
 const router = express.Router();
 
@@ -36,6 +36,8 @@ router.get('/vendor/signup', viewController.signupVendor);
 
 // common routes
 router.get('/dashboard', authController.protect, viewController.dashboard);
+// router.get('/chats', authController.protect, viewController.chat);
+// router.get('/chats/:recieverId', authController.protect, viewController.chatWith);
 router.get('/settings', authController.isLoggedIn, viewController.settings);
 router.get('/profile', authController.isLoggedIn, viewController.profile);
 router.get('/performance', authController.isLoggedIn, viewController.performance);

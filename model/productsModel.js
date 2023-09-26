@@ -85,13 +85,17 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    primaryLocation: [String],
-    secondaryLoaction: [String],
+    productVideoLink: String,
+    primaryLocation: String,
+    primaryGender: String,
+    // primaryLocation: [String],
+    // primaryGender: [String],
     primaryAgeRange: [String],
+    secondaryLoaction: [String],
     secondaryAgeRange: [String],
-    primaryGender: [String],
     secondaryGender: [String],
     socialMeadialPlaces: [String],
+    contactEmail: String,
     createdAt: {
         type: Date,
         default: Date.now(),
@@ -141,7 +145,7 @@ productSchema.pre(/^find/, function (next) {
 productSchema.pre(/^find/, function(next) {
     this.populate({
         path: 'vendor',
-        select: 'fullName slug _id username businessName email active pendingAmountWallet totalAmountWallet'
+        select: 'fullName slug _id image username businessName email active pendingAmountWallet totalAmountWallet'
     });
     next();
 });

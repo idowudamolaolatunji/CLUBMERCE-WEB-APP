@@ -35,7 +35,7 @@ body
             div
     header.product__header
         .product__logo
-            img.p-logo(src=`/asset/img/product${product.image}` alt='brand product logo')
+            img.p-logo(src=`${product.vendor.image !== 'avatar.png' ? `/asset/img/users/${product.vendor.image}` : `/asset/img/products/${product.image}`}` alt='brand product logo')
         nav.product__nav
             ul.product__nav--list
                 li.product__nav--item
@@ -108,9 +108,11 @@ body
         .product__section--container
             h2.product__heading--sec product images
             p.description__text You are permitted to use the following imagery in your promotions. You are not allowed to use any imagery found on this website aside from that detailed below. Click to open the image in a new window then right-click &quot;Save Image As&quot; to save to your computer.
-                .images__box
-                -const productSubImage = product.subImages
-                    a(href=`${productSubImage}` target='_blank')
+            .images__box
+                -const productSubImages = product.subImages
+                each productSubImage of productSubImages
+                    //- a(href=`https://clubmerce.com/asset/img/products/${productSubImage}` target='_blank')
+                    a(href=`http://127.0.0.1:3000/asset/img/products/${productSubImage}` target='_blank')
                         img(src=`/asset/img/products/${product.image}` alt='')
                     
     section#demo.product__section.section__demography
@@ -145,7 +147,7 @@ body
                 -const productBanners = product.banners;
                 each productBanner of productBanners
                     a(href=`${productBanner}` target='_blank')
-                        img(src=`/asset/img/products/${product.image}` alt='')
+                        img(src=`/asset/img/banners/${product.image}` alt='')
                     
     section#contact.product__section.section__contact-seller
         .product__section--container

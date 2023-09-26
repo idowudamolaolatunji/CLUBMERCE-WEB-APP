@@ -20,7 +20,11 @@
 .vendor {
     background-image: linear-gradient(rgba(0, 0, 0, .35) , rgba(0, 0, 0, .35)), url('../../asset/img/vendor_hero.jpg');
 }
-
+.get-started-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+}
 .page__section {
     padding: 8rem 0 0;
 }
@@ -101,7 +105,7 @@
 }
 .content__button {
     color: #eee;
-    padding: 1rem 3rem;
+    padding: 1rem 2em;
     border-radius: .6rem;
     display: inline-block;
     background-color: #2e3192;

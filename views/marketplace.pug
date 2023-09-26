@@ -14,11 +14,10 @@ head
     //- STYLES 
     link(rel="stylesheet" href="/src/css/general.css")
     link(rel="stylesheet" href="/src/css/dashboard.css")
-    link(rel="stylesheet" href="/src/css/chat.css")
     link(rel="stylesheet" href="/src/css/query_dashboard.css")
+    //- link(rel="stylesheet" href="/src/css/chat.css")
 
     script(src="/socket.io/socket.io.js")
-    //- script(defer src="/src/js/chat.js")
     script(defer src="/src/js/productSearch.js")
 
 
@@ -151,7 +150,7 @@ body
                                                     p &#x7C;
                                                     p.product__price=`₦${product.price.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                                                 
-                                                button.product__message.person(data-vendor-id=`${id}`)
+                                                a.product__message.person(href=`/chats/${id}`)
                                                     i.fa-solid.fa-envelope.icon
                                                     | Chat vendor
                                                 .product__content
@@ -262,6 +261,11 @@ body
                             button.hoplink__copy-button.outline Copy
         
 
+            //- a.chat__box-toggler.chatHref(href="/chatS" data-id=`${user._id}` data-fullName=`${user.fullName}` data-img=`${user.image}` style=`${page === 'chat' || user.role === 'admin' ? 'display: none; opacity: 0;' : ''}`)
+                span.material-symbols-rounded
+                    i.fa-solid.fa-comment
+                    | Chat
+
             //- .chat__box
                 .chat-top
                     p.chat-name Idowu Olatunji
@@ -297,7 +301,7 @@ body
                         i.fa-solid.fa-paperclip.chat-icon
                         i.fa-regular.fa-face-smile.chat-icon
 
-            .chat__box
+            //- .chat__box
                 .chat-head
                     i.fa-solid.fa-arrow-left.btn-back 
                     p.chat-person From Admin

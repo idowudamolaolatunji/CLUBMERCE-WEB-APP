@@ -30,6 +30,9 @@ const hideLoadingOverlay = () => {
 
 document.querySelectorAll('a').forEach(el => el.addEventListener('click', function(e) {
     showLoadingOverlay();
+    window.setTimeout(() => {
+        hideLoadingOverlay();
+    }, 5000);
 }));
 
 
@@ -515,21 +518,10 @@ const closeUpdateModal = () => {
 const showUploadModal = function() {
     const html = `
         <div class="product__overlay">
-            <div class="product__modal">
+            <div class="product__modal product__details--modal">
                 <i class="fa-solid fa-close icon form__close-icon"></i>
                 <h3 class="dashboard__heading">Add new product</h3>
                 <form class="product__form product__form-create" enctype="multipart/form-data">
-
-                    <div class="form__body-generic">
-                        <div id="uploader__image--card">
-                            <img id="uploader__image" src="/asset/img/products/product-default.png" alt="" />
-                            <div id="uploader__image--label-box">
-                                <input name="image" id="product__image" type="file" name='image'>
-                                <label id="uploader__image--label" for="product__image"><i class="fa-solid fa-camera"></i> Add image</label>
-                            </div>
-                        </div>
-                    </div>
-
 
                     <div class="form__body-generic">
                         <label class="form__label" for="product__name">Product Name</label>
@@ -537,11 +529,13 @@ const showUploadModal = function() {
                     </div>
                     <div class="form__body-generic">
                         <label class="form__label" for="product__summary">Product Summary (Short Summary)</label>
-                        <textarea class="textarea form__input" id="product__summary" style="height: 6rem;" type="text" name="summary" required="" placeholder="Product Summary (not more than 120 characters)"></textarea>
+                        <textarea class="textarea form__input" id="product__summary" style="height: 6rem;" type="text" name="summary" required="" placeholder="Product Summary (not more than 120 characters)" minlength="60" maxlength="200"></textarea>
+                        <p class="error"></p>
                     </div>
                     <div class="form__body-generic">
                         <label class="form__label" for="product__description">Product Description (Details)</label>
-                        <textarea class="textarea form__input" id="product__description" style="height: 15rem;" type="text" name="description" required="" placeholder="Product Description"></textarea>
+                        <textarea class="textarea form__input" id="product__description" style="height: 15rem;" type="text" name="description" required="" placeholder="Product Description" minlength="500" maxlength="5000"></textarea>
+                        <p class="error"></p>
                     </div>
                     <div class="form__grid-generic">
                         <div class="form__body-generic">
@@ -599,34 +593,73 @@ const showUploadModal = function() {
                             </select>
                         </div>
                     </div>
+                    <h4 class="">Demography</h4>
+                    <div class="form__grid3-generic">
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__primary-location">Primary Location</label>
+                            <select class="form__select" id="product__primary-location" name="primaryLocation">
+                                <option value=nigeria>Nigeria</option>
+                                <option value=ghana>Ghana</option>
+                            </select>
+                        </div>
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__primary-gender">Primary Gender</label>
+                            <select class="form__select" id="product__primary-gender" name="primaryGender">
+                                <option value=male>Male</option>
+                                <option value=female>Female</option>
+                                <option value=both gender>Both Gender</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn form__submit form__submit-generic" type="submit">Add product details</button>
+                </form>
+            </div>
+
+
+            <div class="product__modal product__image--modal">
+                <h3 class="dashboard__heading">Add product image</h3>
+                <form class="product__form product__form-create-image">
+            
+                    <div class="product__main-image">
+                        <p class="form__label photo-head">Product main image Maximim of 1 upload</p>
+                        <input name="image" id="mainimage" class="btn-upload btn__image-upload"  type="file" name='image' accept="image/*" max="1" required />
+                    </div>
                     
                     <div class="product__sub-images">
                         <p class="form__label photo-head">Product sub images Maximim of 6 upload</p>
-                        <div class="sub-images">
-                            <img class="sub-image sub-image1" src="asset/img/product-default.png" alt="product sub image"/>
-                        </div>
-                        <input class="btn-upload btn__image-upload sub-images-input" type="file" accept="image/*" id="imagesubs" name="imagesubs" multiple max="6" />
-                    </div>
-                    <div class="product__banners">
-                        <p class="form__label photo-head">Product banner Maximum of 4 upload</p>
-                        <div class="banners">
-                            <img class="banner banner1" src="asset/img/product-default.png" alt="product sub image"/>
-                        </div>
-                        <input class="btn-upload btn__banner-upload banner-input" type="file" accept="image/*" id="imagebanners" name="imagebanners" multiple max="4" />
+                        <input class="btn-upload btn__image-upload" type="file" accept="image/*" id="imagesubs" name="imagesubs" multiple max="6" required />
                     </div>
 
-                    <button class="btn form__submit form__submit-generic" type="submit">Add product</button>
+                    <div class="form__body-generic">
+                        <label for="productVideoLink" class="form__label">Product Embeded Video Link From Youtube (Optional)</label>
+                        <input id="productVideoLink" class="form__input" placeholder="Place Embeded Link Here.."/>
+                    </div>
+
+                    <div class="product__banners">
+                        <p class="form__label photo-head">Product banner Maximum of 4 upload</p>
+                        <input class="btn-upload btn__image-upload" type="file" accept="image/*" id="imagebanners" name="imagebanners" multiple max="4" required />
+                    </div>
+                    
+                    <button class="btn form__submit form__submit-generic" type="submit">Add product Images</button>
                 </form>
             </div>
         </div>
     `;
   
     document.body.insertAdjacentHTML('afterbegin', html);
+    // Get references to modal sections
+    const productDetailsModal = document.querySelector('.product__details--modal');
+    const productImageModal = document.querySelector('.product__image--modal');
+
+    // Initially, show the product details modal and hide the image modal
+    productDetailsModal.style.display = 'block';
+    productImageModal.style.display = 'none';
+
 }
 
 
 // update markup
-const showUpdateModal = (productName, productImage) => {
+const showUpdateModal = (productName, _) => {
     const html = `
         <div class="product-update__overlay">
             <div class="product-update__modal">
@@ -635,15 +668,6 @@ const showUpdateModal = (productName, productImage) => {
 
                 <form class="product__form product__form-update product__form-admin-update">
 
-                    <div class="form__body-generic">
-                        <div id="uploader__image--card">
-                            <img id="uploader__image" src="/asset/img/products/${productImage}" alt="" />
-                            <div id="uploader__image--label-box">
-                                <input name="image" id="uploader__image--input" class="upload-image" type="file" name='image' accept="image/png, image/jpeg">
-                                <label id="uploader__image--label" for="uploader__image--input"><i class="fa-solid fa-camera"></i> Add image</label>
-                            </div>
-                        </div>
-                    </div>
                     <div class="form__body-generic">
                         <label class="form__label" for="product__update__name">Product Name</label>
                         <input class="form__input" id="product-update__name" value='${productName}' type="text" name="product__name" required="" placeholder="Product name"/>
@@ -711,23 +735,47 @@ const showUpdateModal = (productName, productImage) => {
                             </select>
                         </div>
                     </div>
-                    
-                    <div class="product__sub-images">
-                        <p class="form__label photo-head">Product sub images Maximim of 6 upload</p>
-                        <div class="sub-images">
-                            <img class="sub-image sub-image1" src="asset/img/product-default.png" alt="product sub image"/>
-                        </div>
-                        <input class="btn-upload btn__image-upload sub-images-input" type="file" accept="image/*" id="imagesubs" name="imagesubs" multiple max="6" />
-                    </div>
 
-                    <div class="product__banners">
-                        <p class="form__label photo-head">Product banner Maximum of 4 upload</p>
-                        <div class="banners">
-                            <img class="banner banner1" src="asset/img/product-default.png" alt="product sub image"/>
+                    <h4 class="">Demography</h4>
+                    <div class="form__grid3-generic">
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__primary-location">Primary Location</label>
+                            <select class="form__select" id="product__primary-location" name="primaryLocation">
+                                <option value=nigeria>Nigeria</option>
+                                <option value=ghana>Ghana</option>
+                            </select>
                         </div>
-                        <input class="btn-upload btn__banner-upload banner-input" type="file" accept="image/*" id="imagebanners" name="imagebanners" multiple max="4" />
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__primary-gender">Primary Gender</label>
+                            <select class="form__select" id="product__primary-gender" name="primaryGender">
+                                <option value=male>Male</option>
+                                <option value=female>Female</option>
+                                <option value=female>Both Gender</option>
+                            </select>
+                        </div>
+                        
                     </div>
-                    <button class="btn form__submit form__submit-generic" type="submit">Add product
+                    <h4 class="">Demography</h4>
+                    <div class="form__grid3-generic">
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product-update__primary-location">Primary Location</label>
+                            <select class="form__select" id="product-update__primary-location" name="primaryLocation">
+                                <option value=nigeria>Nigeria</option>
+                                <option value=ghana>Ghana</option>
+                            </select>
+                        </div>
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product-update__primary-gender">Primary Gender</label>
+                            <select class="form__select" id="product-update__primary-gender" name="primaryGender">
+                                <option value=male>Male</option>
+                                <option value=female>Female</option>
+                                <option value=both gender>Both Gender</option>
+                            </select>
+                        </div>
+                        
+                    </div>
+                    
+                    <button class="btn form__submit form__submit-generic" type="submit">Update product details
                     </button>
                 </form>
             </div>
@@ -739,57 +787,101 @@ const showUpdateModal = (productName, productImage) => {
 
 
 
-const imageInput = document.getElementById('uploader__image--input');
-const imagePreview = document.getElementById('uploader__image');
-if(imageInput) {
-    imageInput.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            imagePreview.src = imageUrl;
-        }
-    });
-}
 
 
 
 /*
+primaryAgeRange
+primaryGender
+primaryLocation
+socialMeadialPlaces
+contactEmail
 
- document.body.addEventListener('change', (e) => {
-            const target = e.target;
-            if(target.classList.contains('product__image')) {
-                const file = target.files[0];
-                if (file) {
-                    const imageUrl = URL.createObjectURL(file);
-                    document.getElementById('uploader__image').src = imageUrl;
-                }
-            }
-        });
+document.body.addEventListener('change', (e) => {
+    const target = e.target;
+    if(target.classList.contains('product__image')) {
+        const file = target.files[0];
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            document.getElementById('uploader__image').src = imageUrl;
+        }
+    }
+});
+
+
+        
+
+
+        <div class="form__body-generic">
+            <div id="uploader__image--card">
+                <img id="uploader__image" src="/asset/img/products/${productImage}" alt="" />
+                <div id="uploader__image--label-box">
+                    <input name="image" id="uploader__image--input" class="upload-image" type="file" name='image' accept="image/png, image/jpeg">
+                    <label id="uploader__image--label" for="uploader__image--input"><i class="fa-solid fa-camera"></i> Add image</label>
+                </div>
+            </div>
+        </div>
+
+
+    // const form = new FormData(target);
+    // const imageInput = document.getElementById('product__image');
+    // const subImagesInput = document.getElementById('imagesubs');
+    // const bannerInput = document.getElementById('imagebanners');
+    // if (imageInput.files.length > 0) {
+    //     form.append('image', imageInput.files[0]);
+    // }
+    // if (subImagesInput.files.length > 0) {
+    //     for (let i = 0; i < subImagesInput.files.length; i++) {
+    //         form.append('imagesubs', subImagesInput.files[i]);
+    //     }
+    // }
+    // if (bannerImagesInput.files.length > 0) {
+    //     for (let i = 0; i < bannerImagesInput.files.length; i++) {
+    //         form.append('imagebanners', bannerImagesInput.files[i]);
+    //     };
+    // }
+    // const formData = {};
+    // for (const [key, value] of form) {
+    //     formData[key] = value;
+    //     console.log(key, value)
+    // }
+
+    
+    const form = new FormData();
+    form.append('image', document.getElementById('product__image').files[0]);
+    for (let i = 0; i < document.getElementById('imagesubs').files.length; i++) {
+        form.append('imagesubs', document.getElementById('imagesubs').files[i]);
+    }
+    for (let i = 0; i < document.getElementById('imagebanners').files.length; i++) {
+        form.append('imagebanners', document.getElementById('imagebanners').files[i]);
+    };
+    form.append('imagesubs', document.getElementById('imagesubs'));
+    form.append('imagebanners', document.getElementById('imagebanners'));
+                
 */
 
 
-const postProduct = async function(form, type, id) {
+
+const postProduct = async function(formDetails, type, id) {
     let url, method;
     try {
         if(type === 'create') {
             url = '/api/products';
             method = 'POST'
         }
-        // if(type === 'update') {
-        //     url = `/api/products/${id}`;
-        //     method = 'PATCH'
-        // }
-        showLoadingOverlay()
+        if(type === 'update') {
+            url = `/api/products/${id}`;
+            method = 'PATCH'
+        }
+        showLoadingOverlay();
         const res = await fetch(url, {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
             },
-            // body: JSON.stringify(form)
-            body: form
+            body: JSON.stringify(formDetails)
         });
-        console.log(res)
-
+        console.log(res);
         if (!res.ok) {
             hideLoadingOverlay()
             showAlert('error', 'Product upload failed');
@@ -802,14 +894,17 @@ const postProduct = async function(form, type, id) {
         if(data.status === 'success') {
             hideLoadingOverlay();
             if(type === 'create') {
-                showAlert('success', 'Product Created successfully..');
-            }else {
-                showAlert('success', 'Product Updated successfully..');
-            }
-            window.location.reload(true);
-            return;
-        }
+                showAlert('success', 'Product Details Created successfully..');
+                const productId = data.data.product._id;
+                
+                document.querySelector('.product__details--modal').style.display = 'none';
+                document.querySelector('.product__image--modal').style.display = 'block';
 
+                return productId
+            }else {
+                showAlert('success', 'Product Details Updated successfully..');
+            }
+        }
     } catch (err) {
         console.log(err);
         hideLoadingOverlay();
@@ -817,11 +912,40 @@ const postProduct = async function(form, type, id) {
 };
 
 
-// Create product
+const postProductImages = async function(formImages, id) {
+    try {
+        showLoadingOverlay();
+        const res = await fetch(`/api/products/uploadProductImage/${id}`, {
+            method: 'PATCH',
+            body: formImages,
+        });
+        if (!res.ok) {
+            hideLoadingOverlay();
+            showAlert('error', 'Product image upload failed');
+            return;
+        }
 
+        const data = await res.json();
+        console.log(res, data);
+        
+        if (data.status === 'success') {
+        hideLoadingOverlay();
+        showAlert('success', 'Product Images Uploaded successfully..');
+        window.location.reload(true)
+        }
+    } catch(err) {
+        console.log(err)
+        hideLoadingOverlay();
+        showAlert('error', `${err.message || err}`);
+    }
+} 
+
+
+// Create product
 if (productCreate) {
     productCreate.addEventListener('click', function (e) {
         const existingModal = document.querySelector('.product__overlay');
+        let productId;
         if (existingModal) {
             return;
         }
@@ -832,71 +956,98 @@ if (productCreate) {
         });
 
        
-        document.body.addEventListener('submit', (e) => {
+        document.body.addEventListener('submit', async (e) => {
             const target = e.target;
+            console.log(target);
             if (target.classList.contains('product__form-create')) {
                 e.preventDefault();
-                
-                // const form = new FormData(target);
-                // const imageInput = document.getElementById('product__image');
-                // const subImagesInput = document.getElementById('imagesubs');
-                // const bannerImagesInput = document.getElementById('imagebanners');
-                // if (imageInput.files.length > 0) {
-                //     form.append('image', imageInput.files[0]);
-                // }
-                // if (subImagesInput.files.length > 0) {
-                //     for (let i = 0; i < subImagesInput.files.length; i++) {
-                //         form.append('imagesubs', subImagesInput.files[i]);
-                //     }
-                // }
-                // if (bannerImagesInput.files.length > 0) {
-                //     for (let i = 0; i < bannerImagesInput.files.length; i++) {
-                //         form.append('imagebanners', bannerImagesInput.files[i]);
-                //     };
-                // }
-                // const formData = {};
-                // for (const [key, value] of form) {
-                //     formData[key] = value;
-                //     console.log(key, value)
-                // }
 
-                const form = new FormData();
-                form.append('image', document.getElementById('product__image').files[0]);
-                form.append('name', document.getElementById('product__name').value);
-                form.append('summary', document.getElementById('product__summary').value);
-                form.append('description', document.getElementById('product__description').value);
-                form.append('price', document.getElementById('product__price').value);
-                form.append('commissionPercentage', document.getElementById('product__commission').value);
-                form.append('type', document.getElementById('product__type').value);
-                form.append('niche', document.getElementById('product__category').value);
-                form.append('recurringCommission', document.getElementById('product__recurring').value);
-                for (let i = 0; i < document.getElementById('imagesubs').files.length; i++) {
-                    form.append('imagesubs', document.getElementById('imagesubs').files[i]);
+                const summaryInput = document.getElementById('product__summary');
+                const descriptionInput = document.getElementById('product__description');
+
+                const summary = summaryInput.value;
+                const description = descriptionInput.value;
+
+                const summaryMinLength = parseInt(summaryInput.getAttribute('minlength'));
+                const summaryMaxLength = parseInt(summaryInput.getAttribute('maxlength'));
+                const descriptionMinLength = parseInt(descriptionInput.getAttribute('minlength'));
+                const descriptionMaxLength = parseInt(descriptionInput.getAttribute('maxlength'));
+
+                if (summary.length < summaryMinLength || summary.length > summaryMaxLength) {
+                    displayError(summaryInput, `Summary must be between ${summaryMinLength} and ${summaryMaxLength} characters.`);
+                } else if (description.length < descriptionMinLength || description.length > descriptionMaxLength) {
+                    displayError(descriptionInput, `Description must be between ${descriptionMinLength} and ${descriptionMaxLength} characters.`);
+                } else {
+                    // All character limits are met, proceed to post the product
+                    
+                    const name =  document.getElementById('product__name').value;
+
+                    const price =  document.getElementById('product__price').value;
+                    const commissionPercentage =  document.getElementById('product__commission').value;
+                    const type =  document.getElementById('product__type').value;
+                    const niche =  document.getElementById('product__category').value;
+                    const recurringCommission =  document.getElementById('product__recurring').value;
+                    const primaryLocation =  document.getElementById('product__primary-location').value;
+                    const primaryGender =  document.getElementById('product__primary-gender').value;
+                    
+                    const formDetailsObj = { name, summary, description, price, commissionPercentage, type, niche, recurringCommission, primaryLocation, primaryGender };                
+
+                    
+                    productId = await postProduct(formDetailsObj, 'create');
                 }
-                for (let i = 0; i < document.getElementById('imagebanners').files.length; i++) {
-                    form.append('imagebanners', document.getElementById('imagebanners').files[i]);
-                };
-                // form.append('imagesubs', document.getElementById('imagesubs'));
-                // form.append('imagebanners', document.getElementById('imagebanners'));
+            }
+
+            if(target.classList.contains('product__form-create-image')) {
+                e.preventDefault();
+                console.log('i am current..')
+
+                const subImages = document.getElementById('imagesubs').files;
+                const banners = document.getElementById('imagebanners').files;
                 
-                postProduct(form, 'create');
+                const formImages = new FormData();
+                formImages.append('image', document.getElementById('mainimage').files[0]);
+                for (const subImage of subImages) {
+                    formImages.append('imagesubs', subImage);
+                }
+                for (const banner of banners) {
+                    formImages.append('imagebanners', banner);
+                }
+
+                for (const [key, value] of formImages.entries()) {
+                    console.log(key, value);
+                }
+                postProductImages(formImages, productId);
             }
         });
     });
 } 
 
 
+function displayError(inputElement, errorMessage) {
+    const errorElement = inputElement.parentElement.querySelector('.error');
+    errorElement.textContent = errorMessage;
+}
+
+// Reset error messages when the input is focused
+// document.body.addEventListener('input', (e) => {
+//     const target = e.target;
+//     if (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT') {
+//         const errorElement = target.parentElement.querySelector('.error');
+//         errorElement.textContent = '';
+//     }
+// });
+
+
 
 if(productAdminEdit) {
     productAdminEdit.forEach(el => el.addEventListener('click', function() {
-        const productName = el.dataset.productname;
-        const editingProductId = el.dataset.id;
-        const productImage = el.dataset.productimage;
+        const {productname, id, productimage} = el.dataset;
+
         const existingModal = document.querySelector('.product-update__overlay');
         if (existingModal) {
             return; 
         }
-        showUpdateModal(productName, productImage);
+        showUpdateModal(productname, productimage);
 
         document.querySelector('.form__close-icon').addEventListener('click', function(e) {
             closeUpdateModal();
@@ -907,27 +1058,21 @@ if(productAdminEdit) {
             
             if(target.classList.contains('product__form-admin-update')) {
                 e.preventDefault();
-                const form = new FormData();
-                const inputFiles = document.querySelectorAll('.sub-images-input, .banner-input');
 
-                form.append('image', document.getElementById('uploader__image--input').files[0])
-                form.append('name', document.querySelector('#product-update__name').value)
-                form.append('summary', document.querySelector('#product-update__summary').value)
-                form.append('description', document.querySelector('#product-update__description').value)
-                form.append('price', document.querySelector('#product-update__price').value)
-                form.append('commission', document.querySelector('#product-update__commission').value)
-                form.append('type', document.querySelector('#product-update__type').value)
-                form.append('niche', document.querySelector('#product-update__category').value)
-                form.append('recurring', document.querySelector('#product-update__recurring').value)
-                // Append all selected images to the FormData object
-                inputFiles.forEach(input => {
-                    const files = input.files;
-                    for (let i = 0; i < files.length; i++) {
-                        form.append('images', files[i]);
-                    }
-                });
+                const name =  document.getElementById('product-update__name').value;
+                const summary =  document.getElementById('product-update__summary').value;
+                const description =  document.getElementById('product-update__description').value;
+                const price =  document.getElementById('product-update__price').value;
+                const commissionPercentage =  document.getElementById('product-update__commission').value;
+                const type =  document.getElementById('product-update__type').value;
+                const niche =  document.getElementById('product-update__category').value;
+                const recurringCommission =  document.getElementById('product-update__recurring').value;
+                const primaryGender =  document.getElementById('product-update__primary-location').value;
+                const primaryLocation =  document.getElementById('product-update__primary-gender').value;
+                const formDetailsObj = { name, summary, description, price, commissionPercentage, type, niche, recurringCommission, primaryLocation, primaryGender }; 
 
-                postProduct(form, 'update', editingProductId)
+
+                postProduct(formDetailsObj, 'update', id)
             }
         });
     }));
@@ -936,17 +1081,13 @@ if(productAdminEdit) {
 
 if(productEdit) {
     productEdit.forEach(el => el.addEventListener('click', function() {
-        const productName = el.dataset.productname;
-        const editingProductId = el.dataset.id;
-        console.log(editingProductId)
+        const {productname, id, productimage} = el.dataset;
 
-
-        const productImage = el.dataset.productimage;
         const existingModal = document.querySelector('.product-update__overlay');
         if (existingModal) {
             return; 
         }
-        showUpdateModal(productName, productImage);
+        showUpdateModal(productname, productimage);
 
         document.querySelector('.form__close-icon').addEventListener('click', function(e) {
             closeUpdateModal();
@@ -958,28 +1099,20 @@ if(productEdit) {
             
             if(target.classList.contains('product__form-update')) {
                 e.preventDefault();
-                const form = new FormData();
-                const inputFiles = document.querySelectorAll('.sub-images-input, .banner-input');
 
-                form.append('image', document.getElementById('uploader__image--input').files[0])
-                form.append('name', document.querySelector('#product-update__name').value)
-                form.append('summary', document.querySelector('#product-update__summary').value)
-                form.append('description', document.querySelector('#product-update__description').value)
-                form.append('price', document.querySelector('#product-update__price').value)
-                form.append('commission', document.querySelector('#product-update__commission').value)
-                form.append('type', document.querySelector('#product-update__type').value)
-                form.append('category', document.querySelector('#product-update__category').value)
-                form.append('recurring', document.querySelector('#product-update__recurring').value)
-                // Append all selected images to the FormData object
-                inputFiles.forEach(input => {
-                    const files = input.files;
-                    for (let i = 0; i < files.length; i++) {
-                        form.append('images', files[i]);
-                    }
-                });
+                const name =  document.getElementById('product-update__name').value;
+                const summary =  document.getElementById('product-update__summary').value;
+                const description =  document.getElementById('product-update__description').value;
+                const price =  document.getElementById('product-update__price').value;
+                const commissionPercentage =  document.getElementById('product-update__commission').value;
+                const type =  document.getElementById('product-update__type').value;
+                const niche =  document.getElementById('product-update__category').value;
+                const recurringCommission =  document.getElementById('product-update__recurring').value;
+                const primaryGender =  document.getElementById('product-update__primary-location').value;
+                const primaryLocation =  document.getElementById('product-update__primary-gender').value;
+                const formDetailsObj = { name, summary, description, price, commissionPercentage, type, niche, recurringCommission, primaryLocation, primaryGender }; 
 
-                console.log(form)
-                postProduct(form, 'update', editingProductId);
+                postProduct(formDetailsObj, 'update', id,);
             }
         });
     }));
@@ -1073,6 +1206,21 @@ if(userFormUpdate) {
 }
 */
 
+
+
+const imageInput = document.getElementById('uploader__image--input');
+const imagePreview = document.getElementById('uploader__image');
+if(imageInput) {
+    imageInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            imagePreview.src = imageUrl;
+        }
+    });
+}
+
+
 const uploadProfileImage = async function(form) {
     try {
         showLoadingOverlay()
@@ -1104,7 +1252,7 @@ if(profileImage)
         e.preventDefault();
 
         const form = new FormData();
-        form.append('image', document.getElementById('uploader__image--input').files[0]);
+        form.append('image', document.querySelector('.user-profile-image').files[0]);
         console.log(form)
         uploadProfileImage(form);
     });
@@ -1172,7 +1320,6 @@ const vendorDataForm = document.getElementById('form-data-vendor');
 if (vendorDataForm)
   vendorDataForm.addEventListener('submit', function(e) {
     e.preventDefault();
-    const fullName = document.getElementById('fullName').value;
     const businessName = document.getElementById('businessName').value;
     const email = document.getElementById('email').value;
     const phone = document.getElementById('phone').value;
@@ -1180,7 +1327,7 @@ if (vendorDataForm)
     const state = document.getElementById('state').value;
     const region = document.getElementById('city-region').value;
     const zipCode = Number(document.getElementById('zip-postal').value);
-    const formData = { fullName, businessName, email, phone, country, state, region, zipCode}
+    const formData = { businessName, email, phone, country, state, region, zipCode}
     updateSettings(formData, 'data');
   });
 

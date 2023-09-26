@@ -8,6 +8,7 @@ const Commissions = require('../model/commissionModel');
 const AffiliateLink = require('../model/affiliteLinkModel');
 const Transaction = require('../model/transactionModel');
 const Order = require('../model/orderModel');
+const Chat = require('../model/chatModel');
 const Notification = require('../model/notificationModel'); // there might be an error with the notification
 
 // Global
@@ -15,19 +16,22 @@ let token;
 
 exports.home = async (req, res) => {
     try{
-        if( req.cookies.jwt ) token = req.cookies.jwt;
+        const featuredBrands = await User.find({ role: 'vendor',  vendorAccountType: { $in: ['standard', 'premium'] }})
+        console.log(featuredBrands)
+        if( req.cookies?.jwt ) token = req.cookies?.jwt;
         res.status(200).render('home', {
             title: 'Official Website',
             section: 'home',
             active: 'home',
             token,
+            featuredBrands
         });
     } catch(err) {
         console.log(err)
     }
 }
 exports.getStarted = (req, res) => {
-    if( req.cookies.jwt ) token = req.cookies.jwt;
+    if( req.cookies?.jwt ) token = req.cookies?.jwt;
     res.status(200).render('get-started', {
         title: 'Get Started',
         active: 'get-started',
@@ -77,9 +81,6 @@ exports.verified = async (req, res) => {
 
 
 // visitors / buyers
-exports.paymentForm = (req, res) => {
-    res.status(200).render('payment');
-}
 exports.getOrderProductPage = async(req, res) => {
     res.status(200).render('order_product');
 }
@@ -162,6 +163,38 @@ exports.dashboard = async (req, res) => {
         res.json({message: 'No user with this Id'});
     }
 }
+exports.chat = async(req, res) => {
+    try {
+        const chats = await Chat.find({
+            $or: [
+                { senderId: req.user._id },
+                { receiverId: req.user._id }
+            ]
+        });
+
+        res.status(200).render('chat', {
+            page: 'chat',
+            chats
+        });
+    } catch(err) {
+        console.log(err)
+    }
+}
+exports.chatWith = async(req, res) => {
+    try {
+        const { recieverId } = req.params;
+        const recieverUser = await User.findById(recieverId);
+        const chats = ''
+        res.status(200).render('chat', {
+            page: 'chat',
+            active: true,
+            chats,
+            recieverUser
+        });
+    } catch(err) {
+        console.log(err)
+    }
+}
 exports.profile = (_, res) => {
     res.status(200).render('profile');
 }
@@ -197,17 +230,15 @@ exports.transaction = async (req, res) => {
         console.log(err)
     }
 }
-
-
 exports.leaderboard = async(req, res) => {
     try {
         const affiliateLeaderboard = await User.find({ role: 'affiliate'}).sort({ totalAmountWallet: -1, promotionLinksCounts: -1, clicks: -1, createdAt: -1 });
         const vendorLeaderboard = await User.find({ role: 'vendor'}).sort({ totalAmountWallet: -1, createdAt: -1 });
         const currentUser = await User.findById(req.user._id);
-        const vendorProducts = await Product.find()
+        const vendorProducts = await Product.find();
 
         res.status(200).render('leaderboard', {
-            title: `${'v'} Leaderboards`,
+            title: `${currentUser.role} Leaderboards`,
             affiliateLeaderboard,
             vendorLeaderboard,
             currentUser,
@@ -228,7 +259,7 @@ exports.signupVendor = (req, res) => {
 }
 exports.productCatalog = async(req, res) => {
     try {
-        const products = await Product.find({ vendor: req.user._id })
+        const products = await Product.find({ vendor: req.user._id }).sort({ createdAt: -1 });
         
         res.status(200).render('product_catalog', {
             title: 'Your Product',

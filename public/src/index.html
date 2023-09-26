@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
@@ -6,13 +6,153 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="./css/general.css">
+        <link rel="stylesheet" href="./css/dashboard.css">
+        <link rel="stylesheet" href="./css/query_dashboard.css">
     </head>
     <body>
-        <section></section>
+        <section>
+            <div class="product__overlay">
+                <div class="product__modal">
+                    <i class="fa-solid fa-close icon form__close-icon"></i>
+                    <h3 class="dashboard__heading">Add new product</h3>
+                    <form class="product__form product__form-create" enctype="multipart/form-data">
+    
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__name">Product Name</label>
+                            <input class="form__input" id="product__name" type="text" name="name" required="" placeholder="Product name"/>
+                        </div>
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__summary">Product Summary (Short Summary)</label>
+                            <textarea class="textarea form__input" id="product__summary" style="height: 6rem;" type="text" name="summary" required="" placeholder="Product Summary (not more than 120 characters)"></textarea>
+                        </div>
+                        <div class="form__body-generic">
+                            <label class="form__label" for="product__description">Product Description (Details)</label>
+                            <textarea class="textarea form__input" id="product__description" style="height: 15rem;" type="text" name="description" required="" placeholder="Product Description"></textarea>
+                        </div>
+                        <div class="form__grid-generic">
+                            <div class="form__body-generic">
+                                <label class="form__label" for="product__price">Product Price (NGN)</label>
+                                <input class="form__input" id="product__price" type="number" name="price" required="" placeholder="Product price (NGN)"/>
+                            </div>
+                            <div class="form__body-generic">
+                                <label class="form__label" for="product__commission">Product Commission in (%)</label>
+                                <input class="form__input" id="product__commission" type="number" name="commissionPercentage" required="" placeholder="Product Commission in (%)"/>
+                            </div>
+                        </div>
+                        <div class="form__grid3-generic">
+                            <div class="form__body-generic">
+                                <label class="form__label" for="product__type">Product Type</label>
+                                <select class="form__select" id="product__type" name="type">
+                                    <option value="Physical">Physical Product</option>
+                                    <option value="Digital">Digital Product</option>
+                                </select>
+                            </div>
+                            <div class="form__body-generic">
+                                <label class="form__label" for="product__category">Product Category</label>
+                                <select class="form__select" id="product__category" name="niche">
+                                    <option style="display:none">All categories</option>
+                                    <option class="category__item" data-item="arts">Arts</option>
+                                    <option class="category__item" data-item="betting">Betting</option>
+                                    <option class="category__item" data-item="books">Books</option>
+                                    <option class="category__item" data-item="business">Business</option>
+                                    <option class="category__item" data-item="computers">Computers</option>
+                                    <option class="category__item" data-item="cooking">Cooking</option>
+                                    <option class="category__item" data-item="e-Business-and-e-Marketing">E-Business and E-Marketing</option>
+                                    <option class="category__item" data-item="education">Education</option>
+                                    <option class="category__item" data-item="entertainment">Entertainment</option>
+                                    <option class="category__item" data-item="food-and-Wine">Food and Wine</option>
+                                    <option class="category__item" data-item="games">Games</option>
+                                    <option class="category__item" data-item="green-products">Green Products</option>
+                                    <option class="category__item" data-item="health-and-fitness">Health and Fitness</option>
+                                    <option class="category__item" data-item="home-and-garden">Home and Garden</option>
+                                    <option class="category__item" data-item="internet">Internet</option>
+                                    <option class="category__item" data-item="investing">Investing</option>
+                                    <option class="category__item" data-item="jobs">Jobs</option>
+                                    <option class="category__item" data-item="languages">Languages</option>
+                                    <option class="category__item" data-item="reciepe">Reciepe</option>
+                                    <option class="category__item" data-item="parenting-and-Families">Parenting and Families</option>
+                                    <option class="category__item" data-item="self-Help">Self-Help</option>
+                                    <option class="category__item" data-item="spirituality">Spirituality</option>
+                                    <option class="category__item" data-item="sports">Sports</option>
+                                </select>
+                            </div>
+    
+                            <div class="form__body-generic">
+                                <label class="form__label" for="product__recurring">Recurring Commissions</label>
+                                <select class="form__select" id="product__recurring" name="recurringCommission">
+                                    <option value=false>No</option>
+                                    <option value=true>Yes</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        
+                        <h4 class="">Demography</h4>
+                        <div class="form__grid3-generic">
+                            <div class="form__body-generic">
+                                <label class="form__label" for="product__primary-location">Primary Location</label>
+                                <select class="form__select" id="product__primary-location" name="primaryLocation">
+                                    <option value=nigeria>Nigeria</option>
+                                    <option value=ghana>Ghana</option>
+                                </select>
+                            </div>
+                            <div class="form__body-generic">
+                                <label class="form__label" for="product__primary-gender">Primary Gender</label>
+                                <select class="form__select" id="product__primary-gender" name="primaryGender">
+                                    <option value=male>Male</option>
+                                    <option value=female>Female</option>
+                                    <option value=female>Both Gender</option>
+                                </select>
+                            </div>
+                            
+                        </div>
+    
+                        <button class="btn form__submit form__submit-generic" type="submit">Add product details</button>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+            <div class="product__overlay">
+                <div class="product__modal ">
+                    <h3 class="dashboard__heading">Add product image</h3>
+                    <form class="product__form product__form-create-image">
+                        
+                        
+                        <div class="product__main-image">
+                            <p class="form__label photo-head">Product main image Maximim of 1 upload</p>
+                            <input name="image" id="mainimage" class="btn-upload btn__image-upload"  type="file" name='image' accept="image/*" max="1" required />
+                        </div>
+                        
+                        <div class="product__sub-images">
+                            <p class="form__label photo-head">Product sub images Maximim of 6 upload</p>
+                            <input class="btn-upload btn__image-upload" type="file" accept="image/*" id="imagesubs" name="imagesubs" multiple max="6" required />
+                        </div>
         
-        <script src="" defer>
+                        <div class="form__body-generic">
+                            <label for="productVideoLink" class="form__label">Product Embeded Video Link From Youtube (Optional)</label>
+                            <input id="productVideoLink" class="form__input" placeholder="Place Embeded Link Here.."/>
+                        </div>
+                
+                        <div class="product__banners">
+                            <p class="form__label photo-head">Product banner Maximum of 4 upload</p>
+                            <input class="btn-upload btn__image-upload" type="file" accept="image/*" id="imagebanners" name="imagebanners" multiple max="4" required />
+                        </div>
+                        
+                        <button class="btn form__submit form__submit-generic" type="submit">Add product Images</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+
+
+        
+        <script src="./js/dashboard.js" defer>
 
         </script>
     </body>
-</html>
+</html> -->

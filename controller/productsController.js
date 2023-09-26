@@ -1,6 +1,5 @@
 const multer = require('multer');
 const sharp = require('sharp');
-const cloudinary = require('cloudinary').v2
 
 const app = require('../app');
 const catchAsync = require('../utils/catchAsync')
@@ -10,11 +9,12 @@ const APIFeatures = require('../utils/apiFeatures');
 
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
-cloudinary.config({ 
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
-  api_key: process.env.CLOUDINARY_API_KEY, 
-  api_secret: process.env.CLOUDINARY_SECRET_KEY 
-});
+// const cloudinary = require('cloudinary').v2
+// cloudinary.config({ 
+//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+//   api_key: process.env.CLOUDINARY_API_KEY, 
+//   api_secret: process.env.CLOUDINARY_SECRET_KEY 
+// });
 
 const multerStorage = multer.memoryStorage()
 
@@ -41,9 +41,11 @@ exports.uploadProductImage = upload.fields([
 ]);
 
 exports.resizeProductImage = catchAsync(async (req, res, next) => {
-  if(!req.files.image || req.files.subImages) return next();
+  if(!req.files.image || req.files.imagesubs) return next();
+  const productId = req.params.id;
+  console.log(productId)
 
-  const imageMainFileName = `product-${req.params.id}-${Date.now()}-main.jpeg`;
+  const imageMainFileName = `product-${productId}-${Date.now()}-main.jpeg`;
 
   await sharp(req.files.image[0].buffer)
       .resize(750, 750)
@@ -51,43 +53,41 @@ exports.resizeProductImage = catchAsync(async (req, res, next) => {
       .jpeg({ quality: 90 })
       .toFile(`public/asset/img/products/${imageMainFileName}`);
 
-  req.body.image = imageMainFileName;
+  req.files.image.filename = imageMainFileName;
 
   
-  // subImages
-  req.body.subImages = [];
+  // imagesubs
+  req.files.imagesubs.filenames = [];
   await Promise.all(
-    req.files.subImages.map(async (file, i) => {
-    const filename = `product-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
+    req.files.imagesubs.map(async (file, i) => {
+    const filename = `product-${productId}-${Date.now()}-${i + 1}.jpeg`;
     await sharp(file.buffer)
       .resize(750, 750)
       .toFormat('jpeg')
       .jpeg({ quality: 90 })
       .toFile(`public/asset/img/products/${filename}`);
 
-    req.body.subImages.push(filename);
+    req.files.imagesubs.filenames.push(filename);
    })
   );
 
   
   // banners
-  req.body.banners = [];
+  req.files.imagebanners.filenames = [];
   await Promise.all(
-    req.files.banners.map(async (file, i) => {
-    const filename = `product-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
+    req.files.imagebanners.map(async (file, i) => {
+    const filename = `product-${productId}-${Date.now()}-${i + 1}.jpeg`;
     await sharp(file.buffer)
       .resize(2000, 950)
       .toFormat('jpeg')
       .jpeg({ quality: 90 })
       .toFile(`public/asset/img/products/${filename}`);
 
-    req.body.banners.push(filename);
+    req.files.imagebanners.filenames.push(filename);
    })
   );
-  
-  
   next();
-})
+});
 
 
 
@@ -145,181 +145,103 @@ exports.getAllProduct = async(req, res) => {
 
 
 
-/*
 exports.createProduct = async (req, res) => {
   try {
     const vendorId = req.user._id;
-    const vendor = await User.findById(vendorId);
-    // console.log(vendorId, vendor)
-    if (!vendor) {
-      return res.status(404).json({ error: 'Vendor not found' });
-    }
-    console.log(req.File)
 
-    if (!req.files || !req.files['image'] || req.files['image'].length !== 1) {
-      return res.status(400).json({ message: 'Invalid main image file' });
-    }
-
-    /*
-    // Validate and upload the main image to Cloudinary
-    if (!req.files || !req.files['image'] || req.files['image'].length !== 1) {
-      return res.status(400).json({ error: 'Invalid main image file' });
-    }
-    const mainImageResult = await cloudinary.uploader.upload(req.files['image'][0].path);
-
-    // Validate and upload sub-images to Cloudinary
-    const subImages = [];
-    if (req.files && req.files['subImages'] && Array.isArray(req.files['subImages'])) {
-      for (const subImage of req.files['subImages']) {
-        const result = await cloudinary.uploader.upload(subImage.path);
-        subImages.push(result.secure_url);
-      }
-    } else {
-      return res.status(400).json({ error: 'Invalid sub-images files' });
-    }
-
-    // Validate and upload banners to Cloudinary
-    const banners = [];
-    if (req.files && req.files['banners'] && Array.isArray(req.files['banners'])) {
-      for (const banner of req.files['banners']) {
-        const result = await cloudinary.uploader.upload(banner.path);
-        banners.push(result.secure_url);
-      }
-    } else {
-      return res.status(400).json({ error: 'Invalid banner files' });
-    }
-    const newProduct = await Product.create({
-      ...req.body,
-      vendor: vendor._id,
-      image: mainImageResult.secure_url,
-      subImages: subImages,
-      banners: banners,
-    });
-    */
-
-    // const mainImageResult = req.files.image[0];
-    // const subImages = req.files.imagesubs || [];
-    // const banners = req.files.imagebanners || [];
-
-    /*const mainImageResult = await sharp(req.files['image'][0].buffer)
-      .resize(750, 750)
-      .toFormat('jpeg')
-      .jpeg({ quality: 90 })
-      .toFile(`public/asset/img/products/product-${req.params.id}-${Date.now()}-main.jpeg`);
-
-    // // Process subImages
-    // const subImages = [];
-    // if (req.files['imagesubs'] && Array.isArray(req.files['imagesubs'])) {
-    //   for (const subImage of req.files['imagesubs']) {
-    //     const result = await sharp(subImage.buffer)
-    //       .resize(750, 750)
-    //       .toFormat('jpeg')
-    //       .jpeg({ quality: 90 })
-    //       .toFile(`public/asset/img/products/product-${req.params.id}-${Date.now()}-${subImages.length + 1}.jpeg`);
-    //     subImages.push(result);
-    //   }
-    // }
-
-    // // Process banners
-    // const banners = [];
-    // if (req.files['imagebanners'] && Array.isArray(req.files['imagebanners'])) {
-    //   for (const banner of req.files['imagebanners']) {
-    //     const result = await sharp(banner.buffer)
-    //       .resize(2000, 950)
-    //       .toFormat('jpeg')
-    //       .jpeg({ quality: 90 })
-    //       .toFile(`public/asset/img/products/product-${req.params.id}-${Date.now()}-${banners.length + 1}.jpeg`);
-    //     banners.push(result);
-    //   }
-    // }
-
+    // Create a new product document using Mongoose
     const newProduct = await Product.create({
       ...req.body,
       vendor: vendorId,
-      image: mainImageResult.secure_url,
-      // subImages: subImages.map(image => image.secure_url),
-      // banners: banners.map(banner => banner.secure_url),
     });
-    
 
-    res.status(201).json({
-      status: 'success',
-      data: {
-        product: newProduct,
-      },
-    });
-  } catch (err) {
-    console.log(err, err.message)
-    res.status(404).json({
-      status: 'fail',
-      message: err.message ||'An error occurred while processing the request',
-    });
-  }
-};
-*/
-
-
-
-/*
-// Validate and upload the main image to Cloudinary
-    if (!req.files || !req.files['image'] || req.files['image'].length !== 1) {
-      return res.status(400).json({ error: 'Invalid main image file' });
-    }
-    const mainImageResult = await cloudinary.uploader.upload(req.files['image'][0].path);
-
-    // Validate and upload sub-images to Cloudinary
-    const subImages = [];
-    if (req.files && req.files['subImages'] && Array.isArray(req.files['subImages'])) {
-      for (const subImage of req.files['subImages']) {
-        const result = await cloudinary.uploader.upload(subImage.path);
-        subImages.push(result.secure_url);
-      }
-    } else {
-      return res.status(400).json({ error: 'Invalid sub-images files' });
-    }
-
-    // Validate and upload banners to Cloudinary
-    const banners = [];
-    if (req.files && req.files['banners'] && Array.isArray(req.files['banners'])) {
-      for (const banner of req.files['banners']) {
-        const result = await cloudinary.uploader.upload(banner.path);
-        banners.push(result.secure_url);
-      }
-    } else {
-      return res.status(400).json({ error: 'Invalid banner files' });
-    }
-*/
-
-exports.createProduct = async (req, res) => {
-  try {
-    const vendorId = req.user._id;
-    
-
-    // Create a new product document using Mongoose
-    // const newProduct = await Product.create({
-    //   ...req.body,
-    //   vendor: vendorId,
-      // image: mainImage,
-      // subImages: subImages,
-      // banners: bannerImages,
-    // });
+    // Validate and save the product
+    // await newProduct.validate(); // This will trigger validation
 
     // Respond with a success message
-    // res.status(201).json({
-    //   status: 'success',
-    //   message: 'Product created successfully',
-    //   data: {
-    //     // product: newProduct
-    //   }
-    // });
+    res.status(201).json({
+      status: 'success',
+      message: 'Product created successfully',
+      data: {
+        product: newProduct
+      }
+    });
   } catch (error) {
-    console.error(error);
+
     res.status(400).json({
       status: 'fail',
-      message: 'Product creation failed'
+      message: error.message || 'Product creation failed'
     });
   }
 };
+
+exports.createProductImages = async(req, res) =>{
+  try{
+    const productId = req.params.id;
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'Product not found',
+      });
+    }
+  
+    const fileName = `product-${productId}-${Date.now()}-main.png`;
+    await sharp(req.files['image'][0].buffer)
+      .resize(750, 750)
+      .toFormat('png')
+      .png({ quality: 90 })
+      .toFile(`public/asset/img/products/${fileName}`);
+      const mainImage = fileName;
+
+    // Process subImages
+    const subImages = [];
+    if (req.files['imagesubs'] && Array.isArray(req.files['imagesubs'])) {
+      for (const subImage of req.files['imagesubs']) {
+        const fileName = `product-${productId}-${Date.now()}-${subImages.length + 1}.jpeg`
+        await sharp(subImage.buffer)
+          .resize(750, 750)
+          .toFormat('jpeg')
+          .jpeg({ quality: 90 })
+          .toFile(`public/asset/img/banners/${fileName}`);
+        subImages.push(fileName);
+      }
+    }
+
+    // Process banners
+    const banners = [];
+    if (req.files['imagebanners'] && Array.isArray(req.files['imagebanners'])) {
+      for (const banner of req.files['imagebanners']) {
+        const fileName = `product-${productId}-${Date.now()}-${banners.length + 1}.jpeg`
+        await sharp(banner.buffer)
+          .resize(2000, 950)
+          .toFormat('jpeg')
+          .jpeg({ quality: 90 })
+          .toFile(`public/asset/img/products/${fileName}`);
+        banners.push(fileName);
+      }
+    }
+ 
+    console.log(req.files, banners, subImages, mainImage);
+    console.log('i am the response');
+
+    product.image = mainImage;
+    product.subImages = subImages;
+    product.banners = banners;
+    await product.save();
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Product upload successful'
+    })
+  }catch(err) {
+    res.status(400).json({
+      status: 'fail',
+      message: 'Images update failed..'
+    })
+  }
+}
 
 
 // const multerStorage = multer.memoryStorage();
@@ -389,9 +311,6 @@ exports.createProduct = async (req, res) => {
 //     res.status(400).json({ status: 'fail', message: 'Product creation failed' });
 //   }
 // };
-
-
-
 
 
 
@@ -512,21 +431,13 @@ exports.getProductsByOption = async (req, res) => {
   
 
 
-
+// update product
 exports.updateProduct = async(req, res) => {
     try {
         const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
             runValidation: true,
         });
-
-        // Update the image field if a new image is uploaded
-        if (req.body.image || req.body.subImages || req.body.banners) {
-          updatedProduct.image = req.body.image;
-          updatedProduct.subImages = req.body.subImages;
-          updatedProduct.banners = req.body.banners;
-          await updated.save();
-        }
 
         res.status(200).json({
             status: "success",
@@ -542,6 +453,16 @@ exports.updateProduct = async(req, res) => {
         })
     }
 };
+
+// update product images
+exports.updateProductImages = async(req, res) => {
+  try{
+
+  }catch(err) {
+    
+  }
+}
+
 
 exports.deleteProduct = async(req, res) => {
     try {

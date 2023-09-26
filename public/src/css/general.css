@@ -203,6 +203,9 @@ button {
     line-height: 1;
     margin-right: .8rem;
 }
+textarea {
+    resize: none;
+}
 
 /* ============================= */
 /* HELPER STYLES */

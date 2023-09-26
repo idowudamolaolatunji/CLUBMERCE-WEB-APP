@@ -21,8 +21,22 @@ head
     script(defer src="/src/js/dashboard.js")
     script(defer src="/src/js/paymentAndOrder.js")
     script(src="https://js.paystack.co/v2/inline.js")
-    script(defer src="/src/js/chat.js")
-    script(src="/socket.io/socket.io.js")
+    //- script(src="/socket.io/socket.io.js")
+    script(src='https://js.pusher.com/8.2.0/pusher.min.js')
+    //- script(defer src="/src/js/chat.js")
+    //- script.
+        // Enable pusher logging - don't include this in production
+        var pusher = new Pusher('3518bd1be26b07addc01', {
+            cluster: 'mt1'
+        });
+        pusher.logToConsole = true;
+        var channel = pusher.subscribe(`conversation-${user.id}`);
+        var channel = pusher.subscribe(`my-channel`);
+        channel.bind('message', function(data) {
+            alert(JSON.stringify(data));
+            console.log(data);
+        });
+
 
 
 
@@ -146,7 +160,10 @@ body
                                     .profile__owner
                                         .profile__image--box
                                             img.profile__image(src=`/asset/img/users/${user.image}` alt=`user's photo`)
-                                        p.profile__name= user.fullName
+                                        -if(user.role !== 'vendor')
+                                            p.profile__name= user.fullName
+                                        -else
+                                            p.profile__name= user.businessName
                                     a.profile__link.nav__link(href="/profile") My profile
                                     button.profile__button.order-nav__link(class=`${user.role === 'buyer' ? 'buyer__nav--logout' : 'nav__logout'}`) signout&nbsp;
                                         i.fa-solid.fa-arrow-right-to-bracket.profile__icon
@@ -328,7 +345,7 @@ body
                         -if(user.role === "vendor")
                             .main__dashboard--container
                                 span.heading
-                                    h3.dashboard__heading=`Welcome back, ${!user.business ? user.fullName.split(' ')[0] : user.businessName}`
+                                    h3.dashboard__heading=`Welcome back, ${user.businessName}`
                                     //- span &nbsp;👋🏾
                                     span &nbsp;
                                         picture
@@ -364,6 +381,15 @@ body
                                         span 
                                             p.insight__title My Products
                                             p.insight__text= products.length
+
+
+                                    .insight.insight__four
+                                        .icon__box 
+                                            i.fa-solid.fa-arrow-up-right-from-square.insight__icon
+                                        span 
+                                            p.insight__title Clicks
+                                            p.insight__text= products.reduce((acc, product) => acc + product.clicks, 0)
+
                                             
                                     -const currentOrderCount = recieviedOrders.filter(order => order.orderStatus === 'pending');
                                     .insight.insight__three
@@ -681,32 +707,38 @@ body
 
 
 
+    //- a.chat__box-toggler(href="/chat" data-id=`${user._id}` data-fullName=`${user.fullName}` data-img=`${user.image}` style=`${page === 'chat' || user.role === 'admin' ? 'display: none; opacity: 0;' : ''}`)
+        span.material-symbols-rounded
+            i.fa-solid.fa-comment
+            | Chat
+    
+
 
     //- chat box
-    button.chat__box-toggler(style=`${user.role === 'admin' ? 'display: none; opacity: 0;' : ''}`)
+    //- button.chat__box-toggler(style=`${user.role === 'admin' ? 'display: none; opacity: 0;' : ''}`)
         span.material-symbols-rounded
             i.fa-solid.fa-comment
             | Chat
         span.material-symbols-outlined
             i.fa-solid.fa-close
-
-
-    .chat__box
+    //- .chat__box
         .chat-head
             i.fa-solid.fa-arrow-left.btn-back 
             p.chat-person From Admin
-            span.close-btn.material-symbols-outlined close
-        //- .chat-head-chat
-            p.chat-heading Chats ✉
             span.close-btn.material-symbols-outlined close
         ul.chat__box--chat
             li.chat.incoming
                 p Coming Soon...
         .chat-input
-            textarea(placeholder='Enter a message...' spellcheck='false' required='')
-            span#send-btn.material-symbols-rounded send
+            textarea#textarea(placeholder='Enter a message...' spellcheck='false' required)
+            span#send-btn.material-symbols-rounded send.
+
+
 
                                 
+        //- .chat-head-chat
+            p.chat-heading Chats ✉
+            span.close-btn.material-symbols-outlined close
 
 
         

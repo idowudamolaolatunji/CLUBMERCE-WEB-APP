@@ -435,7 +435,9 @@
 
 /* 390px === 39rem === 22.5em */
 @media screen and (max-width: 23.5em) {
-    
+    .btn__image-upload {
+    width: 100%;
+    }
     .insight {
         gap: 2.4rem;
     }
