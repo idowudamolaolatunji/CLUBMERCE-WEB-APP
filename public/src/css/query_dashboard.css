@@ -224,6 +224,9 @@
         width: 75rem;
     }
     .table-row-message .note-no { text-align: left; }
+    .table-po1 {
+        width: 90rem;
+    }
 }
 
 

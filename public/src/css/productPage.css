@@ -29,7 +29,7 @@ body {
 .product__nav--link:link, .product__nav--link:visited {
     text-decoration: none;
     font-size: 1.6rem;
-    color: #333;
+    color: #333 !important;
     font-weight: 500;
 }
 

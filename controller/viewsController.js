@@ -135,7 +135,7 @@ exports.dashboard = async (req, res) => {
         const commissions = await Commissions.find({ affiliate: req.user._id}).sort({ createdAt: -1});
         const recieviedOrders = await Order.find({ vendor: req.user._id }).sort({ createdAt: -1});
         const requestingOrders = await Order.find({ buyer: req.user._id }).sort({ createdAt: -1});
-        const notifications = await Notification.find({ user: user.id }).sort({ createdAt: -1});
+        const notifications = await Notification.find({ user: req.user._id }).sort({ createdAt: -1});
 
         const allUsers = await User.find();
         const allProducts = await Product.find();

@@ -32,7 +32,7 @@ document.querySelectorAll('a').forEach(el => el.addEventListener('click', functi
     showLoadingOverlay();
     window.setTimeout(() => {
         hideLoadingOverlay();
-    }, 5000);
+    }, 7000);
 }));
 
 
@@ -616,6 +616,8 @@ const showUploadModal = function() {
             </div>
 
 
+
+            
             <div class="product__modal product__image--modal">
                 <h3 class="dashboard__heading">Add product image</h3>
                 <form class="product__form product__form-create-image">
@@ -630,10 +632,6 @@ const showUploadModal = function() {
                         <input class="btn-upload btn__image-upload" type="file" accept="image/*" id="imagesubs" name="imagesubs" multiple max="6" required />
                     </div>
 
-                    <div class="form__body-generic">
-                        <label for="productVideoLink" class="form__label">Product Embeded Video Link From Youtube (Optional)</label>
-                        <input id="productVideoLink" class="form__input" placeholder="Place Embeded Link Here.."/>
-                    </div>
 
                     <div class="product__banners">
                         <p class="form__label photo-head">Product banner Maximum of 4 upload</p>
@@ -694,8 +692,8 @@ const showUpdateModal = (productName, _) => {
                         <div class="form__body-generic">
                             <label class="form__label" for="product-update__type">Product Type</label>
                             <select class="form__select" id="product-update__type" name="product__type">
-                                <option value="physical">Physical Product</option>
-                                <option value="digital">Digital Product</option>
+                                <option value="Physical">Physical Product</option>
+                                <option value="Digital">Digital Product</option>
                             </select>
                         </div>
                         <div class="form__body-generic">
@@ -755,26 +753,6 @@ const showUpdateModal = (productName, _) => {
                         </div>
                         
                     </div>
-                    <h4 class="">Demography</h4>
-                    <div class="form__grid3-generic">
-                        <div class="form__body-generic">
-                            <label class="form__label" for="product-update__primary-location">Primary Location</label>
-                            <select class="form__select" id="product-update__primary-location" name="primaryLocation">
-                                <option value=nigeria>Nigeria</option>
-                                <option value=ghana>Ghana</option>
-                            </select>
-                        </div>
-                        <div class="form__body-generic">
-                            <label class="form__label" for="product-update__primary-gender">Primary Gender</label>
-                            <select class="form__select" id="product-update__primary-gender" name="primaryGender">
-                                <option value=male>Male</option>
-                                <option value=female>Female</option>
-                                <option value=both gender>Both Gender</option>
-                            </select>
-                        </div>
-                        
-                    </div>
-                    
                     <button class="btn form__submit form__submit-generic" type="submit">Update product details
                     </button>
                 </form>
@@ -788,9 +766,12 @@ const showUpdateModal = (productName, _) => {
 
 
 
-
-
 /*
+<div class="form__body-generic style="display: none;">
+    <label for="productVideoLink" class="form__label">Product Embeded Video Link From Youtube (Optional)</label>
+    <input id="productVideoLink" class="form__input" placeholder="Place Embeded Link Here.."/>
+</div>
+
 primaryAgeRange
 primaryGender
 primaryLocation
@@ -903,11 +884,13 @@ const postProduct = async function(formDetails, type, id) {
                 return productId
             }else {
                 showAlert('success', 'Product Details Updated successfully..');
+                window.location.reload(true);
             }
         }
     } catch (err) {
         console.log(err);
         hideLoadingOverlay();
+        showAlert('error', err.message || 'Something went wrong!');
     }
 };
 
@@ -936,7 +919,7 @@ const postProductImages = async function(formImages, id) {
     } catch(err) {
         console.log(err)
         hideLoadingOverlay();
-        showAlert('error', `${err.message || err}`);
+        showAlert('error', err.message || 'Something went wrong!');
     }
 } 
 
@@ -1041,13 +1024,13 @@ function displayError(inputElement, errorMessage) {
 
 if(productAdminEdit) {
     productAdminEdit.forEach(el => el.addEventListener('click', function() {
-        const {productname, id, productimage} = el.dataset;
+        const {productname, id} = el.dataset;
 
         const existingModal = document.querySelector('.product-update__overlay');
         if (existingModal) {
             return; 
         }
-        showUpdateModal(productname, productimage);
+        showUpdateModal(productname);
 
         document.querySelector('.form__close-icon').addEventListener('click', function(e) {
             closeUpdateModal();
@@ -1081,13 +1064,14 @@ if(productAdminEdit) {
 
 if(productEdit) {
     productEdit.forEach(el => el.addEventListener('click', function() {
-        const {productname, id, productimage} = el.dataset;
+        const {productname, id, productSummary, productDescription, productPrice, productCommissionPercentage, productType, productNiche, productRecurringCommission, productPrimaryGender, productPrimaryLocation} = el.dataset;
 
         const existingModal = document.querySelector('.product-update__overlay');
         if (existingModal) {
             return; 
         }
-        showUpdateModal(productname, productimage);
+        console.log({productname, id, productSummary, productDescription, productPrice, productCommissionPercentage, productType, productNiche, productRecurringCommission, productPrimaryGender, productPrimaryLocation});
+        showUpdateModal(productname);
 
         document.querySelector('.form__close-icon').addEventListener('click', function(e) {
             closeUpdateModal();

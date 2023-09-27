@@ -104,7 +104,7 @@ body
 
     section.hero-section.container
         .img-container
-            .main-image
+            .about-image
                 img(src=`/asset/img/products/${product.image}` alt='product image')
             .sub--images
                 -if(product.subImage || product.subImages.length < 1)
@@ -114,7 +114,6 @@ body
                         
                 -else
                     each subImage of product.subImages
-                        -console.log(subImage)
                         .sub-image
                             img(src=`/asset/img/products/${subImage}` alt='product image')
                 
@@ -138,14 +137,14 @@ body
                                 quantityDisplay.textContent = currentQuantity;
                             }
                         }
-            button.card-button(data-product=product) Add to Cart
+            button.card-button(data-product=product) Add to Cart 
                 i.fa-solid.fa-shopping-cart
             
         
 
 
     //- Youtube Video
-    section.video-section.container
+    //- section.video-section.container
         .video
             //- #{product.video}
             <iframe src="https://www.youtube.com/embed/FJsGxP6f9xs?si=V2ndVxBeFeUz4b8W" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
@@ -161,7 +160,7 @@ body
                 button.card-button(data-product=product) Add to Cart
                     i.fa-solid.fa-shopping-cart
             .about-image
-                img(src='/asset/img/products/product-default.png' alt='product image')
+                img(src=`/asset/img/products/${product.image}` alt='product image')
     
 
 
@@ -220,11 +219,11 @@ body
             span.material-symbols-rounded
                 i.fa-solid.fa-comment
                 | Chat
-            span.material-symbols-outlined
+            //- span.material-symbols-outlined
                 i.fa-solid.fa-close
 
 
-        .chat__box
+        //- .chat__box
             .chat-head
                 i.fa-solid.fa-arrow-left.btn-back 
                 p.chat-person From Admin

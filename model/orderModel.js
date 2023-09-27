@@ -70,7 +70,7 @@ orderSchema.pre(/^find/, function(next) {
 		select: '_id email'
 	}).populate({
 		path: 'buyer',
-		select: '_id email country'
+		select: '_id email country state phone name'
 	}).populate({
 		path: 'product',
 		select: '_id name image slug niche category type'

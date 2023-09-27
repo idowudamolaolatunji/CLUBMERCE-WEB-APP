@@ -185,10 +185,10 @@ userSchema.pre('save', function(next) {
     this.passwordChangedAt = Date.now() - 1000;
     next();
 })
-userSchema.pre('save', function(next) {
-    this.totalAmountWallet = this.pendingAmountWallet += this.availableAmountWallet
-    next();
-})
+// userSchema.pre('save', function(next) {
+//     this.totalAmountWallet = this.pendingAmountWallet += this.availableAmountWallet
+//     next();
+// })
 
 userSchema.pre('save', function(next) {
     if(this.role !== 'vendor') {

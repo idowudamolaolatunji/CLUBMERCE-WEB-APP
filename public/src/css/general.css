@@ -362,8 +362,8 @@ a .font-size-sm-help { font-size: 1.8rem; }
     transition: all .35s !important;
 }
 
-.auth__link:hover {
-    background-image: linear-gradient(to left, #2e3192, #f15a29);
+.auth__link:hover, .product__nav--link:hover {
+    background-image: linear-gradient(to left, #2e3192, #f15a29) !important;
     display: inline-block;
     background-clip: text;
     -webkit-background-clip: text;
@@ -919,4 +919,19 @@ input[type="number"] {
     .subscription__figure {
         width: 100%;
     }
+}
+
+.card__chat--btn:link {
+    width: 4.2rem;
+    height: 4.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: .2rem;
+    font-size: 1.4rem;
+    color: #fff;
+    background-color: #2e3192;
+    padding: .6rem;
+    border-radius: 50%;
 }

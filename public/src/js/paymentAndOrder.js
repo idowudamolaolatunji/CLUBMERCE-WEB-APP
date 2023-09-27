@@ -209,7 +209,8 @@ document.querySelectorAll('.card-button').forEach((button) => {
                 price: parseInt(quantityAmount) * productDetails.price,
                 link: window.location.href,
                 id: productDetails._id,
-                niche: productDetails.niche
+                niche: productDetails.niche,
+                image: productDetails.image
             });
             showAlert('success', 'Adding item to cart!');
             showLoadingOverlay();
@@ -232,6 +233,7 @@ let productsArr = [];
 function displayCartItem() {
     const cartStorage = JSON.parse(localStorage.getItem('cartData'));
     const checkoutBox = document.querySelector('.checkout__box');
+    // <img src="/../asset/img/products/${product.image}" alt="product image">
     if(cartStorage && cartStorage.storageProductItems) {
         if(checkoutBox) checkoutBox.innerHTML = '';
         
@@ -240,9 +242,7 @@ function displayCartItem() {
             const markup = `
                 <a style="color: #333; text-decoration: none;" href="${product.link}">
                     <div class="checkout--card" data-name="${product.name}">
-                        <div class="checkout--card__image">
-                            <img src="/../../asset/img/products/${product.image}" alt="product image">
-                        </div>
+                        <div class="checkout--card__image"></div>
                         <div class="checkout--card__info">
                             <p class="checkout--card__product-name">${product.name}</p>
                             <span class="checkout--card__figures">

@@ -22,19 +22,20 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   gap: 2.4rem;
 }
 
-.main-image {
-  height: 30rem;
+/* .main-image {
+  width: 100%;
+  height: 100%;
   border-radius: 1rem;
   overflow: hidden;
 }
 
 .main-image img {
   height: 100%;
-}
+  width: 100%;
+} */
 
 .sub--images {
   width: 100%;

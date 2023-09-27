@@ -15,13 +15,11 @@ exports.createAffiliateLink = async (req, res) => {
     console.log(user, product)
 
     // Generate the affiliate promotion link
-    
     const promotionLink = `https://clubmerce.com/unique_/${user.slug}/${product.slug}`;
     // const promotionLink = `${req.protocol}://${req.get('host')}/unique_/${user.slug}/${product.slug}`
 
     const gravity = await AffiliateLink.find({ product: product._id });
-    console.log(gravity.length)
-    product.productGravity = gravity.length
+    product.productGravity = gravity.length + 1;
     await product.save({});
 
     // Check if link already exist and then create link and update links array
@@ -69,7 +67,6 @@ exports.countClicksRedirects = async (req, res) => {
     user.clicks++;
     await Promise.all([product.save({ validateBeforeSave: false }), user.save({ validateBeforeSave: false })]);
     
-    // res.redirect(`https://clubmerce.com/order-product/${user.username}/${productSlug}`);
     res.redirect(`/buyers/order-product/${user.username}/${productSlug}`);
     // create a route that renders a product order page on /order/username:productSlug, as the product order page
 

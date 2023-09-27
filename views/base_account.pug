@@ -346,7 +346,7 @@ body
                         -if(user.role === "vendor")
                             .main__dashboard--container
                                 span.heading
-                                    h3.dashboard__heading=`Welcome back, ${user.businessName}`
+                                    h3.dashboard__heading=`Welcome back to ${user.businessName}`
                                     //- span &nbsp;👋🏾
                                     span &nbsp;
                                         picture
@@ -409,16 +409,18 @@ body
                                         
 
                                 .dashboard__table
-                                    .table.table-po
+                                    .table.table-po1
                                         .table-title
                                             h4.table-heading Product orders
-                                        .table-head-po
+                                        .table-head-po1
                                             span.table-head-content Product
                                             span.table-head-content Quantity
                                             span.table-head-content Total price
+                                            span.table-head-content Phone No.
                                             span.table-head-content Location
                                             span.table-head-content Status
                                             span.table-head-content Date
+                                            span.table-head-content Action
                                         
                                         -if(recieviedOrders < 1) 
                                             .table-row-message
@@ -426,7 +428,7 @@ body
 
                                         -else
                                             each order of recieviedOrders
-                                                .table-row-po
+                                                .table-row-po1
                                                     span.table-row-content.table-row-product
                                                         img.table-product__image(src=`/asset/img/products/${order.product.image}` alt='product image')
                                                         span
@@ -437,11 +439,20 @@ body
                                                     span.table-row-content
                                                         p.price= `₦${Number(order.vendorProfit).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                                                     span.table-row-content
-                                                        p.brand= order.buyer.country
+                                                        p.phone=`${order.buyer.phone}`
+                                                    span.table-row-content
+                                                        p.location= `${order.buyer.state ? order.buyer.state + ', ' : ''}${order.buyer.country ? order.buyer.country : ''}`
                                                     span.table-row-content
                                                         p(class=`status status--${order.orderStatus}`)= order.orderStatus
                                                     span.table-row-content
-                                                        p.time= order.orderedAt
+                                                        p= order.orderedAt
+                                                    span.table-row-content.button_actions
+                                                        //- button.actions.recieved Recieved
+                                                        //- button.actions.not-recieved Not Recieved
+                                                        a.card__chat--btn(href=`/chats/${order.buyer._id}`)
+                                                            i.fa-solid.fa-comment
+                                                            | chat
+                                                        
 
 
                    
@@ -449,7 +460,7 @@ body
                         -if(user.role == "admin")
                             .main__dashboard--container
                                 span.heading
-                                    h3.dashboard__heading=`Welcome back Boss (Admin)`
+                                    h3.dashboard__heading='Welcome back My Admin'
                                     //- span &nbsp;👋🏾
                                     span &nbsp;
                                         picture
@@ -634,6 +645,8 @@ body
                                             span.table-head-content Total price
                                             span.table-head-content location
                                             span.table-head-content status
+                                            span.table-head-content Date
+                                            span.table-head-content Action
                                         
                                         -if(requestingOrders < 1) 
                                             .table-row-message
@@ -651,11 +664,14 @@ body
                                                     span.table-row-content
                                                         p.price= `₦${Number(order.amount).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                                                     span.table-row-content
-                                                        p.brand= order.buyer.country
+                                                        p.brand= `${order.buyer.state}, ${order.buyer.country}`
                                                     span.table-row-content
                                                         p(class=`status status--${order.orderStatus}`)= order.orderStatus
                                                     span.table-row-content
-                                                        p.time= order.orderedAt
+                                                        p= order.orderedAt
+                                                    span.table-row-content
+                                                        button.actions.recieved.recieved__order Recieved
+                
                 -if(user.role === 'buyer')
                     .checkout__overlay.hidden
                         .checkout__modal
