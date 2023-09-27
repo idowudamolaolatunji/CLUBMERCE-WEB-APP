@@ -657,48 +657,49 @@ const showUploadModal = function() {
 
 
 // update markup
-const showUpdateModal = (productName, _) => {
+const showUpdateModal = (product) => {
+    productname, id, productsummary, productdescription, productprice, productcommissionpercentage, producttype, productniche, productrecurringcommission, productprimarygender, productprimarylocation
     const html = `
         <div class="product-update__overlay">
             <div class="product-update__modal">
                 <i class="fa-solid fa-close icon form__close-icon"></i>
-                <h3 class="dashboard__heading">Update ${productName}</h3>
+                <h3 class="dashboard__heading">Update ${product.productname}</h3>
 
                 <form class="product__form product__form-update product__form-admin-update">
 
                     <div class="form__body-generic">
                         <label class="form__label" for="product__update__name">Product Name</label>
-                        <input class="form__input" id="product-update__name" value='${productName}' type="text" name="product__name" required="" placeholder="Product name"/>
+                        <input class="form__input" id="product-update__name" value='${product.productname}' type="text" name="product__name" required="" placeholder="Product name"/>
                     </div>
                     <div class="form__body-generic">
                         <label class="form__label" for="product-update__summary">Product Summary</label>
-                        <textarea class="textarea form__input" id="product-update__summary" style="height: 6rem;" type="text" name="product__summary" required="" placeholder="Product Summary (not more than 200 characters)"></textarea>
+                        <textarea class="textarea form__input" id="product-update__summary" style="height: 6rem;" type="text" name="product__summary" required="" value="${product.productsummary}" placeholder="Product Summary (not more than 200 characters)"></textarea>
                     </div>
                     <div class="form__body-generic">
                         <label class="form__label" for="product-update__description">Product Description</label>
-                        <textarea class="textarea form__input" id="product-update__description" style="height: 15rem;" type="text" name="product__description" required="" placeholder="Product Description"></textarea>
+                        <textarea class="textarea form__input" id="product-update__description" style="height: 15rem;" type="text" name="product__description" required="" value="${product.productdescription}" placeholder="Product Description"></textarea>
                     </div>
                     <div class="form__grid-generic">
                         <div class="form__body-generic">
                             <label class="form__label" for="product-update__price">Product Price</label>
-                            <input class="form__input" id="product-update__price" type="number" name="product__price" required="" placeholder="Product price (NGN)"/>
+                            <input class="form__input" id="product-update__price" type="number" name="product__price" required="" placeholder="Product price (NGN)" value="${product.productprice}" />
                         </div>
                         <div class="form__body-generic">
                             <label class="form__label" for="product-update__commission">Product Commission</label>
-                            <input class="form__input" id="product-update__commission" type="number" name="product__commission" required="" placeholder="Product Commission in (%)"/>
+                            <input class="form__input" id="product-update__commission" type="number" name="product__commission" required="" placeholder="Product Commission in (%)" value="${product.productcommissionpercentage}" />
                         </div>
                     </div>
                     <div class="form__grid3-generic">
                         <div class="form__body-generic">
                             <label class="form__label" for="product-update__type">Product Type</label>
-                            <select class="form__select" id="product-update__type" name="product__type">
+                            <select class="form__select" id="product-update__type" name="product__type" value="${product.producttype}" >
                                 <option value="Physical">Physical Product</option>
                                 <option value="Digital">Digital Product</option>
                             </select>
                         </div>
                         <div class="form__body-generic">
                             <label class="form__label" for="product-update__category">Product Category</label>
-                            <select class="form__select" id="product-update__category" name="product__category">
+                            <select class="form__select" id="product-update__category" name="product__category" value="${product.productniche}" >
                                 <option style="display:none">All categories</option>
                                 <option class="category__item" data-item="arts">Arts</option>
                                 <option class="category__item" data-item="betting">Betting</option>
@@ -727,7 +728,7 @@ const showUpdateModal = (productName, _) => {
                         </div>
                         <div class="form__body-generic">
                             <label class="form__label" for="product-update-update__recurring">Recurring Commissions</label>
-                            <select class="form__select" id="product-update__recurring" name="product__type">
+                            <select class="form__select" id="product-update__recurring" name="product__type" value="${product.productrecurringcommission}" >
                                 <option value="no">No</option>
                                 <option value="yes">Yes</option>
                             </select>
@@ -738,14 +739,14 @@ const showUpdateModal = (productName, _) => {
                     <div class="form__grid3-generic">
                         <div class="form__body-generic">
                             <label class="form__label" for="product__primary-location">Primary Location</label>
-                            <select class="form__select" id="product__primary-location" name="primaryLocation">
+                            <select class="form__select" id="product__primary-location" name="primaryLocation" value="${product.productprimarygender}" >
                                 <option value=nigeria>Nigeria</option>
                                 <option value=ghana>Ghana</option>
                             </select>
                         </div>
                         <div class="form__body-generic">
                             <label class="form__label" for="product__primary-gender">Primary Gender</label>
-                            <select class="form__select" id="product__primary-gender" name="primaryGender">
+                            <select class="form__select" id="product__primary-gender" name="primaryGender" value="${product.productprimarylocation}" >
                                 <option value=male>Male</option>
                                 <option value=female>Female</option>
                                 <option value=female>Both Gender</option>
@@ -1064,14 +1065,13 @@ if(productAdminEdit) {
 
 if(productEdit) {
     productEdit.forEach(el => el.addEventListener('click', function() {
-        const {productname, id, productSummary, productDescription, productPrice, productCommissionPercentage, productType, productNiche, productRecurringCommission, productPrimaryGender, productPrimaryLocation} = el.dataset;
+        const {productname, id, productsummary, productdescription, productprice, productcommissionpercentage, producttype, productniche, productrecurringcommission, productprimarygender, productprimarylocation} = el.dataset;
 
         const existingModal = document.querySelector('.product-update__overlay');
         if (existingModal) {
             return; 
         }
-        console.log({productname, id, productSummary, productDescription, productPrice, productCommissionPercentage, productType, productNiche, productRecurringCommission, productPrimaryGender, productPrimaryLocation});
-        showUpdateModal(productname);
+        showUpdateModal({productname, id, productsummary, productdescription, productprice, productcommissionpercentage, producttype, productniche, productrecurringcommission, productprimarygender, productprimarylocation});
 
         document.querySelector('.form__close-icon').addEventListener('click', function(e) {
             closeUpdateModal();

@@ -37,6 +37,7 @@ block content
                             span.table-row-content
                                 p.approved.status.status--success Approved
                             span.table-row-content.table-row-btn
+                                -console.log(product)
                                 button.btn-edit.table-btn.product-edit(data-productName=`${product.name}` data-id=`${product._id}` data-productSummary=`${product.summary}` data-productDescription=`${product.description}` data-productPrice=`${product.price}` data-productCommissionPercentage=`${product.commissionPercentage}` data-productType=`${product.type}` data-productNiche=`${product.niche}` data-productRecurringCommission=`${product.recurringCommission}` data-productPrimaryLocation=`${product.primaryLocation}` data-productPrimaryGender=`${product.primaryGender}`) Edit
                                 
                                 button.btn-delete.table-btn.product-delete(data-id=`${product._id}`) Delete
