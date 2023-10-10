@@ -18,26 +18,27 @@ head
     link(rel="stylesheet" href="/src/css/query_dashboard.css")
 
 
+    //- script(src="/socket.io/socket.io.js")
     script(defer src="/src/js/dashboard.js")
+    script(defer src="/src/js/orderCompleted.js")
     script(defer src="/src/js/paymentAndOrder.js")
+    script(defer src="/src/js/withdrawal.js")
     script(src="https://js.paystack.co/v2/inline.js")
     script(src='https://js.pusher.com/8.2.0/pusher.min.js')
-    //- script(src="/socket.io/socket.io.js")
-    //- script(defer src="/src/js/chat.js")
-    //- script.
+    script(defer src="/src/js/chat.js")
+    script.
         // Enable pusher logging - don't include this in production
-        var pusher = new Pusher('3518bd1be26b07addc01', {
+        //- var pusher = new Pusher('3518bd1be26b07addc01', {
+        var pusher = new Pusher('my-channel', {
             cluster: 'mt1'
         });
         pusher.logToConsole = true;
-        var channel = pusher.subscribe(`conversation-${user.id}`);
-        var channel = pusher.subscribe(`my-channel`);
+        //- var channel = pusher.subscribe(`conversation-${user.id}`);
+        var channel = pusher.subscribe(`conversation-id`);
         channel.bind('message', function(data) {
             alert(JSON.stringify(data));
             console.log(data);
         });
-
-
 
 
     title=title
@@ -161,10 +162,7 @@ body
                                     .profile__owner
                                         .profile__image--box
                                             img.profile__image(src=`/asset/img/users/${user.image}` alt=`user's photo`)
-                                        -if(user.role !== 'vendor')
-                                            p.profile__name= user.fullName
-                                        -else
-                                            p.profile__name= user.businessName
+                                        p.profile__name= user.businessName
                                     a.profile__link.nav__link(href="/profile") My profile
                                     button.profile__button.order-nav__link(class=`${user.role === 'buyer' ? 'buyer__nav--logout' : 'nav__logout'}`) signout&nbsp;
                                         i.fa-solid.fa-arrow-right-to-bracket.profile__icon
@@ -400,6 +398,15 @@ body
                                             p.insight__title Orders
                                             p.insight__text= currentOrderCount.length
 
+
+                                    .insight.insight__two
+                                        .icon__box 
+                                            i.fa-solid.fa-arrow-up-right-from-square.insight__icon
+                                        span 
+                                            p.insight__title Product Sold
+                                            p.insight__text= products.reduce((acc, product) => acc + product.purchasesCount, 0)
+
+
                                     .insight.insight__one
                                         .icon__box 
                                             i.fa-solid.fa-bullhorn.insight__icon
@@ -414,12 +421,13 @@ body
                                             h4.table-heading Product orders
                                         .table-head-po1
                                             span.table-head-content Product
-                                            span.table-head-content Quantity
+                                            //- span.table-head-content Quantity
                                             span.table-head-content Total price
                                             span.table-head-content Phone No.
                                             span.table-head-content Location
                                             span.table-head-content Status
                                             span.table-head-content Date
+                                            span.table-head-content chat
                                             span.table-head-content Action
                                         
                                         -if(recieviedOrders < 1) 
@@ -428,16 +436,19 @@ body
 
                                         -else
                                             each order of recieviedOrders
-                                                .table-row-po1
+                                                .table-row-po1(class=`${order.orderStatus === 'delivered' ? 'is-Completed' : ''}`)
+                                                    //- -console.log(order)
                                                     span.table-row-content.table-row-product
+                                                        -console.log(order.product)
                                                         img.table-product__image(src=`/asset/img/products/${order.product.image}` alt='product image')
                                                         span
                                                             p.table-product__name= order.product.name
                                                             p.table-product__niche= order.product.niche
-                                                    span.table-row-content
+                                                    //- span.table-row-content
                                                         p.order= order.quantity
-                                                    span.table-row-content
+                                                    span.table-row-content.price-quantity
                                                         p.price= `₦${Number(order.vendorProfit).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                                                        P.table-quantity= `x ${order.quantity}`
                                                     span.table-row-content
                                                         p.phone=`${order.buyer.phone}`
                                                     span.table-row-content
@@ -446,12 +457,12 @@ body
                                                         p(class=`status status--${order.orderStatus}`)= order.orderStatus
                                                     span.table-row-content
                                                         p= order.orderedAt
-                                                    span.table-row-content.button_actions
-                                                        //- button.actions.recieved Recieved
-                                                        //- button.actions.not-recieved Not Recieved
+                                                    span.table-row-content
                                                         a.card__chat--btn(href=`/chats/${order.buyer._id}`)
                                                             i.fa-solid.fa-comment
                                                             | chat
+                                                    span.table-row-content.button_actions
+                                                        button.actions.recieved.delivered__order(class=`${ order.isDelevered === true ? 'not-clickable-and-disabled' : ''}` data-vendorOrderId=order._id)  Delivered
                                                         
 
 
@@ -475,7 +486,8 @@ body
                                         span 
                                             //- come back to to redo
                                             p.insight__title App Profit
-                                            p.insight__text ₦0
+                                            p.insight__text= `₦${user.adminProfit.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+
 
                                     .insight.insight__one
                                         .icon__box 
@@ -560,8 +572,7 @@ body
                                         span 
                                             //- come back to to redo
                                             p.insight__title All Time Payout
-                                            p.insight__text= `₦${allUsers.filter(user => user.role !== 'admin' && user.role !== 'buyer').reduce((acc, user) => user.pendingAmountWallet + acc, 0)}`
-                                            //- .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                                            p.insight__text= `₦${allUsers.filter(user => user.role !== 'admin' && user.role !== 'buyer').reduce((acc, user) => user.pendingAmountWallet + acc, 0).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                            
 
 
@@ -641,11 +652,12 @@ body
                                             h4.table-heading Product orders
                                         .table-head-po
                                             span.table-head-content Product
-                                            span.table-head-content quantity
+                                            //- span.table-head-content quantity
                                             span.table-head-content Total price
                                             span.table-head-content location
                                             span.table-head-content status
                                             span.table-head-content Date
+                                            span.table-head-content chat
                                             span.table-head-content Action
                                         
                                         -if(requestingOrders < 1) 
@@ -653,16 +665,17 @@ body
                                                 p.note-no No order at the moment...
                                         -else
                                             each order of requestingOrders
-                                                .table-row-po
+                                                .table-row-po(class=`${order.orderStatus === 'delivered' ? 'is-Completed' : ''}`)
                                                     span.table-row-content.table-row-product
                                                         img.table-product__image(src=`/asset/img/products/${order.product.image}` alt='product image')
                                                         span
                                                             p.table-product__name= order.product.name
                                                             p.table-product__niche= order.product.niche
-                                                    span.table-row-content
-                                                        p.order= order.quantity
-                                                    span.table-row-content
+                                                    //- span.table-row-content
+                                                    //-     p.order= order.quantity
+                                                    span.table-row-content.price-quantity
                                                         p.price= `₦${Number(order.amount).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                                                        P.table-quantity= `x ${order.quantity}`
                                                     span.table-row-content
                                                         p.brand= `${order.buyer.state}, ${order.buyer.country}`
                                                     span.table-row-content
@@ -670,8 +683,13 @@ body
                                                     span.table-row-content
                                                         p= order.orderedAt
                                                     span.table-row-content
-                                                        button.actions.recieved.recieved__order Recieved
+                                                        a.card__chat--btn(href=`/chats/${order.buyer._id}`)
+                                                            i.fa-solid.fa-comment
+                                                            | chat
+                                                    span.table-row-content.button_actions
+                                                        button.actions.recieved.recieved__order(class=`${ order.isRecieved === true ? 'not-clickable-and-disabled' : ''}` data-buyerOrderId=order._id) Recieved
                 
+
                 -if(user.role === 'buyer')
                     .checkout__overlay.hidden
                         .checkout__modal
@@ -723,8 +741,17 @@ body
                         button.form__button(type='submit') Proceed
 
 
+    -console.log(page)
+    -if(user.role === 'buyer' && page === 'dashboard' && (!user.phone || !user.country || !user.region || !user.zipCode))
+        .checkout__overlay
+            .checkout__modal
+                p Complet your profile! 
+                    a(href="/buyers/profile") Profile
 
-    //- a.chat__box-toggler(href="/chat" data-id=`${user._id}` data-fullName=`${user.fullName}` data-img=`${user.image}` style=`${page === 'chat' || user.role === 'admin' ? 'display: none; opacity: 0;' : ''}`)
+
+
+
+    a.chat__box-toggler(href="" data-id=`${user._id}` data-fullName=`${user.fullName}` data-img=`${user.image}` style=`${page === 'chat' || user.role === 'admin' ? 'display: none; opacity: 0;' : ''}`)
         span.material-symbols-rounded
             i.fa-solid.fa-comment
             | Chat

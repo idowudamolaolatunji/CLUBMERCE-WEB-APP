@@ -169,7 +169,8 @@ const { id, fullname, img } = chatButton.dataset;
 console.log(id, fullname, img);
 
 // Enable pusher logging - don't include this in production
-var pusher = new Pusher('3518bd1be26b07addc01', {
+// var pusher = new Pusher('3518bd1be26b07addc01', {
+var pusher = new Pusher('my-channel', {
   cluster: 'mt1'
 });
 pusher.logToConsole = true;

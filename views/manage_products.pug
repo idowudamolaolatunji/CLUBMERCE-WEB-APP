@@ -23,7 +23,7 @@ block content
                                 p.table-product__name= product.name
                                 p.table-product__niche= product.niche || product.category
                         span.table-row-content
-                            p.brand= `${product.vendor.businessName || product.vendor.username}`
+                            p.brand= `${product.vendor !== null ? product.vendor.businessName : ''}`
 
                         span.table-row-content
                             p.category= `${product.commissionPercentage || 10}%`

@@ -9,8 +9,8 @@ const userSchema = new mongoose.Schema({
     fullName: {
         type: String,
         // required: [true, "Enter your full name"],
-        maxLength: [40, "Full name must not be more than 40 characters"],
-        minLength: [8, "Full name must not be more than 8 characters"],
+        // maxLength: [40, "Full name must not be more than 40 characters"],
+        // minLength: [8, "Full name must not be more than 8 characters"],
         lowercase: true
     },
     username: {
@@ -65,8 +65,8 @@ const userSchema = new mongoose.Schema({
     zipCode: Number,
     businessName: {
         type: String,
-        maxLength: [40, "Full name must not be more than 40 characters"],
-        minLength: [8, "Full name must not be more than 8 characters"],
+        // maxLength: [40, "Full name must not be more than 40 characters"],
+        // minLength: [8, "Full name must not be more than 8 characters"],
         lowercase: true
     },
     region: String,
@@ -145,10 +145,14 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    socketId: String,
+    // socketId: String,
     isAdmin: {
         type: Boolean,
         default: false,
+    },
+    adminProfit: {
+        type: Number,
+        default: 0
     },
     createdAt: {
         type: Date,
@@ -175,6 +179,7 @@ userSchema.pre('save', async function(next) {
 userSchema.pre('save', function(next) {
     const slug = slugify(this.username, { lower: true });
     this.slug = `${slug}-${this._id}`;
+    // this.totalAmountWallet += this.pendingAmountWallet;
     next();
 })
 

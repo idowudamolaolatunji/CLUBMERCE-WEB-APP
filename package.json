@@ -4,7 +4,8 @@
   "description": "backend application",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "author": "idowu",
   "license": "ISC",

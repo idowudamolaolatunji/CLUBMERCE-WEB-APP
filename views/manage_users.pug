@@ -21,7 +21,7 @@ block content
                         span.table-row-content.table-row-product
                             img.table-user__image(src=`asset/img/users/${user.image}` alt='')
                             span
-                                p.table-user__name= user.fullName
+                                p.table-user__name= `${user.role === 'vendor' ? user.businessName : user.fullName}`
                                 p.table-user__username= user.username
                         span.table-row-content
                             p.email= user.email

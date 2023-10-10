@@ -6,6 +6,7 @@ const AffiliateLink = require('../model/affiliteLinkModel');
 exports.createAffiliateLink = async (req, res) => {
   try {
     const { username } = req.body;
+    console.log(req.params.productSlug, 'slug')
     if(username.length < 1) return res.status(400).json({ message: 'Please provide your username..' });
 
     // Find the user and product

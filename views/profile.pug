@@ -31,7 +31,7 @@ block content
                 input#email.form__input.disable(type='email' value=user.email readonly disable)
             .form__item
                 label.form__label(for='phone') Phone number
-                input#phone.form__input(type='tel' value=user.phone)
+                input#phone.form__input(type='tel' value=user.phone placeholder="Enter a phone number")
             .form__item
                 label.form__label(for='country') Country
                 input#country.form__input(type='country' value=user.country placeholder="Enter a country")
@@ -77,7 +77,7 @@ block content
                 input#email.form__input.disable(type='email' value=`${user.email}` readonly disable)
             .form__item
                 label.form__label(for='phone') Phone number
-                input#phone.form__input(type='tel' value=user.phone)
+                input#phone.form__input(type='tel' value=user.phone placeholder="Enter a phone number")
             .form__item
                 label.form__label(for='country') Country
                 input#country.form__input(type='country' value=user.country placeholder="Enter a country")

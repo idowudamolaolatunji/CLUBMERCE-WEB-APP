@@ -6,8 +6,8 @@ head
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
 
+    link(rel="icon" href="./../asset/img/favicon.png" type="image/png")
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer")
-    link(rel="icon" href="../asset/img/favicon.png" type="image/png")
 
 
     //- STYLES 
@@ -64,8 +64,9 @@ body
                 .product__description
                     h2.product__heading--sec=`What is ${product.name}?`
                     span.description__text
-                        span.description__topic=product.name 
-                        | &nbsp; #{product.description}
+                        //- span.description__topic=`${product.name}:` 
+                        //- | &nbsp; #{product.description}
+                        span.description__topic #{product.description}
 
     section#why.product__section.why-you-should-promote__Section
         .product__section--container

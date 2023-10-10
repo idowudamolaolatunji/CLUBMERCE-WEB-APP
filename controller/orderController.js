@@ -57,7 +57,7 @@ async function createOrder(paymentResponse, _, response, item) {
     try {
         const { data } = paymentResponse.data;
         const buyer = await User.findOne({ email: data.customer.email });
-        const oneLink = item.link.split('/').slice(-2)
+        const oneLink = item.link.split('/').slice(-2);
         const [affiliateUsername, ___] = oneLink;
         const productId = item.id;
         const affiliate = await User.findOne({ username: affiliateUsername });
@@ -79,6 +79,7 @@ async function createOrder(paymentResponse, _, response, item) {
             buyer: buyer._id,
             affiliate: affiliate._id,
             orderStatus: 'pending',
+            companyProfilt: companySettlement,
             quantity: productQuantity,
             amount: productPrice,
             vendorProfit: productVendorFinalPayout,
@@ -146,21 +147,19 @@ async function createOrder(paymentResponse, _, response, item) {
 
         const orderingNotification = await Notification.create({
             user: buyer._id,
-            message: `You just bought ${productQuantity} quantit${productQuantity > 1 ? 'ies' : 'y'} of ${product.name}`,
+            message: `You just ordered ${productQuantity} quantit${productQuantity > 1 ? 'ies' : 'y'} of ${product.name}`,
             notifiedAt: formattedDate
         });
 
         const recievingOrderNotification = await Notification.create({
             user: vendor._id,
-            message: `Order ${productQuantity} quantit${productQuantity > 1 ? 'ies' : 'y'} of ${product.name} from ${buyer.state}, ${buyer.country}`,
+            message: `You have a new Order, ${productQuantity} quantit${productQuantity > 1 ? 'ies' : 'y'} of ${product.name} from ${buyer.state}, ${buyer.country}`,
             notifiedAt: formattedDate
         });
 
         affiliate.pendingAmountWallet += productCommission;
         product.ordersCount += productQuantity;
-        product.profits += productPrice - allSettlements;
         vendor.pendingAmountWallet += productVendorFinalPayout;
-        product.purchasesCount += productQuantity;
         await product.save();
         await vendor.save({ validateBeforeSave: false });
         await affiliate.save({ validateBeforeSave: false });
@@ -188,30 +187,149 @@ async function createOrder(paymentResponse, _, response, item) {
 }
 
 
+const completedOrder = async (_, res, orderObj, reqUserId) => {
+    try {
+        const order = orderObj;
+        const affiliate = await User.findById(order.affiliate._id);
+        // const admin = await User.findOne({ role: 'admin' });
+        const vendor = await User.findById(order.vendor._id);
+        const buyer = await User.findById(order.buyer._id);
+        const product = await Product.findById(order.product._id);
+        const formattedDate = moment(new Date(Date.now())).format('MMMM DD YYYY');
+        console.log('product:', product, reqUserId, 'orderObj', order, affiliate, vendor, buyer._id, formattedDate);
+        // if(reqUserId !== buyer.id) return res.status(404).json({ message: 'Buyer not found' });
+
+        const UpdateAffiliateLink = await AffiliateLink.findOneAndUpdate(
+            { affiliate: affiliate._id, product: order.product._id },
+            { $inc: { purchase: 1 } },
+            { new: true }
+        );
+
+        const UpdateCommission = await Commissions.findOneAndUpdate(
+            { affiliate: affiliate._id, product: order.product._id },
+            { status: 'success' },
+            { new: true }
+        );
+
+        const completionOfOrderNotification = await Notification.create({
+            user: buyer._id,
+            message: `Your order for ${order.quantity} quantit${order.quantity > 1 ? 'ies' : 'y'} of ${product.name} has been completely delivered!`,
+            notifiedAt: formattedDate
+        });
+
+        if (affiliate.pendingAmountWallet >= order.affiliateCommission) {
+            affiliate.pendingAmountWallet -= order.affiliateCommission;
+            affiliate.availableAmountWallet += order.affiliateCommission;
+            affiliate.totalAmountWallet += order.affiliateCommission;
+            affiliate.productSold = order.quantity;
+        }
+        if (vendor.pendingAmountWallet >= order.vendorProfit) {
+            vendor.pendingAmountWallet -= order.vendorProfit;
+            vendor.availableAmountWallet += order.vendorProfit;
+            vendor.totalAmountWallet += order.vendorProfit;
+            product.profits += order.vendorProfit;
+            product.purchasesCount += order.quantity;
+        }
+        order.orderStatus = 'delivered';
+        await order.save({});
+        await vendor.save({ validateBeforeSave: false });
+        await affiliate.save({ validateBeforeSave: false });
+
+        return { UpdateAffiliateLink, completionOfOrderNotification, UpdateCommission };
+        
+        
+    } catch(err) {
+        console.log(err.message)
+    }
+}
+
+
 exports.recievedOrder = async(req, res) => {
     try {
         const { orderId } = req.params;
-        // const userId = req.user._id;
-        const completedOrder = await Order.findById(orderId);
-        const affiliate = await User.findById(completedOrder.affiliate._id);
-        const vendor = await User.findById(completedOrder.vendor._id);
-        const buyer = await User.findById(completedOrder.buyer._id);
-        const product = await User.findById(completedOrder.product);
-        const formattedDate = moment(new Date(Date.now())).format('MMMM DD YYYY');
-        console.log(orderId, completedOrder, affiliate, vendor, buyer, product, formattedDate);
+        const buyerId = req.user._id;
+        const order = await Order.findById(orderId);
+        order.isRecieved = true;
+        order.save({});
+        console.log('Order now recieved');
 
-        // if(userId !== buyer._id) return res.status(404).json({ message: 'Buyer not found' });
+        
+        if(order.isRecieved && order.isDelevered) {
+            const completed = await completedOrder(req, res, order, buyerId)
 
-        const UpdateAffiliateLink = await AffiliateLink.findOneAndUpdate(
+            res.status(200).json({
+                status: 'success',
+                message: 'Order completed!',
+                data: {
+                    completed
+                }
+            });
+        } else {
+            return res.status(200).json({ 
+                status: 'success',
+                message: 'Order now recieved!'
+            });
+        }
+
+    } catch(err) {
+        console.log(err.message)
+        res.status(400).json({
+            status: 'fail',
+            message: err.message || 'Something went wrong!'
+        });
+    };
+};
+
+exports.deliveredOrder = async(req, res) => {
+    try {
+        const { orderId } = req.params;
+        const vendorId = req.user._id;
+        const order = await Order.findById(orderId);
+        order.isDelevered = true;
+        order.save({})
+        console.log('Order now delivered!');
+
+        if(order.isDelevered && order.isRecieved) {
+            const completed = await completedOrder(req, res, order, vendorId);
+            console.log('i was logged', completed)
+
+            res.status(200).json({
+                status: 'success',
+                message: 'Order completed!',
+                data: {
+                    completed,
+                }
+            });
+        } else {
+            return res.status(200).json({ 
+                status: 'success',
+                message: 'Order now delivered!'
+            });
+        }
+
+    } catch(err) {
+        console.log(err.message)
+        res.status(400).json({
+            status: 'fail',
+            message: err.message || 'Something went wrong!'
+        });
+    };
+};
+
+
+
+/*
+onst UpdateAffiliateLink = await AffiliateLink.findOneAndUpdate(
             { affiliate: affiliate._id, product: completedOrder.product._id },
             { $inc: { purchase: 1 } },
             { new: true }
         );
-        // const completionOfOrderNotification = await Notification.create({
-        //     user: buyer._id,
-        //     message: `Your order for ${completedOrder.quantity} quantit${completedOrder.quantity > 1 ? 'ies' : 'y'} of ${product.name}  has been completely delivered!`,
-        //     notifiedAt: formattedDate
-        // });
+
+        const completionOfOrderNotification = await Notification.create({
+            user: buyer._id,
+            message: `Your order for ${completedOrder.quantity} quantit${completedOrder.quantity > 1 ? 'ies' : 'y'} of ${product.name}  has been completely delivered!`,
+            notifiedAt: formattedDate
+        });
 
         affiliate.pendingAmountWallet -= completedOrder.affiliateCommission;
         affiliate.availableAmountWallet += completedOrder.affiliateCommission;
@@ -231,18 +349,12 @@ exports.recievedOrder = async(req, res) => {
             message: 'Order completed',
             data: {
                 UpdateAffiliateLink,
-                // completionOfOrderNotification
+                completionOfOrderNotification
             }
         });
 
-    } catch(err) {
-        console.log(err.message)
-        res.status(400).json({
-            status: 'fail',
-            message: err.message || 'Something went wrong!'
-        })
-    }
-}
+*/
+
 
 // exports.OrdersAndPayment = async (req, res) => {
 //     try {

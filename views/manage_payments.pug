@@ -23,7 +23,8 @@ block content
                         span.table-row-content
                             p.transaction transact-#{transaction.transactionId}
                         span.table-row-content
-                            p.user= `${transaction.user.fullName}`
+                            -console.log(transaction.user.role)
+                            p.user= `${transaction.user.role !== 'vendor' ? transaction.user.fullName : transaction.user.businessName}`
                         span.table-row-content
                             p.user= `${transaction.user.role}`
                         span.table-row-content

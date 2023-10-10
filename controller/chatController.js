@@ -9,7 +9,9 @@ exports.sendMessage = async (req, res) => {
         const senderId = req.user._id;
         // const recieverId = req.params;
         const recieverId = '650a2e27a196ec383445c145';
-        const channelName = `conversation-${recieverId}`;
+        // const channelName = `conversation-${recieverId}`;
+        const channelName = `conversation-id`;
+        
         const user = await User.findById(recieverId)
 
         const messageData = {

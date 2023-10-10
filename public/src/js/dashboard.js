@@ -558,7 +558,7 @@ const showUploadModal = function() {
                         <div class="form__body-generic">
                             <label class="form__label" for="product__category">Product Category</label>
                             <select class="form__select" id="product__category" name="niche">
-                                <option style="display:none">All categories</option>
+                                <option class="category__item" disabled value selected >Select a product</option>
                                 <option class="category__item" data-item="arts">Arts</option>
                                 <option class="category__item" data-item="betting">Betting</option>
                                 <option class="category__item" data-item="books">Books</option>
@@ -588,8 +588,8 @@ const showUploadModal = function() {
                         <div class="form__body-generic">
                             <label class="form__label" for="product__recurring">Recurring Commissions</label>
                             <select class="form__select" id="product__recurring" name="recurringCommission">
-                                <option value=false>No</option>
-                                <option value=true>Yes</option>
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
                             </select>
                         </div>
                     </div>
@@ -598,16 +598,16 @@ const showUploadModal = function() {
                         <div class="form__body-generic">
                             <label class="form__label" for="product__primary-location">Primary Location</label>
                             <select class="form__select" id="product__primary-location" name="primaryLocation">
-                                <option value=nigeria>Nigeria</option>
-                                <option value=ghana>Ghana</option>
+                                <option value="nigeria">Nigeria</option>
+                                <option value="ghana">Ghana</option>
                             </select>
                         </div>
                         <div class="form__body-generic">
                             <label class="form__label" for="product__primary-gender">Primary Gender</label>
                             <select class="form__select" id="product__primary-gender" name="primaryGender">
-                                <option value=male>Male</option>
-                                <option value=female>Female</option>
-                                <option value=both gender>Both Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="all-gender">All Gender</option>
                             </select>
                         </div>
                     </div>
@@ -658,7 +658,6 @@ const showUploadModal = function() {
 
 // update markup
 const showUpdateModal = (product) => {
-    productname, id, productsummary, productdescription, productprice, productcommissionpercentage, producttype, productniche, productrecurringcommission, productprimarygender, productprimarylocation
     const html = `
         <div class="product-update__overlay">
             <div class="product-update__modal">
@@ -673,11 +672,11 @@ const showUpdateModal = (product) => {
                     </div>
                     <div class="form__body-generic">
                         <label class="form__label" for="product-update__summary">Product Summary</label>
-                        <textarea class="textarea form__input" id="product-update__summary" style="height: 6rem;" type="text" name="product__summary" required="" value="${product.productsummary}" placeholder="Product Summary (not more than 200 characters)"></textarea>
+                        <textarea class="textarea form__input" id="product-update__summary" style="height: 6rem;" type="text" name="product__summary" required="" placeholder="Product Summary (not more than 200 characters)" value="${product.productsummary}" >${product.productsummary}</textarea>
                     </div>
                     <div class="form__body-generic">
                         <label class="form__label" for="product-update__description">Product Description</label>
-                        <textarea class="textarea form__input" id="product-update__description" style="height: 15rem;" type="text" name="product__description" required="" value="${product.productdescription}" placeholder="Product Description"></textarea>
+                        <textarea class="textarea form__input" id="product-update__description" style="height: 15rem;" type="text" name="product__description" required="" placeholder="Product Description" value="${product.productdescription}" >${product.productdescription}</textarea>
                     </div>
                     <div class="form__grid-generic">
                         <div class="form__body-generic">
@@ -692,15 +691,17 @@ const showUpdateModal = (product) => {
                     <div class="form__grid3-generic">
                         <div class="form__body-generic">
                             <label class="form__label" for="product-update__type">Product Type</label>
-                            <select class="form__select" id="product-update__type" name="product__type" value="${product.producttype}" >
+                            <select class="form__select" id="product-update__type" name="product__type">
+                                <option value="${product.producttype}" disabled selected>${product.producttype}</option>
                                 <option value="Physical">Physical Product</option>
                                 <option value="Digital">Digital Product</option>
                             </select>
                         </div>
                         <div class="form__body-generic">
                             <label class="form__label" for="product-update__category">Product Category</label>
-                            <select class="form__select" id="product-update__category" name="product__category" value="${product.productniche}" >
-                                <option style="display:none">All categories</option>
+                            <select class="form__select" id="product-update__category" name="product__category">
+                                <option class="category__item" data-item="${product.productniche}" disabled selected>${product.productniche}</option>
+                                <option class="category__item" disabled value >Select a product</option>
                                 <option class="category__item" data-item="arts">Arts</option>
                                 <option class="category__item" data-item="betting">Betting</option>
                                 <option class="category__item" data-item="books">Books</option>
@@ -728,9 +729,10 @@ const showUpdateModal = (product) => {
                         </div>
                         <div class="form__body-generic">
                             <label class="form__label" for="product-update-update__recurring">Recurring Commissions</label>
-                            <select class="form__select" id="product-update__recurring" name="product__type" value="${product.productrecurringcommission}" >
-                                <option value="no">No</option>
-                                <option value="yes">Yes</option>
+                            <select class="form__select" id="product-update__recurring" name="product__type" >
+                                <option value="${product.productrecurringcommission ? "true" : "false"}" disabled selected>${product.productrecurringcommission ? 'Yes' : 'No'}</option>
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
                             </select>
                         </div>
                     </div>
@@ -738,18 +740,20 @@ const showUpdateModal = (product) => {
                     <h4 class="">Demography</h4>
                     <div class="form__grid3-generic">
                         <div class="form__body-generic">
-                            <label class="form__label" for="product__primary-location">Primary Location</label>
-                            <select class="form__select" id="product__primary-location" name="primaryLocation" value="${product.productprimarygender}" >
-                                <option value=nigeria>Nigeria</option>
-                                <option value=ghana>Ghana</option>
+                            <label class="form__label" for="product-update__primary-location">Primary Location</label>
+                            <select class="form__select" id="product-update__primary-location" name="primaryLocation">
+                                <option value="${product.productprimarylocation}" disabled selected>${product.productprimarylocation}</option>
+                                <option value="nigeria">Nigeria</option>
+                                <option value="ghana">Ghana</option>
                             </select>
                         </div>
                         <div class="form__body-generic">
-                            <label class="form__label" for="product__primary-gender">Primary Gender</label>
-                            <select class="form__select" id="product__primary-gender" name="primaryGender" value="${product.productprimarylocation}" >
-                                <option value=male>Male</option>
-                                <option value=female>Female</option>
-                                <option value=female>Both Gender</option>
+                            <label class="form__label" for="product-update__primary-gender">Primary Gender</label>
+                            <select class="form__select" id="product-update__primary-gender" name="primaryGender" >
+                                <option value="${product.productprimarygender}" disabled selected>${product.productprimarygender}</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="all-gender">All Gender</option>
                             </select>
                         </div>
                         
@@ -1051,8 +1055,8 @@ if(productAdminEdit) {
                 const type =  document.getElementById('product-update__type').value;
                 const niche =  document.getElementById('product-update__category').value;
                 const recurringCommission =  document.getElementById('product-update__recurring').value;
-                const primaryGender =  document.getElementById('product-update__primary-location').value;
-                const primaryLocation =  document.getElementById('product-update__primary-gender').value;
+                const primaryLocation =  document.getElementById('product-update__primary-location').value;
+                const primaryGender =  document.getElementById('product-update__primary-gender').value;
                 const formDetailsObj = { name, summary, description, price, commissionPercentage, type, niche, recurringCommission, primaryLocation, primaryGender }; 
 
 
@@ -1092,8 +1096,8 @@ if(productEdit) {
                 const type =  document.getElementById('product-update__type').value;
                 const niche =  document.getElementById('product-update__category').value;
                 const recurringCommission =  document.getElementById('product-update__recurring').value;
-                const primaryGender =  document.getElementById('product-update__primary-location').value;
-                const primaryLocation =  document.getElementById('product-update__primary-gender').value;
+                const primaryLocation =  document.getElementById('product-update__primary-location').value;
+                const primaryGender =  document.getElementById('product-update__primary-gender').value;
                 const formDetailsObj = { name, summary, description, price, commissionPercentage, type, niche, recurringCommission, primaryLocation, primaryGender }; 
 
                 postProduct(formDetailsObj, 'update', id,);

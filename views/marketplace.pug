@@ -7,8 +7,8 @@ head
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
 
+    link(rel="icon" href="./../asset/img/favicon.png" type="image/png")
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer")
-    link(rel="icon" href="../asset/img/favicon.png" type="image/png")
 
 
     //- STYLES 
@@ -37,10 +37,11 @@ body
             div
     section.section__dashboard
         .section__top.margin__left--sm
-            a(href='/dashboard')
-                img.logo(src='asset/img/logo-removebg.png' alt='clubmerce logo')
-            a(href='/dashboard')
-                img.logo-small(src='asset/img/favicon.png' alt='clubmerce logo')
+            span
+                a(href='/dashboard')
+                    img.logo(src='asset/img/logo-removebg.png' alt='clubmerce logo')
+                a(href='/dashboard')
+                    img.logo-small(src='asset/img/favicon.png' alt='clubmerce logo')
             nav.navbar
                 form.nav__search
                     input.nav__input(type='search' placeholder='search...')
@@ -113,7 +114,7 @@ body
                                     li.category__item(data-item='business') Business (#{products.filter(product => product.category === 'business').length})
                                     li.category__item(data-item='computers') Computers (#{products.filter(product => product.category === 'computers').length})
                                     li.category__item(data-item='cooking') Cooking (#{products.filter(product => product.category === 'cooking').length})
-                                    li.category__item(data-item='e-Business-and-e-Marketing') E-Business and E-Marketing (#{products.filter(product => product.category === 'e-Business-and-e-Marketing').length})
+                                    li.category__item(data-item='e-business-and-e-marketing') E-Business and E-Marketing (#{products.filter(product => product.category === 'e-business-and-e-marketing').length})
                                     li.category__item(data-item='education') Education (#{products.filter(product => product.category === 'education').length})
                                     li.category__item(data-item='entertainment') Entertainment (#{products.filter(product => product.category === 'entertainment').length})
                                     li.category__item(data-item='food-and-Wine') Food and Wine (#{products.filter(product => product.category === 'food-and-Wine').length})
@@ -181,7 +182,7 @@ body
                                             p.commision avg commissions 
                                             span.commission__amount #{product.commissionPercentage}%
                                             p.commission__percent= `₦${product.commissionAmount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                                        button.btn.product__button.promote(data-productSlug=product.id) Promote
+                                        button.btn.product__button.promote(data-productSlug=product.id data-slug=product.slug) Promote
                                         a.product__button.page(target="_blank" href=`/marketplace/${product.slug}`) affiliate page
 
 
@@ -261,7 +262,7 @@ body
                             button.hoplink__copy-button.outline Copy
         
 
-            //- a.chat__box-toggler.chatHref(href="/chats" data-id=`${user._id}` data-fullName=`${user.fullName}` data-img=`${user.image}` style=`${page === 'chat' || user.role === 'admin' ? 'display: none; opacity: 0;' : ''}`)
+            a.chat__box-toggler.chatHref(href="/chats" data-id=`${user._id}` data-fullName=`${user.fullName}` data-img=`${user.image}` style=`${page === 'chat' || user.role === 'admin' ? 'display: none; opacity: 0;' : ''}`)
                 span.material-symbols-rounded
                     i.fa-solid.fa-comment
                     | Chats

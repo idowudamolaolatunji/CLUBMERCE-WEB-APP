@@ -12,6 +12,7 @@ const commissionSchema = new mongoose.Schema({
     commissionAmount: Number,
     status: {
         type: String,
+        enum: ['pending', 'success'],
         default: 'pending'
     },
     paidAt: String,

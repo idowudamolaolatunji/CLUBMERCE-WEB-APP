@@ -80,7 +80,7 @@ const productSchema = new mongoose.Schema({
     approval: {
         type: String,
         enum: ['approved', 'pending', 'decined'],
-        default: 'pending'
+        default: 'approved'
     },
     recurringCommission: {
         type: Boolean,

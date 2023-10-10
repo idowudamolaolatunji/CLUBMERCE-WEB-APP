@@ -13,7 +13,7 @@ block content
                 span.wallet__info Total Accessable Amount (limit: ₦15,000)
             .withdrawal__card
                 h3.dashboard__heading Withdrawal
-                form.withdraw__form
+                form.withdraw__form(data-userObj=user)
                 .form__body-ungeneric
                     input#bank__details.form__input-ungeneric(type='radio')
                     label.form__label-ungeneric(for='bank__details')
@@ -76,7 +76,7 @@ block content
                 span.wallet__info Total Accessable Amount (limit: ₦25,000)
             .withdrawal__card
                 h3.dashboard__heading Withdrawal
-                form.withdraw__form
+                form.withdraw__form(data-userObj=user)
                     .form__body-ungeneric
                         input#bank__details.form__input-ungeneric(type='radio')
                         label.form__label-ungeneric(for='bank__details')

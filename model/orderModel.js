@@ -18,12 +18,20 @@ const orderSchema = new mongoose.Schema({
 		type: mongoose.Schema.ObjectId,
 		ref: 'User'
 	},
+	companyProfilt: {
+		type: Number,
+		default: 0
+	},
 	orderStatus: {
         type: String,
 		enum: ['pending', 'delivered'],
         default: 'pending',
     },
 	isDelevered: {
+		type: Boolean,
+		default: false
+	},
+	isRecieved: {
 		type: Boolean,
 		default: false
 	},
@@ -64,7 +72,7 @@ const orderSchema = new mongoose.Schema({
 orderSchema.pre(/^find/, function(next) {
 	this.populate({
 		path: 'vendor',
-		select: '_id businessName',
+		select: '_id businessName image ',
 	}).populate({
 		path: 'affiliate',
 		select: '_id email'
@@ -73,7 +81,7 @@ orderSchema.pre(/^find/, function(next) {
 		select: '_id email country state phone name'
 	}).populate({
 		path: 'product',
-		select: '_id name image slug niche category type'
+		select: '_id name image vendor slug niche category type'
 	})
 	next();
 })

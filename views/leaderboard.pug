@@ -64,7 +64,7 @@ block content
                         span.table-row-content
                             p.wallet= `₦${vendor.totalAmountWallet.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                         span.table-row-content
-                            -const myProducts = vendorProducts.filter(product => product.vendor.id === vendor.id)
+                            -const myProducts = vendorProducts.filter(product => product?.vendor?._id === vendor.id)
                             p.clicks= myProducts.reduce((acc, product) => Math.trunc(acc + Number(product.clicks)), 0)
                         span.table-row-content
                             p.links= myProducts.reduce((acc, product) => Math.trunc(acc + Number(product.productGravity)), 0)

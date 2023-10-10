@@ -796,10 +796,10 @@ a.nav--text {
 }
 .table-row-po, .table-head-po {
     /* grid-template-columns: 2.5fr 1.2fr 1.2fr 1.2fr 1.5fr; */
-    grid-template-columns: 2.8fr 1.2fr 1.2fr 1.2fr 1.2fr 1.7fr 1.2fr;
+    grid-template-columns: 3fr 1.2fr 1.2fr 1.2fr 1.8fr 0.7fr 1.2fr;
 }
 .table-row-po1, .table-head-po1 {
-    grid-template-columns: 2.8fr 1.1fr 1.35fr 1.2fr 1.2fr 1.2fr 1.8fr 0.6fr;
+    grid-template-columns: 2.8fr 1.3fr 1.35fr 1.5fr 1fr 1.8fr 0.6fr 1.2fr;
 }
 .table-row-mp, .table-head-mp {
     grid-template-columns: 2.4fr 1.9fr 1.2fr 1fr 1.2fr 1.5fr;
@@ -1697,7 +1697,7 @@ button.img__upload--btn {
 .price-quantity {
     display: flex;
     align-items: center;
-    gap: .8rem;
+    gap: .4rem;
 }
 
 .button_actions {
@@ -1709,11 +1709,12 @@ button.img__upload--btn {
     gap: 1rem;
 }
 .actions.recieved {
-    padding: .6rem 1rem;
-    background-color: #2e3192;
-    color: #fff;
+    padding: .4rem .8rem;
+    background-color: #eee;
+    color: #444;
     cursor: pointer;
     transition: opacity .35s;
+    font-weight: 500;
 }
 .actions:hover {
     opacity: 0.9;

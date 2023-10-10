@@ -159,7 +159,7 @@ exports.signupBuyer = catchAsync(async (req, res) => {
         user: newBuyer
       }
     });
-    await sendSignUpEmailToken(req, newUser, token);
+    await sendSignUpEmailToken(req, newBuyer, token);
 });
 
 
@@ -370,7 +370,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     }
 
     if (!token) {
-        res.redirect('/login')
+        res.redirect('/login');
         return next(
         new AppError('You are not logged in! Please log in to get access.', 401)
         );
@@ -385,6 +385,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     // 3) Check if user still exists
     const currentUser = await User.findById(decoded.id);
     if (!currentUser) {
+      res.clearCookie("jwt");
+      res.redirect('/login');
       return next(
       new AppError(
         'The user belonging to this token does no longer exist.',

@@ -215,7 +215,7 @@ body
                             li 30 days Garantee
 
     -if(token)
-        button.chat__box-toggler
+        a.chat__box-toggler.chatHref(href=`/chats${product.vendor._id}`)
             span.material-symbols-rounded
                 i.fa-solid.fa-comment
                 | Chat

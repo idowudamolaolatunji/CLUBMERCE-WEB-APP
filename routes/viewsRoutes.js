@@ -36,8 +36,8 @@ router.get('/vendor/signup', viewController.signupVendor);
 
 // common routes
 router.get('/dashboard', authController.protect, viewController.dashboard);
-// router.get('/chats', authController.protect, viewController.chat);
-// router.get('/chats/:recieverId', authController.protect, viewController.chatWith);
+router.get('/chat', authController.protect, viewController.chat);
+router.get('/chat/:recieverId', authController.protect, viewController.chatWith);
 router.get('/settings', authController.isLoggedIn, viewController.settings);
 router.get('/profile', authController.isLoggedIn, viewController.profile);
 router.get('/performance', authController.isLoggedIn, viewController.performance);

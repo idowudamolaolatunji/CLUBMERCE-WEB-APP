@@ -13,8 +13,8 @@ block content
             h3.dashboard__heading Add a payment account
             .form__item
                 label.form__label(for='paymentBankName') Payment Bank Name
-                select#paymentBankName.form__input(selected=`${user.bankName}`)
-                    option(selected)= `${user.bankName}` || 'Choose a bank'
+                select#paymentBankName.form__input
+                    option(selected)= `${user.bankName ? user.bankName : 'Choose a bank' }`
                     option(value='Access Bank') Access Bank
                     option(value='Citi Bank') Citi Bank
                     option(value='Coronation Merchant Bank') Coronation Merchant Bank

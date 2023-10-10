@@ -14,7 +14,8 @@ block content
 
         -if(orders.length > 0)
             each order of orders
-                .table-row-mp
+                -console.log(order)
+                .table-row-mp(class=`${order.orderStatus === 'delivered' ? 'is-Completed' : '')
                     span.table-row-content.table-row-product
                         img.table-product__image(src=`asset/img/products/${order.product.image}` alt='order product image')
                         span
@@ -22,6 +23,7 @@ block content
                             p.table-product__niche= order.product.niche
                     span.table-row-content
                         p.brand= order.vendor.businessName
+                        -console.log(order.vendor.businessName)
                     span.table-row-content.price-quantity
                         p.price= `₦${Number(order.amount).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                         P.table-quantity= `x ${order.quantity}`

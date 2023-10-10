@@ -157,7 +157,7 @@ const fetchProductsByCategory = async (category) => {
         if(!res.ok) return;
 
         const data = await res.json();
-        console.log(data)
+        // console.log(data)
         const {products} = data.data;
         if(products.length === 0) {
             hideLoadingOverlay();
@@ -180,7 +180,7 @@ const fetchProductsByCategory = async (category) => {
 
         // Display the products for the selected category
         products.forEach(product => {
-            console.log(product)
+            // console.log(product)
             const markup = `
                 <div class="product__card ${product.isBoosted ? 'promoted' : ''}">
                     <div class="product__side--left">   
@@ -525,7 +525,7 @@ if (hoplinkClose) {
   
 if (hoplinkModalCopyOk) {
     hoplinkModalCopyOk.addEventListener('click', () => {
-    //   closeModal(hoplinkCopyOverlay, hoplinkCopyModal);
+      closeModal(hoplinkCopyOverlay, hoplinkCopyModal);
     });
 }
 
@@ -535,7 +535,7 @@ if(productBox) {
         const target = e.target;
 
         if (target.classList.contains('promote')) {
-            productSlug = target.dataset.productslug;
+            productSlug = target.dataset.slug;
 
             openModal(hoplinkGetOverlay, hoplinkGetModal);
             productSlug = productSlug;

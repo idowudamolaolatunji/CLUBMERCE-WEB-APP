@@ -109,7 +109,7 @@ exports.getProduct = async (req, res) => {
     try {
         // 1) Get the data, for the requested product
         const product = await Product.findOne({ slug: req.params.slug });
-        const vendor = await User.findOne({ })
+        // const vendor = await User.findOne({ });
         const user = await User.findById(req.user._id);
         if (!product) {
             return res.json({message: 'There is no product with that name.'})
@@ -159,6 +159,7 @@ exports.dashboard = async (req, res) => {
             totalPurchases,
 
             title: `${user.role}'s dashboard`,
+            page: 'dashboard'
         });
     } catch (err) {
         res.json({message: 'No user with this Id'});
@@ -166,16 +167,16 @@ exports.dashboard = async (req, res) => {
 }
 exports.chat = async(req, res) => {
     try {
-        const chats = await Chat.find({
-            $or: [
-                { senderId: req.user._id },
-                { receiverId: req.user._id }
-            ]
-        });
+        // const chats = await Chat.find({
+        //     $or: [
+        //         { senderId: req.user._id },
+        //         { receiverId: req.user._id }
+        //     ]
+        // });
 
         res.status(200).render('chat', {
             page: 'chat',
-            chats
+            // chats
         });
     } catch(err) {
         console.log(err)
@@ -272,8 +273,15 @@ exports.productCatalog = async(req, res) => {
         res.json({message: 'You dont have any product'});
     }
 }
-exports.upgrade = (req, res) => {
-    res.status(200).render('upgrade');
+exports.upgrade = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        res.status(200).render('upgrade', {
+            user
+        });
+    } catch(err) {
+        console.log(err)
+    }
 }
 
 
