@@ -9,7 +9,7 @@ const verifyPayment = require('../utils/verifyPayment');
 const User = require('../model/usersModel');
 const Product = require('../model/productsModel');
 const Order = require('../model/orderModel');
-const Commissions = require('../model/commissionModel');
+const Commission = require('../model/commissionModel');
 const Transaction = require('../model/transactionModel');
 const AffiliateLink = require('../model/affiliteLinkModel');
 const Notification = require('../model/notificationModel');
@@ -106,10 +106,9 @@ async function createOrder(paymentResponse, _, response, item) {
         // );
         const UpdateAffiliateLink = await AffiliateLink.findOneAndUpdate(
             { affiliate: affiliate._id, product: product._id }, 
-            { $inc: {commission: productCommission } },
+            { $inc: { commission: productCommission } },
             { new: true }
         );
-        
         const orderTransaction = await Transaction.create({
             transactionId: data.id,
             user: buyer._id,
@@ -118,7 +117,6 @@ async function createOrder(paymentResponse, _, response, item) {
             amount: formattedAmount,
             paidAt: formattedDate,
         });
-
         const formattedSalesAmount = `₦ ${Number(productVendorFinalPayout).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
         const productPurchaseTransaction = await Transaction.create({
             transactionId: data.id,
@@ -138,32 +136,27 @@ async function createOrder(paymentResponse, _, response, item) {
             amount: formattedCommission,
             paidAt: formattedDate,
         });
-
         const commissionNotification = await Notification.create({
             user: affiliate._id,
             message: `You just made ${formattedCommission} from sales`,
             notifiedAt: formattedDate
         });
-
         const orderingNotification = await Notification.create({
             user: buyer._id,
             message: `You just ordered ${productQuantity} quantit${productQuantity > 1 ? 'ies' : 'y'} of ${product.name}`,
             notifiedAt: formattedDate
         });
-
         const recievingOrderNotification = await Notification.create({
             user: vendor._id,
             message: `You have a new Order, ${productQuantity} quantit${productQuantity > 1 ? 'ies' : 'y'} of ${product.name} from ${buyer.state}, ${buyer.country}`,
             notifiedAt: formattedDate
         });
-
         affiliate.pendingAmountWallet += productCommission;
         product.ordersCount += productQuantity;
         vendor.pendingAmountWallet += productVendorFinalPayout;
         await product.save();
         await vendor.save({ validateBeforeSave: false });
         await affiliate.save({ validateBeforeSave: false });
-
         return {
             newOrder: order,
             commission,
@@ -205,7 +198,7 @@ const completedOrder = async (_, res, orderObj, reqUserId) => {
             { new: true }
         );
 
-        const UpdateCommission = await Commissions.findOneAndUpdate(
+        const UpdateCommission = await Commission.findOneAndUpdate(
             { affiliate: affiliate._id, product: order.product._id },
             { status: 'success' },
             { new: true }
