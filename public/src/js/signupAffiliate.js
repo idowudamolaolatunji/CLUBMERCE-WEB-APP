@@ -52,40 +52,40 @@ if (closeButton) {
 
 // signup
 const signup = async (fullName, email, role, password, passwordConfirm, username, country, phone) => {
-    try {
-          if(role === 'vendor' || role === 'admin' || role === 'buyer') return;
-          showLoadingOverlay();
-     
-          const res = await fetch('/api/users/signup-affiliate', {
-               method: 'POST',
-               headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ fullName, email, role, password, passwordConfirm, username, country, phone }),
-          });
-     
-          if (!res.ok) {
-               throw new Error('Error signing up');
-          }
-     
-          const data = await res.json();
-          if(data.message === 'Email already Exist') {
-               showAlert('error', data.message);
-               hideLoadingOverlay();
-          }
-          if(data.message === 'Username already Exist') {
-               showAlert('error', data.message);
-               hideLoadingOverlay();
-          }
-          if (data.status === 'success') {
-               showAlert('success', data.message || 'Successful');
-               showEmailVerificationModal(email);
-          } else if (data.status === 'fail') {
-               throw new Error(data.message || 'Error signing up');
-          }
-    } catch (err) {
-        showAlert('error', err.message || 'Something went wrong. Please try again!');
-    } finally {
-        hideLoadingOverlay();
+  try {
+    if(role === 'vendor' || role === 'admin' || role === 'buyer') return;
+    showLoadingOverlay();
+
+    const res = await fetch('/api/users/signup-affiliate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fullName, email, role, password, passwordConfirm, username, country, phone }),
+    });
+
+    if (!res.ok) {
+      throw new Error('Error signing up');
     }
+
+    const data = await res.json();
+    if(data.message === 'Email already Exist') {
+      showAlert('error', data.message);
+      hideLoadingOverlay();
+    }
+    if(data.message === 'Username already Exist') {
+      showAlert('error', data.message);
+      hideLoadingOverlay();
+    }
+    if (data.status === 'success') {
+      showAlert('success', data.message || 'Successful');
+      showEmailVerificationModal(email);
+    } else if (data.status === 'fail') {
+      throw new Error(data.message || 'Error signing up');
+    }
+  } catch (err) {
+      showAlert('error', err.message || 'Something went wrong. Please try again!');
+  } finally {
+    hideLoadingOverlay();
+  }
 };
 // email confirmation
 const showEmailConfirmationModal = () => {

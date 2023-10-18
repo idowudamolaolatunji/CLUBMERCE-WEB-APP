@@ -260,6 +260,7 @@ const signupBuyer = async (fullName, email, password, passwordConfirm, username)
           }
           if (data.status === 'success') {
                showAlert('success', data.message || 'Successful');
+               showEmailVerificationModal(email);
           } else if (data.status === 'fail') {
                throw new Error(data.message || 'Error signing up');
           }

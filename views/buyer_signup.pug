@@ -75,5 +75,21 @@ body
                         span  Already have an account? 
                         a.form__extra(href='/buyers/login') Login here.
 
+
+
+        .email__drop-down.drop-down__shadow.hidden
+            .email-verify__modal.modal
+                i.fa-solid.fa-close.close__icon.verify__close--icon 
+
+                .modal__container
+                    h3.extra__heading Successful signup!
+                    //- i.fa-solid.fa-thumbs-up
+                    picture.welcome
+                        source(srcset='https://fonts.gstatic.com/s/e/notoemoji/latest/1f44d_1f3fc/512.webp' type='image/webp')
+                        img(src='https://fonts.gstatic.com/s/e/notoemoji/latest/1f44d_1f3fc/512.gif' alt='👍' width='32' height='32')
+                    p.modal__text A link has been sent! Please click the link in your email and verify your email.
+                        br
+                        span.user__email emailaddress@example.com
+
     
     include _auth_footer

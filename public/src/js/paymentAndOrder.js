@@ -14,6 +14,13 @@ const calcTotalAmount = function(price, quantity ) {
     return totalAmount = orderAmount + charges;
 }
 
+document.querySelectorAll('a').forEach(el => el.addEventListener('click', function(e) {
+    showLoadingOverlay();
+    window.setTimeout(() => {
+        hideLoadingOverlay();
+    }, 7000);
+}));
+
 const successFunction = function(text) {
     const markup = `
         <div class="checkout__overlay">
@@ -39,8 +46,8 @@ const payWithPaystack = function(price, _, email, sucMessage, errMessage, type, 
 
     const amountInKobo = calcTotalAmount(price, 1) * 100;
     var handler = PaystackPop.setup({
-        key: 'pk_live_34cf0528cd04ac9d4f4675db08bf427bfa1509ad',
-        // key: 'pk_test_ec63f7d3f340612917fa775bde47924bb4a90af7',
+        // key: 'pk_live_34cf0528cd04ac9d4f4675db08bf427bfa1509ad',
+        key: 'pk_test_ec63f7d3f340612917fa775bde47924bb4a90af7',
         email: email,
         amount: amountInKobo,
         currency: 'NGN',
@@ -182,6 +189,7 @@ const cart = document.querySelector('.shopping-cart');
 
 
 // adds to cart
+
 document.querySelectorAll('.card-button').forEach((button) => {
     button.addEventListener('click', function(e) {
         const quantityAmount = document.getElementById('quantityNumber').textContent;
@@ -310,12 +318,18 @@ if(document.querySelectorAll('.delete-cart')) {
 // cart checkout
 let sumTotals;
 document.querySelectorAll('.order__checkout--button').forEach((button) => {
-    button.addEventListener('click', function() {
+    button.addEventListener('click', function(e) {
         sumTotals = Number(document.querySelector('.total-checkout').textContent.slice(1).replace(/,/g, ''));
         document.querySelector('.sumTotal').textContent = `₦${Number(sumTotals).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
-
-
-        if(sumTotals > 1000 && window.location.href.includes('/order-product/')) {
+        
+        const isLoggedIn = e.target.dataset.token;
+        console.log(isLoggedIn)
+        if(!isLoggedIn) {
+            showLoadingOverlay();
+            showAlert('error', 'You are not logged in!')
+            window.location.assign('/buyers/login');
+        }
+        if(isLoggedIn && sumTotals > 1000 && window.location.href.includes('/order-product/')) {
             showLoadingOverlay();
             showAlert('error', 'Only make orders through dashboard')
             window.location.assign('/buyers/dashboard');

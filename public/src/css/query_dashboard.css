@@ -361,6 +361,18 @@
         gap: 1.8rem;
         align-items: center;
     }
+    .hero-section.order-hero, .about-container.order-about {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .about-container.order-about {
+        flex-direction: column-reverse;
+        gap: 8rem;
+    }
+    .order-nav {
+        gap: 4.8rem;
+    }
 }
 
 /* 450px === 45rem === 28.125em */

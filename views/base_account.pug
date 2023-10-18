@@ -93,7 +93,7 @@ body
                                     p Sub Total
                                     span.total-checkout ₦0
                                 .controls
-                                    button.order__checkout--button Proceed to checkout
+                                    button.order__checkout--button(data-token=`${token ? true : false}`) Proceed to checkout
 
 
                     -if(user.role !== 'admin')
@@ -458,7 +458,7 @@ body
                                                     span.table-row-content
                                                         p= order.orderedAt
                                                     span.table-row-content
-                                                        a.card__chat--btn(href=`/chats/${order.buyer._id}`)
+                                                        a.card__chat--btn(href=`/chat/${order.buyer._id}`)
                                                             i.fa-solid.fa-comment
                                                             | chat
                                                     span.table-row-content.button_actions
@@ -683,7 +683,7 @@ body
                                                     span.table-row-content
                                                         p= order.orderedAt
                                                     span.table-row-content
-                                                        a.card__chat--btn(href=`/chats/${order.buyer._id}`)
+                                                        a.card__chat--btn(href=`/chat/${order.buyer._id}`)
                                                             i.fa-solid.fa-comment
                                                             | chat
                                                     span.table-row-content.button_actions
@@ -751,7 +751,7 @@ body
 
 
 
-    a.chat__box-toggler(href="" data-id=`${user._id}` data-fullName=`${user.fullName}` data-img=`${user.image}` style=`${page === 'chat' || user.role === 'admin' ? 'display: none; opacity: 0;' : ''}`)
+    a.chat__box-toggler(href="/chats" data-id=`${user._id}` data-fullName=`${user.fullName}` data-img=`${user.image}` style=`${page === 'chat' || user.role === 'admin' ? 'display: none; opacity: 0;' : ''}`)
         span.material-symbols-rounded
             i.fa-solid.fa-comment
             | Chat

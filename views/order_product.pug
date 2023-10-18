@@ -68,7 +68,7 @@ body
                                 p Sub Total
                                 span.total-checkout ₦0
                             .controls
-                                button.order__checkout--button Proceed to checkout
+                                button.order__checkout--button(data-token=`${token ? true : false}`) Proceed to checkout
 
 
                     -if(token)
@@ -88,7 +88,7 @@ body
 
 
                     -else
-                        ul
+                        ul.order-nav
                             li.nav__item
                                 a.nav__link.nav-login(href="/buyers/login") login  
                             li.nav__item
@@ -102,7 +102,7 @@ body
         | Dashboard
 
 
-    section.hero-section.container
+    section.hero-section.container.order-hero
         .img-container
             .about-image
                 img(src=`/asset/img/products/${product.image}` alt='product image')
@@ -154,7 +154,7 @@ body
 
     //- Product description
     section.about-section
-        .about-container.container
+        .about-container.container.order-about
             span
                 p.secondary-heading #{product.description}
                 button.card-button(data-product=product) Add to Cart

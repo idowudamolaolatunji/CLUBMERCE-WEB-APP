@@ -129,7 +129,9 @@ exports.getProduct = async (req, res) => {
 // common routes
 exports.dashboard = async (req, res) => {
     try {
-        // console.log(req)
+        let token;
+        if( req.cookies.jwt ) token = req.cookies.jwt;
+
         const user = await User.findById(req.user._id);
         const products = await Product.find({ vendor: req.user._id }).sort({ createdAt: -1});
         const commissions = await Commissions.find({ affiliate: req.user._id}).sort({ createdAt: -1});
@@ -157,6 +159,7 @@ exports.dashboard = async (req, res) => {
             allOrders,
             totalClicks,
             totalPurchases,
+            token,
 
             title: `${user.role}'s dashboard`,
             page: 'dashboard'
