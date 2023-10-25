@@ -89,7 +89,7 @@ const DB = process.env.CLUBMERCE_DB.replace('<PASSWORD>', process.env.CLUBMERCE_
 
 mongoose.connect(DB)
 .then(con => {
-    console.log('Db connection successful!');
+    console.log('Db connection successful!'); 
 }).catch(err => {
     console.log(err);
 });
